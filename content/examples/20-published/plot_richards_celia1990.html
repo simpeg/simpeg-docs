@@ -1,0 +1,467 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>FLOW: Richards: 1D: Celia1990 &mdash; SimPEG 0.14.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/logo-block.ico"/>
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="EM: Schenkel and Morrison Casing Model" href="plot_schenkel_morrison_casing.html" />
+    <link rel="prev" title="Heagy et al., 2017 Load and Plot Bookpurnong Data" href="plot_load_booky.html" />
+ 
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-45185336-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> SimPEG
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.14.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../basic/big_picture.html">Why SimPEG?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/contributing.html">Contributing to SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/installing.html">Getting Started with SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/getting_started_developers.html">Getting Started: for Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/practices.html">Practices</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#mappings">Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#gravity">Gravity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#magnetics">Magnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#dc-resistivity-and-induced-polarization">DC Resistivity and Induced Polarization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#frequency-domain-electromagnetics">Frequency Domain Electromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#time-domain-electromagnetics">Time Domain Electromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#natural-source-electromagnetics">Natural Source Electromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#viscous-remanent-magnetization">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#richards-fluid-flow">Richards Fluid Flow</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#in-publication">In Publication</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="plot_booky_1D_time_freq_inv.html">Heagy et al., 2017 1D RESOLVE and SkyTEM Bookpurnong Inversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_booky_1Dstitched_resolve_inv.html">Heagy et al., 2017 1D RESOLVE Bookpurnong Inversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_effective_medium_theory.html">Effective Medium Theory Mapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_heagyetal2017_casing.html">Heagy et al., 2017 Casing Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_heagyetal2017_cyl_inversions.html">Heagy et al., 2017 1D FDEM and TDEM inversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_laguna_del_maule_inversion.html">PF: Gravity: Laguna del Maule Bouguer Gravity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_load_booky.html">Heagy et al., 2017 Load and Plot Bookpurnong Data</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">FLOW: Richards: 1D: Celia1990</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_schenkel_morrison_casing.html">EM: Schenkel and Morrison Casing Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_tomo_joint_with_volume.html">Straight Ray with Volume Data Misfit Term</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_vadose_vangenuchten.html">FLOW: Vadose: van Genuchten</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/01-models_mapping/index.html">Models and Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/02-linear_inversion/index.html">Linear Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/03-gravity/index.html">Gravity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/04-magnetics/index.html">Magnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/05-dcr/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/06-ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/07-fdem/index.html">Frequency-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/08-tdem/index.html">Time-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/09-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/10-vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/11-flow/index.html">Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/12-seismic/index.html">Seismic</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Packages</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../em/index.html">Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dc/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pf/index.html">Potential Fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../flow/index.html">Richards Equation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_FiniteVolume.html">Finite Volume</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_ForwardProblem.html">Forward Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_InversionComponents.html">Inversion Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_Maps.html">Maps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_Utilities.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Meta Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../release/index.html">Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">SimPEG</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Gallery</a> &raquo;</li>
+        
+      <li>FLOW: Richards: 1D: Celia1990</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            <a href="https://github.com/simpeg/simpeg/edit/master/docs/content/examples/20-published/plot_richards_celia1990.rst" class="fa fa-github"> Edit on GitHub</a>
+        
+      </li>
+    
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-content-examples-20-published-plot-richards-celia1990-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="flow-richards-1d-celia1990">
+<span id="sphx-glr-content-examples-20-published-plot-richards-celia1990-py"></span><h1>FLOW: Richards: 1D: Celia1990<a class="headerlink" href="#flow-richards-1d-celia1990" title="Permalink to this headline">¶</a></h1>
+<p>There are two different forms of Richards equation that differ
+on how they deal with the non-linearity in the time-stepping term.</p>
+<p>The most fundamental form, referred to as the
+‘mixed’-form of Richards Equation <a class="reference external" href="http://www.webpages.uidaho.edu/ch/papers/Celia.pdf">Celia1990</a></p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial \theta(\psi)}{\partial t} -
+\nabla \cdot k(\psi) \nabla \psi -
+\frac{\partial k(\psi)}{\partial z} = 0
+\quad \psi \in \Omega\]</div>
+<p>where \(\theta\) is water content, and \(\psi\)
+is pressure head. This formulation of Richards equation is called the
+‘mixed’-form because the equation is parameterized in \(\psi\)
+but the time-stepping is in terms of \(\theta\).</p>
+<p>As noted in <a class="reference external" href="http://www.webpages.uidaho.edu/ch/papers/Celia.pdf">Celia1990</a> the ‘head’-based form of Richards
+equation can be written in the continuous form as:</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial \theta}{\partial \psi}
+\frac{\partial \psi}{\partial t} -
+\nabla \cdot k(\psi) \nabla \psi -
+\frac{\partial k(\psi)}{\partial z} = 0
+\quad \psi \in \Omega\]</div>
+<p>However, it can be shown that this does not conserve mass in the
+discrete formulation.</p>
+<p>Here we reproduce the results from <a class="reference external" href="http://www.webpages.uidaho.edu/ch/papers/Celia.pdf">Celia1990</a> demonstrating the
+head-based formulation and the mixed-formulation.</p>
+<img alt="Mixed Method, Head-Based Method" class="sphx-glr-single-img" src="../../../_images/sphx_glr_plot_richards_celia1990_001.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:157: FutureWarning: TensorMesh.setCellGradBC has been deprecated, please use TensorMesh.set_cell_gradient_BC. It will be removed in version 1.0.0 of discretize.
+  FutureWarning,
+/usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: TensorMesh.faceDiv has been deprecated, please use TensorMesh.face_divergence. It will be removed in version 1.0.0 of discretize.
+  warnings.warn(message, FutureWarning)
+/usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: TensorMesh.cellGrad has been deprecated, please use TensorMesh.cell_gradient. It will be removed in version 1.0.0 of discretize.
+  warnings.warn(message, FutureWarning)
+/usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: TensorMesh.cellGradBC has been deprecated, please use TensorMesh.cell_gradient_BC. It will be removed in version 1.0.0 of discretize.
+  warnings.warn(message, FutureWarning)
+/usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: TensorMesh.faceDivx has been deprecated, please use TensorMesh.face_x_divergence. It will be removed in version 1.0.0 of discretize.
+  warnings.warn(message, FutureWarning)
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">discretize</span>
+<span class="kn">from</span> <span class="nn">SimPEG</span> <span class="kn">import</span> <span class="n">maps</span>
+<span class="kn">from</span> <span class="nn">SimPEG.flow</span> <span class="kn">import</span> <span class="n">richards</span>
+
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">plotIt</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+    <span class="n">M</span> <span class="o">=</span> <a href="http://discretize.simpeg.xyz/en/master/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class"><span class="n">discretize</span><span class="o">.</span><span class="n">TensorMesh</span></a><span class="p">([</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ones.html#numpy.ones" title="numpy.ones" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">(</span><span class="mi">40</span><span class="p">)])</span>
+    <span class="n">M</span><span class="o">.</span><span class="n">setCellGradBC</span><span class="p">(</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">)</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">richards</span><span class="o">.</span><span class="n">empirical</span><span class="o">.</span><span class="n">HaverkampParams</span><span class="p">()</span><span class="o">.</span><span class="n">celia1990</span>
+    <span class="n">k_fun</span><span class="p">,</span> <span class="n">theta_fun</span> <span class="o">=</span> <span class="n">richards</span><span class="o">.</span><span class="n">empirical</span><span class="o">.</span><span class="n">haverkamp</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+    <span class="n">k_fun</span><span class="o">.</span><span class="n">KsMap</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">maps</span><span class="o">.</span><span class="n">IdentityMap</span></a><span class="p">(</span><span class="n">nP</span><span class="o">=</span><span class="n">M</span><span class="o">.</span><span class="n">nC</span><span class="p">)</span>
+
+    <span class="n">bc</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="o">-</span><span class="mf">61.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">20.7</span><span class="p">])</span>
+    <span class="n">h</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">nC</span><span class="p">)</span> <span class="o">+</span> <span class="n">bc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">getFields</span><span class="p">(</span><span class="n">timeStep</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+        <span class="n">timeSteps</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ones.html#numpy.ones" title="numpy.ones" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mi">360</span> <span class="o">/</span> <span class="n">timeStep</span><span class="p">))</span> <span class="o">*</span> <span class="n">timeStep</span>
+        <span class="n">prob</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">richards</span><span class="o">.</span><span class="n">SimulationNDCellCentered</span></a><span class="p">(</span>
+            <span class="n">M</span><span class="p">,</span>
+            <span class="n">hydraulic_conductivity</span><span class="o">=</span><span class="n">k_fun</span><span class="p">,</span>
+            <span class="n">water_retention</span><span class="o">=</span><span class="n">theta_fun</span><span class="p">,</span>
+            <span class="n">boundary_conditions</span><span class="o">=</span><span class="n">bc</span><span class="p">,</span>
+            <span class="n">initial_conditions</span><span class="o">=</span><span class="n">h</span><span class="p">,</span>
+            <span class="n">do_newton</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">prob</span><span class="o">.</span><span class="n">time_steps</span> <span class="o">=</span> <span class="n">timeSteps</span>
+        <span class="k">return</span> <span class="n">prob</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;Ks&quot;</span><span class="p">]</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ones.html#numpy.ones" title="numpy.ones" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">nC</span><span class="p">))</span>
+
+    <span class="n">Hs_M010</span> <span class="o">=</span> <span class="n">getFields</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;mixed&quot;</span><span class="p">)</span>
+    <span class="n">Hs_M030</span> <span class="o">=</span> <span class="n">getFields</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="s2">&quot;mixed&quot;</span><span class="p">)</span>
+    <span class="n">Hs_M120</span> <span class="o">=</span> <span class="n">getFields</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="s2">&quot;mixed&quot;</span><span class="p">)</span>
+    <span class="n">Hs_H010</span> <span class="o">=</span> <span class="n">getFields</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;head&quot;</span><span class="p">)</span>
+    <span class="n">Hs_H030</span> <span class="o">=</span> <span class="n">getFields</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="s2">&quot;head&quot;</span><span class="p">)</span>
+    <span class="n">Hs_H120</span> <span class="o">=</span> <span class="n">getFields</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="s2">&quot;head&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">plotIt</span><span class="p">:</span>
+        <span class="k">return</span>
+    <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+    <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+    <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="mi">40</span> <span class="o">-</span> <span class="n">M</span><span class="o">.</span><span class="n">gridCC</span><span class="p">,</span> <span class="n">Hs_M010</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;b-&quot;</span><span class="p">)</span>
+    <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="mi">40</span> <span class="o">-</span> <span class="n">M</span><span class="o">.</span><span class="n">gridCC</span><span class="p">,</span> <span class="n">Hs_M030</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;r-&quot;</span><span class="p">)</span>
+    <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="mi">40</span> <span class="o">-</span> <span class="n">M</span><span class="o">.</span><span class="n">gridCC</span><span class="p">,</span> <span class="n">Hs_M120</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;k-&quot;</span><span class="p">)</span>
+    <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.ylim.html#matplotlib.pyplot.ylim" title="matplotlib.pyplot.ylim" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span></a><span class="p">([</span><span class="o">-</span><span class="mi">70</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">])</span>
+    <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.title.html#matplotlib.pyplot.title" title="matplotlib.pyplot.title" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">title</span></a><span class="p">(</span><span class="s2">&quot;Mixed Method&quot;</span><span class="p">)</span>
+    <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.xlabel.html#matplotlib.pyplot.xlabel" title="matplotlib.pyplot.xlabel" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span></a><span class="p">(</span><span class="s2">&quot;Depth, cm&quot;</span><span class="p">)</span>
+    <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.ylabel.html#matplotlib.pyplot.ylabel" title="matplotlib.pyplot.ylabel" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span></a><span class="p">(</span><span class="s2">&quot;Pressure Head, cm&quot;</span><span class="p">)</span>
+    <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.legend.html#matplotlib.pyplot.legend" title="matplotlib.pyplot.legend" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">legend</span></a><span class="p">((</span><span class="s2">&quot;$\Delta t$ = 10 sec&quot;</span><span class="p">,</span> <span class="s2">&quot;$\Delta t$ = 30 sec&quot;</span><span class="p">,</span> <span class="s2">&quot;$\Delta t$ = 120 sec&quot;</span><span class="p">))</span>
+    <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+    <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="mi">40</span> <span class="o">-</span> <span class="n">M</span><span class="o">.</span><span class="n">gridCC</span><span class="p">,</span> <span class="n">Hs_H010</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;b-&quot;</span><span class="p">)</span>
+    <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="mi">40</span> <span class="o">-</span> <span class="n">M</span><span class="o">.</span><span class="n">gridCC</span><span class="p">,</span> <span class="n">Hs_H030</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;r-&quot;</span><span class="p">)</span>
+    <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="mi">40</span> <span class="o">-</span> <span class="n">M</span><span class="o">.</span><span class="n">gridCC</span><span class="p">,</span> <span class="n">Hs_H120</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;k-&quot;</span><span class="p">)</span>
+    <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.ylim.html#matplotlib.pyplot.ylim" title="matplotlib.pyplot.ylim" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span></a><span class="p">([</span><span class="o">-</span><span class="mi">70</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">])</span>
+    <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.title.html#matplotlib.pyplot.title" title="matplotlib.pyplot.title" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">title</span></a><span class="p">(</span><span class="s2">&quot;Head-Based Method&quot;</span><span class="p">)</span>
+    <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.xlabel.html#matplotlib.pyplot.xlabel" title="matplotlib.pyplot.xlabel" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span></a><span class="p">(</span><span class="s2">&quot;Depth, cm&quot;</span><span class="p">)</span>
+    <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.ylabel.html#matplotlib.pyplot.ylabel" title="matplotlib.pyplot.ylabel" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span></a><span class="p">(</span><span class="s2">&quot;Pressure Head, cm&quot;</span><span class="p">)</span>
+    <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.legend.html#matplotlib.pyplot.legend" title="matplotlib.pyplot.legend" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">legend</span></a><span class="p">((</span><span class="s2">&quot;$\Delta t$ = 10 sec&quot;</span><span class="p">,</span> <span class="s2">&quot;$\Delta t$ = 30 sec&quot;</span><span class="p">,</span> <span class="s2">&quot;$\Delta t$ = 120 sec&quot;</span><span class="p">))</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">run</span><span class="p">()</span>
+    <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  7.363 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  9 MB</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-examples-20-published-plot-richards-celia1990-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/f333595cfe76ff58a817b82f60989303/plot_richards_celia1990.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_richards_celia1990.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/66c2fadad3f1ac7ce4d3ce9716804ce4/plot_richards_celia1990.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_richards_celia1990.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="plot_schenkel_morrison_casing.html" class="btn btn-neutral float-right" title="EM: Schenkel and Morrison Casing Model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="plot_load_booky.html" class="btn btn-neutral float-left" title="Heagy et al., 2017 Load and Plot Bookpurnong Data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+
+ 
+
+
+    <div id="disqus_thread"></div>
+    <script>
+
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+    var disqus_config = function () {
+    this.page.url = {path};  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = {path}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://simpeg.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    <div role="contentinfo">
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/" width="60px"; style="float:right;height:3em;line-height:3em;padding:10px 0 0 1em;">
+            <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" />
+        </a>
+        2013-2018,
+        <a href="http://simpeg.xyz">SimPEG Developers.</a><br />
+        Except where noted, this work is licensed under a <br />
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+            Creative Commons Attribution 4.0 International License
+        </a>
+    </div>
+    <br>
+    <div>
+    Built with
+        <a href="http://sphinx-doc.org/">Sphinx</a>
+        using a
+        <a href="https://github.com/snide/sphinx_rtd_theme">theme</a>
+        provided by
+        <a href="https://readthedocs.org">Read the Docs</a>.
+     </div>
+
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

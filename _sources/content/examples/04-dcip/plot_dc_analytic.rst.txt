@@ -1,0 +1,171 @@
+.. only:: html
+
+    .. note::
+        :class: sphx-glr-download-link-note
+
+        Click :ref:`here <sphx_glr_download_content_examples_04-dcip_plot_dc_analytic.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_content_examples_04-dcip_plot_dc_analytic.py:
+
+
+DC Analytic Dipole
+==================
+
+Comparison of the analytic and numerical solution for a direct current
+resistivity dipole in 3D.
+
+
+
+.. image:: /content/examples/04-dcip/images/sphx_glr_plot_dc_analytic_001.png
+    :alt: Analytic, Computed
+    :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: TensorMesh.faceBoundaryInd has been deprecated, please use TensorMesh.face_boundary_indices. It will be removed in version 1.0.0 of discretize.
+      warnings.warn(message, FutureWarning)
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/base/base_tensor_mesh.py:690: FutureWarning: hx has been deprecated, please access as mesh.h[0]
+      "hx has been deprecated, please access as mesh.h[0]", FutureWarning
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/base/base_tensor_mesh.py:707: FutureWarning: hy has been deprecated, please access as mesh.h[1]
+      "hy has been deprecated, please access as mesh.h[1]", FutureWarning
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/base/base_tensor_mesh.py:724: FutureWarning: hz has been deprecated, please access as mesh.h[2]
+      "hz has been deprecated, please access as mesh.h[2]", FutureWarning
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: TensorMesh.vol has been deprecated, please use TensorMesh.cell_volumes. It will be removed in version 1.0.0 of discretize.
+      warnings.warn(message, FutureWarning)
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: TensorMesh.faceDiv has been deprecated, please use TensorMesh.face_divergence. It will be removed in version 1.0.0 of discretize.
+      warnings.warn(message, FutureWarning)
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:157: FutureWarning: TensorMesh.getBCProjWF_simple has been deprecated, please use TensorMesh.get_BC_projections_simple. It will be removed in version 1.0.0 of discretize.
+      FutureWarning,
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:157: FutureWarning: TensorMesh.setCellGradBC has been deprecated, please use TensorMesh.set_cell_gradient_BC. It will be removed in version 1.0.0 of discretize.
+      FutureWarning,
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: TensorMesh.cellGrad has been deprecated, please use TensorMesh.cell_gradient. It will be removed in version 1.0.0 of discretize.
+      warnings.warn(message, FutureWarning)
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:157: FutureWarning: TensorMesh.getFaceInnerProduct has been deprecated, please use TensorMesh.get_face_inner_product. It will be removed in version 1.0.0 of discretize.
+      FutureWarning,
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/operators/inner_products.py:69: FutureWarning: The invMat keyword argument has been deprecated, please use invert_matrix. This will be removed in discretize 1.0.0
+      FutureWarning,
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:176: FutureWarning: closestPoints has been deprecated, please use closest_points_index. It will be removed in version 1.0.0 of discretize.
+      FutureWarning,
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/mesh_utils.py:206: FutureWarning: The gridLoc keyword argument has been deprecated, please use grid_loc. This will be removed in discretize 1.0.0
+      FutureWarning,
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:157: FutureWarning: TensorMesh.getInterpolationMat has been deprecated, please use TensorMesh.get_interpolation_matrix. It will be removed in version 1.0.0 of discretize.
+      FutureWarning,
+    0.06464333484677047
+
+
+
+
+
+
+|
+
+
+.. code-block:: default
+
+    from __future__ import print_function
+    import discretize
+    from SimPEG import utils
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from SimPEG.electromagnetics.static import resistivity as DC
+
+    try:
+        from pymatsolver import Pardiso as Solver
+    except ImportError:
+        from SimPEG import SolverLU as Solver
+
+
+    cs = 25.0
+    hx = [(cs, 7, -1.3), (cs, 21), (cs, 7, 1.3)]
+    hy = [(cs, 7, -1.3), (cs, 21), (cs, 7, 1.3)]
+    hz = [(cs, 7, -1.3), (cs, 20)]
+    mesh = discretize.TensorMesh([hx, hy, hz], "CCN")
+    sighalf = 1e-2
+    sigma = np.ones(mesh.nC) * sighalf
+    xtemp = np.linspace(-150, 150, 21)
+    ytemp = np.linspace(-150, 150, 21)
+    xyz_rxP = utils.ndgrid(xtemp - 10.0, ytemp, np.r_[0.0])
+    xyz_rxN = utils.ndgrid(xtemp + 10.0, ytemp, np.r_[0.0])
+    xyz_rxM = utils.ndgrid(xtemp, ytemp, np.r_[0.0])
+
+
+    rx = DC.Rx.Dipole(xyz_rxP, xyz_rxN)
+    src = DC.Src.Dipole([rx], np.r_[-200, 0, -12.5], np.r_[+200, 0, -12.5])
+    survey = DC.Survey([src])
+    sim = DC.Simulation3DCellCentered(
+        mesh, survey=survey, solver=Solver, sigma=sigma, bc_type="Neumann"
+    )
+
+    data = sim.dpred()
+
+
+    def DChalf(srclocP, srclocN, rxloc, sigma, I=1.0):
+        rp = (srclocP.reshape([1, -1])).repeat(rxloc.shape[0], axis=0)
+        rn = (srclocN.reshape([1, -1])).repeat(rxloc.shape[0], axis=0)
+        rP = np.sqrt(((rxloc - rp) ** 2).sum(axis=1))
+        rN = np.sqrt(((rxloc - rn) ** 2).sum(axis=1))
+        return I / (sigma * 2.0 * np.pi) * (1 / rP - 1 / rN)
+
+
+    data_anaP = DChalf(np.r_[-200, 0, 0.0], np.r_[+200, 0, 0.0], xyz_rxP, sighalf)
+    data_anaN = DChalf(np.r_[-200, 0, 0.0], np.r_[+200, 0, 0.0], xyz_rxN, sighalf)
+    data_ana = data_anaP - data_anaN
+    Data_ana = data_ana.reshape((21, 21), order="F")
+    Data = data.reshape((21, 21), order="F")
+    X = xyz_rxM[:, 0].reshape((21, 21), order="F")
+    Y = xyz_rxM[:, 1].reshape((21, 21), order="F")
+
+
+    fig, ax = plt.subplots(1, 2, figsize=(12, 5))
+    vmin = np.r_[data, data_ana].min()
+    vmax = np.r_[data, data_ana].max()
+    dat0 = ax[0].contourf(X, Y, Data_ana, 60, vmin=vmin, vmax=vmax)
+    dat1 = ax[1].contourf(X, Y, Data, 60, vmin=vmin, vmax=vmax)
+    plt.colorbar(dat0, orientation="horizontal", ax=ax[0])
+    plt.colorbar(dat1, orientation="horizontal", ax=ax[1])
+    ax[0].set_title("Analytic")
+    ax[1].set_title("Computed")
+
+    print(np.linalg.norm(data - data_ana) / np.linalg.norm(data_ana))
+    plt.show()
+
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  2.280 seconds)
+
+**Estimated memory usage:**  97 MB
+
+
+.. _sphx_glr_download_content_examples_04-dcip_plot_dc_analytic.py:
+
+
+.. only :: html
+
+ .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-example
+
+
+
+  .. container:: sphx-glr-download sphx-glr-download-python
+
+     :download:`Download Python source code: plot_dc_analytic.py <plot_dc_analytic.py>`
+
+
+
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
+
+     :download:`Download Jupyter notebook: plot_dc_analytic.ipynb <plot_dc_analytic.ipynb>`
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.github.io>`_

@@ -1,0 +1,1200 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>InvProblem &mdash; SimPEG 0.14.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/logo-block.ico"/>
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Maps" href="api_Maps.html" />
+    <link rel="prev" title="Optimize" href="api_Optimization.html" />
+ 
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-45185336-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> SimPEG
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.14.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../basic/big_picture.html">Why SimPEG?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/contributing.html">Contributing to SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/installing.html">Getting Started with SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/getting_started_developers.html">Getting Started: for Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/practices.html">Practices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/01-models_mapping/index.html">Models and Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/02-linear_inversion/index.html">Linear Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/03-gravity/index.html">Gravity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/04-magnetics/index.html">Magnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/05-dcr/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/06-ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/07-fdem/index.html">Frequency-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/08-tdem/index.html">Time-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/09-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/10-vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/11-flow/index.html">Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/12-seismic/index.html">Seismic</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Packages</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../em/index.html">Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dc/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pf/index.html">Potential Fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../flow/index.html">Richards Equation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api_FiniteVolume.html">Finite Volume</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_ForwardProblem.html">Forward Simulation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api_InversionComponents.html">Inversion Components</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="api_DataMisfit.html">Data Misfit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_Regularization.html">Regularization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_Optimization.html">Optimize</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">InvProblem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#inversion">Inversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-SimPEG.directives">Directives</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_Maps.html">Maps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_Utilities.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Meta Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../release/index.html">Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SimPEG</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="api_InversionComponents.html">Inversion Components</a> &raquo;</li>
+        
+      <li>InvProblem</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            <a href="https://github.com/simpeg/simpeg/edit/master/docs/content/api_core/api_Inversion.rst" class="fa fa-github"> Edit on GitHub</a>
+        
+      </li>
+    
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="invproblem">
+<h1>InvProblem<a class="headerlink" href="#invproblem" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="SimPEG.inverse_problem.BaseInvProblem">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.inverse_problem.</code><code class="sig-name descname">BaseInvProblem</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dmisfit</span></em>, <em class="sig-param"><span class="n">reg</span></em>, <em class="sig-param"><span class="n">opt</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/inverse_problem.py#L14-L243"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.inverse_problem.BaseInvProblem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="api_Props.html#SimPEG.props.BaseSimPEG" title="SimPEG.props.BaseSimPEG"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.props.BaseSimPEG</span></code></a></p>
+<p><strong>Optional Properties:</strong></p>
+<ul class="simple">
+<li><p><strong>model</strong> (<a class="reference internal" href="api_Props.html#SimPEG.props.Model" title="SimPEG.props.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a>): Inversion model., a numpy array of &lt;class ‘float’&gt;, &lt;class ‘int’&gt; with shape (*, *) or (*)</p></li>
+</ul>
+<dl class="py attribute">
+<dt id="SimPEG.inverse_problem.BaseInvProblem.beta">
+<code class="sig-name descname">beta</code><em class="property"> = 1.0</em><a class="headerlink" href="#SimPEG.inverse_problem.BaseInvProblem.beta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trade-off parameter</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.inverse_problem.BaseInvProblem.debug">
+<code class="sig-name descname">debug</code><em class="property"> = False</em><a class="headerlink" href="#SimPEG.inverse_problem.BaseInvProblem.debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print debugging information</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.inverse_problem.BaseInvProblem.counter">
+<code class="sig-name descname">counter</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.inverse_problem.BaseInvProblem.counter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set this to a SimPEG.utils.Counter() if you want to count things</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.inverse_problem.BaseInvProblem.deleteTheseOnModelUpdate">
+<code class="sig-name descname">deleteTheseOnModelUpdate</code><em class="property"> = []</em><a class="headerlink" href="#SimPEG.inverse_problem.BaseInvProblem.deleteTheseOnModelUpdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of strings, e.g. [‘_MeSigma’, ‘_MeSigmaI’]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.inverse_problem.BaseInvProblem.model">
+<em class="property">property </em><code class="sig-name descname">model</code><a class="headerlink" href="#SimPEG.inverse_problem.BaseInvProblem.model" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>model</strong> (<a class="reference internal" href="api_Props.html#SimPEG.props.Model" title="SimPEG.props.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a>): Inversion model., a numpy array of &lt;class ‘float’&gt;, &lt;class ‘int’&gt; with shape (*, *) or (*)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.inverse_problem.BaseInvProblem.dmisfit">
+<code class="sig-name descname">dmisfit</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.inverse_problem.BaseInvProblem.dmisfit" title="Permalink to this definition">¶</a></dt>
+<dd><p>DataMisfit</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.inverse_problem.BaseInvProblem.reg">
+<code class="sig-name descname">reg</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.inverse_problem.BaseInvProblem.reg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Regularization</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.inverse_problem.BaseInvProblem.opt">
+<code class="sig-name descname">opt</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.inverse_problem.BaseInvProblem.opt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optimization program</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.inverse_problem.BaseInvProblem.startup">
+<code class="sig-name descname">startup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m0</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/inverse_problem.py#L65-L115"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.inverse_problem.BaseInvProblem.startup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when inversion is first starting.</p>
+<p>If you have things that also need to run in the method startup, you can create a method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_startup</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">...</span> <span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>Where the * can be any string. If present, _startup* will be called at the start of the default startup call.
+You may also completely overwrite this function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.inverse_problem.BaseInvProblem.warmstart">
+<em class="property">property </em><code class="sig-name descname">warmstart</code><a class="headerlink" href="#SimPEG.inverse_problem.BaseInvProblem.warmstart" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.inverse_problem.BaseInvProblem.getFields">
+<code class="sig-name descname">getFields</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">store</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">deleteWarmstart</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/inverse_problem.py#L134-L161"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.inverse_problem.BaseInvProblem.getFields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.inverse_problem.BaseInvProblem.get_dpred">
+<code class="sig-name descname">get_dpred</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/inverse_problem.py#L163-L173"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.inverse_problem.BaseInvProblem.get_dpred" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.inverse_problem.BaseInvProblem.evalFunction">
+<code class="sig-name descname">evalFunction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">return_g</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">return_H</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/inverse_problem.py#L175-L243"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.inverse_problem.BaseInvProblem.evalFunction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="inversion">
+<h1>Inversion<a class="headerlink" href="#inversion" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="SimPEG.inversion.BaseInversion">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.inversion.</code><code class="sig-name descname">BaseInversion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">invProb</span></em>, <em class="sig-param"><span class="n">directiveList</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/inversion.py#L10-L72"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.inversion.BaseInversion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Inversion Class</p>
+<dl class="py attribute">
+<dt id="SimPEG.inversion.BaseInversion.name">
+<code class="sig-name descname">name</code><em class="property"> = 'BaseInversion'</em><a class="headerlink" href="#SimPEG.inversion.BaseInversion.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.inversion.BaseInversion.debug">
+<code class="sig-name descname">debug</code><em class="property"> = False</em><a class="headerlink" href="#SimPEG.inversion.BaseInversion.debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print debugging information</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.inversion.BaseInversion.counter">
+<code class="sig-name descname">counter</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.inversion.BaseInversion.counter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set this to a SimPEG.utils.Counter() if you want to count things</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.inversion.BaseInversion.directiveList">
+<em class="property">property </em><code class="sig-name descname">directiveList</code><a class="headerlink" href="#SimPEG.inversion.BaseInversion.directiveList" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.inversion.BaseInversion.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m0</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/inversion.py#L56-L69"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.inversion.BaseInversion.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the inversion!</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-SimPEG.directives">
+<span id="directives"></span><h1>Directives<a class="headerlink" href="#module-SimPEG.directives" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="SimPEG.directives.InversionDirective">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.directives.</code><code class="sig-name descname">InversionDirective</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L23-L121"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.InversionDirective" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">properties.base.base.HasProperties</span></code></p>
+<dl class="py attribute">
+<dt id="SimPEG.directives.InversionDirective.debug">
+<code class="sig-name descname">debug</code><em class="property"> = False</em><a class="headerlink" href="#SimPEG.directives.InversionDirective.debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print debugging information</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.InversionDirective.inversion">
+<em class="property">property </em><code class="sig-name descname">inversion</code><a class="headerlink" href="#SimPEG.directives.InversionDirective.inversion" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the inversion of the InversionDirective instance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.InversionDirective.invProb">
+<em class="property">property </em><code class="sig-name descname">invProb</code><a class="headerlink" href="#SimPEG.directives.InversionDirective.invProb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.InversionDirective.opt">
+<em class="property">property </em><code class="sig-name descname">opt</code><a class="headerlink" href="#SimPEG.directives.InversionDirective.opt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.InversionDirective.reg">
+<em class="property">property </em><code class="sig-name descname">reg</code><a class="headerlink" href="#SimPEG.directives.InversionDirective.reg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.InversionDirective.dmisfit">
+<em class="property">property </em><code class="sig-name descname">dmisfit</code><a class="headerlink" href="#SimPEG.directives.InversionDirective.dmisfit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.InversionDirective.survey">
+<em class="property">property </em><code class="sig-name descname">survey</code><a class="headerlink" href="#SimPEG.directives.InversionDirective.survey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assuming that dmisfit is always a ComboObjectiveFunction,
+return a list of surveys for each dmisfit [survey1, survey2, … ]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.InversionDirective.simulation">
+<em class="property">property </em><code class="sig-name descname">simulation</code><a class="headerlink" href="#SimPEG.directives.InversionDirective.simulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assuming that dmisfit is always a ComboObjectiveFunction,
+return a list of problems for each dmisfit [prob1, prob2, …]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.InversionDirective.prob">
+<em class="property">property </em><code class="sig-name descname">prob</code><a class="headerlink" href="#SimPEG.directives.InversionDirective.prob" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>simulation.prob</cite> has been deprecated. See <cite>simulation</cite> for documentation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.InversionDirective.initialize">
+<code class="sig-name descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L111-L112"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.InversionDirective.initialize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.InversionDirective.endIter">
+<code class="sig-name descname">endIter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L114-L115"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.InversionDirective.endIter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.InversionDirective.finish">
+<code class="sig-name descname">finish</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L117-L118"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.InversionDirective.finish" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.InversionDirective.validate">
+<code class="sig-name descname">validate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">directiveList</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L120-L121"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.InversionDirective.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call all registered class validator methods</p>
+<p>These are all methods decorated with <code class="code docutils literal notranslate"><span class="pre">&#64;properties.validator</span></code>.
+Validator methods are expected to raise a ValidationError if they
+fail.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.directives.DirectiveList">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.directives.</code><code class="sig-name descname">DirectiveList</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">directives</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L124-L179"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.DirectiveList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt id="SimPEG.directives.DirectiveList.dList">
+<code class="sig-name descname">dList</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.directives.DirectiveList.dList" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of Directives</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.DirectiveList.debug">
+<em class="property">property </em><code class="sig-name descname">debug</code><a class="headerlink" href="#SimPEG.directives.DirectiveList.debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.DirectiveList.inversion">
+<em class="property">property </em><code class="sig-name descname">inversion</code><a class="headerlink" href="#SimPEG.directives.DirectiveList.inversion" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the inversion of the InversionDirective instance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.DirectiveList.call">
+<code class="sig-name descname">call</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ruleType</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L164-L175"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.DirectiveList.call" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.DirectiveList.validate">
+<code class="sig-name descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L177-L179"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.DirectiveList.validate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.directives.BetaEstimate_ByEig">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.directives.</code><code class="sig-name descname">BetaEstimate_ByEig</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L182-L236"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.BetaEstimate_ByEig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.directives.InversionDirective" title="SimPEG.directives.InversionDirective"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.directives.InversionDirective</span></code></a></p>
+<p>BetaEstimate</p>
+<dl class="py attribute">
+<dt id="SimPEG.directives.BetaEstimate_ByEig.beta0">
+<code class="sig-name descname">beta0</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.directives.BetaEstimate_ByEig.beta0" title="Permalink to this definition">¶</a></dt>
+<dd><p>The initial Beta (regularization parameter)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.BetaEstimate_ByEig.beta0_ratio">
+<code class="sig-name descname">beta0_ratio</code><em class="property"> = 100.0</em><a class="headerlink" href="#SimPEG.directives.BetaEstimate_ByEig.beta0_ratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>estimateBeta0 is used with this ratio</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.BetaEstimate_ByEig.initialize">
+<code class="sig-name descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L188-L236"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.BetaEstimate_ByEig.initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>The initial beta is calculated by comparing the estimated
+eigenvalues of JtJ and WtW.
+To estimate the eigenvector of <strong>A</strong>, we will use one iteration
+of the <em>Power Method</em>:</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{x_1 = A x_0}\]</div>
+<p>Given this (very course) approximation of the eigenvector, we can
+use the <em>Rayleigh quotient</em> to approximate the largest eigenvalue.</p>
+<div class="math notranslate nohighlight">
+\[\lambda_0 = \frac{\mathbf{x^\top A x}}{\mathbf{x^\top x}}\]</div>
+<p>We will approximate the largest eigenvalue for both JtJ and WtW,
+and use some ratio of the quotient to estimate beta0.</p>
+<div class="math notranslate nohighlight">
+\[\beta_0 = \gamma \frac{\mathbf{x^\top J^\top J x}}{\mathbf{x^\top W^\top W x}}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>beta0</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.directives.BetaSchedule">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.directives.</code><code class="sig-name descname">BetaSchedule</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L239-L253"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.BetaSchedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.directives.InversionDirective" title="SimPEG.directives.InversionDirective"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.directives.InversionDirective</span></code></a></p>
+<dl class="py attribute">
+<dt id="SimPEG.directives.BetaSchedule.coolingFactor">
+<code class="sig-name descname">coolingFactor</code><em class="property"> = 8.0</em><a class="headerlink" href="#SimPEG.directives.BetaSchedule.coolingFactor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.BetaSchedule.coolingRate">
+<code class="sig-name descname">coolingRate</code><em class="property"> = 3</em><a class="headerlink" href="#SimPEG.directives.BetaSchedule.coolingRate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.BetaSchedule.endIter">
+<code class="sig-name descname">endIter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L245-L253"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.BetaSchedule.endIter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.directives.TargetMisfit">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.directives.</code><code class="sig-name descname">TargetMisfit</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L256-L293"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.TargetMisfit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.directives.InversionDirective" title="SimPEG.directives.InversionDirective"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.directives.InversionDirective</span></code></a></p>
+<p>… note:: Currently the target misfit is not set up for joint inversions. Get <a class="reference external" href="https://github.com/simpeg/simpeg/issues/new">in touch</a> if you would like to help with the upgrade!</p>
+<dl class="py attribute">
+<dt id="SimPEG.directives.TargetMisfit.chifact">
+<code class="sig-name descname">chifact</code><em class="property"> = 1.0</em><a class="headerlink" href="#SimPEG.directives.TargetMisfit.chifact" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.TargetMisfit.phi_d_star">
+<code class="sig-name descname">phi_d_star</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.directives.TargetMisfit.phi_d_star" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.TargetMisfit.target">
+<em class="property">property </em><code class="sig-name descname">target</code><a class="headerlink" href="#SimPEG.directives.TargetMisfit.target" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.TargetMisfit.endIter">
+<code class="sig-name descname">endIter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L283-L286"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.TargetMisfit.endIter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.TargetMisfit.print_final_misfit">
+<code class="sig-name descname">print_final_misfit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L289-L293"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.TargetMisfit.print_final_misfit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.directives.SaveEveryIteration">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.directives.</code><code class="sig-name descname">SaveEveryIteration</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L296-L326"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.SaveEveryIteration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.directives.InversionDirective" title="SimPEG.directives.InversionDirective"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.directives.InversionDirective</span></code></a></p>
+<blockquote>
+<div><p>This directive saves an array at each iteration. The default
+directory is the current directoy and the models are saved as
+<code class="docutils literal notranslate"><span class="pre">InversionModel-YYYY-MM-DD-HH-MM-iter.npy</span></code></p>
+</div></blockquote>
+<p><strong>Required Properties:</strong></p>
+<ul class="simple">
+<li><p><strong>directory</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.String" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code></a>): directory to save results in, a unicode string, Default: .</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.String" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code></a>): root of the filename to be saved, a unicode string, Default: InversionModel</p></li>
+</ul>
+<dl class="py method">
+<dt id="SimPEG.directives.SaveEveryIteration.directory">
+<em class="property">property </em><code class="sig-name descname">directory</code><a class="headerlink" href="#SimPEG.directives.SaveEveryIteration.directory" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>directory</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.String" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code></a>): directory to save results in, a unicode string, Default: .</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.SaveEveryIteration.name">
+<em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#SimPEG.directives.SaveEveryIteration.name" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>name</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.String" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code></a>): root of the filename to be saved, a unicode string, Default: InversionModel</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.SaveEveryIteration.fileName">
+<em class="property">property </em><code class="sig-name descname">fileName</code><a class="headerlink" href="#SimPEG.directives.SaveEveryIteration.fileName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.directives.SaveModelEveryIteration">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.directives.</code><code class="sig-name descname">SaveModelEveryIteration</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L329-L349"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.SaveModelEveryIteration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.directives.SaveEveryIteration" title="SimPEG.directives.SaveEveryIteration"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.directives.SaveEveryIteration</span></code></a></p>
+<blockquote>
+<div><p>This directive saves the model as a numpy array at each iteration. The
+default directory is the current directoy and the models are saved as
+<code class="docutils literal notranslate"><span class="pre">InversionModel-YYYY-MM-DD-HH-MM-iter.npy</span></code></p>
+</div></blockquote>
+<p><strong>Required Properties:</strong></p>
+<ul class="simple">
+<li><p><strong>directory</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.String" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code></a>): directory to save results in, a unicode string, Default: .</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.String" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code></a>): root of the filename to be saved, a unicode string, Default: InversionModel</p></li>
+</ul>
+<dl class="py method">
+<dt id="SimPEG.directives.SaveModelEveryIteration.initialize">
+<code class="sig-name descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L337-L341"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.SaveModelEveryIteration.initialize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.SaveModelEveryIteration.endIter">
+<code class="sig-name descname">endIter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L343-L349"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.SaveModelEveryIteration.endIter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.directives.SaveOutputEveryIteration">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.directives.</code><code class="sig-name descname">SaveOutputEveryIteration</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L352-L558"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.SaveOutputEveryIteration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.directives.SaveEveryIteration" title="SimPEG.directives.SaveEveryIteration"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.directives.SaveEveryIteration</span></code></a></p>
+<p><strong>Required Properties:</strong></p>
+<ul class="simple">
+<li><p><strong>directory</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.String" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code></a>): directory to save results in, a unicode string, Default: .</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.String" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code></a>): root of the filename to be saved, a unicode string, Default: InversionModel</p></li>
+</ul>
+<dl class="py attribute">
+<dt id="SimPEG.directives.SaveOutputEveryIteration.header">
+<code class="sig-name descname">header</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.directives.SaveOutputEveryIteration.header" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.SaveOutputEveryIteration.save_txt">
+<code class="sig-name descname">save_txt</code><em class="property"> = True</em><a class="headerlink" href="#SimPEG.directives.SaveOutputEveryIteration.save_txt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.SaveOutputEveryIteration.beta">
+<code class="sig-name descname">beta</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.directives.SaveOutputEveryIteration.beta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.SaveOutputEveryIteration.phi_d">
+<code class="sig-name descname">phi_d</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.directives.SaveOutputEveryIteration.phi_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.SaveOutputEveryIteration.phi_m">
+<code class="sig-name descname">phi_m</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.directives.SaveOutputEveryIteration.phi_m" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.SaveOutputEveryIteration.phi_m_small">
+<code class="sig-name descname">phi_m_small</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.directives.SaveOutputEveryIteration.phi_m_small" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.SaveOutputEveryIteration.phi_m_smooth_x">
+<code class="sig-name descname">phi_m_smooth_x</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.directives.SaveOutputEveryIteration.phi_m_smooth_x" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.SaveOutputEveryIteration.phi_m_smooth_y">
+<code class="sig-name descname">phi_m_smooth_y</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.directives.SaveOutputEveryIteration.phi_m_smooth_y" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.SaveOutputEveryIteration.phi_m_smooth_z">
+<code class="sig-name descname">phi_m_smooth_z</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.directives.SaveOutputEveryIteration.phi_m_smooth_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.SaveOutputEveryIteration.phi">
+<code class="sig-name descname">phi</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.directives.SaveOutputEveryIteration.phi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.SaveOutputEveryIteration.initialize">
+<code class="sig-name descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L366-L386"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.SaveOutputEveryIteration.initialize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.SaveOutputEveryIteration.endIter">
+<code class="sig-name descname">endIter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L388-L426"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.SaveOutputEveryIteration.endIter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.SaveOutputEveryIteration.load_results">
+<code class="sig-name descname">load_results</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L428-L451"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.SaveOutputEveryIteration.load_results" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.SaveOutputEveryIteration.plot_misfit_curves">
+<code class="sig-name descname">plot_misfit_curves</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dpi</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="n">plot_small_smooth</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">plot_phi_m</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">plot_small</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">plot_smooth</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L453-L514"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.SaveOutputEveryIteration.plot_misfit_curves" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.SaveOutputEveryIteration.plot_tikhonov_curves">
+<code class="sig-name descname">plot_tikhonov_curves</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dpi</span><span class="o">=</span><span class="default_value">200</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L516-L558"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.SaveOutputEveryIteration.plot_tikhonov_curves" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.directives.SaveOutputDictEveryIteration">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.directives.</code><code class="sig-name descname">SaveOutputDictEveryIteration</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L561-L618"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.SaveOutputDictEveryIteration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.directives.SaveEveryIteration" title="SimPEG.directives.SaveEveryIteration"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.directives.SaveEveryIteration</span></code></a></p>
+<blockquote>
+<div><p>Saves inversion parameters at every iteration.</p>
+</div></blockquote>
+<p><strong>Required Properties:</strong></p>
+<ul class="simple">
+<li><p><strong>directory</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.String" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code></a>): directory to save results in, a unicode string, Default: .</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.String" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code></a>): root of the filename to be saved, a unicode string, Default: InversionModel</p></li>
+</ul>
+<dl class="py attribute">
+<dt id="SimPEG.directives.SaveOutputDictEveryIteration.outDict">
+<code class="sig-name descname">outDict</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.directives.SaveOutputDictEveryIteration.outDict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.SaveOutputDictEveryIteration.saveOnDisk">
+<code class="sig-name descname">saveOnDisk</code><em class="property"> = False</em><a class="headerlink" href="#SimPEG.directives.SaveOutputDictEveryIteration.saveOnDisk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.SaveOutputDictEveryIteration.initialize">
+<code class="sig-name descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L570-L577"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.SaveOutputDictEveryIteration.initialize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.SaveOutputDictEveryIteration.endIter">
+<code class="sig-name descname">endIter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L579-L618"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.SaveOutputDictEveryIteration.endIter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.directives.Update_IRLS">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.directives.</code><code class="sig-name descname">Update_IRLS</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L621-L920"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.Update_IRLS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.directives.InversionDirective" title="SimPEG.directives.InversionDirective"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.directives.InversionDirective</span></code></a></p>
+<p><strong>Required Properties:</strong></p>
+<ul class="simple">
+<li><p><strong>beta_search</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Boolean" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Boolean</span></code></a>): Do a beta serarch, a boolean, Default: False</p></li>
+<li><p><strong>coolingFactor</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Float" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>): Cooling factor, a float, Default: 2.0</p></li>
+<li><p><strong>coolingRate</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Integer" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Integer</span></code></a>): Cooling rate, an integer, Default: 1</p></li>
+<li><p><strong>max_irls_iterations</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Integer" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Integer</span></code></a>): maximum irls iterations, an integer, Default: 20</p></li>
+<li><p><strong>update_beta</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Boolean" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Boolean</span></code></a>): Update beta, a boolean, Default: True</p></li>
+</ul>
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.f_old">
+<code class="sig-name descname">f_old</code><em class="property"> = 0</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.f_old" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.f_min_change">
+<code class="sig-name descname">f_min_change</code><em class="property"> = 0.01</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.f_min_change" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.beta_tol">
+<code class="sig-name descname">beta_tol</code><em class="property"> = 0.1</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.beta_tol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.beta_ratio_l2">
+<code class="sig-name descname">beta_ratio_l2</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.beta_ratio_l2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.prctile">
+<code class="sig-name descname">prctile</code><em class="property"> = 100</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.prctile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.chifact_start">
+<code class="sig-name descname">chifact_start</code><em class="property"> = 1.0</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.chifact_start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.chifact_target">
+<code class="sig-name descname">chifact_target</code><em class="property"> = 1.0</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.chifact_target" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.irls_iteration">
+<code class="sig-name descname">irls_iteration</code><em class="property"> = 0</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.irls_iteration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.minGNiter">
+<code class="sig-name descname">minGNiter</code><em class="property"> = 1</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.minGNiter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.Update_IRLS.max_irls_iterations">
+<em class="property">property </em><code class="sig-name descname">max_irls_iterations</code><a class="headerlink" href="#SimPEG.directives.Update_IRLS.max_irls_iterations" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>max_irls_iterations</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Integer" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Integer</span></code></a>): maximum irls iterations, an integer, Default: 20</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.iterStart">
+<code class="sig-name descname">iterStart</code><em class="property"> = 0</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.iterStart" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.sphericalDomain">
+<code class="sig-name descname">sphericalDomain</code><em class="property"> = False</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.sphericalDomain" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.Update_IRLS.update_beta">
+<em class="property">property </em><code class="sig-name descname">update_beta</code><a class="headerlink" href="#SimPEG.directives.Update_IRLS.update_beta" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>update_beta</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Boolean" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Boolean</span></code></a>): Update beta, a boolean, Default: True</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.Update_IRLS.beta_search">
+<em class="property">property </em><code class="sig-name descname">beta_search</code><a class="headerlink" href="#SimPEG.directives.Update_IRLS.beta_search" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>beta_search</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Boolean" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Boolean</span></code></a>): Do a beta serarch, a boolean, Default: False</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.Update_IRLS.coolingFactor">
+<em class="property">property </em><code class="sig-name descname">coolingFactor</code><a class="headerlink" href="#SimPEG.directives.Update_IRLS.coolingFactor" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>coolingFactor</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Float" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>): Cooling factor, a float, Default: 2.0</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.Update_IRLS.coolingRate">
+<em class="property">property </em><code class="sig-name descname">coolingRate</code><a class="headerlink" href="#SimPEG.directives.Update_IRLS.coolingRate" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>coolingRate</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Integer" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Integer</span></code></a>): Cooling rate, an integer, Default: 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.ComboObjFun">
+<code class="sig-name descname">ComboObjFun</code><em class="property"> = False</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.ComboObjFun" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.mode">
+<code class="sig-name descname">mode</code><em class="property"> = 1</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.coolEpsOptimized">
+<code class="sig-name descname">coolEpsOptimized</code><em class="property"> = True</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.coolEpsOptimized" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.coolEps_p">
+<code class="sig-name descname">coolEps_p</code><em class="property"> = True</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.coolEps_p" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.coolEps_q">
+<code class="sig-name descname">coolEps_q</code><em class="property"> = True</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.coolEps_q" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.floorEps_p">
+<code class="sig-name descname">floorEps_p</code><em class="property"> = 1e-08</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.floorEps_p" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.floorEps_q">
+<code class="sig-name descname">floorEps_q</code><em class="property"> = 1e-08</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.floorEps_q" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.coolEpsFact">
+<code class="sig-name descname">coolEpsFact</code><em class="property"> = 1.2</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.coolEpsFact" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.silent">
+<code class="sig-name descname">silent</code><em class="property"> = False</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.silent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_IRLS.fix_Jmatrix">
+<code class="sig-name descname">fix_Jmatrix</code><em class="property"> = False</em><a class="headerlink" href="#SimPEG.directives.Update_IRLS.fix_Jmatrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.Update_IRLS.maxIRLSiters">
+<em class="property">property </em><code class="sig-name descname">maxIRLSiters</code><a class="headerlink" href="#SimPEG.directives.Update_IRLS.maxIRLSiters" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>maxIRLSiters</cite> has been deprecated. See <cite>max_irls_iterations</cite> for documentation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.Update_IRLS.updateBeta">
+<em class="property">property </em><code class="sig-name descname">updateBeta</code><a class="headerlink" href="#SimPEG.directives.Update_IRLS.updateBeta" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>updateBeta</cite> has been deprecated. See <cite>update_beta</cite> for documentation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.Update_IRLS.betaSearch">
+<em class="property">property </em><code class="sig-name descname">betaSearch</code><a class="headerlink" href="#SimPEG.directives.Update_IRLS.betaSearch" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>betaSearch</cite> has been deprecated. See <cite>beta_search</cite> for documentation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.Update_IRLS.target">
+<em class="property">property </em><code class="sig-name descname">target</code><a class="headerlink" href="#SimPEG.directives.Update_IRLS.target" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.Update_IRLS.start">
+<em class="property">property </em><code class="sig-name descname">start</code><a class="headerlink" href="#SimPEG.directives.Update_IRLS.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.Update_IRLS.initialize">
+<code class="sig-name descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L699-L714"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.Update_IRLS.initialize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.Update_IRLS.endIter">
+<code class="sig-name descname">endIter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L716-L838"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.Update_IRLS.endIter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.Update_IRLS.startIRLS">
+<code class="sig-name descname">startIRLS</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L840-L882"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.Update_IRLS.startIRLS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.Update_IRLS.angleScale">
+<code class="sig-name descname">angleScale</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L884-L900"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.Update_IRLS.angleScale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the scales used by regularization for the
+different block of models</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.Update_IRLS.validate">
+<code class="sig-name descname">validate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">directiveList</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L902-L920"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.Update_IRLS.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call all registered class validator methods</p>
+<p>These are all methods decorated with <code class="code docutils literal notranslate"><span class="pre">&#64;properties.validator</span></code>.
+Validator methods are expected to raise a ValidationError if they
+fail.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.directives.UpdatePreconditioner">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.directives.</code><code class="sig-name descname">UpdatePreconditioner</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L923-L986"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.UpdatePreconditioner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.directives.InversionDirective" title="SimPEG.directives.InversionDirective"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.directives.InversionDirective</span></code></a></p>
+<p>Create a Jacobi preconditioner for the linear problem</p>
+<dl class="py attribute">
+<dt id="SimPEG.directives.UpdatePreconditioner.update_every_iteration">
+<code class="sig-name descname">update_every_iteration</code><em class="property"> = True</em><a class="headerlink" href="#SimPEG.directives.UpdatePreconditioner.update_every_iteration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update every iterations if False</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.UpdatePreconditioner.initialize">
+<code class="sig-name descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L930-L956"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.UpdatePreconditioner.initialize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.UpdatePreconditioner.endIter">
+<code class="sig-name descname">endIter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L958-L986"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.UpdatePreconditioner.endIter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.directives.Update_Wj">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.directives.</code><code class="sig-name descname">Update_Wj</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L989-L1014"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.Update_Wj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.directives.InversionDirective" title="SimPEG.directives.InversionDirective"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.directives.InversionDirective</span></code></a></p>
+<p>Create approx-sensitivity base weighting using the probing method</p>
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_Wj.k">
+<code class="sig-name descname">k</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.directives.Update_Wj.k" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.Update_Wj.itr">
+<code class="sig-name descname">itr</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.directives.Update_Wj.itr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.Update_Wj.endIter">
+<code class="sig-name descname">endIter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L997-L1014"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.Update_Wj.endIter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.directives.UpdateSensitivityWeights">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.directives.</code><code class="sig-name descname">UpdateSensitivityWeights</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L1017-L1127"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.UpdateSensitivityWeights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.directives.InversionDirective" title="SimPEG.directives.InversionDirective"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.directives.InversionDirective</span></code></a></p>
+<p>Directive to take care of re-weighting
+the non-linear magnetic problems.</p>
+<dl class="py attribute">
+<dt id="SimPEG.directives.UpdateSensitivityWeights.mapping">
+<code class="sig-name descname">mapping</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.directives.UpdateSensitivityWeights.mapping" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.UpdateSensitivityWeights.JtJdiag">
+<code class="sig-name descname">JtJdiag</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.directives.UpdateSensitivityWeights.JtJdiag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.UpdateSensitivityWeights.everyIter">
+<code class="sig-name descname">everyIter</code><em class="property"> = True</em><a class="headerlink" href="#SimPEG.directives.UpdateSensitivityWeights.everyIter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.UpdateSensitivityWeights.threshold">
+<code class="sig-name descname">threshold</code><em class="property"> = 1e-12</em><a class="headerlink" href="#SimPEG.directives.UpdateSensitivityWeights.threshold" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.directives.UpdateSensitivityWeights.switch">
+<code class="sig-name descname">switch</code><em class="property"> = True</em><a class="headerlink" href="#SimPEG.directives.UpdateSensitivityWeights.switch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.UpdateSensitivityWeights.initialize">
+<code class="sig-name descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L1029-L1033"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.UpdateSensitivityWeights.initialize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.UpdateSensitivityWeights.endIter">
+<code class="sig-name descname">endIter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L1035-L1039"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.UpdateSensitivityWeights.endIter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.UpdateSensitivityWeights.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L1041-L1050"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.UpdateSensitivityWeights.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.UpdateSensitivityWeights.getJtJdiag">
+<code class="sig-name descname">getJtJdiag</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L1052-L1074"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.UpdateSensitivityWeights.getJtJdiag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute explicitly the main diagonal of JtJ
+Good for any problem where J is formed explicitly</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.UpdateSensitivityWeights.getWr">
+<code class="sig-name descname">getWr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L1076-L1095"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.UpdateSensitivityWeights.getWr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take the diagonal of JtJ and return
+a normalized sensitivty weighting vector</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.UpdateSensitivityWeights.updateReg">
+<code class="sig-name descname">updateReg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L1097-L1103"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.UpdateSensitivityWeights.updateReg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the cell weights with the approximated sensitivity</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.UpdateSensitivityWeights.validate">
+<code class="sig-name descname">validate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">directiveList</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L1105-L1127"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.UpdateSensitivityWeights.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call all registered class validator methods</p>
+<p>These are all methods decorated with <code class="code docutils literal notranslate"><span class="pre">&#64;properties.validator</span></code>.
+Validator methods are expected to raise a ValidationError if they
+fail.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.directives.ProjectSphericalBounds">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.directives.</code><code class="sig-name descname">ProjectSphericalBounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L1130-L1175"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.ProjectSphericalBounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.directives.InversionDirective" title="SimPEG.directives.InversionDirective"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.directives.InversionDirective</span></code></a></p>
+<p>Trick for spherical coordinate system.
+Project         heta and phi angles back to [-pi,pi] using
+back and forth conversion.
+spherical-&gt;cartesian-&gt;spherical</p>
+<dl class="py method">
+<dt id="SimPEG.directives.ProjectSphericalBounds.initialize">
+<code class="sig-name descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L1138-L1152"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.ProjectSphericalBounds.initialize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.directives.ProjectSphericalBounds.endIter">
+<code class="sig-name descname">endIter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/directives.py#L1154-L1175"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.directives.ProjectSphericalBounds.endIter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api_Maps.html" class="btn btn-neutral float-right" title="Maps" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="api_Optimization.html" class="btn btn-neutral float-left" title="Optimize" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+
+ 
+
+
+    <div id="disqus_thread"></div>
+    <script>
+
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+    var disqus_config = function () {
+    this.page.url = {path};  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = {path}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://simpeg.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    <div role="contentinfo">
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/" width="60px"; style="float:right;height:3em;line-height:3em;padding:10px 0 0 1em;">
+            <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" />
+        </a>
+        2013-2018,
+        <a href="http://simpeg.xyz">SimPEG Developers.</a><br />
+        Except where noted, this work is licensed under a <br />
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+            Creative Commons Attribution 4.0 International License
+        </a>
+    </div>
+    <br>
+    <div>
+    Built with
+        <a href="http://sphinx-doc.org/">Sphinx</a>
+        using a
+        <a href="https://github.com/snide/sphinx_rtd_theme">theme</a>
+        provided by
+        <a href="https://readthedocs.org">Read the Docs</a>.
+     </div>
+
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,395 @@
+.. only:: html
+
+    .. note::
+        :class: sphx-glr-download-link-note
+
+        Click :ref:`here <sphx_glr_download_content_examples_04-dcip_plot_inv_dcip_dipoledipole_3Dinversion_twospheres.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_content_examples_04-dcip_plot_inv_dcip_dipoledipole_3Dinversion_twospheres.py:
+
+
+3D DC inversion of Dipole Dipole array
+======================================
+
+This is an example for 3D DC inversion. The model consists of 2 spheres,
+one conductive, the other one resistive compared to the background.
+
+We restrain the inversion to the Core Mesh through the use an Active Cells
+mapping that we combine with an exponetial mapping to invert
+in log conductivity space. Here mapping,  :math:`\mathcal{M}`,
+indicates transformation of our model to a different space:
+
+.. math::
+    \sigma = \mathcal{M}(\mathbf{m})
+
+Following example will show you how user can implement a 3D DC inversion.
+
+
+.. code-block:: default
+
+
+    import discretize
+    from SimPEG import (
+        maps,
+        utils,
+        data_misfit,
+        regularization,
+        optimization,
+        inverse_problem,
+        directives,
+        inversion,
+    )
+    from SimPEG.electromagnetics.static import resistivity as DC, utils as DCutils
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    try:
+        from pymatsolver import Pardiso as Solver
+    except ImportError:
+        from SimPEG import SolverLU as Solver
+
+    np.random.seed(12345)
+
+    # 3D Mesh
+    #########
+
+    # Cell sizes
+    csx, csy, csz = 1.0, 1.0, 0.5
+    # Number of core cells in each direction
+    ncx, ncy, ncz = 41, 31, 21
+    # Number of padding cells to add in each direction
+    npad = 7
+    # Vectors of cell lengths in each direction with padding
+    hx = [(csx, npad, -1.5), (csx, ncx), (csx, npad, 1.5)]
+    hy = [(csy, npad, -1.5), (csy, ncy), (csy, npad, 1.5)]
+    hz = [(csz, npad, -1.5), (csz, ncz)]
+    # Create mesh and center it
+    mesh = discretize.TensorMesh([hx, hy, hz], x0="CCN")
+
+    # 2-spheres Model Creation
+
+
+
+
+
+
+
+
+.. code-block:: default
+
+
+    # Spheres parameters
+    x0, y0, z0, r0 = -6.0, 0.0, -3.5, 3.0
+    x1, y1, z1, r1 = 6.0, 0.0, -3.5, 3.0
+
+    # ln conductivity
+    ln_sigback = -5.0
+    ln_sigc = -3.0
+    ln_sigr = -6.0
+
+    # Define model
+    # Background
+    mtrue = ln_sigback * np.ones(mesh.nC)
+
+    # Conductive sphere
+    csph = (
+        np.sqrt(
+            (mesh.gridCC[:, 0] - x0) ** 2.0
+            + (mesh.gridCC[:, 1] - y0) ** 2.0
+            + (mesh.gridCC[:, 2] - z0) ** 2.0
+        )
+    ) < r0
+    mtrue[csph] = ln_sigc * np.ones_like(mtrue[csph])
+
+    # Resistive Sphere
+    rsph = (
+        np.sqrt(
+            (mesh.gridCC[:, 0] - x1) ** 2.0
+            + (mesh.gridCC[:, 1] - y1) ** 2.0
+            + (mesh.gridCC[:, 2] - z1) ** 2.0
+        )
+    ) < r1
+    mtrue[rsph] = ln_sigr * np.ones_like(mtrue[rsph])
+
+    # Extract Core Mesh
+    xmin, xmax = -20.0, 20.0
+    ymin, ymax = -15.0, 15.0
+    zmin, zmax = -10.0, 0.0
+    xyzlim = np.r_[[[xmin, xmax], [ymin, ymax], [zmin, zmax]]]
+    actind, meshCore = utils.mesh_utils.ExtractCoreMesh(xyzlim, mesh)
+
+
+    # Function to plot cylinder border
+    def getCylinderPoints(xc, zc, r):
+        xLocOrig1 = np.arange(-r, r + r / 10.0, r / 10.0)
+        xLocOrig2 = np.arange(r, -r - r / 10.0, -r / 10.0)
+        # Top half of cylinder
+        zLoc1 = np.sqrt(-(xLocOrig1 ** 2.0) + r ** 2.0) + zc
+        # Bottom half of cylinder
+        zLoc2 = -np.sqrt(-(xLocOrig2 ** 2.0) + r ** 2.0) + zc
+        # Shift from x = 0 to xc
+        xLoc1 = xLocOrig1 + xc * np.ones_like(xLocOrig1)
+        xLoc2 = xLocOrig2 + xc * np.ones_like(xLocOrig2)
+
+        topHalf = np.vstack([xLoc1, zLoc1]).T
+        topHalf = topHalf[0:-1, :]
+        bottomHalf = np.vstack([xLoc2, zLoc2]).T
+        bottomHalf = bottomHalf[0:-1, :]
+
+        cylinderPoints = np.vstack([topHalf, bottomHalf])
+        cylinderPoints = np.vstack([cylinderPoints, topHalf[0, :]])
+        return cylinderPoints
+
+
+    # Setup a synthetic Dipole-Dipole Survey
+    # Line 1
+    xmin, xmax = -15.0, 15.0
+    ymin, ymax = 0.0, 0.0
+    zmin, zmax = 0, 0
+    endl = np.array([[xmin, ymin, zmin], [xmax, ymax, zmax]])
+    survey1 = DCutils.gen_DCIPsurvey(endl, "dipole-dipole", dim=mesh.dim, a=3, b=3, n=8)
+
+    # Line 2
+    xmin, xmax = -15.0, 15.0
+    ymin, ymax = 5.0, 5.0
+    zmin, zmax = 0, 0
+    endl = np.array([[xmin, ymin, zmin], [xmax, ymax, zmax]])
+    survey2 = DCutils.gen_DCIPsurvey(endl, "dipole-dipole", dim=mesh.dim, a=3, b=3, n=8)
+
+    # Line 3
+    xmin, xmax = -15.0, 15.0
+    ymin, ymax = -5.0, -5.0
+    zmin, zmax = 0, 0
+    endl = np.array([[xmin, ymin, zmin], [xmax, ymax, zmax]])
+    survey3 = DCutils.gen_DCIPsurvey(endl, "dipole-dipole", dim=mesh.dim, a=3, b=3, n=8)
+
+    # Concatenate lines
+    survey = DC.Survey(survey1.source_list + survey2.source_list + survey3.source_list)
+
+    # Setup Problem with exponential mapping and Active cells only in the core mesh
+    expmap = maps.ExpMap(mesh)
+    mapactive = maps.InjectActiveCells(mesh=mesh, indActive=actind, valInactive=-5.0)
+    mapping = expmap * mapactive
+    problem = DC.Simulation3DCellCentered(
+        mesh, survey=survey, sigmaMap=mapping, solver=Solver, bc_type="Neumann"
+    )
+
+    data = problem.make_synthetic_data(mtrue[actind], relative_error=0.05, add_noise=True)
+
+    # Tikhonov Inversion
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:176: FutureWarning: ExtractCoreMesh has been deprecated, please use extract_core_mesh. It will be removed in version 1.0.0 of discretize.
+      FutureWarning,
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: TensorMesh.faceBoundaryInd has been deprecated, please use TensorMesh.face_boundary_indices. It will be removed in version 1.0.0 of discretize.
+      warnings.warn(message, FutureWarning)
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/base/base_tensor_mesh.py:690: FutureWarning: hx has been deprecated, please access as mesh.h[0]
+      "hx has been deprecated, please access as mesh.h[0]", FutureWarning
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/base/base_tensor_mesh.py:707: FutureWarning: hy has been deprecated, please access as mesh.h[1]
+      "hy has been deprecated, please access as mesh.h[1]", FutureWarning
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/base/base_tensor_mesh.py:724: FutureWarning: hz has been deprecated, please access as mesh.h[2]
+      "hz has been deprecated, please access as mesh.h[2]", FutureWarning
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: TensorMesh.vol has been deprecated, please use TensorMesh.cell_volumes. It will be removed in version 1.0.0 of discretize.
+      warnings.warn(message, FutureWarning)
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: TensorMesh.faceDiv has been deprecated, please use TensorMesh.face_divergence. It will be removed in version 1.0.0 of discretize.
+      warnings.warn(message, FutureWarning)
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:157: FutureWarning: TensorMesh.getBCProjWF_simple has been deprecated, please use TensorMesh.get_BC_projections_simple. It will be removed in version 1.0.0 of discretize.
+      FutureWarning,
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:157: FutureWarning: TensorMesh.setCellGradBC has been deprecated, please use TensorMesh.set_cell_gradient_BC. It will be removed in version 1.0.0 of discretize.
+      FutureWarning,
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: TensorMesh.cellGrad has been deprecated, please use TensorMesh.cell_gradient. It will be removed in version 1.0.0 of discretize.
+      warnings.warn(message, FutureWarning)
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:157: FutureWarning: TensorMesh.getFaceInnerProduct has been deprecated, please use TensorMesh.get_face_inner_product. It will be removed in version 1.0.0 of discretize.
+      FutureWarning,
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/operators/inner_products.py:69: FutureWarning: The invMat keyword argument has been deprecated, please use invert_matrix. This will be removed in discretize 1.0.0
+      FutureWarning,
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:176: FutureWarning: closestPoints has been deprecated, please use closest_points_index. It will be removed in version 1.0.0 of discretize.
+      FutureWarning,
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/mesh_utils.py:206: FutureWarning: The gridLoc keyword argument has been deprecated, please use grid_loc. This will be removed in discretize 1.0.0
+      FutureWarning,
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:157: FutureWarning: TensorMesh.getInterpolationMat has been deprecated, please use TensorMesh.get_interpolation_matrix. It will be removed in version 1.0.0 of discretize.
+      FutureWarning,
+
+
+
+
+
+.. code-block:: default
+
+
+    # Initial Model
+    m0 = np.median(ln_sigback) * np.ones(mapping.nP)
+    # Data Misfit
+    dmis = data_misfit.L2DataMisfit(simulation=problem, data=data)
+    # Regularization
+    regT = regularization.Simple(
+        mesh, indActive=actind, alpha_s=1e-6, alpha_x=1.0, alpha_y=1.0, alpha_z=1.0
+    )
+
+    # Optimization Scheme
+    opt = optimization.InexactGaussNewton(maxIter=10)
+
+    # Form the problem
+    opt.remember("xc")
+    invProb = inverse_problem.BaseInvProblem(dmis, regT, opt)
+
+    # Directives for Inversions
+    beta = directives.BetaEstimate_ByEig(beta0_ratio=1e1)
+    Target = directives.TargetMisfit()
+    betaSched = directives.BetaSchedule(coolingFactor=5.0, coolingRate=2)
+
+    inv = inversion.BaseInversion(invProb, directiveList=[beta, Target, betaSched])
+    # Run Inversion
+    minv = inv.run(m0)
+
+    # Final Plot
+    ############
+
+    fig, ax = plt.subplots(2, 2, figsize=(12, 6))
+    ax = utils.mkvc(ax)
+
+    cyl0v = getCylinderPoints(x0, z0, r0)
+    cyl1v = getCylinderPoints(x1, z1, r1)
+
+    cyl0h = getCylinderPoints(x0, y0, r0)
+    cyl1h = getCylinderPoints(x1, y1, r1)
+
+    clim = [(mtrue[actind]).min(), (mtrue[actind]).max()]
+
+    dat = meshCore.plotSlice(
+        ((mtrue[actind])), ax=ax[0], normal="Y", clim=clim, ind=int(ncy / 2)
+    )
+    ax[0].set_title("Ground Truth, Vertical")
+    ax[0].set_aspect("equal")
+
+    meshCore.plotSlice((minv), ax=ax[1], normal="Y", clim=clim, ind=int(ncy / 2))
+    ax[1].set_aspect("equal")
+    ax[1].set_title("Inverted Model, Vertical")
+
+    meshCore.plotSlice(((mtrue[actind])), ax=ax[2], normal="Z", clim=clim, ind=int(ncz / 2))
+    ax[2].set_title("Ground Truth, Horizontal")
+    ax[2].set_aspect("equal")
+
+    meshCore.plotSlice((minv), ax=ax[3], normal="Z", clim=clim, ind=int(ncz / 2))
+    ax[3].set_title("Inverted Model, Horizontal")
+    ax[3].set_aspect("equal")
+
+    for i in range(2):
+        ax[i].plot(cyl0v[:, 0], cyl0v[:, 1], "k--")
+        ax[i].plot(cyl1v[:, 0], cyl1v[:, 1], "k--")
+    for i in range(2, 4):
+        ax[i].plot(cyl1h[:, 0], cyl1h[:, 1], "k--")
+        ax[i].plot(cyl0h[:, 0], cyl0h[:, 1], "k--")
+
+    fig.subplots_adjust(right=0.8)
+    cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
+    cb = plt.colorbar(dat[0], ax=cbar_ax)
+    cb.set_label("ln conductivity")
+
+    cbar_ax.axis("off")
+
+    plt.show()
+
+
+
+.. image:: /content/examples/04-dcip/images/sphx_glr_plot_inv_dcip_dipoledipole_3Dinversion_twospheres_001.png
+    :alt: Ground Truth, Vertical, Ground Truth, Horizontal, Inverted Model, Vertical, Inverted Model, Horizontal
+    :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    SimPEG.InvProblem will set Regularization.mref to m0.
+
+            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
+            ***Done using same Solver and solverOpts as the problem***
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: TensorMesh._cellGradxStencil has been deprecated, please use TensorMesh.stencil_cell_gradient_x. It will be removed in version 1.0.0 of discretize.
+      warnings.warn(message, FutureWarning)
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: TensorMesh.vol has been deprecated, please use TensorMesh.cell_volumes. It will be removed in version 1.0.0 of discretize.
+      warnings.warn(message, FutureWarning)
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: TensorMesh._cellGradyStencil has been deprecated, please use TensorMesh.stencil_cell_gradient_y. It will be removed in version 1.0.0 of discretize.
+      warnings.warn(message, FutureWarning)
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: TensorMesh._cellGradzStencil has been deprecated, please use TensorMesh.stencil_cell_gradient_z. It will be removed in version 1.0.0 of discretize.
+      warnings.warn(message, FutureWarning)
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:157: FutureWarning: TensorMesh.setCellGradBC has been deprecated, please use TensorMesh.set_cell_gradient_BC. It will be removed in version 1.0.0 of discretize.
+      FutureWarning,
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: TensorMesh.cellGrad has been deprecated, please use TensorMesh.cell_gradient. It will be removed in version 1.0.0 of discretize.
+      warnings.warn(message, FutureWarning)
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:157: FutureWarning: TensorMesh.getFaceInnerProduct has been deprecated, please use TensorMesh.get_face_inner_product. It will be removed in version 1.0.0 of discretize.
+      FutureWarning,
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/operators/inner_products.py:69: FutureWarning: The invMat keyword argument has been deprecated, please use invert_matrix. This will be removed in discretize 1.0.0
+      FutureWarning,
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: TensorMesh.faceDiv has been deprecated, please use TensorMesh.face_divergence. It will be removed in version 1.0.0 of discretize.
+      warnings.warn(message, FutureWarning)
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:157: FutureWarning: TensorMesh.getFaceInnerProductDeriv has been deprecated, please use TensorMesh.get_face_inner_product_deriv. It will be removed in version 1.0.0 of discretize.
+      FutureWarning,
+    model has any nan: 0
+    ============================ Inexact Gauss Newton ============================
+      #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
+    -----------------------------------------------------------------------------
+    x0 has any nan: 0
+       0  2.66e+01  2.54e+03  0.00e+00  2.54e+03    5.66e+02      0              
+       1  2.66e+01  3.45e+02  5.85e+00  5.00e+02    5.88e+01      0              
+       2  5.31e+00  2.30e+02  8.53e+00  2.75e+02    4.70e+01      0   Skip BFGS  
+       3  5.31e+00  9.83e+01  1.84e+01  1.96e+02    2.37e+01      0              
+       4  1.06e+00  7.74e+01  2.00e+01  9.86e+01    2.06e+01      0              
+    ------------------------- STOP! -------------------------
+    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 2.5374e+02
+    1 : |xc-x_last| = 3.3364e+00 <= tolX*(1+|x0|) = 7.5300e+01
+    0 : |proj(x-g)-x|    = 2.0560e+01 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 2.0560e+01 <= 1e3*eps       = 1.0000e-02
+    0 : maxIter   =      10    <= iter          =      5
+    ------------------------- DONE! -------------------------
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:157: FutureWarning: TensorMesh.plotSlice has been deprecated, please use TensorMesh.plot_slice. It will be removed in version 1.0.0 of discretize.
+      FutureWarning,
+
+
+
+
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 1 minutes  13.324 seconds)
+
+**Estimated memory usage:**  257 MB
+
+
+.. _sphx_glr_download_content_examples_04-dcip_plot_inv_dcip_dipoledipole_3Dinversion_twospheres.py:
+
+
+.. only :: html
+
+ .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-example
+
+
+
+  .. container:: sphx-glr-download sphx-glr-download-python
+
+     :download:`Download Python source code: plot_inv_dcip_dipoledipole_3Dinversion_twospheres.py <plot_inv_dcip_dipoledipole_3Dinversion_twospheres.py>`
+
+
+
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
+
+     :download:`Download Jupyter notebook: plot_inv_dcip_dipoledipole_3Dinversion_twospheres.ipynb <plot_inv_dcip_dipoledipole_3Dinversion_twospheres.ipynb>`
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.github.io>`_

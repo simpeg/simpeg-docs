@@ -1,0 +1,761 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Utils &mdash; SimPEG 0.14.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/logo-block.ico"/>
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Testing SimPEG" href="api_Tests.html" />
+    <link rel="prev" title="SimPEG Props" href="api_Props.html" />
+ 
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-45185336-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> SimPEG
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.14.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../basic/big_picture.html">Why SimPEG?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/contributing.html">Contributing to SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/installing.html">Getting Started with SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/getting_started_developers.html">Getting Started: for Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/practices.html">Practices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/01-models_mapping/index.html">Models and Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/02-linear_inversion/index.html">Linear Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/03-gravity/index.html">Gravity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/04-magnetics/index.html">Magnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/05-dcr/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/06-ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/07-fdem/index.html">Frequency-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/08-tdem/index.html">Time-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/09-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/10-vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/11-flow/index.html">Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/12-seismic/index.html">Seismic</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Packages</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../em/index.html">Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dc/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pf/index.html">Potential Fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../flow/index.html">Richards Equation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api_FiniteVolume.html">Finite Volume</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_ForwardProblem.html">Forward Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_InversionComponents.html">Inversion Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_Maps.html">Maps</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api_Utilities.html">Utilities</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="api_Solver.html">Solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_Props.html">SimPEG Props</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-SimPEG.utils.mat_utils">Matrix Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-SimPEG.utils.solver_utils">Solver Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-SimPEG.utils.curv_utils">Curv Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-SimPEG.utils.mesh_utils">Mesh Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-SimPEG.utils.model_builder">Model Builder Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-discretize.utils.interputils">Interpolation Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#counter-utilities">Counter Utilities</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-SimPEG.utils.counter_utils">The API</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api_Tests.html">Testing SimPEG</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Meta Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../release/index.html">Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SimPEG</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="api_Utilities.html">Utilities</a> &raquo;</li>
+        
+      <li>Utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            <a href="https://github.com/simpeg/simpeg/edit/master/docs/content/api_core/api_Utils.rst" class="fa fa-github"> Edit on GitHub</a>
+        
+      </li>
+    
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-SimPEG.utils">
+<span id="utils"></span><h1>Utils<a class="headerlink" href="#module-SimPEG.utils" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-SimPEG.utils.mat_utils">
+<span id="matrix-utilities"></span><h2>Matrix Utilities<a class="headerlink" href="#module-SimPEG.utils.mat_utils" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="SimPEG.utils.mat_utils.diagEst">
+<code class="sig-prename descclassname">SimPEG.utils.mat_utils.</code><code class="sig-name descname">diagEst</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">matFun</span></em>, <em class="sig-param"><span class="n">n</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">approach</span><span class="o">=</span><span class="default_value">'Probing'</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/mat_utils.py#L31-L92"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.mat_utils.diagEst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate the diagonal of a matrix, A. Note that the matrix may be a
+function which returns A times a vector.</p>
+<p>Three different approaches have been implemented:</p>
+<ol class="arabic simple">
+<li><p>Probing: cyclic permutations of vectors with 1’s and 0’s (default)</p></li>
+<li><p>Ones: random +/- 1 entries</p></li>
+<li><p>Random: random vectors</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>matFun</strong> (<em>callable</em>) – takes a (numpy.ndarray) and multiplies it by a matrix to estimate the diagonal</p></li>
+<li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – size of the vector that should be used to compute matFun(v)</p></li>
+<li><p><strong>k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of vectors to be used to estimate the diagonal</p></li>
+<li><p><strong>approach</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – approach to be used for getting vectors</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>est_diag(A)</p>
+</dd>
+</dl>
+<p>Based on Saad <a class="reference external" href="http://www-users.cs.umn.edu/~saad/PDF/umsi-2005-082.pdf">http://www-users.cs.umn.edu/~saad/PDF/umsi-2005-082.pdf</a>,
+and <a class="reference external" href="https://www.cita.utoronto.ca/~niels/diagonal.pdf">https://www.cita.utoronto.ca/~niels/diagonal.pdf</a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="SimPEG.utils.mat_utils.uniqueRows">
+<code class="sig-prename descclassname">SimPEG.utils.mat_utils.</code><code class="sig-name descname">uniqueRows</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">M</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/mat_utils.py#L95-L100"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.mat_utils.uniqueRows" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="SimPEG.utils.mat_utils.cartesian2spherical">
+<code class="sig-prename descclassname">SimPEG.utils.mat_utils.</code><code class="sig-name descname">cartesian2spherical</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/mat_utils.py#L103-L122"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.mat_utils.cartesian2spherical" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert from cartesian to spherical</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="SimPEG.utils.mat_utils.spherical2cartesian">
+<code class="sig-prename descclassname">SimPEG.utils.mat_utils.</code><code class="sig-name descname">spherical2cartesian</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/mat_utils.py#L125-L134"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.mat_utils.spherical2cartesian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert from spherical to cartesian</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="SimPEG.utils.mat_utils.dip_azimuth2cartesian">
+<code class="sig-prename descclassname">SimPEG.utils.mat_utils.</code><code class="sig-name descname">dip_azimuth2cartesian</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dip</span></em>, <em class="sig-param"><span class="n">azm_N</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/mat_utils.py#L137-L173"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.mat_utils.dip_azimuth2cartesian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function converting degree angles for dip and azimuth from north to a
+3-components in cartesian coordinates.</p>
+<p>INPUT
+dip     : Value or vector of dip from horizontal in DEGREE
+azm_N   : Value or vector of azimuth from north in DEGREE</p>
+<p>OUTPUT
+M       : [n-by-3] Array of xyz components of a unit vector in cartesian</p>
+<p>Created on Dec, 20th 2015</p>
+<p>&#64;author: dominiquef</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="SimPEG.utils.mat_utils.coterminal">
+<code class="sig-prename descclassname">SimPEG.utils.mat_utils.</code><code class="sig-name descname">coterminal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">theta</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/mat_utils.py#L176-L186"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.mat_utils.coterminal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute coterminal angle so that [-pi &lt; theta &lt; pi]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-SimPEG.utils.solver_utils">
+<span id="solver-utilities"></span><h2>Solver Utilities<a class="headerlink" href="#module-SimPEG.utils.solver_utils" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="SimPEG.utils.solver_utils.SolverWrapD">
+<code class="sig-prename descclassname">SimPEG.utils.solver_utils.</code><code class="sig-name descname">SolverWrapD</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fun</span></em>, <em class="sig-param"><span class="n">factorize</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">checkAccuracy</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">accuracyTol</span><span class="o">=</span><span class="default_value">1e-06</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/solver_utils.py#L22-L112"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.solver_utils.SolverWrapD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraps a direct Solver.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="n">Solver</span>   <span class="o">=</span> <span class="n">solver_utils</span><span class="o">.</span><span class="n">SolverWrapD</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">spsolve</span><span class="p">,</span> <span class="n">factorize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">SolverLU</span> <span class="o">=</span> <span class="n">solver_utils</span><span class="o">.</span><span class="n">SolverWrapD</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">splu</span><span class="p">,</span> <span class="n">factorize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="SimPEG.utils.solver_utils.SolverWrapI">
+<code class="sig-prename descclassname">SimPEG.utils.solver_utils.</code><code class="sig-name descname">SolverWrapI</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fun</span></em>, <em class="sig-param"><span class="n">checkAccuracy</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">accuracyTol</span><span class="o">=</span><span class="default_value">1e-05</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/solver_utils.py#L115-L198"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.solver_utils.SolverWrapI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraps an iterative Solver.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="n">SolverCG</span> <span class="o">=</span> <span class="n">solver_utils</span><span class="o">.</span><span class="n">SolverWrapI</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cg</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.utils.solver_utils.Solver">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.utils.solver_utils.</code><code class="sig-name descname">Solver</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">A</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/solver_utils.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.solver_utils.Solver" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="SimPEG.utils.solver_utils.Solver.clean">
+<code class="sig-name descname">clean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/solver_utils.py#L99-L101"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.solver_utils.Solver.clean" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.utils.solver_utils.SolverLU">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.utils.solver_utils.</code><code class="sig-name descname">SolverLU</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">A</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/solver_utils.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.solver_utils.SolverLU" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="SimPEG.utils.solver_utils.SolverLU.clean">
+<code class="sig-name descname">clean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/solver_utils.py#L99-L101"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.solver_utils.SolverLU.clean" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.utils.solver_utils.SolverCG">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.utils.solver_utils.</code><code class="sig-name descname">SolverCG</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">A</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/solver_utils.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.solver_utils.SolverCG" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="SimPEG.utils.solver_utils.SolverCG.clean">
+<code class="sig-name descname">clean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/solver_utils.py#L186-L187"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.solver_utils.SolverCG.clean" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.utils.solver_utils.SolverBiCG">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.utils.solver_utils.</code><code class="sig-name descname">SolverBiCG</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">A</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/solver_utils.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.solver_utils.SolverBiCG" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="SimPEG.utils.solver_utils.SolverBiCG.clean">
+<code class="sig-name descname">clean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/solver_utils.py#L186-L187"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.solver_utils.SolverBiCG.clean" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.utils.solver_utils.SolverDiag">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.utils.solver_utils.</code><code class="sig-name descname">SolverDiag</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">A</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/solver_utils.py#L207-L243"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.solver_utils.SolverDiag" title="Permalink to this definition">¶</a></dt>
+<dd><p>docstring for SolverDiag</p>
+<dl class="py method">
+<dt id="SimPEG.utils.solver_utils.SolverDiag.clean">
+<code class="sig-name descname">clean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/solver_utils.py#L242-L243"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.solver_utils.SolverDiag.clean" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-SimPEG.utils.curv_utils">
+<span id="curv-utilities"></span><h2>Curv Utilities<a class="headerlink" href="#module-SimPEG.utils.curv_utils" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-SimPEG.utils.mesh_utils">
+<span id="mesh-utilities"></span><h2>Mesh Utilities<a class="headerlink" href="#module-SimPEG.utils.mesh_utils" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-SimPEG.utils.model_builder">
+<span id="model-builder-utilities"></span><h2>Model Builder Utilities<a class="headerlink" href="#module-SimPEG.utils.model_builder" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="SimPEG.utils.model_builder.addBlock">
+<code class="sig-prename descclassname">SimPEG.utils.model_builder.</code><code class="sig-name descname">addBlock</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gridCC</span></em>, <em class="sig-param"><span class="n">modelCC</span></em>, <em class="sig-param"><span class="n">p0</span></em>, <em class="sig-param"><span class="n">p1</span></em>, <em class="sig-param"><span class="n">blockProp</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/model_builder.py#L16-L31"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.model_builder.addBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a block to an exsisting cell centered model, modelCC</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gridCC</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – mesh.gridCC is the cell centered grid</p></li>
+<li><p><strong>modelCC</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – cell centered model</p></li>
+<li><p><strong>p0</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – bottom, southwest corner of block</p></li>
+<li><p><strong>p1</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – top, northeast corner of block</p></li>
+</ul>
+</dd>
+<dt class="field-even">BlockProp float blockProp</dt>
+<dd class="field-even"><p>property to assign to the model</p>
+</dd>
+<dt class="field-odd">Return numpy.ndarray, modelBlock</dt>
+<dd class="field-odd"><p>model with block</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="SimPEG.utils.model_builder.getIndicesBlock">
+<code class="sig-prename descclassname">SimPEG.utils.model_builder.</code><code class="sig-name descname">getIndicesBlock</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p0</span></em>, <em class="sig-param"><span class="n">p1</span></em>, <em class="sig-param"><span class="n">ccMesh</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/model_builder.py#L34-L99"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.model_builder.getIndicesBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a vector containing the block indices in the cell centers mesh.
+Returns a tuple</p>
+<p>The block is defined by the points</p>
+<p>p0, describe the position of the left  upper  front corner, and</p>
+<p>p1, describe the position of the right bottom back  corner.</p>
+<p>ccMesh represents the cell-centered mesh</p>
+<p>The points p0 and p1 must live in the the same dimensional space as the mesh.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="SimPEG.utils.model_builder.defineBlock">
+<code class="sig-prename descclassname">SimPEG.utils.model_builder.</code><code class="sig-name descname">defineBlock</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ccMesh</span></em>, <em class="sig-param"><span class="n">p0</span></em>, <em class="sig-param"><span class="n">p1</span></em>, <em class="sig-param"><span class="n">vals</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/model_builder.py#L102-L115"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.model_builder.defineBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a block with the conductivity specified by condVal.  Returns an array.
+vals[0]  conductivity of the block
+vals[1]  conductivity of the ground</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="SimPEG.utils.model_builder.defineElipse">
+<code class="sig-prename descclassname">SimPEG.utils.model_builder.</code><code class="sig-name descname">defineElipse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ccMesh</span></em>, <em class="sig-param"><span class="n">center</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">anisotropy</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">slope</span><span class="o">=</span><span class="default_value">10.0</span></em>, <em class="sig-param"><span class="n">theta</span><span class="o">=</span><span class="default_value">0.0</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/model_builder.py#L118-L143"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.model_builder.defineElipse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="SimPEG.utils.model_builder.getIndicesSphere">
+<code class="sig-prename descclassname">SimPEG.utils.model_builder.</code><code class="sig-name descname">getIndicesSphere</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">center</span></em>, <em class="sig-param"><span class="n">radius</span></em>, <em class="sig-param"><span class="n">ccMesh</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/model_builder.py#L146-L192"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.model_builder.getIndicesSphere" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a vector containing the sphere indices in the cell centers mesh.
+Returns a tuple</p>
+<p>The sphere is defined by the points</p>
+<p>p0, describe the position of the center of the cell</p>
+<p>r, describe the radius of the sphere.</p>
+<p>ccMesh represents the cell-centered mesh</p>
+<p>The points p0 must live in the the same dimensional space as the mesh.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="SimPEG.utils.model_builder.defineTwoLayers">
+<code class="sig-prename descclassname">SimPEG.utils.model_builder.</code><code class="sig-name descname">defineTwoLayers</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ccMesh</span></em>, <em class="sig-param"><span class="n">depth</span></em>, <em class="sig-param"><span class="n">vals</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/model_builder.py#L195-L236"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.model_builder.defineTwoLayers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define a two layered model.  Depth of the first layer must be specified.
+CondVals vector with the conductivity values of the layers.  Eg:</p>
+<p>Convention to number the layers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;----------------------------|------------------------------------&gt;</span>
+<span class="mi">0</span>                          <span class="n">depth</span>                                 <span class="n">zf</span>
+     <span class="mi">1</span><span class="n">st</span> <span class="n">layer</span>                       <span class="mi">2</span><span class="n">nd</span> <span class="n">layer</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="SimPEG.utils.model_builder.scalarConductivity">
+<code class="sig-prename descclassname">SimPEG.utils.model_builder.</code><code class="sig-name descname">scalarConductivity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ccMesh</span></em>, <em class="sig-param"><span class="n">pFunction</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/model_builder.py#L239-L253"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.model_builder.scalarConductivity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the distribution conductivity in the mesh according to the
+analytical expression given in pFunction</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="SimPEG.utils.model_builder.layeredModel">
+<code class="sig-prename descclassname">SimPEG.utils.model_builder.</code><code class="sig-name descname">layeredModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ccMesh</span></em>, <em class="sig-param"><span class="n">layerTops</span></em>, <em class="sig-param"><span class="n">layerValues</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/model_builder.py#L256-L296"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.model_builder.layeredModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define a layered model from layerTops (z-positive up)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ccMesh</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – cell-centered mesh</p></li>
+<li><p><strong>layerTops</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – z-locations of the tops of each layer</p></li>
+<li><p><strong>layerValue</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – values of the property to assign for each layer (starting at the top)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>M, layered model on the mesh</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="SimPEG.utils.model_builder.randomModel">
+<code class="sig-prename descclassname">SimPEG.utils.model_builder.</code><code class="sig-name descname">randomModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">anisotropy</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">its</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">bounds</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/model_builder.py#L299-L358"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.model_builder.randomModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a random model by convolving a kernel with a
+uniformly distributed model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a>) – shape of the model.</p></li>
+<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – pick which model to produce, prints the seed if you don’t choose.</p></li>
+<li><p><strong>anisotropy</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – this is the (3 x n) blurring kernel that is used.</p></li>
+<li><p><strong>its</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of smoothing iterations</p></li>
+<li><p><strong>bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – bounds on the model, len(list) == 2</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>M, the model</p>
+</dd>
+</dl>
+<p>(<a class="reference external" href="../../content/api_core/api_Utils-1.py">Source code</a>, <a class="reference external" href="../../content/api_core/api_Utils-1.png">png</a>, <a class="reference external" href="../../content/api_core/api_Utils-1.hires.png">hires.png</a>, <a class="reference external" href="../../content/api_core/api_Utils-1.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../../_images/api_Utils-1.png" src="../../_images/api_Utils-1.png" />
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="SimPEG.utils.model_builder.PolygonInd">
+<code class="sig-prename descclassname">SimPEG.utils.model_builder.</code><code class="sig-name descname">PolygonInd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mesh</span></em>, <em class="sig-param"><span class="n">pts</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/model_builder.py#L361-L393"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.model_builder.PolygonInd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finde a volxel indices included in mpolygon (2D) or polyhedra (3D)
+uniformly distributed model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a>) – shape of the model.</p></li>
+<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – pick which model to produce, prints the seed if you don’t choose.</p></li>
+<li><p><strong>anisotropy</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – this is the (3 x n) blurring kernel that is used.</p></li>
+<li><p><strong>its</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of smoothing iterations</p></li>
+<li><p><strong>bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – bounds on the model, len(list) == 2</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>M, the model</p>
+</dd>
+</dl>
+<p>(<a class="reference external" href="../../content/api_core/api_Utils-2.py">Source code</a>, <a class="reference external" href="../../content/api_core/api_Utils-2.png">png</a>, <a class="reference external" href="../../content/api_core/api_Utils-2.hires.png">hires.png</a>, <a class="reference external" href="../../content/api_core/api_Utils-2.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../../_images/api_Utils-2.png" src="../../_images/api_Utils-2.png" />
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-discretize.utils.interputils">
+<span id="interpolation-utilities"></span><h2>Interpolation Utilities<a class="headerlink" href="#module-discretize.utils.interputils" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="counter-utilities">
+<h2>Counter Utilities<a class="headerlink" href="#counter-utilities" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+
+    <span class="nd">@count</span>
+    <span class="k">def</span> <span class="nf">MyMethod</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@timeIt</span>
+    <span class="k">def</span> <span class="nf">MySecondMethod</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">MyClass</span><span class="p">(</span><span class="s1">&#39;blah&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span> <span class="n">c</span><span class="o">.</span><span class="n">MyMethod</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">300</span><span class="p">):</span> <span class="n">c</span><span class="o">.</span><span class="n">MySecondMethod</span><span class="p">()</span>
+<span class="n">c</span><span class="o">.</span><span class="n">counter</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span></span>Counters:
+  MyClass.MyMethod                        :      100
+
+Times:                                        mean      sum
+  MyClass.MySecondMethod                  : 1.70e-06, 5.10e-04,  300x
+</pre></div>
+</td></tr></table></div>
+<div class="section" id="module-SimPEG.utils.counter_utils">
+<span id="the-api"></span><h3>The API<a class="headerlink" href="#module-SimPEG.utils.counter_utils" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt id="SimPEG.utils.counter_utils.Counter">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.utils.counter_utils.</code><code class="sig-name descname">Counter</code><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/counter_utils.py#L8-L84"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.counter_utils.Counter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Counter allows anything that calls it to record iterations and
+timings in a simple way.</p>
+<p>Also has plotting functions that allow quick recalls of data.</p>
+<p>If you want to use this, import <em>count</em> or <em>timeIt</em> and use them as
+decorators on class methods.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+
+    <span class="nd">@count</span>
+    <span class="k">def</span> <span class="nf">MyMethod</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@timeIt</span>
+    <span class="k">def</span> <span class="nf">MySecondMethod</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">MyClass</span><span class="p">(</span><span class="s1">&#39;blah&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span> <span class="n">c</span><span class="o">.</span><span class="n">MyMethod</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">300</span><span class="p">):</span> <span class="n">c</span><span class="o">.</span><span class="n">MySecondMethod</span><span class="p">()</span>
+<span class="n">c</span><span class="o">.</span><span class="n">counter</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="SimPEG.utils.counter_utils.Counter.count">
+<code class="sig-name descname">count</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">prop</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/counter_utils.py#L43-L50"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.counter_utils.Counter.count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Increases the count of the property.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.utils.counter_utils.Counter.countTic">
+<code class="sig-name descname">countTic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">prop</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/counter_utils.py#L52-L59"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.counter_utils.Counter.countTic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Times a property call, this is the init call.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.utils.counter_utils.Counter.countToc">
+<code class="sig-name descname">countToc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">prop</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/counter_utils.py#L61-L67"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.counter_utils.Counter.countToc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Times a property call, this is the end call.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.utils.counter_utils.Counter.summary">
+<code class="sig-name descname">summary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/counter_utils.py#L69-L84"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.counter_utils.Counter.summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides a text summary of the current counters and timers.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="SimPEG.utils.counter_utils.count">
+<code class="sig-prename descclassname">SimPEG.utils.counter_utils.</code><code class="sig-name descname">count</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/counter_utils.py#L87-L96"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.counter_utils.count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="SimPEG.utils.counter_utils.timeIt">
+<code class="sig-prename descclassname">SimPEG.utils.counter_utils.</code><code class="sig-name descname">timeIt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/utils/counter_utils.py#L99-L110"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.utils.counter_utils.timeIt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api_Tests.html" class="btn btn-neutral float-right" title="Testing SimPEG" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="api_Props.html" class="btn btn-neutral float-left" title="SimPEG Props" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+
+ 
+
+
+    <div id="disqus_thread"></div>
+    <script>
+
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+    var disqus_config = function () {
+    this.page.url = {path};  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = {path}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://simpeg.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    <div role="contentinfo">
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/" width="60px"; style="float:right;height:3em;line-height:3em;padding:10px 0 0 1em;">
+            <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" />
+        </a>
+        2013-2018,
+        <a href="http://simpeg.xyz">SimPEG Developers.</a><br />
+        Except where noted, this work is licensed under a <br />
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+            Creative Commons Attribution 4.0 International License
+        </a>
+    </div>
+    <br>
+    <div>
+    Built with
+        <a href="http://sphinx-doc.org/">Sphinx</a>
+        using a
+        <a href="https://github.com/snide/sphinx_rtd_theme">theme</a>
+        provided by
+        <a href="https://readthedocs.org">Read the Docs</a>.
+     </div>
+
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

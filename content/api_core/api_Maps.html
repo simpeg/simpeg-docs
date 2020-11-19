@@ -1,0 +1,2628 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Maps &mdash; SimPEG 0.14.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/logo-block.ico"/>
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Utilities" href="api_Utilities.html" />
+    <link rel="prev" title="InvProblem" href="api_Inversion.html" />
+ 
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-45185336-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> SimPEG
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.14.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../basic/big_picture.html">Why SimPEG?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/contributing.html">Contributing to SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/installing.html">Getting Started with SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/getting_started_developers.html">Getting Started: for Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/practices.html">Practices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/01-models_mapping/index.html">Models and Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/02-linear_inversion/index.html">Linear Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/03-gravity/index.html">Gravity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/04-magnetics/index.html">Magnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/05-dcr/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/06-ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/07-fdem/index.html">Frequency-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/08-tdem/index.html">Time-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/09-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/10-vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/11-flow/index.html">Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/12-seismic/index.html">Seismic</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Packages</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../em/index.html">Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dc/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pf/index.html">Potential Fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../flow/index.html">Richards Equation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api_FiniteVolume.html">Finite Volume</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_ForwardProblem.html">Forward Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_InversionComponents.html">Inversion Components</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Maps</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#that-s-not-a-map">That’s not a map…?!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#combining-maps">Combining Maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#taking-derivatives">Taking Derivatives</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-maps">Common Maps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#exponential-map">Exponential Map</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vertical-1d-map">Vertical 1D Map</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#map-2d-cross-section-to-3d-model">Map 2D Cross-Section to 3D Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mesh-to-mesh-map">Mesh to Mesh Map</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#under-the-hood">Under the Hood</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#combo-map">Combo Map</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#the-api">The API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_Utilities.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Meta Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../release/index.html">Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SimPEG</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Maps</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            <a href="https://github.com/simpeg/simpeg/edit/master/docs/content/api_core/api_Maps.rst" class="fa fa-github"> Edit on GitHub</a>
+        
+      </li>
+    
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="maps">
+<span id="api-maps"></span><h1>Maps<a class="headerlink" href="#maps" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="that-s-not-a-map">
+<h2>That’s not a map…?!<a class="headerlink" href="#that-s-not-a-map" title="Permalink to this headline">¶</a></h2>
+<p>A SimPEG map operates on a vector and transforms it to another space.
+We will use an example commonly applied in electromagnetics (EM) of the
+log-conductivity model.</p>
+<div class="math notranslate nohighlight">
+\[m = \log(\sigma)\]</div>
+<p>Here we require a <em>mapping</em> to get from \(m\) to  \(\sigma\),
+we will call this map \(\mathcal{M}\).</p>
+<div class="math notranslate nohighlight">
+\[\sigma = \mathcal{M}(m) = \exp(m)\]</div>
+<p>In SimPEG, we use a (<a class="reference internal" href="#SimPEG.maps.ExpMap" title="SimPEG.maps.ExpMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.ExpMap</span></code></a>) to describe how to map
+back to conductivity. This is a relatively trivial example (we are just taking
+the exponential!) but by defining maps we can start to combine and manipulate
+exactly what we think about as our model, \(m\). In code, this looks like</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">M</span> <span class="o">=</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">TensorMesh</span><span class="p">([</span><span class="mi">100</span><span class="p">])</span> <span class="c1"># Create a mesh</span>
+<span class="n">expMap</span> <span class="o">=</span> <span class="n">Maps</span><span class="o">.</span><span class="n">ExpMap</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>    <span class="c1"># Create a mapping</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">nC</span><span class="p">)</span>         <span class="c1"># Create a model vector</span>
+<span class="n">m</span><span class="p">[</span><span class="n">M</span><span class="o">.</span><span class="n">vectorCCx</span><span class="o">&gt;</span><span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>   <span class="c1"># Set half of it to 1.0</span>
+<span class="n">sig</span> <span class="o">=</span> <span class="n">expMap</span> <span class="o">*</span> <span class="n">m</span>           <span class="c1"># Apply the mapping using *</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="c1"># [ 0.    0.    0.    1.     1.     1. ]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
+<span class="c1"># [ 1.    1.    1.  2.718  2.718  2.718]</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="combining-maps">
+<h2>Combining Maps<a class="headerlink" href="#combining-maps" title="Permalink to this headline">¶</a></h2>
+<p>We will use an example where we want a 1D layered earth as
+our model, but we want to map this to a 2D discretization to do our forward
+modeling. We will also assume that we are working in log conductivity still,
+so after the transformation we want to map to conductivity space.
+To do this we will introduce the vertical 1D map (<a class="reference internal" href="#SimPEG.maps.SurjectVertical1D" title="SimPEG.maps.SurjectVertical1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.SurjectVertical1D</span></code></a>),
+which does the first part of what we just described. The second part will be
+done by the <a class="reference internal" href="#SimPEG.maps.ExpMap" title="SimPEG.maps.ExpMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.ExpMap</span></code></a> described above.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">M</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">TensorMesh</span><span class="p">([</span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
+<span class="n">v1dMap</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="n">SurjectVertical1D</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+<span class="n">expMap</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="n">ExpMap</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+<span class="n">myMap</span> <span class="o">=</span> <span class="n">expMap</span> <span class="o">*</span> <span class="n">v1dMap</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mf">0.2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mf">2.9</span><span class="p">]</span> <span class="c1"># only 5 model parameters!</span>
+<span class="n">sig</span> <span class="o">=</span> <span class="n">myMap</span> <span class="o">*</span> <span class="n">m</span>
+</pre></div>
+</td></tr></table></div>
+<a class="reference external image-reference" href="/content/examples/01-maps/plot_combo.html"><img alt="../../_images/sphx_glr_plot_combo_001.png" class="align-center" src="../../_images/sphx_glr_plot_combo_001.png" /></a>
+<p>If you noticed, it was pretty easy to combine maps. What is even cooler is
+that the derivatives also are made for you (if everything goes right).
+Just to be sure that the derivative is correct, you should always run the test
+on the mapping that you create.</p>
+</div>
+<div class="section" id="taking-derivatives">
+<h2>Taking Derivatives<a class="headerlink" href="#taking-derivatives" title="Permalink to this headline">¶</a></h2>
+<p>Now that we have wrapped up the mapping, we can ensure that it is easy to take
+derivatives (or at least have access to them!). In the <a class="reference internal" href="#SimPEG.maps.ExpMap" title="SimPEG.maps.ExpMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.ExpMap</span></code></a>
+there are no dependencies between model parameters, so it will be a diagonal matrix:</p>
+<div class="math notranslate nohighlight">
+\[\left(\frac{\partial \mathcal{M}(m)}{\partial m}\right)_{ii} = \frac{\partial \exp(m_i)}{\partial m} = \exp(m_i)\]</div>
+<p>Or equivalently:</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial \mathcal{M}(m)}{\partial m} = \text{diag}( \exp(m) )\]</div>
+<p>The mapping API makes this really easy to test that you have got the derivative correct.
+When these are used in the inverse problem, this is extremely important!!</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">discretize</span>
+<span class="kn">from</span> <span class="nn">SimPEG</span> <span class="kn">import</span> <span class="n">maps</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">M</span> <span class="o">=</span> <span class="n">discretize</span><span class="o">.</span><span class="n">TensorMesh</span><span class="p">([</span><span class="mi">100</span><span class="p">])</span>
+<span class="n">expMap</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="n">ExpMap</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">nC</span><span class="p">)</span>
+<span class="n">m</span><span class="p">[</span><span class="n">M</span><span class="o">.</span><span class="n">vectorCCx</span><span class="o">&gt;</span><span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">expMap</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">plotIt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../content/api_core/api_Maps-1.py">Source code</a>, <a class="reference external" href="../../content/api_core/api_Maps-1.png">png</a>, <a class="reference external" href="../../content/api_core/api_Maps-1.hires.png">hires.png</a>, <a class="reference external" href="../../content/api_core/api_Maps-1.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../../_images/api_Maps-1.png" src="../../_images/api_Maps-1.png" />
+</div>
+</div>
+<div class="section" id="common-maps">
+<h2>Common Maps<a class="headerlink" href="#common-maps" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="exponential-map">
+<h3>Exponential Map<a class="headerlink" href="#exponential-map" title="Permalink to this headline">¶</a></h3>
+<p>Electrical conductivity varies over many orders of magnitude, so it is a common
+technique when solving the inverse problem to parameterize and optimize in terms
+of log conductivity. This makes sense not only because it ensures all conductivities
+will be positive, but because this is fundamentally the space where conductivity
+lives (i.e. it varies logarithmically).</p>
+<dl class="py class">
+<dt>
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">ExpMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1054-L1124"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Electrical conductivity varies over many orders of magnitude, so it is
+a common technique when solving the inverse problem to parameterize and
+optimize in terms of log conductivity. This makes sense not only
+because it ensures all conductivities will be positive, but because
+this is fundamentally the space where conductivity
+lives (i.e. it varies logarithmically).</p>
+<p>Changes the model into the physical property.</p>
+<p>A common example of this is to invert for electrical conductivity
+in log space. In this case, your model will be log(sigma) and to
+get back to sigma, you can take the exponential:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}m = \log{\sigma}\\\exp{m} = \exp{\log{\sigma}} = \sigma\end{aligned}\end{align} \]</div>
+<dl class="py method">
+<dt>
+<code class="sig-name descname">inverse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">D</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1082-L1096"><span class="viewcode-link">[source]</span></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>D</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – physical property</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>model</p>
+</dd>
+</dl>
+<p>The <em>transformInverse</em> changes the physical property into the
+model.</p>
+<div class="math notranslate nohighlight">
+\[m = \log{\sigma}\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt>
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1098-L1124"><span class="viewcode-link">[source]</span></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+<p>The <em>transform</em> changes the model into the physical property.
+The <em>transformDeriv</em> provides the derivative of the <em>transform</em>.</p>
+<p>If the model <em>transform</em> is:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}m = \log{\sigma}\\\exp{m} = \exp{\log{\sigma}} = \sigma\end{aligned}\end{align} \]</div>
+<p>Then the derivative is:</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial \exp{m}}{\partial m} = \text{sdiag}(\exp{m})\]</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="vertical-1d-map">
+<h3>Vertical 1D Map<a class="headerlink" href="#vertical-1d-map" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt>
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">SurjectVertical1D</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1373-L1415"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>SurjectVertical1DMap</p>
+<p>Given a 1D vector through the last dimension
+of the mesh, this will extend to the full
+model space.</p>
+<dl class="py method">
+<dt>
+<em class="property">property </em><code class="sig-name descname">nP</code></dt>
+<dd><p>Number of model properties.</p>
+<p>The number of cells in the
+last dimension of the mesh.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt>
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1402-L1415"><span class="viewcode-link">[source]</span></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="map-2d-cross-section-to-3d-model">
+<h3>Map 2D Cross-Section to 3D Model<a class="headerlink" href="#map-2d-cross-section-to-3d-model" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt>
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">Surject2Dto3D</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1418-L1482"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Map2Dto3D</p>
+<p>Given a 2D vector, this will extend to the full
+3D model space.</p>
+<dl class="py attribute">
+<dt>
+<code class="sig-name descname">normal</code><em class="property"> = 'Y'</em></dt>
+<dd><p>The normal</p>
+</dd></dl>
+
+<dl class="py method">
+<dt>
+<em class="property">property </em><code class="sig-name descname">nP</code></dt>
+<dd><p>Number of model properties.</p>
+<p>The number of cells in the
+last dimension of the mesh.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt>
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1471-L1482"><span class="viewcode-link">[source]</span></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="mesh-to-mesh-map">
+<h3>Mesh to Mesh Map<a class="headerlink" href="#mesh-to-mesh-map" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt>
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">Mesh2Mesh</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1485-L1534"><span class="viewcode-link">[source]</span></a></dt>
+<dd><blockquote>
+<div><p>Takes a model on one mesh are translates it to another mesh.</p>
+</div></blockquote>
+<p><strong>Required Properties:</strong></p>
+<ul class="simple">
+<li><p><strong>indActive</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/math.html#properties.Array" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>): active indices on target mesh, a list or numpy array of &lt;class ‘bool’&gt; with shape (*)</p></li>
+</ul>
+<dl class="py method">
+<dt>
+<em class="property">property </em><code class="sig-name descname">indActive</code></dt>
+<dd><p><strong>indActive</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/math.html#properties.Array" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>): active indices on target mesh, a list or numpy array of &lt;class ‘bool’&gt; with shape (*)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt>
+<em class="property">property </em><code class="sig-name descname">P</code></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt>
+<em class="property">property </em><code class="sig-name descname">shape</code></dt>
+<dd><p>Number of parameters in the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt>
+<em class="property">property </em><code class="sig-name descname">nP</code></dt>
+<dd><p>Number of parameters in the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt>
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1531-L1534"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>The derivative of the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<a class="reference external image-reference" href="/content/examples/01-maps/plot_mesh2mesh.html"><img alt="../../_images/sphx_glr_plot_mesh2mesh_001.png" class="align-center" src="../../_images/sphx_glr_plot_mesh2mesh_001.png" /></a>
+</div>
+</div>
+<div class="section" id="under-the-hood">
+<h2>Under the Hood<a class="headerlink" href="#under-the-hood" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="combo-map">
+<h3>Combo Map<a class="headerlink" href="#combo-map" title="Permalink to this headline">¶</a></h3>
+<p>The ComboMap holds the information for multiplying and combining
+maps. It also uses the chain rule to create the derivative.
+Remember, any time that you make your own combination of mappings
+be sure to test that the derivative is correct.</p>
+<dl class="py class">
+<dt>
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">ComboMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L227-L308"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Combination of various maps.</p>
+<p>The ComboMap holds the information for multiplying and combining
+maps. It also uses the chain rule to create the derivative.
+Remember, any time that you make your own combination of mappings
+be sure to test that the derivative is correct.</p>
+<dl class="py method">
+<dt>
+<em class="property">property </em><code class="sig-name descname">shape</code></dt>
+<dd><p>The default shape is (mesh.nC, nP) if the mesh is defined.
+If this is a meshless mapping (i.e. nP is defined independently)
+the shape will be the the shape (nP,nP).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>shape of the operator as a tuple (int,int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt>
+<em class="property">property </em><code class="sig-name descname">nP</code></dt>
+<dd><p>Number of model properties.</p>
+<p>The number of cells in the
+last dimension of the mesh.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt>
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L289-L300"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>The derivative of the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="the-api">
+<h2>The API<a class="headerlink" href="#the-api" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="code docutils literal notranslate"><span class="pre">IdentityMap</span></code> is the base class for all mappings, and it does absolutely nothing.</p>
+<span class="target" id="module-SimPEG.maps"></span><dl class="py class">
+<dt id="SimPEG.maps.IdentityMap">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">IdentityMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L35-L224"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.IdentityMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">properties.base.base.HasProperties</span></code></p>
+<p>SimPEG Map</p>
+<dl class="py method">
+<dt id="SimPEG.maps.IdentityMap.nP">
+<em class="property">property </em><code class="sig-name descname">nP</code><a class="headerlink" href="#SimPEG.maps.IdentityMap.nP" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>number of parameters that the mapping accepts</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.IdentityMap.shape">
+<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#SimPEG.maps.IdentityMap.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default shape is (mesh.nC, nP) if the mesh is defined.
+If this is a meshless mapping (i.e. nP is defined independently)
+the shape will be the the shape (nP,nP).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>shape of the operator as a tuple (int,int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.IdentityMap.inverse">
+<code class="sig-name descname">inverse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">D</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L100-L113"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.IdentityMap.inverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the physical property into the model.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <em>transformInverse</em> may not be easy to create in general.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>D</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – physical property</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.IdentityMap.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L115-L128"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.IdentityMap.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The derivative of the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.IdentityMap.test">
+<code class="sig-name descname">test</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L130-L151"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.IdentityMap.test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the derivative of the mapping.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p></li>
+<li><p><strong>kwargs</strong> – key word arguments of
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">discretize.Tests.checkDerivative()</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>passed the test?</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.IdentityMap.testVec">
+<code class="sig-name descname">testVec</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L153-L170"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.IdentityMap.testVec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the derivative of the mapping times a vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p></li>
+<li><p><strong>kwargs</strong> – key word arguments of
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">discretize.Tests.checkDerivative()</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>passed the test?</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.IdentityMap.dot">
+<code class="sig-name descname">dot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">val</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L207-L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.IdentityMap.dot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.ComboMap">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">ComboMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L227-L308"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ComboMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<p>Combination of various maps.</p>
+<p>The ComboMap holds the information for multiplying and combining
+maps. It also uses the chain rule to create the derivative.
+Remember, any time that you make your own combination of mappings
+be sure to test that the derivative is correct.</p>
+<dl class="py method">
+<dt id="SimPEG.maps.ComboMap.shape">
+<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#SimPEG.maps.ComboMap.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default shape is (mesh.nC, nP) if the mesh is defined.
+If this is a meshless mapping (i.e. nP is defined independently)
+the shape will be the the shape (nP,nP).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>shape of the operator as a tuple (int,int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ComboMap.nP">
+<em class="property">property </em><code class="sig-name descname">nP</code><a class="headerlink" href="#SimPEG.maps.ComboMap.nP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of model properties.</p>
+<p>The number of cells in the
+last dimension of the mesh.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ComboMap.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L289-L300"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ComboMap.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The derivative of the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.Projection">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">Projection</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L311-L359"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.Projection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<p>A map to rearrange / select parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nP</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of model parameters</p></li>
+<li><p><strong>index</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – indices to select</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="SimPEG.maps.Projection.shape">
+<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#SimPEG.maps.Projection.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shape of the matrix operation (number of indices x nP)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.Projection.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L350-L359"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.Projection.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.SumMap">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">SumMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L362-L445"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SumMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.ComboMap" title="SimPEG.maps.ComboMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.ComboMap</span></code></a></p>
+<p>A map to add model parameters contributing to the
+forward operation e.g. F(m) = F(g(x) + h(y))</p>
+<p>Assumes that the model vectors defined by g(x) and h(y)
+are equal in length.
+Allows to assume different things about the model m:
+i.e. parametric + voxel models</p>
+<dl class="py method">
+<dt id="SimPEG.maps.SumMap.shape">
+<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#SimPEG.maps.SumMap.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default shape is (mesh.nC, nP) if the mesh is defined.
+If this is a meshless mapping (i.e. nP is defined independently)
+the shape will be the the shape (nP,nP).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>shape of the operator as a tuple (int,int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SumMap.nP">
+<em class="property">property </em><code class="sig-name descname">nP</code><a class="headerlink" href="#SimPEG.maps.SumMap.nP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of model properties.</p>
+<p>The number of cells in the
+last dimension of the mesh.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SumMap.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L428-L445"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SumMap.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The derivative of the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.SurjectUnits">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">SurjectUnits</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L448-L515"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SurjectUnits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<blockquote>
+<div><p>A map to group model cells into homogeneous units</p>
+<dl class="field-list simple">
+<dt class="field-odd">param list indices</dt>
+<dd class="field-odd"><p>list of bool for each homogeneous unit</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Required Properties:</strong></p>
+<ul class="simple">
+<li><p><strong>indices</strong> (a list of <a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/math.html#properties.Array" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>): list of indices for each unit to be surjected into, a list (each item is a list or numpy array of &lt;class ‘bool’&gt; with shape (*))</p></li>
+</ul>
+<dl class="py method">
+<dt id="SimPEG.maps.SurjectUnits.indices">
+<em class="property">property </em><code class="sig-name descname">indices</code><a class="headerlink" href="#SimPEG.maps.SurjectUnits.indices" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>indices</strong> (a list of <a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/math.html#properties.Array" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>): list of indices for each unit to be surjected into, a list (each item is a list or numpy array of &lt;class ‘bool’&gt; with shape (*))</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SurjectUnits.P">
+<em class="property">property </em><code class="sig-name descname">P</code><a class="headerlink" href="#SimPEG.maps.SurjectUnits.P" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SurjectUnits.nP">
+<em class="property">property </em><code class="sig-name descname">nP</code><a class="headerlink" href="#SimPEG.maps.SurjectUnits.nP" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>number of parameters that the mapping accepts</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SurjectUnits.shape">
+<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#SimPEG.maps.SurjectUnits.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shape of the matrix operation (number of indices x nP)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SurjectUnits.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L506-L515"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SurjectUnits.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.SphericalSystem">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">SphericalSystem</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L518-L616"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SphericalSystem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<p>A vector map to spherical parameters of amplitude, theta and phi</p>
+<dl class="py method">
+<dt id="SimPEG.maps.SphericalSystem.sphericalDeriv">
+<code class="sig-name descname">sphericalDeriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L527-L579"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SphericalSystem.sphericalDeriv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SphericalSystem.inverse">
+<code class="sig-name descname">inverse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L589-L597"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SphericalSystem.inverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cartesian to spherical.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – physical property in Cartesian</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SphericalSystem.shape">
+<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#SimPEG.maps.SphericalSystem.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shape of the matrix operation (number of indices x nP)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SphericalSystem.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L607-L616"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SphericalSystem.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.Wires">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">Wires</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L619-L655"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.Wires" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt id="SimPEG.maps.Wires.nP">
+<em class="property">property </em><code class="sig-name descname">nP</code><a class="headerlink" href="#SimPEG.maps.Wires.nP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">SelfConsistentEffectiveMedium</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L658-L1044"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">properties.base.base.HasProperties</span></code></p>
+<blockquote>
+<div><p>Two phase self-consistent effective medium theory mapping for
+ellipsoidal inclusions. The inversion model is the concentration
+(volume fraction) of the phase 2 material.</p>
+<p>The inversion model is <span class="math notranslate nohighlight">\(\varphi\)</span>. We solve for <span class="math notranslate nohighlight">\(\sigma\)</span>
+given <span class="math notranslate nohighlight">\(\sigma_0\)</span>, <span class="math notranslate nohighlight">\(\sigma_1\)</span> and <span class="math notranslate nohighlight">\(\varphi\)</span> . Each of
+the following are implicit expressions of the effective conductivity.
+They are solved using a fixed point iteration.</p>
+<p><strong>Spherical Inclusions</strong></p>
+<p>If the shape of the inclusions are spheres, we use</p>
+<div class="math notranslate nohighlight">
+\[\sum_{j=1}^N (\sigma^* - \sigma_j)R^{j} = 0\]</div>
+<p>where <span class="math notranslate nohighlight">\(j=[1,N]\)</span> is the each material phase, and N is the number
+of phases. Currently, the implementation is only set up for 2 phase
+materials, so we solve</p>
+<div class="math notranslate nohighlight">
+\[(1-\varphi)(\sigma - \sigma_0)R^{(0)} + \varphi(\sigma - \sigma_1)R^{(1)} = 0.\]</div>
+<p>Where <span class="math notranslate nohighlight">\(R^{(j)}\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[R^{(j)} = \left[1 + \frac{1}{3}\frac{\sigma_j - \sigma}{\sigma} \right]^{-1}.\]</div>
+<p><strong>Ellipsoids</strong></p>
+<p>If the inclusions are aligned ellipsoids, we solve</p>
+<div class="math notranslate nohighlight">
+\[\sum_{j=1}^N \varphi_j (\Sigma^* - \sigma_j\mathbf{I}) \mathbf{R}^{j, *} = 0\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{R}^{(j, *)} = \left[ \mathbf{I} + \mathbf{A}_j {\Sigma^{*}}^{-1}(\sigma_j \mathbf{I} - \Sigma^*) \right]^{-1}\]</div>
+<p>and the depolarization tensor <span class="math notranslate nohighlight">\(\mathbf{A}_j\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{A}^* = \left[\begin{array}{ccc}
+    Q &amp; 0 &amp; 0 \\
+    0 &amp; Q &amp; 0 \\
+    0 &amp; 0 &amp; 1-2Q
+\end{array}\right]\end{split}\]</div>
+<p>for a spheroid aligned along the z-axis. For an oblate spheroid
+(<span class="math notranslate nohighlight">\(\alpha &lt; 1\)</span>, pancake-like)</p>
+<div class="math notranslate nohighlight">
+\[Q = \frac{1}{2}\left(
+    1 + \frac{1}{\alpha^2 - 1} \left[
+        1 - \frac{1}{\chi}\tan^{-1}(\chi)
+    \right]
+\right)\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\chi = \sqrt{\frac{1}{\alpha^2} - 1}\]</div>
+<p>For reference, see
+<a class="reference external" href="https://link.springer.com/book/10.1007/978-1-4757-6355-3">Torquato (2002), Random Heterogeneous Materials</a></p>
+</div></blockquote>
+<p><strong>Required Properties:</strong></p>
+<ul class="simple">
+<li><p><strong>alpha0</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Float" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>): aspect ratio of the phase-0 ellipsoids, a float, Default: 1.0</p></li>
+<li><p><strong>alpha1</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Float" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>): aspect ratio of the phase-1 ellipsoids, a float, Default: 1.0</p></li>
+<li><p><strong>maxIter</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Integer" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Integer</span></code></a>): maximum number of iterations for the fixed point iteration calculation, an integer, Default: 50</p></li>
+<li><p><strong>orientation0</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/math.html#properties.Vector3" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector3</span></code></a>): orientation of the phase-0 inclusions, a 3D Vector of &lt;class ‘float’&gt; with shape (3), Default: Z</p></li>
+<li><p><strong>orientation1</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/math.html#properties.Vector3" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector3</span></code></a>): orientation of the phase-1 inclusions, a 3D Vector of &lt;class ‘float’&gt; with shape (3), Default: Z</p></li>
+<li><p><strong>random</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Boolean" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Boolean</span></code></a>): are the inclusions randomly oriented (True) or preferentially aligned (False)?, a boolean, Default: True</p></li>
+<li><p><strong>rel_tol</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Float" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>): relative tolerance for convergence for the fixed-point iteration, a float, Default: 0.001</p></li>
+<li><p><strong>sigma0</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Float" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>): physical property value for phase-0 material, a float in range [0.0, inf]</p></li>
+<li><p><strong>sigma1</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Float" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>): physical property value for phase-1 material, a float in range [0.0, inf]</p></li>
+</ul>
+<dl class="py method">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium.sigma0">
+<em class="property">property </em><code class="sig-name descname">sigma0</code><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium.sigma0" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>sigma0</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Float" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>): physical property value for phase-0 material, a float in range [0.0, inf]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium.sigma1">
+<em class="property">property </em><code class="sig-name descname">sigma1</code><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium.sigma1" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>sigma1</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Float" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>): physical property value for phase-1 material, a float in range [0.0, inf]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium.alpha0">
+<em class="property">property </em><code class="sig-name descname">alpha0</code><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium.alpha0" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>alpha0</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Float" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>): aspect ratio of the phase-0 ellipsoids, a float, Default: 1.0</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium.alpha1">
+<em class="property">property </em><code class="sig-name descname">alpha1</code><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium.alpha1" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>alpha1</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Float" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>): aspect ratio of the phase-1 ellipsoids, a float, Default: 1.0</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium.orientation0">
+<em class="property">property </em><code class="sig-name descname">orientation0</code><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium.orientation0" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>orientation0</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/math.html#properties.Vector3" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector3</span></code></a>): orientation of the phase-0 inclusions, a 3D Vector of &lt;class ‘float’&gt; with shape (3), Default: Z</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium.orientation1">
+<em class="property">property </em><code class="sig-name descname">orientation1</code><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium.orientation1" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>orientation1</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/math.html#properties.Vector3" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector3</span></code></a>): orientation of the phase-1 inclusions, a 3D Vector of &lt;class ‘float’&gt; with shape (3), Default: Z</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium.random">
+<em class="property">property </em><code class="sig-name descname">random</code><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium.random" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>random</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Boolean" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Boolean</span></code></a>): are the inclusions randomly oriented (True) or preferentially aligned (False)?, a boolean, Default: True</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium.rel_tol">
+<em class="property">property </em><code class="sig-name descname">rel_tol</code><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium.rel_tol" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>rel_tol</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Float" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>): relative tolerance for convergence for the fixed-point iteration, a float, Default: 0.001</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium.maxIter">
+<em class="property">property </em><code class="sig-name descname">maxIter</code><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium.maxIter" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>maxIter</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Integer" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Integer</span></code></a>): maximum number of iterations for the fixed point iteration calculation, an integer, Default: 50</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium.tol">
+<em class="property">property </em><code class="sig-name descname">tol</code><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium.tol" title="Permalink to this definition">¶</a></dt>
+<dd><p>absolute tolerance for the convergence of the fixed point iteration
+calc</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium.sigstart">
+<em class="property">property </em><code class="sig-name descname">sigstart</code><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium.sigstart" title="Permalink to this definition">¶</a></dt>
+<dd><p>first guess for sigma</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium.wiener_bounds">
+<code class="sig-name descname">wiener_bounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">phi1</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L800-L810"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium.wiener_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define Wenner Conductivity Bounds</p>
+<p>See Torquato, 2002</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium.hashin_shtrikman_bounds">
+<code class="sig-name descname">hashin_shtrikman_bounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">phi1</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L812-L835"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium.hashin_shtrikman_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hashin Shtrikman bounds</p>
+<p>See Torquato, 2002</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium.hashin_shtrikman_bounds_anisotropic">
+<code class="sig-name descname">hashin_shtrikman_bounds_anisotropic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">phi1</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L837-L872"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium.hashin_shtrikman_bounds_anisotropic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hashin Shtrikman bounds for anisotropic media</p>
+<p>See Torquato, 2002</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium.getQ">
+<code class="sig-name descname">getQ</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alpha</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L874-L897"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium.getQ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Geometric factor in the depolarization tensor</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium.getA">
+<code class="sig-name descname">getA</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alpha</span></em>, <em class="sig-param"><span class="n">orientation</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L899-L905"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium.getA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Depolarization tensor</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium.getR">
+<code class="sig-name descname">getR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sj</span></em>, <em class="sig-param"><span class="n">se</span></em>, <em class="sig-param"><span class="n">alpha</span></em>, <em class="sig-param"><span class="n">orientation</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L907-L925"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium.getR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Electric field concentration tensor</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium.getdR">
+<code class="sig-name descname">getdR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sj</span></em>, <em class="sig-param"><span class="n">se</span></em>, <em class="sig-param"><span class="n">alpha</span></em>, <em class="sig-param"><span class="n">orientation</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L927-L952"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium.getdR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Derivative of the electric field concentration tensor with respect
+to the concentration of the second phase material.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1032-L1038"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Derivative of the effective conductivity with respect to the
+volume fraction of phase 2 material</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SelfConsistentEffectiveMedium.inverse">
+<code class="sig-name descname">inverse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sige</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1040-L1044"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SelfConsistentEffectiveMedium.inverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the concentration given the effective conductivity</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.ExpMap">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">ExpMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1054-L1124"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ExpMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<p>Electrical conductivity varies over many orders of magnitude, so it is
+a common technique when solving the inverse problem to parameterize and
+optimize in terms of log conductivity. This makes sense not only
+because it ensures all conductivities will be positive, but because
+this is fundamentally the space where conductivity
+lives (i.e. it varies logarithmically).</p>
+<p>Changes the model into the physical property.</p>
+<p>A common example of this is to invert for electrical conductivity
+in log space. In this case, your model will be log(sigma) and to
+get back to sigma, you can take the exponential:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}m = \log{\sigma}\\\exp{m} = \exp{\log{\sigma}} = \sigma\end{aligned}\end{align} \]</div>
+<dl class="py method">
+<dt id="SimPEG.maps.ExpMap.inverse">
+<code class="sig-name descname">inverse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">D</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1082-L1096"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ExpMap.inverse" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>D</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – physical property</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>model</p>
+</dd>
+</dl>
+<p>The <em>transformInverse</em> changes the physical property into the
+model.</p>
+<div class="math notranslate nohighlight">
+\[m = \log{\sigma}\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ExpMap.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1098-L1124"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ExpMap.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+<p>The <em>transform</em> changes the model into the physical property.
+The <em>transformDeriv</em> provides the derivative of the <em>transform</em>.</p>
+<p>If the model <em>transform</em> is:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}m = \log{\sigma}\\\exp{m} = \exp{\log{\sigma}} = \sigma\end{aligned}\end{align} \]</div>
+<p>Then the derivative is:</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial \exp{m}}{\partial m} = \text{sdiag}(\exp{m})\]</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.ReciprocalMap">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">ReciprocalMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1127-L1152"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ReciprocalMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<p>Reciprocal mapping. For example, electrical resistivity and
+conductivity.</p>
+<div class="math notranslate nohighlight">
+\[\rho = \frac{1}{\sigma}\]</div>
+<dl class="py method">
+<dt id="SimPEG.maps.ReciprocalMap.inverse">
+<code class="sig-name descname">inverse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">D</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1144-L1145"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ReciprocalMap.inverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the physical property into the model.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <em>transformInverse</em> may not be easy to create in general.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>D</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – physical property</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ReciprocalMap.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1147-L1152"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ReciprocalMap.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The derivative of the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.LogMap">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">LogMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1155-L1194"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.LogMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<p>Changes the model into the physical property.</p>
+<p>If (p) is the physical property and (m) is the model, then</p>
+<div class="math notranslate nohighlight">
+\[p = \log(m)\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[m = \exp(p)\]</div>
+<p>NOTE: If you have a model which is log conductivity
+(ie. (m = log(sigma))),
+you should be using an ExpMap</p>
+<dl class="py method">
+<dt id="SimPEG.maps.LogMap.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1183-L1191"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.LogMap.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The derivative of the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.LogMap.inverse">
+<code class="sig-name descname">inverse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1193-L1194"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.LogMap.inverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the physical property into the model.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <em>transformInverse</em> may not be easy to create in general.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>D</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – physical property</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.ChiMap">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">ChiMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1197-L1220"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ChiMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<p>Chi Map</p>
+<p>Convert Magnetic Susceptibility to Magnetic Permeability.</p>
+<div class="math notranslate nohighlight">
+\[\mu(m) = \mu_0 (1 + \chi(m))\]</div>
+<dl class="py method">
+<dt id="SimPEG.maps.ChiMap.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1214-L1217"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ChiMap.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The derivative of the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ChiMap.inverse">
+<code class="sig-name descname">inverse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1219-L1220"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ChiMap.inverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the physical property into the model.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <em>transformInverse</em> may not be easy to create in general.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>D</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – physical property</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.MuRelative">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">MuRelative</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1223-L1244"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.MuRelative" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<p>Invert for relative permeability</p>
+<div class="math notranslate nohighlight">
+\[\mu(m) = \mu_0 * \mathbf{m}\]</div>
+<dl class="py method">
+<dt id="SimPEG.maps.MuRelative.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1238-L1241"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.MuRelative.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The derivative of the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.MuRelative.inverse">
+<code class="sig-name descname">inverse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1243-L1244"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.MuRelative.inverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the physical property into the model.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <em>transformInverse</em> may not be easy to create in general.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>D</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – physical property</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.Weighting">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">Weighting</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1247-L1286"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.Weighting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<p>Model weight parameters.</p>
+<dl class="py method">
+<dt id="SimPEG.maps.Weighting.shape">
+<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#SimPEG.maps.Weighting.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default shape is (mesh.nC, nP) if the mesh is defined.
+If this is a meshless mapping (i.e. nP is defined independently)
+the shape will be the the shape (nP,nP).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>shape of the operator as a tuple (int,int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.Weighting.P">
+<em class="property">property </em><code class="sig-name descname">P</code><a class="headerlink" href="#SimPEG.maps.Weighting.P" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.Weighting.inverse">
+<code class="sig-name descname">inverse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">D</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1280-L1281"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.Weighting.inverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the physical property into the model.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <em>transformInverse</em> may not be easy to create in general.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>D</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – physical property</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.Weighting.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1283-L1286"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.Weighting.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The derivative of the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.ComplexMap">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">ComplexMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1289-L1326"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ComplexMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<p>default nP is nC in the mesh times 2 [real, imag]</p>
+<dl class="py method">
+<dt id="SimPEG.maps.ComplexMap.nP">
+<em class="property">property </em><code class="sig-name descname">nP</code><a class="headerlink" href="#SimPEG.maps.ComplexMap.nP" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>number of parameters that the mapping accepts</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ComplexMap.shape">
+<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#SimPEG.maps.ComplexMap.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default shape is (mesh.nC, nP) if the mesh is defined.
+If this is a meshless mapping (i.e. nP is defined independently)
+the shape will be the the shape (nP,nP).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>shape of the operator as a tuple (int,int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ComplexMap.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1314-L1326"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ComplexMap.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The derivative of the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.SurjectFull">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">SurjectFull</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1338-L1370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SurjectFull" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<p>Given a scalar, the SurjectFull maps the value to the
+full model space.</p>
+<dl class="py method">
+<dt id="SimPEG.maps.SurjectFull.nP">
+<em class="property">property </em><code class="sig-name descname">nP</code><a class="headerlink" href="#SimPEG.maps.SurjectFull.nP" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>number of parameters that the mapping accepts</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SurjectFull.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1361-L1370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SurjectFull.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.SurjectVertical1D">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">SurjectVertical1D</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1373-L1415"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SurjectVertical1D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<p>SurjectVertical1DMap</p>
+<p>Given a 1D vector through the last dimension
+of the mesh, this will extend to the full
+model space.</p>
+<dl class="py method">
+<dt id="SimPEG.maps.SurjectVertical1D.nP">
+<em class="property">property </em><code class="sig-name descname">nP</code><a class="headerlink" href="#SimPEG.maps.SurjectVertical1D.nP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of model properties.</p>
+<p>The number of cells in the
+last dimension of the mesh.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.SurjectVertical1D.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1402-L1415"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SurjectVertical1D.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.Surject2Dto3D">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">Surject2Dto3D</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1418-L1482"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.Surject2Dto3D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<p>Map2Dto3D</p>
+<p>Given a 2D vector, this will extend to the full
+3D model space.</p>
+<dl class="py attribute">
+<dt id="SimPEG.maps.Surject2Dto3D.normal">
+<code class="sig-name descname">normal</code><em class="property"> = 'Y'</em><a class="headerlink" href="#SimPEG.maps.Surject2Dto3D.normal" title="Permalink to this definition">¶</a></dt>
+<dd><p>The normal</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.Surject2Dto3D.nP">
+<em class="property">property </em><code class="sig-name descname">nP</code><a class="headerlink" href="#SimPEG.maps.Surject2Dto3D.nP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of model properties.</p>
+<p>The number of cells in the
+last dimension of the mesh.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.Surject2Dto3D.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1471-L1482"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.Surject2Dto3D.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.Mesh2Mesh">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">Mesh2Mesh</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1485-L1534"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.Mesh2Mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<blockquote>
+<div><p>Takes a model on one mesh are translates it to another mesh.</p>
+</div></blockquote>
+<p><strong>Required Properties:</strong></p>
+<ul class="simple">
+<li><p><strong>indActive</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/math.html#properties.Array" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>): active indices on target mesh, a list or numpy array of &lt;class ‘bool’&gt; with shape (*)</p></li>
+</ul>
+<dl class="py method">
+<dt id="SimPEG.maps.Mesh2Mesh.indActive">
+<em class="property">property </em><code class="sig-name descname">indActive</code><a class="headerlink" href="#SimPEG.maps.Mesh2Mesh.indActive" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>indActive</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/math.html#properties.Array" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>): active indices on target mesh, a list or numpy array of &lt;class ‘bool’&gt; with shape (*)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.Mesh2Mesh.P">
+<em class="property">property </em><code class="sig-name descname">P</code><a class="headerlink" href="#SimPEG.maps.Mesh2Mesh.P" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.Mesh2Mesh.shape">
+<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#SimPEG.maps.Mesh2Mesh.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of parameters in the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.Mesh2Mesh.nP">
+<em class="property">property </em><code class="sig-name descname">nP</code><a class="headerlink" href="#SimPEG.maps.Mesh2Mesh.nP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of parameters in the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.Mesh2Mesh.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1531-L1534"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.Mesh2Mesh.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The derivative of the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.InjectActiveCells">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">InjectActiveCells</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1537-L1588"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.InjectActiveCells" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<p>Active model parameters.</p>
+<dl class="py attribute">
+<dt id="SimPEG.maps.InjectActiveCells.indActive">
+<code class="sig-name descname">indActive</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.maps.InjectActiveCells.indActive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Active Cells</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.maps.InjectActiveCells.valInactive">
+<code class="sig-name descname">valInactive</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.maps.InjectActiveCells.valInactive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Values of inactive Cells</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.InjectActiveCells.shape">
+<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#SimPEG.maps.InjectActiveCells.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default shape is (mesh.nC, nP) if the mesh is defined.
+If this is a meshless mapping (i.e. nP is defined independently)
+the shape will be the the shape (nP,nP).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>shape of the operator as a tuple (int,int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.InjectActiveCells.nP">
+<em class="property">property </em><code class="sig-name descname">nP</code><a class="headerlink" href="#SimPEG.maps.InjectActiveCells.nP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of parameters in the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.InjectActiveCells.inverse">
+<code class="sig-name descname">inverse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">D</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1582-L1583"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.InjectActiveCells.inverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the physical property into the model.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <em>transformInverse</em> may not be easy to create in general.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>D</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – physical property</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.InjectActiveCells.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1585-L1588"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.InjectActiveCells.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The derivative of the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.ParametricCircleMap">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">ParametricCircleMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1598-L1704"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricCircleMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<p>Parameterize the model space using a circle in a wholespace.</p>
+<div class="math notranslate nohighlight">
+\[\sigma(m) = \sigma_1 + (\sigma_2 - \sigma_1)\left(
+\arctan\left(100*\sqrt{(\vec{x}-x_0)^2 + (\vec{y}-y_0)}-r
+\right) \pi^{-1} + 0.5\right)\]</div>
+<p>Define the model as:</p>
+<div class="math notranslate nohighlight">
+\[m = [\sigma_1, \sigma_2, x_0, y_0, r]\]</div>
+<dl class="py attribute">
+<dt id="SimPEG.maps.ParametricCircleMap.slope">
+<code class="sig-name descname">slope</code><em class="property"> = 0.1</em><a class="headerlink" href="#SimPEG.maps.ParametricCircleMap.slope" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricCircleMap.nP">
+<em class="property">property </em><code class="sig-name descname">nP</code><a class="headerlink" href="#SimPEG.maps.ParametricCircleMap.nP" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>number of parameters that the mapping accepts</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricCircleMap.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1643-L1704"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricCircleMap.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The derivative of the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.ParametricPolyMap">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">ParametricPolyMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1707-L1873"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricPolyMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<p>PolyMap</p>
+<p>Parameterize the model space using a polynomials in a wholespace.</p>
+<div class="math notranslate nohighlight">
+\[y = \mathbf{V} c\]</div>
+<p>Define the model as:</p>
+<div class="math notranslate nohighlight">
+\[m = [\sigma_1, \sigma_2, c]\]</div>
+<p>Can take in an actInd vector to account for topography.</p>
+<dl class="py attribute">
+<dt id="SimPEG.maps.ParametricPolyMap.slope">
+<code class="sig-name descname">slope</code><em class="property"> = 10000.0</em><a class="headerlink" href="#SimPEG.maps.ParametricPolyMap.slope" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricPolyMap.shape">
+<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#SimPEG.maps.ParametricPolyMap.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default shape is (mesh.nC, nP) if the mesh is defined.
+If this is a meshless mapping (i.e. nP is defined independently)
+the shape will be the the shape (nP,nP).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>shape of the operator as a tuple (int,int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricPolyMap.nP">
+<em class="property">property </em><code class="sig-name descname">nP</code><a class="headerlink" href="#SimPEG.maps.ParametricPolyMap.nP" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>number of parameters that the mapping accepts</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricPolyMap.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1809-L1873"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricPolyMap.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The derivative of the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.ParametricSplineMap">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">ParametricSplineMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1876-L2094"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricSplineMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<p>SplineMap</p>
+<p>Parameterize the boundary of two geological units using
+a spline interpolation</p>
+<div class="math notranslate nohighlight">
+\[g = f(x)-y\]</div>
+<p>Define the model as:</p>
+<div class="math notranslate nohighlight">
+\[m = [\sigma_1, \sigma_2, y]\]</div>
+<dl class="py attribute">
+<dt id="SimPEG.maps.ParametricSplineMap.slope">
+<code class="sig-name descname">slope</code><em class="property"> = 10000.0</em><a class="headerlink" href="#SimPEG.maps.ParametricSplineMap.slope" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricSplineMap.nP">
+<em class="property">property </em><code class="sig-name descname">nP</code><a class="headerlink" href="#SimPEG.maps.ParametricSplineMap.nP" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>number of parameters that the mapping accepts</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricSplineMap.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L1971-L2094"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricSplineMap.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The derivative of the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.BaseParametric">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">BaseParametric</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2097-L2159"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.BaseParametric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<dl class="py attribute">
+<dt id="SimPEG.maps.BaseParametric.slopeFact">
+<code class="sig-name descname">slopeFact</code><em class="property"> = 1</em><a class="headerlink" href="#SimPEG.maps.BaseParametric.slopeFact" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.maps.BaseParametric.indActive">
+<code class="sig-name descname">indActive</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.maps.BaseParametric.indActive" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.maps.BaseParametric.slope">
+<code class="sig-name descname">slope</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.maps.BaseParametric.slope" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.BaseParametric.x">
+<em class="property">property </em><code class="sig-name descname">x</code><a class="headerlink" href="#SimPEG.maps.BaseParametric.x" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.BaseParametric.y">
+<em class="property">property </em><code class="sig-name descname">y</code><a class="headerlink" href="#SimPEG.maps.BaseParametric.y" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.BaseParametric.z">
+<em class="property">property </em><code class="sig-name descname">z</code><a class="headerlink" href="#SimPEG.maps.BaseParametric.z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.ParametricLayer">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">ParametricLayer</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2162-L2291"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.BaseParametric" title="SimPEG.maps.BaseParametric"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.BaseParametric</span></code></a></p>
+<p>Parametric Layer Space</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">val_background</span><span class="p">,</span>
+    <span class="n">val_layer</span><span class="p">,</span>
+    <span class="n">layer_center</span><span class="p">,</span>
+    <span class="n">layer_thickness</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>Required</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mesh</strong> (<a class="reference external" href="http://discretize.simpeg.xyz/en/master/api/generated/discretize.base.BaseMesh.html#discretize.base.BaseMesh" title="(in discretize v0.6.1)"><em>discretize.base.BaseMesh</em></a>) – SimPEG Mesh, 2D or 3D</p>
+</dd>
+</dl>
+<p><strong>Optional</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>slopeFact</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – arctan slope factor - divided by the minimum h
+spacing to give the slope of the arctan
+functions</p></li>
+<li><p><strong>slope</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – slope of the arctan function</p></li>
+<li><p><strong>indActive</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – bool vector with</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricLayer.nP">
+<em class="property">property </em><code class="sig-name descname">nP</code><a class="headerlink" href="#SimPEG.maps.ParametricLayer.nP" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>number of parameters that the mapping accepts</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricLayer.shape">
+<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#SimPEG.maps.ParametricLayer.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default shape is (mesh.nC, nP) if the mesh is defined.
+If this is a meshless mapping (i.e. nP is defined independently)
+the shape will be the the shape (nP,nP).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>shape of the operator as a tuple (int,int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricLayer.mDict">
+<code class="sig-name descname">mDict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2202-L2208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricLayer.mDict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricLayer.layer_cont">
+<code class="sig-name descname">layer_cont</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mDict</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2253-L2256"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricLayer.layer_cont" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricLayer.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2278-L2291"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricLayer.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The derivative of the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.ParametricBlock">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">ParametricBlock</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2294-L2525"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.BaseParametric" title="SimPEG.maps.BaseParametric"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.BaseParametric</span></code></a></p>
+<blockquote>
+<div><p>Parametric Block in a Homogeneous Space</p>
+<p>For 1D:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">val_background</span><span class="p">,</span>
+    <span class="n">val_block</span><span class="p">,</span>
+    <span class="n">block_x0</span><span class="p">,</span>
+    <span class="n">block_dx</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>For 2D:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">val_background</span><span class="p">,</span>
+    <span class="n">val_block</span><span class="p">,</span>
+    <span class="n">block_x0</span><span class="p">,</span>
+    <span class="n">block_dx</span><span class="p">,</span>
+    <span class="n">block_y0</span><span class="p">,</span>
+    <span class="n">block_dy</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>For 3D:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">val_background</span><span class="p">,</span>
+    <span class="n">val_block</span><span class="p">,</span>
+    <span class="n">block_x0</span><span class="p">,</span>
+    <span class="n">block_dx</span><span class="p">,</span>
+    <span class="n">block_y0</span><span class="p">,</span>
+    <span class="n">block_dy</span>
+    <span class="n">block_z0</span><span class="p">,</span>
+    <span class="n">block_dz</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>Required</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">param discretize.base.BaseMesh mesh</dt>
+<dd class="field-odd"><p>SimPEG Mesh, 2D or 3D</p>
+</dd>
+</dl>
+<p><strong>Optional</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">param float slopeFact</dt>
+<dd class="field-odd"><p>arctan slope factor - divided by the minimum h
+spacing to give the slope of the arctan
+functions</p>
+</dd>
+<dt class="field-even">param float slope</dt>
+<dd class="field-even"><p>slope of the arctan function</p>
+</dd>
+<dt class="field-odd">param numpy.ndarray indActive</dt>
+<dd class="field-odd"><p>bool vector with active indices</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Required Properties:</strong></p>
+<ul class="simple">
+<li><p><strong>epsilon</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Float" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>): epsilon value used in the ekblom representation of the block, a float, Default: 1e-06</p></li>
+<li><p><strong>p</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Float" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>): p-value used in the ekblom representation of the block, a float, Default: 10</p></li>
+</ul>
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricBlock.epsilon">
+<em class="property">property </em><code class="sig-name descname">epsilon</code><a class="headerlink" href="#SimPEG.maps.ParametricBlock.epsilon" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>epsilon</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Float" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>): epsilon value used in the ekblom representation of the block, a float, Default: 1e-06</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricBlock.p">
+<em class="property">property </em><code class="sig-name descname">p</code><a class="headerlink" href="#SimPEG.maps.ParametricBlock.p" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>p</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Float" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>): p-value used in the ekblom representation of the block, a float, Default: 10</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricBlock.nP">
+<em class="property">property </em><code class="sig-name descname">nP</code><a class="headerlink" href="#SimPEG.maps.ParametricBlock.nP" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>number of parameters that the mapping accepts</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricBlock.shape">
+<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#SimPEG.maps.ParametricBlock.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default shape is (mesh.nC, nP) if the mesh is defined.
+If this is a meshless mapping (i.e. nP is defined independently)
+the shape will be the the shape (nP,nP).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>shape of the operator as a tuple (int,int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricBlock.mDict">
+<code class="sig-name descname">mDict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2408-L2409"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricBlock.mDict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricBlock.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2522-L2525"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricBlock.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The derivative of the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.ParametricEllipsoid">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">ParametricEllipsoid</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2528-L2548"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricEllipsoid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.ParametricBlock" title="SimPEG.maps.ParametricBlock"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.ParametricBlock</span></code></a></p>
+<p><strong>Required Properties:</strong></p>
+<ul class="simple">
+<li><p><strong>epsilon</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Float" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>): epsilon value used in the ekblom representation of the block, a float, Default: 1e-06</p></li>
+<li><p><strong>p</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Float" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Float</span></code></a>): p-value used in the ekblom representation of the block, a float, Default: 10</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.ParametricCasingAndLayer">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">ParametricCasingAndLayer</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2551-L2870"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricCasingAndLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.ParametricLayer" title="SimPEG.maps.ParametricLayer"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.ParametricLayer</span></code></a></p>
+<p>Parametric layered space with casing.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="p">[</span><span class="n">val_background</span><span class="p">,</span>
+     <span class="n">val_layer</span><span class="p">,</span>
+     <span class="n">val_casing</span><span class="p">,</span>
+     <span class="n">val_insideCasing</span><span class="p">,</span>
+     <span class="n">layer_center</span><span class="p">,</span>
+     <span class="n">layer_thickness</span><span class="p">,</span>
+     <span class="n">casing_radius</span><span class="p">,</span>
+     <span class="n">casing_thickness</span><span class="p">,</span>
+     <span class="n">casing_bottom</span><span class="p">,</span>
+     <span class="n">casing_top</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricCasingAndLayer.nP">
+<em class="property">property </em><code class="sig-name descname">nP</code><a class="headerlink" href="#SimPEG.maps.ParametricCasingAndLayer.nP" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>number of parameters that the mapping accepts</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricCasingAndLayer.shape">
+<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#SimPEG.maps.ParametricCasingAndLayer.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default shape is (mesh.nC, nP) if the mesh is defined.
+If this is a meshless mapping (i.e. nP is defined independently)
+the shape will be the the shape (nP,nP).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>shape of the operator as a tuple (int,int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricCasingAndLayer.mDict">
+<code class="sig-name descname">mDict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2589-L2605"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricCasingAndLayer.mDict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricCasingAndLayer.casing_a">
+<code class="sig-name descname">casing_a</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mDict</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2607-L2608"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricCasingAndLayer.casing_a" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricCasingAndLayer.casing_b">
+<code class="sig-name descname">casing_b</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mDict</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2610-L2611"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricCasingAndLayer.casing_b" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricCasingAndLayer.layer_cont">
+<code class="sig-name descname">layer_cont</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mDict</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2694-L2698"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricCasingAndLayer.layer_cont" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricCasingAndLayer.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2851-L2870"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricCasingAndLayer.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The derivative of the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.ParametricBlockInLayer">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">ParametricBlockInLayer</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2873-L3316"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricBlockInLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.ParametricLayer" title="SimPEG.maps.ParametricLayer"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.ParametricLayer</span></code></a></p>
+<p>Parametric Block in a Layered Space</p>
+<p>For 2D:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="p">[</span><span class="n">val_background</span><span class="p">,</span>
+     <span class="n">val_layer</span><span class="p">,</span>
+     <span class="n">val_block</span><span class="p">,</span>
+     <span class="n">layer_center</span><span class="p">,</span>
+     <span class="n">layer_thickness</span><span class="p">,</span>
+     <span class="n">block_x0</span><span class="p">,</span>
+     <span class="n">block_dx</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>For 3D:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="p">[</span><span class="n">val_background</span><span class="p">,</span>
+     <span class="n">val_layer</span><span class="p">,</span>
+     <span class="n">val_block</span><span class="p">,</span>
+     <span class="n">layer_center</span><span class="p">,</span>
+     <span class="n">layer_thickness</span><span class="p">,</span>
+     <span class="n">block_x0</span><span class="p">,</span>
+     <span class="n">block_y0</span><span class="p">,</span>
+     <span class="n">block_dx</span><span class="p">,</span>
+     <span class="n">block_dy</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>Required</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mesh</strong> (<a class="reference external" href="http://discretize.simpeg.xyz/en/master/api/generated/discretize.base.BaseMesh.html#discretize.base.BaseMesh" title="(in discretize v0.6.1)"><em>discretize.base.BaseMesh</em></a>) – SimPEG Mesh, 2D or 3D</p>
+</dd>
+</dl>
+<p><strong>Optional</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>slopeFact</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – arctan slope factor - divided by the minimum h
+spacing to give the slope of the arctan
+functions</p></li>
+<li><p><strong>slope</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – slope of the arctan function</p></li>
+<li><p><strong>indActive</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – bool vector with</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricBlockInLayer.nP">
+<em class="property">property </em><code class="sig-name descname">nP</code><a class="headerlink" href="#SimPEG.maps.ParametricBlockInLayer.nP" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>number of parameters that the mapping accepts</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricBlockInLayer.shape">
+<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#SimPEG.maps.ParametricBlockInLayer.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default shape is (mesh.nC, nP) if the mesh is defined.
+If this is a meshless mapping (i.e. nP is defined independently)
+the shape will be the the shape (nP,nP).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>shape of the operator as a tuple (int,int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricBlockInLayer.mDict">
+<code class="sig-name descname">mDict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2960-L2964"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricBlockInLayer.mDict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricBlockInLayer.xleft">
+<code class="sig-name descname">xleft</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mDict</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2966-L2967"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricBlockInLayer.xleft" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricBlockInLayer.xright">
+<code class="sig-name descname">xright</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mDict</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2969-L2970"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricBlockInLayer.xright" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricBlockInLayer.yleft">
+<code class="sig-name descname">yleft</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mDict</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2972-L2973"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricBlockInLayer.yleft" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricBlockInLayer.yright">
+<code class="sig-name descname">yright</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mDict</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L2975-L2976"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricBlockInLayer.yright" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.ParametricBlockInLayer.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L3311-L3316"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ParametricBlockInLayer.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The derivative of the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.TileMap">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">TileMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L3319-L3426"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.TileMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.IdentityMap</span></code></a></p>
+<p>Mapping for tiled inversion.</p>
+<p>Uses volume averaging to map a model defined on a global mesh to the
+local mesh. Everycell in the local mesh must also be in the global mesh.</p>
+<dl class="py attribute">
+<dt id="SimPEG.maps.TileMap.tol">
+<code class="sig-name descname">tol</code><em class="property"> = 1e-08</em><a class="headerlink" href="#SimPEG.maps.TileMap.tol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.maps.TileMap.components">
+<code class="sig-name descname">components</code><em class="property"> = 1</em><a class="headerlink" href="#SimPEG.maps.TileMap.components" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.TileMap.local_active">
+<em class="property">property </em><code class="sig-name descname">local_active</code><a class="headerlink" href="#SimPEG.maps.TileMap.local_active" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the local_active of the global_active used in the global problem.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.TileMap.P">
+<em class="property">property </em><code class="sig-name descname">P</code><a class="headerlink" href="#SimPEG.maps.TileMap.P" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the projection matrix with partial volumes</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.TileMap.shape">
+<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#SimPEG.maps.TileMap.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shape of the matrix operation (number of indices x nP)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.maps.TileMap.deriv">
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L3418-L3426"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.TileMap.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a>) – model</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.5.4)">scipy.sparse.csr_matrix</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>derivative of transformed model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.FullMap">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">FullMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L3437-L3438"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.FullMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.SurjectFull" title="SimPEG.maps.SurjectFull"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.SurjectFull</span></code></a></p>
+<p>This class has been deprecated, see <cite>SurjectFull</cite> for documentation</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.Vertical1DMap">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">Vertical1DMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L3442-L3443"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.Vertical1DMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.SurjectVertical1D" title="SimPEG.maps.SurjectVertical1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.SurjectVertical1D</span></code></a></p>
+<p>This class has been deprecated, see <cite>SurjectVertical1D</cite> for documentation</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.Map2Dto3D">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">Map2Dto3D</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L3447-L3448"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.Map2Dto3D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.Surject2Dto3D" title="SimPEG.maps.Surject2Dto3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.Surject2Dto3D</span></code></a></p>
+<p>This class has been deprecated, see <cite>Surject2Dto3D</cite> for documentation</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.ActiveCells">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">ActiveCells</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L3452-L3453"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.ActiveCells" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.InjectActiveCells" title="SimPEG.maps.InjectActiveCells"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.InjectActiveCells</span></code></a></p>
+<p>This class has been deprecated, see <cite>InjectActiveCells</cite> for documentation</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.CircleMap">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">CircleMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L3457-L3458"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.CircleMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.ParametricCircleMap" title="SimPEG.maps.ParametricCircleMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.ParametricCircleMap</span></code></a></p>
+<p>This class has been deprecated, see <cite>ParametricCircleMap</cite> for documentation</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.PolyMap">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">PolyMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L3462-L3463"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.PolyMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.ParametricPolyMap" title="SimPEG.maps.ParametricPolyMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.ParametricPolyMap</span></code></a></p>
+<p>This class has been deprecated, see <cite>ParametricPolyMap</cite> for documentation</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.maps.SplineMap">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.maps.</code><code class="sig-name descname">SplineMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/master/SimPEG/maps.py#L3467-L3468"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.maps.SplineMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.maps.ParametricSplineMap" title="SimPEG.maps.ParametricSplineMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.ParametricSplineMap</span></code></a></p>
+<p>This class has been deprecated, see <cite>ParametricSplineMap</cite> for documentation</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api_Utilities.html" class="btn btn-neutral float-right" title="Utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="api_Inversion.html" class="btn btn-neutral float-left" title="InvProblem" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+
+ 
+
+
+    <div id="disqus_thread"></div>
+    <script>
+
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+    var disqus_config = function () {
+    this.page.url = {path};  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = {path}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://simpeg.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    <div role="contentinfo">
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/" width="60px"; style="float:right;height:3em;line-height:3em;padding:10px 0 0 1em;">
+            <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" />
+        </a>
+        2013-2018,
+        <a href="http://simpeg.xyz">SimPEG Developers.</a><br />
+        Except where noted, this work is licensed under a <br />
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+            Creative Commons Attribution 4.0 International License
+        </a>
+    </div>
+    <br>
+    <div>
+    Built with
+        <a href="http://sphinx-doc.org/">Sphinx</a>
+        using a
+        <a href="https://github.com/snide/sphinx_rtd_theme">theme</a>
+        provided by
+        <a href="https://readthedocs.org">Read the Docs</a>.
+     </div>
+
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,680 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>EM: Schenkel and Morrison Casing Model &mdash; SimPEG 0.14.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/logo-block.ico"/>
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Straight Ray with Volume Data Misfit Term" href="plot_tomo_joint_with_volume.html" />
+    <link rel="prev" title="FLOW: Richards: 1D: Celia1990" href="plot_richards_celia1990.html" />
+ 
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-45185336-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> SimPEG
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.14.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../basic/big_picture.html">Why SimPEG?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/contributing.html">Contributing to SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/installing.html">Getting Started with SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/getting_started_developers.html">Getting Started: for Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/practices.html">Practices</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#mappings">Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#gravity">Gravity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#magnetics">Magnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#dc-resistivity-and-induced-polarization">DC Resistivity and Induced Polarization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#frequency-domain-electromagnetics">Frequency Domain Electromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#time-domain-electromagnetics">Time Domain Electromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#natural-source-electromagnetics">Natural Source Electromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#viscous-remanent-magnetization">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#richards-fluid-flow">Richards Fluid Flow</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#in-publication">In Publication</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="plot_booky_1D_time_freq_inv.html">Heagy et al., 2017 1D RESOLVE and SkyTEM Bookpurnong Inversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_booky_1Dstitched_resolve_inv.html">Heagy et al., 2017 1D RESOLVE Bookpurnong Inversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_effective_medium_theory.html">Effective Medium Theory Mapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_heagyetal2017_casing.html">Heagy et al., 2017 Casing Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_heagyetal2017_cyl_inversions.html">Heagy et al., 2017 1D FDEM and TDEM inversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_laguna_del_maule_inversion.html">PF: Gravity: Laguna del Maule Bouguer Gravity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_load_booky.html">Heagy et al., 2017 Load and Plot Bookpurnong Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_richards_celia1990.html">FLOW: Richards: 1D: Celia1990</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">EM: Schenkel and Morrison Casing Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_tomo_joint_with_volume.html">Straight Ray with Volume Data Misfit Term</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_vadose_vangenuchten.html">FLOW: Vadose: van Genuchten</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/01-models_mapping/index.html">Models and Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/02-linear_inversion/index.html">Linear Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/03-gravity/index.html">Gravity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/04-magnetics/index.html">Magnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/05-dcr/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/06-ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/07-fdem/index.html">Frequency-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/08-tdem/index.html">Time-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/09-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/10-vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/11-flow/index.html">Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/12-seismic/index.html">Seismic</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Packages</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../em/index.html">Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dc/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pf/index.html">Potential Fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../flow/index.html">Richards Equation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_FiniteVolume.html">Finite Volume</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_ForwardProblem.html">Forward Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_InversionComponents.html">Inversion Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_Maps.html">Maps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_Utilities.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Meta Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../release/index.html">Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">SimPEG</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Gallery</a> &raquo;</li>
+        
+      <li>EM: Schenkel and Morrison Casing Model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            <a href="https://github.com/simpeg/simpeg/edit/master/docs/content/examples/20-published/plot_schenkel_morrison_casing.rst" class="fa fa-github"> Edit on GitHub</a>
+        
+      </li>
+    
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-content-examples-20-published-plot-schenkel-morrison-casing-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="em-schenkel-and-morrison-casing-model">
+<span id="sphx-glr-content-examples-20-published-plot-schenkel-morrison-casing-py"></span><h1>EM: Schenkel and Morrison Casing Model<a class="headerlink" href="#em-schenkel-and-morrison-casing-model" title="Permalink to this headline">¶</a></h1>
+<p>Here we create and run a FDEM forward simulation to calculate the
+vertical current inside a steel-cased. The model is based on the
+Schenkel and Morrison Casing Model, and the results are used in a 2016
+SEG abstract by Yang et al.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Schenkel, C.J., and H.F. Morrison, 1990, Effects of well casing on
+potential field measurements using downhole current sources:
+Geophysical prospecting, 38, 663-686.
+</pre></div>
+</div>
+<p>The model consists of:</p>
+<ul class="simple">
+<li><p>Air: Conductivity 1e-8 S/m, above z = 0</p></li>
+<li><p>Background: conductivity 1e-2 S/m, below z = 0</p></li>
+<li><dl class="simple">
+<dt>Casing: conductivity 1e6 S/m</dt><dd><ul>
+<li><p>300m long</p></li>
+<li><p>radius of 0.1m</p></li>
+<li><p>thickness of 6e-3m</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Inside the casing, we take the same conductivity as the background.</p>
+<p>We are using an EM code to simulate DC, so we use frequency low enough
+that the skin depth inside the casing is longer than the casing length
+(f = 1e-6 Hz). The plot produced is of the current inside the casing.</p>
+<p>These results are shown in the SEG abstract by Yang et al., 2016: 3D DC
+resistivity modeling of steel casing for reservoir monitoring using
+equivalent resistor network. The solver used to produce these results
+and achieve the CPU time of ~30s is Mumps, which was installed using
+<a class="reference external" href="https://github.com/rowanc1/pymatsolver">pymatsolver</a></p>
+<p>This example is on figshare:
+<a class="reference external" href="https://dx.doi.org/10.6084/m9.figshare.3126961.v1">https://dx.doi.org/10.6084/m9.figshare.3126961.v1</a></p>
+<p>If you would use this example for a code comparison, or build upon it,
+a citation would be much appreciated!</p>
+<ul class="sphx-glr-horizontal">
+<li><img alt="Simulation Mesh" class="sphx-glr-multi-img" src="../../../_images/sphx_glr_plot_schenkel_morrison_casing_001.png" />
+</li>
+<li><img alt="Log_10 (Sigma)" class="sphx-glr-multi-img" src="../../../_images/sphx_glr_plot_schenkel_morrison_casing_002.png" />
+</li>
+<li><img alt="Magnitude of Vertical Current in Casing, Magnitude of Vertical Current in Casing" class="sphx-glr-multi-img" src="../../../_images/sphx_glr_plot_schenkel_morrison_casing_003.png" />
+</li>
+</ul>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Skin Depth:  [5000000.0]
+/usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:176: FutureWarning: meshTensor has been deprecated, please use unpack_widths. It will be removed in version 1.0.0 of discretize.
+  FutureWarning,
+/usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:95: FutureWarning: CylMesh has been deprecated, please use CylindricalMesh. It will be removed in version 1.0.0 of discretize.
+  warnings.warn(message, FutureWarning)
+/usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: CylMesh.vectorCCx has been deprecated, please use CylMesh.cell_centers_x. It will be removed in version 1.0.0 of discretize.
+  warnings.warn(message, FutureWarning)
+/usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: CylMesh.vectorCCz has been deprecated, please use CylMesh.cell_centers_z. It will be removed in version 1.0.0 of discretize.
+  warnings.warn(message, FutureWarning)
+Mesh Extent xmax: 30844847.844048,: zmin: -10732642.852316, zmax: 10732343.352316
+Number of cells 878878
+/usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:157: FutureWarning: CylMesh.plotGrid has been deprecated, please use CylMesh.plot_grid. It will be removed in version 1.0.0 of discretize.
+  FutureWarning,
+/usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:157: FutureWarning: CylMesh.plotImage has been deprecated, please use CylMesh.plot_image. It will be removed in version 1.0.0 of discretize.
+  FutureWarning,
+/usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: CylMesh.area has been deprecated, please use CylMesh.face_areas. It will be removed in version 1.0.0 of discretize.
+  warnings.warn(message, FutureWarning)
+/usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:129: FutureWarning: CylMesh.edgeCurl has been deprecated, please use CylMesh.edge_curl. It will be removed in version 1.0.0 of discretize.
+  warnings.warn(message, FutureWarning)
+/usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:157: FutureWarning: CylMesh.getEdgeInnerProduct has been deprecated, please use CylMesh.get_edge_inner_product. It will be removed in version 1.0.0 of discretize.
+  FutureWarning,
+/usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/utils/code_utils.py:157: FutureWarning: CylMesh.getFaceInnerProduct has been deprecated, please use CylMesh.get_face_inner_product. It will be removed in version 1.0.0 of discretize.
+  FutureWarning,
+/usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/operators/inner_products.py:69: FutureWarning: The invMat keyword argument has been deprecated, please use invert_matrix. This will be removed in discretize 1.0.0
+  FutureWarning,
+/usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/discretize/operators/inner_products.py:122: FutureWarning: The invMat keyword argument has been deprecated, please use invert_matrix. This will be removed in discretize 1.0.0
+  FutureWarning,
+Time to solve 2 sources 13.047276496887207
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">discretize</span>
+<span class="kn">from</span> <span class="nn">SimPEG</span> <span class="kn">import</span> <span class="n">maps</span><span class="p">,</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">SimPEG.electromagnetics</span> <span class="kn">import</span> <span class="n">frequency_domain</span> <span class="k">as</span> <span class="n">FDEM</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pymatsolver</span> <span class="kn">import</span> <span class="n">Pardiso</span> <span class="k">as</span> <span class="n">Solver</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">SimPEG</span> <span class="kn">import</span> <span class="n">SolverLU</span> <span class="k">as</span> <span class="n">Solver</span>
+
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">plotIt</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+    <span class="c1"># ------------------ MODEL ------------------</span>
+    <span class="n">sigmaair</span> <span class="o">=</span> <span class="mf">1e-8</span>  <span class="c1"># air</span>
+    <span class="n">sigmaback</span> <span class="o">=</span> <span class="mf">1e-2</span>  <span class="c1"># background</span>
+    <span class="n">sigmacasing</span> <span class="o">=</span> <span class="mf">1e6</span>  <span class="c1"># casing</span>
+    <span class="n">sigmainside</span> <span class="o">=</span> <span class="n">sigmaback</span>  <span class="c1"># inside the casing</span>
+
+    <span class="n">casing_t</span> <span class="o">=</span> <span class="mf">0.006</span>  <span class="c1"># 1cm thickness</span>
+    <span class="n">casing_l</span> <span class="o">=</span> <span class="mi">300</span>  <span class="c1"># length of the casing</span>
+
+    <span class="n">casing_r</span> <span class="o">=</span> <span class="mf">0.1</span>
+    <span class="n">casing_a</span> <span class="o">=</span> <span class="n">casing_r</span> <span class="o">-</span> <span class="n">casing_t</span> <span class="o">/</span> <span class="mf">2.0</span>  <span class="c1"># inner radius</span>
+    <span class="n">casing_b</span> <span class="o">=</span> <span class="n">casing_r</span> <span class="o">+</span> <span class="n">casing_t</span> <span class="o">/</span> <span class="mf">2.0</span>  <span class="c1"># outer radius</span>
+    <span class="n">casing_z</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="o">-</span><span class="n">casing_l</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+
+    <span class="c1"># ------------------ SURVEY PARAMETERS ------------------</span>
+    <span class="n">freqs</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="mf">1e-6</span><span class="p">]</span>  <span class="c1"># [1e-1, 1, 5] # frequencies</span>
+    <span class="n">dsz</span> <span class="o">=</span> <span class="o">-</span><span class="mi">300</span>  <span class="c1"># down-hole z source location</span>
+    <span class="n">src_loc</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">dsz</span><span class="p">]</span>
+    <span class="n">inf_loc</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e4</span><span class="p">]</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Skin Depth: &quot;</span><span class="p">,</span> <span class="p">[(</span><span class="mf">500.0</span> <span class="o">/</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.sqrt.html#numpy.sqrt" title="numpy.sqrt" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span></a><span class="p">(</span><span class="n">sigmaback</span> <span class="o">*</span> <span class="n">_</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">freqs</span><span class="p">])</span>
+
+    <span class="c1"># ------------------ MESH ------------------</span>
+    <span class="c1"># fine cells near well bore</span>
+    <span class="n">csx1</span><span class="p">,</span> <span class="n">csx2</span> <span class="o">=</span> <span class="mf">2e-3</span><span class="p">,</span> <span class="mf">60.0</span>
+    <span class="n">pfx1</span><span class="p">,</span> <span class="n">pfx2</span> <span class="o">=</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">1.3</span>
+    <span class="n">ncx1</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ceil.html#numpy.ceil" title="numpy.ceil" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">ceil</span></a><span class="p">(</span><span class="n">casing_b</span> <span class="o">/</span> <span class="n">csx1</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># pad nicely to second cell size</span>
+    <span class="n">npadx1</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.floor.html#numpy.floor" title="numpy.floor" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">floor</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.log.html#numpy.log" title="numpy.log" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">log</span></a><span class="p">(</span><span class="n">csx2</span> <span class="o">/</span> <span class="n">csx1</span><span class="p">)</span> <span class="o">/</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.log.html#numpy.log" title="numpy.log" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">log</span></a><span class="p">(</span><span class="n">pfx1</span><span class="p">))</span>
+    <span class="n">hx1a</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">meshTensor</span><span class="p">([(</span><span class="n">csx1</span><span class="p">,</span> <span class="n">ncx1</span><span class="p">)])</span>
+    <span class="n">hx1b</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">meshTensor</span><span class="p">([(</span><span class="n">csx1</span><span class="p">,</span> <span class="n">npadx1</span><span class="p">,</span> <span class="n">pfx1</span><span class="p">)])</span>
+    <span class="n">dx1</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">hx1a</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">hx1b</span><span class="p">)</span>
+    <span class="n">dx1</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.floor.html#numpy.floor" title="numpy.floor" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">floor</span></a><span class="p">(</span><span class="n">dx1</span> <span class="o">/</span> <span class="n">csx2</span><span class="p">)</span>
+    <span class="n">hx1b</span> <span class="o">*=</span> <span class="p">(</span><span class="n">dx1</span> <span class="o">*</span> <span class="n">csx2</span> <span class="o">-</span> <span class="nb">sum</span><span class="p">(</span><span class="n">hx1a</span><span class="p">))</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">hx1b</span><span class="p">)</span>
+
+    <span class="c1"># second chunk of mesh</span>
+    <span class="n">dx2</span> <span class="o">=</span> <span class="mf">300.0</span>  <span class="c1"># uniform mesh out to here</span>
+    <span class="n">ncx2</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ceil.html#numpy.ceil" title="numpy.ceil" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">ceil</span></a><span class="p">((</span><span class="n">dx2</span> <span class="o">-</span> <span class="n">dx1</span><span class="p">)</span> <span class="o">/</span> <span class="n">csx2</span><span class="p">)</span>
+    <span class="n">npadx2</span> <span class="o">=</span> <span class="mi">45</span>
+    <span class="n">hx2a</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">meshTensor</span><span class="p">([(</span><span class="n">csx2</span><span class="p">,</span> <span class="n">ncx2</span><span class="p">)])</span>
+    <span class="n">hx2b</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">meshTensor</span><span class="p">([(</span><span class="n">csx2</span><span class="p">,</span> <span class="n">npadx2</span><span class="p">,</span> <span class="n">pfx2</span><span class="p">)])</span>
+    <span class="n">hx</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.hstack.html#numpy.hstack" title="numpy.hstack" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">hstack</span></a><span class="p">([</span><span class="n">hx1a</span><span class="p">,</span> <span class="n">hx1b</span><span class="p">,</span> <span class="n">hx2a</span><span class="p">,</span> <span class="n">hx2b</span><span class="p">])</span>
+
+    <span class="c1"># z-direction</span>
+    <span class="n">csz</span> <span class="o">=</span> <span class="mf">0.05</span>
+    <span class="n">nza</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="c1"># cell size, number of core cells, number of padding cells in the</span>
+    <span class="c1"># x-direction</span>
+    <span class="n">ncz</span><span class="p">,</span> <span class="n">npadzu</span><span class="p">,</span> <span class="n">npadzd</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class"><span class="n">np</span><span class="o">.</span><span class="n">int</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ceil.html#numpy.ceil" title="numpy.ceil" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">ceil</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.diff.html#numpy.diff" title="numpy.diff" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">diff</span></a><span class="p">(</span><span class="n">casing_z</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">csz</span><span class="p">))</span> <span class="o">+</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">68</span>
+    <span class="c1"># vector of cell widths in the z-direction</span>
+    <span class="n">hz</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">meshTensor</span><span class="p">([(</span><span class="n">csz</span><span class="p">,</span> <span class="n">npadzd</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.3</span><span class="p">),</span> <span class="p">(</span><span class="n">csz</span><span class="p">,</span> <span class="n">ncz</span><span class="p">),</span> <span class="p">(</span><span class="n">csz</span><span class="p">,</span> <span class="n">npadzu</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">)])</span>
+
+    <span class="c1"># Mesh</span>
+    <span class="n">mesh</span> <span class="o">=</span> <a href="http://discretize.simpeg.xyz/en/master/api/generated/discretize.CylindricalMesh.html#discretize.CylindricalMesh" title="discretize.CylindricalMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class"><span class="n">discretize</span><span class="o">.</span><span class="n">CylMesh</span></a><span class="p">(</span>
+        <span class="p">[</span><span class="n">hx</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">hz</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.sum.html#numpy.sum" title="numpy.sum" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">sum</span></a><span class="p">(</span><span class="n">hz</span><span class="p">[:</span> <span class="n">npadzu</span> <span class="o">+</span> <span class="n">ncz</span> <span class="o">-</span> <span class="n">nza</span><span class="p">])]</span>
+    <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s2">&quot;Mesh Extent xmax: </span><span class="si">{0:f}</span><span class="s2">,: zmin: </span><span class="si">{1:f}</span><span class="s2">, zmax: </span><span class="si">{2:f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">mesh</span><span class="o">.</span><span class="n">vectorCCx</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">mesh</span><span class="o">.</span><span class="n">vectorCCz</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">mesh</span><span class="o">.</span><span class="n">vectorCCz</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of cells&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">nC</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">plotIt</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Simulation Mesh&quot;</span><span class="p">)</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">plotGrid</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+
+    <span class="c1"># Put the model on the mesh</span>
+    <span class="n">sigWholespace</span> <span class="o">=</span> <span class="n">sigmaback</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ones.html#numpy.ones" title="numpy.ones" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">((</span><span class="n">mesh</span><span class="o">.</span><span class="n">nC</span><span class="p">))</span>
+
+    <span class="n">sigBack</span> <span class="o">=</span> <span class="n">sigWholespace</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">sigBack</span><span class="p">[</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridCC</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigmaair</span>
+
+    <span class="n">sigCasing</span> <span class="o">=</span> <span class="n">sigBack</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">iCasingZ</span> <span class="o">=</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridCC</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">casing_z</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridCC</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">casing_z</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">iCasingX</span> <span class="o">=</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridCC</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">casing_a</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridCC</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">casing_b</span><span class="p">)</span>
+    <span class="n">iCasing</span> <span class="o">=</span> <span class="n">iCasingX</span> <span class="o">&amp;</span> <span class="n">iCasingZ</span>
+    <span class="n">sigCasing</span><span class="p">[</span><span class="n">iCasing</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigmacasing</span>
+
+    <span class="k">if</span> <span class="n">plotIt</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="c1"># plotting parameters</span>
+        <span class="n">xlim</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]</span>
+        <span class="n">zlim</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="o">-</span><span class="mf">350.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">]</span>
+        <span class="n">clim_sig</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+
+        <span class="c1"># plot models</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+        <span class="n">im</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">plotImage</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.log10.html#numpy.log10" title="numpy.log10" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">log10</span></a><span class="p">(</span><span class="n">sigCasing</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">im</span><span class="o">.</span><span class="n">set_clim</span><span class="p">(</span><span class="n">clim_sig</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Log_10 (Sigma)&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xlim</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">zlim</span><span class="p">)</span>
+
+    <span class="c1"># -------------- Sources --------------------</span>
+    <span class="c1"># Define Custom Current Sources</span>
+
+    <span class="c1"># surface source</span>
+    <span class="n">sg_x</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vnF</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="n">sg_y</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vnF</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="n">sg_z</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vnF</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+
+    <span class="n">nza</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># put the wire two cells above the surface</span>
+
+    <span class="c1"># vertically directed wire</span>
+    <span class="c1"># hook it up to casing at the surface</span>
+    <span class="n">sgv_indx</span> <span class="o">=</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridFz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">casing_a</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridFz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">casing_a</span> <span class="o">+</span> <span class="n">csx1</span><span class="p">)</span>
+    <span class="n">sgv_indz</span> <span class="o">=</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridFz</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="o">+</span><span class="n">csz</span> <span class="o">*</span> <span class="n">nza</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridFz</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="n">csz</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">sgv_ind</span> <span class="o">=</span> <span class="n">sgv_indx</span> <span class="o">&amp;</span> <span class="n">sgv_indz</span>
+    <span class="n">sg_z</span><span class="p">[</span><span class="n">sgv_ind</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+
+    <span class="c1"># horizontally directed wire</span>
+    <span class="n">sgh_indx</span> <span class="o">=</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridFx</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">casing_a</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridFx</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">inf_loc</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">sgh_indz</span> <span class="o">=</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridFx</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">csz</span> <span class="o">*</span> <span class="p">(</span><span class="n">nza</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">(</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">gridFx</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">csz</span> <span class="o">*</span> <span class="p">(</span><span class="n">nza</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">sgh_ind</span> <span class="o">=</span> <span class="n">sgh_indx</span> <span class="o">&amp;</span> <span class="n">sgh_indz</span>
+    <span class="n">sg_x</span><span class="p">[</span><span class="n">sgh_ind</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+
+    <span class="c1"># hook it up to casing at the surface</span>
+    <span class="n">sgv2_indx</span> <span class="o">=</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridFz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">gridFx</span><span class="p">[</span><span class="n">sgh_ind</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span> <span class="o">&amp;</span> <span class="p">(</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">gridFz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">inf_loc</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1.2</span>
+    <span class="p">)</span>
+    <span class="n">sgv2_indz</span> <span class="o">=</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridFz</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="o">+</span><span class="n">csz</span> <span class="o">*</span> <span class="n">nza</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridFz</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="n">csz</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">sgv2_ind</span> <span class="o">=</span> <span class="n">sgv2_indx</span> <span class="o">&amp;</span> <span class="n">sgv2_indz</span>
+    <span class="n">sg_z</span><span class="p">[</span><span class="n">sgv2_ind</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+    <span class="c1"># assemble the source</span>
+    <span class="n">sg</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.hstack.html#numpy.hstack" title="numpy.hstack" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">hstack</span></a><span class="p">([</span><span class="n">sg_x</span><span class="p">,</span> <span class="n">sg_y</span><span class="p">,</span> <span class="n">sg_z</span><span class="p">])</span>
+    <span class="n">sg_p</span> <span class="o">=</span> <span class="p">[</span><a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">FDEM</span><span class="o">.</span><span class="n">Src</span><span class="o">.</span><span class="n">RawVec_e</span></a><span class="p">([],</span> <span class="n">_</span><span class="p">,</span> <span class="n">sg</span> <span class="o">/</span> <span class="n">mesh</span><span class="o">.</span><span class="n">area</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">freqs</span><span class="p">]</span>
+
+    <span class="c1"># downhole source</span>
+    <span class="n">dg_x</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vnF</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="n">dg_y</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vnF</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="n">dg_z</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vnF</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+
+    <span class="c1"># vertically directed wire</span>
+    <span class="n">dgv_indx</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">gridFz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">csx1</span>  <span class="c1"># go through the center of the well</span>
+    <span class="n">dgv_indz</span> <span class="o">=</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridFz</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="o">+</span><span class="n">csz</span> <span class="o">*</span> <span class="n">nza</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridFz</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">dsz</span> <span class="o">+</span> <span class="n">csz</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">dgv_ind</span> <span class="o">=</span> <span class="n">dgv_indx</span> <span class="o">&amp;</span> <span class="n">dgv_indz</span>
+    <span class="n">dg_z</span><span class="p">[</span><span class="n">dgv_ind</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+
+    <span class="c1"># couple to the casing downhole</span>
+    <span class="n">dgh_indx</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">gridFx</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">casing_a</span> <span class="o">+</span> <span class="n">csx1</span>
+    <span class="n">dgh_indz</span> <span class="o">=</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridFx</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">dsz</span> <span class="o">+</span> <span class="n">csz</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridFx</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">dsz</span><span class="p">)</span>
+    <span class="n">dgh_ind</span> <span class="o">=</span> <span class="n">dgh_indx</span> <span class="o">&amp;</span> <span class="n">dgh_indz</span>
+    <span class="n">dg_x</span><span class="p">[</span><span class="n">dgh_ind</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+    <span class="c1"># horizontal part at surface</span>
+    <span class="n">dgh2_indx</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">gridFx</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">inf_loc</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1.2</span>
+    <span class="n">dgh2_indz</span> <span class="o">=</span> <span class="n">sgh_indz</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">dgh2_ind</span> <span class="o">=</span> <span class="n">dgh2_indx</span> <span class="o">&amp;</span> <span class="n">dgh2_indz</span>
+    <span class="n">dg_x</span><span class="p">[</span><span class="n">dgh2_ind</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+
+    <span class="c1"># vertical part at surface</span>
+    <span class="n">dgv2_ind</span> <span class="o">=</span> <span class="n">sgv2_ind</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">dg_z</span><span class="p">[</span><span class="n">dgv2_ind</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+    <span class="c1"># assemble the source</span>
+    <span class="n">dg</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.hstack.html#numpy.hstack" title="numpy.hstack" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">hstack</span></a><span class="p">([</span><span class="n">dg_x</span><span class="p">,</span> <span class="n">dg_y</span><span class="p">,</span> <span class="n">dg_z</span><span class="p">])</span>
+    <span class="n">dg_p</span> <span class="o">=</span> <span class="p">[</span><a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">FDEM</span><span class="o">.</span><span class="n">Src</span><span class="o">.</span><span class="n">RawVec_e</span></a><span class="p">([],</span> <span class="n">_</span><span class="p">,</span> <span class="n">dg</span> <span class="o">/</span> <span class="n">mesh</span><span class="o">.</span><span class="n">area</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">freqs</span><span class="p">]</span>
+
+    <span class="c1"># ------------ Problem and Survey ---------------</span>
+    <span class="n">survey</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">FDEM</span><span class="o">.</span><span class="n">Survey</span></a><span class="p">(</span><span class="n">sg_p</span> <span class="o">+</span> <span class="n">dg_p</span><span class="p">)</span>
+    <span class="n">problem</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">FDEM</span><span class="o">.</span><span class="n">Simulation3DMagneticField</span></a><span class="p">(</span>
+        <span class="n">mesh</span><span class="p">,</span> <span class="n">survey</span><span class="o">=</span><span class="n">survey</span><span class="p">,</span> <span class="n">sigmaMap</span><span class="o">=</span><a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">maps</span><span class="o">.</span><span class="n">IdentityMap</span></a><span class="p">(</span><span class="n">mesh</span><span class="p">),</span> <span class="n">Solver</span><span class="o">=</span><span class="n">Solver</span>
+    <span class="p">)</span>
+
+    <span class="c1"># ------------- Solve ---------------------------</span>
+    <span class="n">t0</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/time.html#time.time" title="time.time" class="sphx-glr-backref-module-time sphx-glr-backref-type-py-function"><span class="n">time</span><span class="o">.</span><span class="n">time</span></a><span class="p">()</span>
+    <span class="n">fieldsCasing</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="n">sigCasing</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time to solve 2 sources&quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/time.html#time.time" title="time.time" class="sphx-glr-backref-module-time sphx-glr-backref-type-py-function"><span class="n">time</span><span class="o">.</span><span class="n">time</span></a><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span>
+
+    <span class="c1"># Plot current</span>
+
+    <span class="c1"># current density</span>
+    <span class="n">jn0</span> <span class="o">=</span> <span class="n">fieldsCasing</span><span class="p">[</span><span class="n">dg_p</span><span class="p">,</span> <span class="s2">&quot;j&quot;</span><span class="p">]</span>
+    <span class="n">jn1</span> <span class="o">=</span> <span class="n">fieldsCasing</span><span class="p">[</span><span class="n">sg_p</span><span class="p">,</span> <span class="s2">&quot;j&quot;</span><span class="p">]</span>
+
+    <span class="c1"># current</span>
+    <span class="n">in0</span> <span class="o">=</span> <span class="p">[</span><span class="n">mesh</span><span class="o">.</span><span class="n">area</span> <span class="o">*</span> <span class="n">fieldsCasing</span><span class="p">[</span><span class="n">dg_p</span><span class="p">,</span> <span class="s2">&quot;j&quot;</span><span class="p">][:,</span> <span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">freqs</span><span class="p">))]</span>
+    <span class="n">in1</span> <span class="o">=</span> <span class="p">[</span><span class="n">mesh</span><span class="o">.</span><span class="n">area</span> <span class="o">*</span> <span class="n">fieldsCasing</span><span class="p">[</span><span class="n">sg_p</span><span class="p">,</span> <span class="s2">&quot;j&quot;</span><span class="p">][:,</span> <span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">freqs</span><span class="p">))]</span>
+
+    <span class="n">in0</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.vstack.html#numpy.vstack" title="numpy.vstack" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">vstack</span></a><span class="p">(</span><span class="n">in0</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">in1</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.vstack.html#numpy.vstack" title="numpy.vstack" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">vstack</span></a><span class="p">(</span><span class="n">in1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="c1"># integrate to get z-current inside casing</span>
+    <span class="n">inds_inx</span> <span class="o">=</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridFz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">casing_a</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridFz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">casing_b</span><span class="p">)</span>
+    <span class="n">inds_inz</span> <span class="o">=</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridFz</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">dsz</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridFz</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">inds_fz</span> <span class="o">=</span> <span class="n">inds_inx</span> <span class="o">&amp;</span> <span class="n">inds_inz</span>
+
+    <span class="n">indsx</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">*</span> <span class="n">mesh</span><span class="o">.</span><span class="n">nFx</span>
+    <span class="n">inds</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">indsx</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">inds_fz</span><span class="p">)</span>
+
+    <span class="n">in0_in</span> <span class="o">=</span> <span class="n">in0</span><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="n">inds</span><span class="p">]]</span>
+    <span class="n">in1_in</span> <span class="o">=</span> <span class="n">in1</span><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="n">inds</span><span class="p">]]</span>
+    <span class="n">z_in</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">gridFz</span><span class="p">[</span><span class="n">inds_fz</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+
+    <span class="n">in0_in</span> <span class="o">=</span> <span class="n">in0_in</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="n">in0_in</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+    <span class="n">in1_in</span> <span class="o">=</span> <span class="n">in1_in</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="n">in1_in</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+    <span class="n">z_in</span> <span class="o">=</span> <span class="n">z_in</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="n">z_in</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+
+    <span class="n">I0</span> <span class="o">=</span> <span class="n">in0_in</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">real</span>
+    <span class="n">I1</span> <span class="o">=</span> <span class="n">in1_in</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">real</span>
+    <span class="n">z_in</span> <span class="o">=</span> <span class="n">z_in</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">plotIt</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">z_in</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.absolute.html#numpy.absolute" title="numpy.absolute" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">absolute</span></a><span class="p">(</span><span class="n">I0</span><span class="p">),</span> <span class="n">z_in</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.absolute.html#numpy.absolute" title="numpy.absolute" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">absolute</span></a><span class="p">(</span><span class="n">I1</span><span class="p">))</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s2">&quot;top casing&quot;</span><span class="p">,</span> <span class="s2">&quot;bottom casing&quot;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Magnitude of Vertical Current in Casing&quot;</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">z_in</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.absolute.html#numpy.absolute" title="numpy.absolute" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">absolute</span></a><span class="p">(</span><span class="n">I0</span><span class="p">),</span> <span class="n">z_in</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.absolute.html#numpy.absolute" title="numpy.absolute" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">absolute</span></a><span class="p">(</span><span class="n">I1</span><span class="p">))</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s2">&quot;top casing&quot;</span><span class="p">,</span> <span class="s2">&quot;bottom casing&quot;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Magnitude of Vertical Current in Casing&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">run</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  15.711 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  1621 MB</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-examples-20-published-plot-schenkel-morrison-casing-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/769a08f4d52123484a8d042fb1e64ca1/plot_schenkel_morrison_casing.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_schenkel_morrison_casing.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/452d9067f7d754b59a7363a694c50ba3/plot_schenkel_morrison_casing.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_schenkel_morrison_casing.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="plot_tomo_joint_with_volume.html" class="btn btn-neutral float-right" title="Straight Ray with Volume Data Misfit Term" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="plot_richards_celia1990.html" class="btn btn-neutral float-left" title="FLOW: Richards: 1D: Celia1990" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+
+ 
+
+
+    <div id="disqus_thread"></div>
+    <script>
+
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+    var disqus_config = function () {
+    this.page.url = {path};  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = {path}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://simpeg.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    <div role="contentinfo">
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/" width="60px"; style="float:right;height:3em;line-height:3em;padding:10px 0 0 1em;">
+            <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" />
+        </a>
+        2013-2018,
+        <a href="http://simpeg.xyz">SimPEG Developers.</a><br />
+        Except where noted, this work is licensed under a <br />
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+            Creative Commons Attribution 4.0 International License
+        </a>
+    </div>
+    <br>
+    <div>
+    Built with
+        <a href="http://sphinx-doc.org/">Sphinx</a>
+        using a
+        <a href="https://github.com/snide/sphinx_rtd_theme">theme</a>
+        provided by
+        <a href="https://readthedocs.org">Read the Docs</a>.
+     </div>
+
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
