@@ -1,0 +1,830 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Sparse Norm Inversion of Gravity Anomaly Data &mdash; SimPEG 0.15.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/logo-block.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Magnetics" href="../04-magnetics/index.html" />
+    <link rel="prev" title="Least-Squares Inversion of Gravity Anomaly Data" href="plot_inv_1a_gravity_anomaly.html" />
+ 
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-45185336-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> SimPEG
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.15.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/big_picture.html">Why SimPEG?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/contributing.html">Contributing to SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/installing.html">Getting Started with SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/getting_started_developers.html">Getting Started: for Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/practices.html">Practices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../01-models_mapping/index.html">Models and Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02-linear_inversion/index.html">Linear Problems</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Gravity</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="plot_1a_gravity_anomaly.html">Forward Simulation of Gravity Anomaly Data on a Tensor Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_1b_gravity_gradiometry.html">Forward Simulation of Gradiometry Data on a Tree Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inv_1a_gravity_anomaly.html">Least-Squares Inversion of Gravity Anomaly Data</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Sparse Norm Inversion of Gravity Anomaly Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#import-modules">Import modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#define-file-names">Define File Names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-data-and-plot">Load Data and Plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#assign-uncertainties">Assign Uncertainties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#defining-the-survey">Defining the Survey</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#defining-the-data">Defining the Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#defining-a-tensor-mesh">Defining a Tensor Mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#starting-reference-model-and-mapping-on-tensor-mesh">Starting/Reference Model and Mapping on Tensor Mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#define-the-physics">Define the Physics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#define-the-inverse-problem">Define the Inverse Problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#define-inversion-directives">Define Inversion Directives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-the-inversion">Running the Inversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recreate-true-model">Recreate True Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plotting-true-model-and-recovered-model">Plotting True Model and Recovered Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plotting-predicted-data-and-normalized-misfit">Plotting Predicted Data and Normalized Misfit</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../04-magnetics/index.html">Magnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../05-dcr/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06-ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../07-fdem/index.html">Frequency-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../08-tdem/index.html">Time-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../09-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../10-vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../11-flow/index.html">Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../12-seismic/index.html">Seismic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../13-pgi/index.html">PGI: Petrophysically and Geologically Guided Geophysical Inversion</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Packages</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../em/index.html">Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dc/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pf/index.html">Potential Fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../flow/index.html">Richards Equation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_FiniteVolume.html">Finite Volume</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_ForwardProblem.html">Forward Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_InversionComponents.html">Inversion Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_Maps.html">Maps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_Utilities.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Meta Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../release/index.html">Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">SimPEG</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Gravity</a> &raquo;</li>
+        
+      <li>Sparse Norm Inversion of Gravity Anomaly Data</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            <a href="https://github.com/simpeg/simpeg/edit/main/docs/content/tutorials/03-gravity/plot_inv_1b_gravity_anomaly_irls.rst" class="fa fa-github"> Edit on GitHub</a>
+        
+      </li>
+    
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-content-tutorials-03-gravity-plot-inv-1b-gravity-anomaly-irls-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="sparse-norm-inversion-of-gravity-anomaly-data">
+<span id="sphx-glr-content-tutorials-03-gravity-plot-inv-1b-gravity-anomaly-irls-py"></span><h1>Sparse Norm Inversion of Gravity Anomaly Data<a class="headerlink" href="#sparse-norm-inversion-of-gravity-anomaly-data" title="Permalink to this headline">¶</a></h1>
+<p>Here we invert gravity anomaly data to recover a density contrast model. We formulate the inverse problem as an iteratively
+re-weighted least-squares (IRLS) optimization problem. For this tutorial, we
+focus on the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Defining the survey from xyz formatted data</p></li>
+<li><p>Generating a mesh based on survey geometry</p></li>
+<li><p>Including surface topography</p></li>
+<li><p>Defining the inverse problem (data misfit, regularization, optimization)</p></li>
+<li><p>Specifying directives for the inversion</p></li>
+<li><p>Setting sparse and blocky norms</p></li>
+<li><p>Plotting the recovered model and data misfit</p></li>
+</ul>
+</div></blockquote>
+<p>Although we consider gravity anomaly data in this tutorial, the same approach
+can be used to invert gradiometry and other types of geophysical data.</p>
+<div class="section" id="import-modules">
+<h2>Import modules<a class="headerlink" href="#import-modules" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">tarfile</span>
+
+<span class="kn">from</span> <span class="nn">discretize</span> <span class="kn">import</span> <a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class"><span class="n">TensorMesh</span></a>
+
+<span class="kn">from</span> <span class="nn">SimPEG.utils</span> <span class="kn">import</span> <span class="n">plot2Ddata</span><span class="p">,</span> <span class="n">surface2ind_topo</span><span class="p">,</span> <span class="n">model_builder</span>
+<span class="kn">from</span> <span class="nn">SimPEG.potential_fields</span> <span class="kn">import</span> <span class="n">gravity</span>
+<span class="kn">from</span> <span class="nn">SimPEG</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">maps</span><span class="p">,</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">data_misfit</span><span class="p">,</span>
+    <span class="n">inverse_problem</span><span class="p">,</span>
+    <span class="n">regularization</span><span class="p">,</span>
+    <span class="n">optimization</span><span class="p">,</span>
+    <span class="n">directives</span><span class="p">,</span>
+    <span class="n">inversion</span><span class="p">,</span>
+    <span class="n">utils</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># sphinx_gallery_thumbnail_number = 3</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="define-file-names">
+<h2>Define File Names<a class="headerlink" href="#define-file-names" title="Permalink to this headline">¶</a></h2>
+<p>File paths for assets we are loading. To set up the inversion, we require
+topography and field observations. The true model defined on the whole mesh
+is loaded to compare with the inversion result. These files are stored as a
+tar-file on our google cloud bucket:
+“<a class="reference external" href="https://storage.googleapis.com/simpeg/doc-assets/gravity.tar.gz">https://storage.googleapis.com/simpeg/doc-assets/gravity.tar.gz</a>”</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># storage bucket where we have the data</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_source</span></a> <span class="o">=</span> <span class="s2">&quot;https://storage.googleapis.com/simpeg/doc-assets/gravity.tar.gz&quot;</span>
+
+<span class="c1"># download the data</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">downloaded_data</span></a> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_source</span></a><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># unzip the tarfile</span>
+<a href="https://docs.python.org/3/library/tarfile.html#tarfile.TarFile" title="tarfile.TarFile" class="sphx-glr-backref-module-tarfile sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tar</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/tarfile.html#tarfile.open" title="tarfile.open" class="sphx-glr-backref-module-tarfile sphx-glr-backref-type-py-function"><span class="n">tarfile</span><span class="o">.</span><span class="n">open</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">downloaded_data</span></a><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/tarfile.html#tarfile.TarFile.extractall" title="tarfile.TarFile.extractall" class="sphx-glr-backref-module-tarfile sphx-glr-backref-type-py-method"><span class="n">tar</span><span class="o">.</span><span class="n">extractall</span></a><span class="p">()</span>
+<a href="https://docs.python.org/3/library/tarfile.html#tarfile.TarFile.close" title="tarfile.TarFile.close" class="sphx-glr-backref-module-tarfile sphx-glr-backref-type-py-method"><span class="n">tar</span><span class="o">.</span><span class="n">close</span></a><span class="p">()</span>
+
+<span class="c1"># path to the directory containing our data</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dir_path</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">downloaded_data</span></a><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span></a>
+
+<span class="c1"># files to work with</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">topo_filename</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dir_path</span></a> <span class="o">+</span> <span class="s2">&quot;gravity_topo.txt&quot;</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_filename</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dir_path</span></a> <span class="o">+</span> <span class="s2">&quot;gravity_data.obs&quot;</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model_filename</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dir_path</span></a> <span class="o">+</span> <span class="s2">&quot;true_model.txt&quot;</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>overwriting /Users/josephcapriotti/codes/simpeg/tutorials/03-gravity/gravity.tar.gz
+Downloading https://storage.googleapis.com/simpeg/doc-assets/gravity.tar.gz
+   saved to: /Users/josephcapriotti/codes/simpeg/tutorials/03-gravity/gravity.tar.gz
+Download completed!
+</pre></div>
+</div>
+</div>
+<div class="section" id="load-data-and-plot">
+<h2>Load Data and Plot<a class="headerlink" href="#load-data-and-plot" title="Permalink to this headline">¶</a></h2>
+<p>Here we load and plot synthetic gravity anomaly data. Topography is generally
+defined as an (N, 3) array. Gravity data is generally defined with 4 columns:
+x, y, z and data.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load topography</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">xyz_topo</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.loadtxt.html#numpy.loadtxt" title="numpy.loadtxt" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span></a><span class="p">(</span><span class="nb">str</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">topo_filename</span></a><span class="p">))</span>
+
+<span class="c1"># Load field data</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.loadtxt.html#numpy.loadtxt" title="numpy.loadtxt" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span></a><span class="p">(</span><span class="nb">str</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_filename</span></a><span class="p">))</span>
+
+<span class="c1"># Define receiver locations and observed data</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">receiver_locations</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># Plot</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#dict.update" title="builtins.dict.update" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-method"><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span></a><span class="p">({</span><span class="s2">&quot;font.size&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">})</span>
+<a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure.add_axes" title="matplotlib.figure.Figure.add_axes" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span></a><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.73</span><span class="p">,</span> <span class="mf">0.85</span><span class="p">])</span>
+<span class="n">plot2Ddata</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">receiver_locations</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a><span class="p">,</span> <span class="n">contourOpts</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cmap&quot;</span><span class="p">:</span> <span class="s2">&quot;bwr&quot;</span><span class="p">})</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span></a><span class="p">(</span><span class="s2">&quot;Gravity Anomaly&quot;</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span></a><span class="p">(</span><span class="s2">&quot;x (m)&quot;</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span></a><span class="p">(</span><span class="s2">&quot;y (m)&quot;</span><span class="p">)</span>
+
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax2</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure.add_axes" title="matplotlib.figure.Figure.add_axes" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span></a><span class="p">([</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.85</span><span class="p">])</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">norm</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.Normalize.html#matplotlib.colors.Normalize" title="matplotlib.colors.Normalize" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class"><span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span></a><span class="p">(</span><span class="n">vmin</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">abs</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="p">)),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">abs</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="p">)))</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cbar</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/colorbar_api.html#matplotlib.colorbar.ColorbarBase" title="matplotlib.colorbar.ColorbarBase" class="sphx-glr-backref-module-matplotlib-colorbar sphx-glr-backref-type-py-class"><span class="n">mpl</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">ColorbarBase</span></a><span class="p">(</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax2</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">norm</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">norm</span></a><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.LinearSegmentedColormap.html#matplotlib.colors.LinearSegmentedColormap" title="matplotlib.colors.LinearSegmentedColormap" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">bwr</span></a><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.1e</span><span class="s2">&quot;</span>
+<span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span></a><span class="p">(</span><span class="s2">&quot;$mgal$&quot;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">270</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="Gravity Anomaly" class="sphx-glr-single-img" src="../../../_images/sphx_glr_plot_inv_1b_gravity_anomaly_irls_001.png" />
+</div>
+<div class="section" id="assign-uncertainties">
+<h2>Assign Uncertainties<a class="headerlink" href="#assign-uncertainties" title="Permalink to this headline">¶</a></h2>
+<p>Inversion with SimPEG requires that we define standard deviation on our data.
+This represents our estimate of the noise in our data. For gravity inversion,
+a constant floor value is generally applied to all data. For this tutorial,
+the standard deviation on each datum will be 1% of the maximum observed
+gravity anomaly value.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">maximum_anomaly</span></a> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">abs</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="p">))</span>
+
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">uncertainties</span></a> <span class="o">=</span> <span class="mf">0.01</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">maximum_anomaly</span></a> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ones.html#numpy.ones" title="numpy.ones" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.shape.html#numpy.shape" title="numpy.shape" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">shape</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="defining-the-survey">
+<h2>Defining the Survey<a class="headerlink" href="#defining-the-survey" title="Permalink to this headline">¶</a></h2>
+<p>Here, we define survey that will be used for this tutorial. Gravity
+surveys are simple to create. The user only needs an (N, 3) array to define
+the xyz locations of the observation locations. From this, the user can
+define the receivers and the source field.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the receivers. The data consist of vertical gravity anomaly measurements.</span>
+<span class="c1"># The set of receivers must be defined as a list.</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">receiver_list</span></a> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">gravity</span><span class="o">.</span><span class="n">receivers</span><span class="o">.</span><span class="n">Point</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">receiver_locations</span></a><span class="p">,</span> <span class="n">components</span><span class="o">=</span><span class="s2">&quot;gz&quot;</span><span class="p">)</span>
+
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">receiver_list</span></a> <span class="o">=</span> <span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">receiver_list</span></a><span class="p">]</span>
+
+<span class="c1"># Define the source field</span>
+<span class="n">source_field</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">gravity</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">SourceField</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">receiver_list</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">receiver_list</span></a><span class="p">)</span>
+
+<span class="c1"># Define the survey</span>
+<span class="n">survey</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">gravity</span><span class="o">.</span><span class="n">survey</span><span class="o">.</span><span class="n">Survey</span></a><span class="p">(</span><span class="n">source_field</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="defining-the-data">
+<h2>Defining the Data<a class="headerlink" href="#defining-the-data" title="Permalink to this headline">¶</a></h2>
+<p>Here is where we define the data that are inverted. The data are defined by
+the survey, the observation values and the standard deviation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data_object</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">data</span><span class="o">.</span><span class="n">Data</span></a><span class="p">(</span><span class="n">survey</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="p">,</span> <span class="n">standard_deviation</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">uncertainties</span></a><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="defining-a-tensor-mesh">
+<h2>Defining a Tensor Mesh<a class="headerlink" href="#defining-a-tensor-mesh" title="Permalink to this headline">¶</a></h2>
+<p>Here, we create the tensor mesh that will be used to invert gravity anomaly
+data. If desired, we could define an OcTree mesh.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dh</span></a> <span class="o">=</span> <span class="mf">5.0</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hx</span></a> <span class="o">=</span> <span class="p">[(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dh</span></a><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.3</span><span class="p">),</span> <span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dh</span></a><span class="p">,</span> <span class="mi">40</span><span class="p">),</span> <span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dh</span></a><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">)]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hy</span></a> <span class="o">=</span> <span class="p">[(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dh</span></a><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.3</span><span class="p">),</span> <span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dh</span></a><span class="p">,</span> <span class="mi">40</span><span class="p">),</span> <span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dh</span></a><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">)]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hz</span></a> <span class="o">=</span> <span class="p">[(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dh</span></a><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.3</span><span class="p">),</span> <span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dh</span></a><span class="p">,</span> <span class="mi">15</span><span class="p">)]</span>
+<a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a> <span class="o">=</span> <a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class"><span class="n">TensorMesh</span></a><span class="p">([</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hx</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hy</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hz</span></a><span class="p">],</span> <span class="s2">&quot;CCN&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="starting-reference-model-and-mapping-on-tensor-mesh">
+<h2>Starting/Reference Model and Mapping on Tensor Mesh<a class="headerlink" href="#starting-reference-model-and-mapping-on-tensor-mesh" title="Permalink to this headline">¶</a></h2>
+<p>Here, we create starting and/or reference models for the inversion as
+well as the mapping from the model space to the active cells. Starting and
+reference models can be a constant background value or contain a-priori
+structures. Here, the background is 1e-6 g/cc.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define density contrast values for each unit in g/cc. Don&#39;t make this 0!</span>
+<span class="c1"># Otherwise the gradient for the 1st iteration is zero and the inversion will</span>
+<span class="c1"># not converge.</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">background_density</span></a> <span class="o">=</span> <span class="mf">1e-6</span>
+
+<span class="c1"># Find the indecies of the active cells in forward model (ones below surface)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_active</span></a> <span class="o">=</span> <span class="n">surface2ind_topo</span><span class="p">(</span><a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">xyz_topo</span></a><span class="p">)</span>
+
+<span class="c1"># Define mapping from model to active cells</span>
+<a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nC</span></a> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_active</span></a><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="n">model_map</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">maps</span><span class="o">.</span><span class="n">IdentityMap</span></a><span class="p">(</span><span class="n">nP</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nC</span></a><span class="p">)</span>  <span class="c1"># model consists of a value for each active cell</span>
+
+<span class="c1"># Define and plot starting model</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">starting_model</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">background_density</span></a> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ones.html#numpy.ones" title="numpy.ones" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nC</span></a><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="define-the-physics">
+<h2>Define the Physics<a class="headerlink" href="#define-the-physics" title="Permalink to this headline">¶</a></h2>
+<p>Here, we define the physics of the gravity problem by using the simulation
+class.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">simulation</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">gravity</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">Simulation3DIntegral</span></a><span class="p">(</span>
+    <span class="n">survey</span><span class="o">=</span><span class="n">survey</span><span class="p">,</span> <a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="o">=</span><a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span> <span class="n">rhoMap</span><span class="o">=</span><span class="n">model_map</span><span class="p">,</span> <span class="n">actInd</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_active</span></a>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="define-the-inverse-problem">
+<h2>Define the Inverse Problem<a class="headerlink" href="#define-the-inverse-problem" title="Permalink to this headline">¶</a></h2>
+<p>The inverse problem is defined by 3 things:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Data Misfit: a measure of how well our recovered model explains the field data</p></li>
+<li><p>Regularization: constraints placed on the recovered model and a priori information</p></li>
+<li><p>Optimization: the numerical approach used to solve the inverse problem</p></li>
+</ol>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the data misfit. Here the data misfit is the L2 norm of the weighted</span>
+<span class="c1"># residual between the observed data and the data predicted for a given model.</span>
+<span class="c1"># Within the data misfit, the residual between predicted and observed data are</span>
+<span class="c1"># normalized by the data&#39;s standard deviation.</span>
+<span class="n">dmis</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">data_misfit</span><span class="o">.</span><span class="n">L2DataMisfit</span></a><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data_object</span><span class="p">,</span> <span class="n">simulation</span><span class="o">=</span><span class="n">simulation</span><span class="p">)</span>
+<span class="n">dmis</span><span class="o">.</span><span class="n">W</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">sdiag</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">uncertainties</span></a><span class="p">)</span>
+
+<span class="c1"># Define the regularization (model objective function).</span>
+<span class="n">reg</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">regularization</span><span class="o">.</span><span class="n">Sparse</span></a><span class="p">(</span><a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span> <span class="n">indActive</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_active</span></a><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="n">model_map</span><span class="p">)</span>
+<span class="n">reg</span><span class="o">.</span><span class="n">norms</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.c_.html#numpy.c_" title="numpy.c_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">c_</span></a><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+
+<span class="c1"># Define how the optimization problem is solved. Here we will use a projected</span>
+<span class="c1"># Gauss-Newton approach that employs the conjugate gradient solver.</span>
+<span class="n">opt</span> <span class="o">=</span> <span class="n">optimization</span><span class="o">.</span><span class="n">ProjectedGNCG</span><span class="p">(</span>
+    <span class="n">maxIter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">lower</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">maxIterLS</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">maxIterCG</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">tolCG</span><span class="o">=</span><span class="mf">1e-3</span>
+<span class="p">)</span>
+
+<span class="c1"># Here we define the inverse problem that is to be solved</span>
+<span class="n">inv_prob</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">inverse_problem</span><span class="o">.</span><span class="n">BaseInvProblem</span></a><span class="p">(</span><span class="n">dmis</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="define-inversion-directives">
+<h2>Define Inversion Directives<a class="headerlink" href="#define-inversion-directives" title="Permalink to this headline">¶</a></h2>
+<p>Here we define any directiveas that are carried out during the inversion. This
+includes the cooling schedule for the trade-off parameter (beta), stopping
+criteria for the inversion and saving inversion results at each iteration.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Defining a starting value for the trade-off parameter (beta) between the data</span>
+<span class="c1"># misfit and the regularization.</span>
+<span class="n">starting_beta</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">BetaEstimate_ByEig</span></a><span class="p">(</span><span class="n">beta0_ratio</span><span class="o">=</span><span class="mf">1e0</span><span class="p">)</span>
+
+<span class="c1"># Defines the directives for the IRLS regularization. This includes setting</span>
+<span class="c1"># the cooling schedule for the trade-off parameter.</span>
+<span class="n">update_IRLS</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">Update_IRLS</span></a><span class="p">(</span>
+    <span class="n">f_min_change</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span> <span class="n">max_irls_iterations</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">coolEpsFact</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">beta_tol</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Defining the fractional decrease in beta and the number of Gauss-Newton solves</span>
+<span class="c1"># for each beta value.</span>
+<span class="n">beta_schedule</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">BetaSchedule</span></a><span class="p">(</span><span class="n">coolingFactor</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">coolingRate</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Options for outputting recovered models and predicted data for each beta.</span>
+<span class="n">save_iteration</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">SaveOutputEveryIteration</span></a><span class="p">(</span><span class="n">save_txt</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Updating the preconditionner if it is model dependent.</span>
+<span class="n">update_jacobi</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">UpdatePreconditioner</span></a><span class="p">()</span>
+
+<span class="c1"># Add sensitivity weights</span>
+<span class="n">sensitivity_weights</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">UpdateSensitivityWeights</span></a><span class="p">(</span><span class="n">everyIter</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># The directives are defined as a list.</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">directives_list</span></a> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">update_IRLS</span><span class="p">,</span>
+    <span class="n">sensitivity_weights</span><span class="p">,</span>
+    <span class="n">starting_beta</span><span class="p">,</span>
+    <span class="n">beta_schedule</span><span class="p">,</span>
+    <span class="n">save_iteration</span><span class="p">,</span>
+    <span class="n">update_jacobi</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-the-inversion">
+<h2>Running the Inversion<a class="headerlink" href="#running-the-inversion" title="Permalink to this headline">¶</a></h2>
+<p>To define the inversion object, we need to define the inversion problem and
+the set of directives. We can then run the inversion.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Here we combine the inverse problem and the set of directives</span>
+<span class="n">inv</span> <span class="o">=</span> <span class="n">inversion</span><span class="o">.</span><span class="n">BaseInversion</span><span class="p">(</span><span class="n">inv_prob</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">directives_list</span></a><span class="p">)</span>
+
+<span class="c1"># Run inversion</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">recovered_model</span></a> <span class="o">=</span> <span class="n">inv</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">starting_model</span></a><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>SimPEG.InvProblem will set Regularization.mref to m0.
+
+        SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
+        ***Done using same Solver and solverOpts as the problem***
+model has any nan: 0
+=============================== Projected GNCG ===============================
+  #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment
+-----------------------------------------------------------------------------
+x0 has any nan: 0
+   0  3.55e+05  1.33e+05  0.00e+00  1.33e+05    2.19e+02      0
+   1  3.55e+04  9.17e+03  5.11e-02  1.10e+04    2.16e+02      0
+   2  3.55e+03  4.66e+02  1.09e-01  8.52e+02    1.93e+02      0   Skip BFGS
+Reached starting chifact with l2-norm regularization: Start IRLS steps...
+eps_p: 0.06175025126555368 eps_q: 0.06175025126555368
+   3  3.55e+02  4.93e+01  2.57e-01  1.41e+02    1.97e+02      0   Skip BFGS
+   4  2.95e+02  2.29e+01  3.33e-01  1.21e+02    2.02e+02      0   Skip BFGS
+   5  3.30e+02  1.57e+01  3.69e-01  1.38e+02    1.86e+02      0
+   6  5.40e+02  1.01e+01  3.96e-01  2.24e+02    1.88e+02      0
+   7  7.42e+02  1.23e+01  3.71e-01  2.87e+02    1.97e+02      0
+   8  1.11e+03  1.11e+01  2.80e-01  3.22e+02    2.12e+02      0
+   9  1.22e+03  1.61e+01  2.02e-01  2.62e+02    1.97e+02      0
+  10  1.65e+03  1.25e+01  1.46e-01  2.53e+02    2.05e+02      0
+  11  2.19e+03  1.28e+01  1.08e-01  2.50e+02    1.99e+02      0
+  12  2.91e+03  1.28e+01  8.18e-02  2.51e+02    1.99e+02      0
+  13  3.69e+03  1.36e+01  6.82e-02  2.65e+02    1.90e+02      0
+  14  4.36e+03  1.47e+01  6.07e-02  2.80e+02    1.84e+02      0
+  15  4.78e+03  1.61e+01  5.52e-02  2.80e+02    1.89e+02      0
+  16  4.99e+03  1.71e+01  5.10e-02  2.71e+02    1.81e+02      0
+  17  5.05e+03  1.78e+01  4.80e-02  2.60e+02    1.83e+02      0
+  18  4.99e+03  1.83e+01  4.58e-02  2.47e+02    1.83e+02      0   Skip BFGS
+  19  4.84e+03  1.88e+01  4.44e-02  2.34e+02    1.82e+02      0   Skip BFGS
+  20  4.64e+03  1.91e+01  4.36e-02  2.21e+02    1.81e+02      0   Skip BFGS
+  21  4.44e+03  1.91e+01  4.30e-02  2.10e+02    1.84e+02      0   Skip BFGS
+  22  4.28e+03  1.89e+01  4.26e-02  2.01e+02    1.82e+02      0   Skip BFGS
+  23  4.15e+03  1.87e+01  4.23e-02  1.94e+02    1.83e+02      0   Skip BFGS
+  24  4.07e+03  1.86e+01  4.21e-02  1.90e+02    1.83e+02      0   Skip BFGS
+  25  4.00e+03  1.84e+01  4.20e-02  1.86e+02    1.83e+02      0   Skip BFGS
+  26  3.96e+03  1.83e+01  4.17e-02  1.83e+02    1.84e+02      0   Skip BFGS
+  27  3.93e+03  1.82e+01  4.16e-02  1.82e+02    1.86e+02      0   Skip BFGS
+  28  3.92e+03  1.81e+01  4.14e-02  1.81e+02    1.86e+02      0   Skip BFGS
+  29  3.93e+03  1.80e+01  4.12e-02  1.80e+02    1.87e+02      0   Skip BFGS
+  30  3.96e+03  1.79e+01  4.11e-02  1.81e+02    1.86e+02      0   Skip BFGS
+  31  3.99e+03  1.79e+01  4.10e-02  1.81e+02    1.87e+02      0
+  32  4.02e+03  1.79e+01  4.08e-02  1.82e+02    1.85e+02      0   Skip BFGS
+Reach maximum number of IRLS cycles: 30
+------------------------- STOP! -------------------------
+1 : |fc-fOld| = 0.0000e+00 &lt;= tolF*(1+|f0|) = 1.3312e+04
+1 : |xc-x_last| = 1.5149e-02 &lt;= tolX*(1+|x0|) = 1.0002e-01
+0 : |proj(x-g)-x|    = 1.8521e+02 &lt;= tolG          = 1.0000e-01
+0 : |proj(x-g)-x|    = 1.8521e+02 &lt;= 1e3*eps       = 1.0000e-02
+0 : maxIter   =     100    &lt;= iter          =     33
+------------------------- DONE! -------------------------
+</pre></div>
+</div>
+</div>
+<div class="section" id="recreate-true-model">
+<h2>Recreate True Model<a class="headerlink" href="#recreate-true-model" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define density contrast values for each unit in g/cc</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">background_density</span></a> <span class="o">=</span> <span class="mf">0.0</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">block_density</span></a> <span class="o">=</span> <span class="o">-</span><span class="mf">0.2</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sphere_density</span></a> <span class="o">=</span> <span class="mf">0.2</span>
+
+<span class="c1"># Define model. Models in SimPEG are vector arrays.</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">true_model</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">background_density</span></a> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ones.html#numpy.ones" title="numpy.ones" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nC</span></a><span class="p">)</span>
+
+<span class="c1"># You could find the indicies of specific cells within the model and change their</span>
+<span class="c1"># value to add structures.</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_block</span></a> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span><span class="o">.</span><span class="n">gridCC</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_active</span></a><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">50.0</span><span class="p">)</span>
+    <span class="o">&amp;</span> <span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span><span class="o">.</span><span class="n">gridCC</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_active</span></a><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">20.0</span><span class="p">)</span>
+    <span class="o">&amp;</span> <span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span><span class="o">.</span><span class="n">gridCC</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_active</span></a><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">15.0</span><span class="p">)</span>
+    <span class="o">&amp;</span> <span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span><span class="o">.</span><span class="n">gridCC</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_active</span></a><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">15.0</span><span class="p">)</span>
+    <span class="o">&amp;</span> <span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span><span class="o">.</span><span class="n">gridCC</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_active</span></a><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">50.0</span><span class="p">)</span>
+    <span class="o">&amp;</span> <span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span><span class="o">.</span><span class="n">gridCC</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_active</span></a><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">30.0</span><span class="p">)</span>
+<span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">true_model</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_block</span></a><span class="p">]</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">block_density</span></a>
+
+<span class="c1"># You can also use SimPEG utilities to add structures to the model more concisely</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_sphere</span></a> <span class="o">=</span> <span class="n">model_builder</span><span class="o">.</span><span class="n">getIndicesSphere</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="mf">35.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">40.0</span><span class="p">],</span> <span class="mf">15.0</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span><span class="o">.</span><span class="n">gridCC</span></a><span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_sphere</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_sphere</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_active</span></a><span class="p">]</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">true_model</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_sphere</span></a><span class="p">]</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sphere_density</span></a>
+</pre></div>
+</div>
+</div>
+<div class="section" id="plotting-true-model-and-recovered-model">
+<h2>Plotting True Model and Recovered Model<a class="headerlink" href="#plotting-true-model-and-recovered-model" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot True Model</span>
+<a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plotting_map</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">maps</span><span class="o">.</span><span class="n">InjectActiveCells</span></a><span class="p">(</span><a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_active</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">nan</span></a><span class="p">)</span>
+
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure.add_axes" title="matplotlib.figure.Figure.add_axes" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span></a><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.73</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">])</span>
+<a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh.plotSlice" title="discretize.TensorMesh.plotSlice" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-method"><span class="n">mesh</span><span class="o">.</span><span class="n">plotSlice</span></a><span class="p">(</span>
+    <span class="n">plotting_map</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">true_model</span></a><span class="p">,</span>
+    <span class="n">normal</span><span class="o">=</span><span class="s2">&quot;Y&quot;</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a><span class="p">,</span>
+    <span class="n">ind</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh.nCy" title="discretize.TensorMesh.nCy" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-attribute"><span class="n">mesh</span><span class="o">.</span><span class="n">nCy</span></a> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">true_model</span></a><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">true_model</span></a><span class="p">)),</span>
+    <span class="n">pcolorOpts</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cmap&quot;</span><span class="p">:</span> <span class="s2">&quot;viridis&quot;</span><span class="p">},</span>
+<span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span></a><span class="p">(</span><span class="s2">&quot;Model slice at y = 0 m&quot;</span><span class="p">)</span>
+
+
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax2</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure.add_axes" title="matplotlib.figure.Figure.add_axes" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span></a><span class="p">([</span><span class="mf">0.85</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">])</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">norm</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.Normalize.html#matplotlib.colors.Normalize" title="matplotlib.colors.Normalize" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class"><span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span></a><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">true_model</span></a><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">true_model</span></a><span class="p">))</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cbar</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/colorbar_api.html#matplotlib.colorbar.ColorbarBase" title="matplotlib.colorbar.ColorbarBase" class="sphx-glr-backref-module-matplotlib-colorbar sphx-glr-backref-type-py-class"><span class="n">mpl</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">ColorbarBase</span></a><span class="p">(</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax2</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">norm</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">norm</span></a><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.ListedColormap.html#matplotlib.colors.ListedColormap" title="matplotlib.colors.ListedColormap" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">viridis</span></a><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.1e</span><span class="s2">&quot;</span>
+<span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span></a><span class="p">(</span><span class="s2">&quot;$g/cm^3$&quot;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">270</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
+
+<span class="c1"># Plot Recovered Model</span>
+<a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plotting_map</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">maps</span><span class="o">.</span><span class="n">InjectActiveCells</span></a><span class="p">(</span><a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_active</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">nan</span></a><span class="p">)</span>
+
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure.add_axes" title="matplotlib.figure.Figure.add_axes" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span></a><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.73</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">])</span>
+<a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh.plotSlice" title="discretize.TensorMesh.plotSlice" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-method"><span class="n">mesh</span><span class="o">.</span><span class="n">plotSlice</span></a><span class="p">(</span>
+    <span class="n">plotting_map</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">recovered_model</span></a><span class="p">,</span>
+    <span class="n">normal</span><span class="o">=</span><span class="s2">&quot;Y&quot;</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a><span class="p">,</span>
+    <span class="n">ind</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh.nCy" title="discretize.TensorMesh.nCy" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-attribute"><span class="n">mesh</span><span class="o">.</span><span class="n">nCy</span></a> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">recovered_model</span></a><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">recovered_model</span></a><span class="p">)),</span>
+    <span class="n">pcolorOpts</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cmap&quot;</span><span class="p">:</span> <span class="s2">&quot;viridis&quot;</span><span class="p">},</span>
+<span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span></a><span class="p">(</span><span class="s2">&quot;Model slice at y = 0 m&quot;</span><span class="p">)</span>
+
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax2</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure.add_axes" title="matplotlib.figure.Figure.add_axes" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span></a><span class="p">([</span><span class="mf">0.85</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">])</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">norm</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.Normalize.html#matplotlib.colors.Normalize" title="matplotlib.colors.Normalize" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class"><span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span></a><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">recovered_model</span></a><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">recovered_model</span></a><span class="p">))</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cbar</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/colorbar_api.html#matplotlib.colorbar.ColorbarBase" title="matplotlib.colorbar.ColorbarBase" class="sphx-glr-backref-module-matplotlib-colorbar sphx-glr-backref-type-py-class"><span class="n">mpl</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">ColorbarBase</span></a><span class="p">(</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax2</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">norm</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">norm</span></a><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.ListedColormap.html#matplotlib.colors.ListedColormap" title="matplotlib.colors.ListedColormap" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">viridis</span></a>
+<span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span></a><span class="p">(</span><span class="s2">&quot;$g/cm^3$&quot;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">270</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img alt="Model slice at y = 0 m" class="sphx-glr-multi-img" src="../../../_images/sphx_glr_plot_inv_1b_gravity_anomaly_irls_002.png" />
+</li>
+<li><img alt="Model slice at y = 0 m" class="sphx-glr-multi-img" src="../../../_images/sphx_glr_plot_inv_1b_gravity_anomaly_irls_003.png" />
+</li>
+</ul>
+</div>
+<div class="section" id="plotting-predicted-data-and-normalized-misfit">
+<h2>Plotting Predicted Data and Normalized Misfit<a class="headerlink" href="#plotting-predicted-data-and-normalized-misfit" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Predicted data with final recovered model</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dpred</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">inv_prob</span><span class="o">.</span><span class="n">dpred</span></a>
+
+<span class="c1"># Observed data | Predicted data | Normalized data misfit</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_array</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.c_.html#numpy.c_" title="numpy.c_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">c_</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dpred</span></a><span class="p">,</span> <span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a> <span class="o">-</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dpred</span></a><span class="p">)</span> <span class="o">/</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">uncertainties</span></a><span class="p">]</span>
+
+<a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">plot_title</span></a> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Observed&quot;</span><span class="p">,</span> <span class="s2">&quot;Predicted&quot;</span><span class="p">,</span> <span class="s2">&quot;Normalized Misfit&quot;</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">plot_units</span></a> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mgal&quot;</span><span class="p">,</span> <span class="s2">&quot;mgal&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]</span>
+
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax2</span></a> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">norm</span></a> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cbar</span></a> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cplot</span></a> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">v_lim</span></a> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">abs</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">abs</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">abs</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_array</span></a><span class="p">[:,</span> <span class="mi">2</span><span class="p">]))]</span>
+
+<span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">]</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure.add_axes" title="matplotlib.figure.Figure.add_axes" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span></a><span class="p">([</span><span class="mf">0.33</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a> <span class="o">+</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">,</span> <span class="mf">0.23</span><span class="p">,</span> <span class="mf">0.84</span><span class="p">])</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cplot</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">]</span> <span class="o">=</span> <span class="n">plot2Ddata</span><span class="p">(</span>
+        <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">receiver_list</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">locations</span><span class="p">,</span>
+        <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_array</span></a><span class="p">[:,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">],</span>
+        <span class="n">ax</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">],</span>
+        <span class="n">ncontour</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+        <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">v_lim</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">],</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">v_lim</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">]),</span>
+        <span class="n">contourOpts</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cmap&quot;</span><span class="p">:</span> <span class="s2">&quot;bwr&quot;</span><span class="p">},</span>
+    <span class="p">)</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">plot_title</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">])</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x (m)&quot;</span><span class="p">)</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;y (m)&quot;</span><span class="p">)</span>
+
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax2</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">]</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure.add_axes" title="matplotlib.figure.Figure.add_axes" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span></a><span class="p">([</span><span class="mf">0.33</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a> <span class="o">+</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.85</span><span class="p">])</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">norm</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">]</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.Normalize.html#matplotlib.colors.Normalize" title="matplotlib.colors.Normalize" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class"><span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span></a><span class="p">(</span><span class="n">vmin</span><span class="o">=-</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">v_lim</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">],</span> <span class="n">vmax</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">v_lim</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">])</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cbar</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">]</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/colorbar_api.html#matplotlib.colorbar.ColorbarBase" title="matplotlib.colorbar.ColorbarBase" class="sphx-glr-backref-module-matplotlib-colorbar sphx-glr-backref-type-py-class"><span class="n">mpl</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">ColorbarBase</span></a><span class="p">(</span>
+        <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax2</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">],</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">norm</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">norm</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">],</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.LinearSegmentedColormap.html#matplotlib.colors.LinearSegmentedColormap" title="matplotlib.colors.LinearSegmentedColormap" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">bwr</span></a>
+    <span class="p">)</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cbar</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">]</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">plot_units</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">],</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">270</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="Observed, Predicted, Normalized Misfit" class="sphx-glr-single-img" src="../../../_images/sphx_glr_plot_inv_1b_gravity_anomaly_irls_004.png" />
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  51.564 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-tutorials-03-gravity-plot-inv-1b-gravity-anomaly-irls-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/d0fdf888b914b02330d24dd22cfd98ca/plot_inv_1b_gravity_anomaly_irls.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_inv_1b_gravity_anomaly_irls.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/88488584090fbd3bfc18dd889b7fc6a0/plot_inv_1b_gravity_anomaly_irls.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_inv_1b_gravity_anomaly_irls.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../04-magnetics/index.html" class="btn btn-neutral float-right" title="Magnetics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="plot_inv_1a_gravity_anomaly.html" class="btn btn-neutral float-left" title="Least-Squares Inversion of Gravity Anomaly Data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+
+ 
+
+
+    <div id="disqus_thread"></div>
+    <script>
+
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+    var disqus_config = function () {
+    this.page.url = {path};  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = {path}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://simpeg.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    <div role="contentinfo">
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/" width="60px"; style="float:right;height:3em;line-height:3em;padding:10px 0 0 1em;">
+            <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" />
+        </a>
+        2013-2018,
+        <a href="http://simpeg.xyz">SimPEG Developers.</a><br />
+        Except where noted, this work is licensed under a <br />
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+            Creative Commons Attribution 4.0 International License
+        </a>
+    </div>
+    <br>
+    <div>
+    Built with
+        <a href="http://sphinx-doc.org/">Sphinx</a>
+        using a
+        <a href="https://github.com/snide/sphinx_rtd_theme">theme</a>
+        provided by
+        <a href="https://readthedocs.org">Read the Docs</a>.
+     </div>
+
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

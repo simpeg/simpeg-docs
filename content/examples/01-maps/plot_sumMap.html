@@ -1,0 +1,618 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Maps: ComboMaps &mdash; SimPEG 0.15.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/logo-block.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="PF: Gravity: Tiled Inversion Linear" href="../02-gravity/plot_inv_grav_tiled.html" />
+    <link rel="prev" title="Maps: Mesh2Mesh" href="plot_mesh2mesh.html" />
+ 
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-45185336-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> SimPEG
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.15.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../basic/big_picture.html">Why SimPEG?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/contributing.html">Contributing to SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/installing.html">Getting Started with SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/getting_started_developers.html">Getting Started: for Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/practices.html">Practices</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Gallery</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#mappings">Mappings</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="plot_block_in_layer.html">Maps: Parametric Block in a Layer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_combo.html">Maps: ComboMaps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_layer.html">Maps: Parametrized Layer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_mesh2mesh.html">Maps: Mesh2Mesh</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Maps: ComboMaps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#gravity">Gravity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#magnetics">Magnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#dc-resistivity-and-induced-polarization">DC Resistivity and Induced Polarization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#frequency-domain-electromagnetics">Frequency Domain Electromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#time-domain-electromagnetics">Time Domain Electromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#natural-source-electromagnetics">Natural Source Electromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#viscous-remanent-magnetization">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#richards-fluid-flow">Richards Fluid Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#in-publication">In Publication</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/01-models_mapping/index.html">Models and Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/02-linear_inversion/index.html">Linear Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/03-gravity/index.html">Gravity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/04-magnetics/index.html">Magnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/05-dcr/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/06-ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/07-fdem/index.html">Frequency-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/08-tdem/index.html">Time-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/09-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/10-vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/11-flow/index.html">Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/12-seismic/index.html">Seismic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/13-pgi/index.html">PGI: Petrophysically and Geologically Guided Geophysical Inversion</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Packages</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../em/index.html">Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dc/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pf/index.html">Potential Fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../flow/index.html">Richards Equation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_FiniteVolume.html">Finite Volume</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_ForwardProblem.html">Forward Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_InversionComponents.html">Inversion Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_Maps.html">Maps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_Utilities.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Meta Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../release/index.html">Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">SimPEG</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Gallery</a> &raquo;</li>
+        
+      <li>Maps: ComboMaps</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            <a href="https://github.com/simpeg/simpeg/edit/main/docs/content/examples/01-maps/plot_sumMap.rst" class="fa fa-github"> Edit on GitHub</a>
+        
+      </li>
+    
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-content-examples-01-maps-plot-summap-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="maps-combomaps">
+<span id="sphx-glr-content-examples-01-maps-plot-summap-py"></span><h1>Maps: ComboMaps<a class="headerlink" href="#maps-combomaps" title="Permalink to this headline">¶</a></h1>
+<p>Invert synthetic magnetic data with variable background values
+and a single block anomaly buried at depth. We will use the Sum Map
+to invert for both the background values and an heterogeneous susceptibiilty
+model.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>
+</pre></div>
+</td></tr></table></div>
+<ul class="sphx-glr-horizontal">
+<li><img alt="plot sumMap" class="sphx-glr-multi-img" src="../../../_images/sphx_glr_plot_sumMap_001.png" />
+</li>
+<li><img alt="plot sumMap" class="sphx-glr-multi-img" src="../../../_images/sphx_glr_plot_sumMap_002.png" />
+</li>
+</ul>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>5576
+
+        SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
+        ***Done using same Solver and solverOpts as the problem***
+model has any nan: 0
+=============================== Projected GNCG ===============================
+  #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment
+-----------------------------------------------------------------------------
+x0 has any nan: 0
+   0  6.55e+09  4.55e+06  1.72e-06  4.57e+06    6.22e+01      0
+   1  3.28e+09  2.85e+05  7.99e-05  5.47e+05    5.89e+01      0
+   2  1.64e+09  1.85e+05  1.01e-04  3.50e+05    5.65e+01      0   Skip BFGS
+   3  8.19e+08  1.45e+05  1.18e-04  2.41e+05    5.55e+01      0   Skip BFGS
+   4  4.10e+08  1.26e+05  1.34e-04  1.81e+05    5.30e+01      0   Skip BFGS
+   5  2.05e+08  1.09e+05  1.64e-04  1.42e+05    5.09e+01      0   Skip BFGS
+   6  1.02e+08  8.68e+04  2.42e-04  1.12e+05    4.97e+01      0   Skip BFGS
+   7  5.12e+07  5.95e+04  4.35e-04  8.18e+04    4.90e+01      0   Skip BFGS
+   8  2.56e+07  3.32e+04  8.03e-04  5.37e+04    4.85e+01      0   Skip BFGS
+   9  1.28e+07  1.47e+04  1.31e-03  3.14e+04    4.82e+01      0   Skip BFGS
+  10  6.40e+06  5.45e+03  1.80e-03  1.70e+04    4.80e+01      0   Skip BFGS
+  11  3.20e+06  1.86e+03  2.18e-03  8.85e+03    4.79e+01      0   Skip BFGS
+  12  1.60e+06  6.83e+02  2.43e-03  4.57e+03    4.79e+01      0   Skip BFGS
+  13  8.00e+05  3.28e+02  2.58e-03  2.39e+03    4.78e+01      0   Skip BFGS
+  14  4.00e+05  2.22e+02  2.66e-03  1.29e+03    4.72e+01      0   Skip BFGS
+Reached starting chifact with l2-norm regularization: Start IRLS steps...
+eps_p: 0.010160617495494597 eps_q: 0.010160617495494597
+eps_p: 0.012015906825335605 eps_q: 0.012015906825335605
+  15  2.00e+05  1.90e+02  3.77e-03  9.43e+02    2.88e+01      0   Skip BFGS
+  16  2.00e+05  1.87e+02  4.02e-03  9.91e+02    5.88e+01      0
+  17  2.00e+05  1.87e+02  4.11e-03  1.01e+03    5.94e+01      4   Skip BFGS
+  18  2.00e+05  1.89e+02  4.12e-03  1.01e+03    3.44e+01      4
+  19  2.00e+05  1.98e+02  4.08e-03  1.01e+03    3.56e+01      1   Skip BFGS
+  20  2.00e+05  1.97e+02  3.98e-03  9.93e+02    5.87e+01      3
+  21  2.00e+05  2.09e+02  3.85e-03  9.79e+02    6.08e+01      1   Skip BFGS
+  22  2.00e+05  2.14e+02  3.69e-03  9.51e+02    3.55e+01      2
+  23  2.00e+05  2.16e+02  3.50e-03  9.17e+02    3.56e+01      4   Skip BFGS
+  24  2.00e+05  2.16e+02  3.30e-03  8.76e+02    5.94e+01      2
+  25  2.00e+05  2.08e+02  3.11e-03  8.30e+02    5.40e+01      0
+  26  2.00e+05  2.10e+02  2.95e-03  8.00e+02    3.31e+01      3   Skip BFGS
+  27  2.00e+05  2.10e+02  2.83e-03  7.77e+02    2.64e+01      0
+  28  2.00e+05  2.12e+02  2.70e-03  7.52e+02    5.93e+01      2   Skip BFGS
+  29  2.00e+05  2.11e+02  2.59e-03  7.30e+02    2.47e+01      0
+  30  2.00e+05  2.13e+02  2.50e-03  7.12e+02    3.42e+01      2   Skip BFGS
+  31  2.00e+05  2.12e+02  2.40e-03  6.92e+02    2.73e+01      0
+  32  2.00e+05  2.13e+02  2.29e-03  6.72e+02    6.00e+01      1   Skip BFGS
+  33  2.00e+05  2.11e+02  2.15e-03  6.40e+02    3.41e+01      0
+  34  2.00e+05  2.12e+02  2.04e-03  6.20e+02    3.48e+01      1   Skip BFGS
+Reach maximum number of IRLS cycles: 20
+------------------------- STOP! -------------------------
+1 : |fc-fOld| = 0.0000e+00 &lt;= tolF*(1+|f0|) = 4.5658e+05
+1 : |xc-x_last| = 3.6656e-03 &lt;= tolX*(1+|x0|) = 1.0075e-01
+0 : |proj(x-g)-x|    = 3.4821e+01 &lt;= tolG          = 1.0000e-03
+0 : |proj(x-g)-x|    = 3.4821e+01 &lt;= 1e3*eps       = 1.0000e-03
+0 : maxIter   =     100    &lt;= iter          =     35
+------------------------- DONE! -------------------------
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">discretize</span>
+<span class="kn">from</span> <span class="nn">SimPEG</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">utils</span><span class="p">,</span>
+    <span class="n">maps</span><span class="p">,</span>
+    <span class="n">regularization</span><span class="p">,</span>
+    <span class="n">data_misfit</span><span class="p">,</span>
+    <span class="n">optimization</span><span class="p">,</span>
+    <span class="n">inverse_problem</span><span class="p">,</span>
+    <span class="n">directives</span><span class="p">,</span>
+    <span class="n">inversion</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">SimPEG.potential_fields</span> <span class="kn">import</span> <span class="n">magnetics</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">plotIt</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+    <span class="n">H0</span> <span class="o">=</span> <span class="p">(</span><span class="mf">50000.0</span><span class="p">,</span> <span class="mf">90.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+
+    <span class="c1"># Create a mesh</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="mf">5.0</span>
+
+    <span class="n">hxind</span> <span class="o">=</span> <span class="p">[(</span><span class="n">dx</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.3</span><span class="p">),</span> <span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">)]</span>
+    <span class="n">hyind</span> <span class="o">=</span> <span class="p">[(</span><span class="n">dx</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.3</span><span class="p">),</span> <span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">)]</span>
+    <span class="n">hzind</span> <span class="o">=</span> <span class="p">[(</span><span class="n">dx</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.3</span><span class="p">),</span> <span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="mi">10</span><span class="p">)]</span>
+
+    <span class="n">mesh</span> <span class="o">=</span> <a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class"><span class="n">discretize</span><span class="o">.</span><span class="n">TensorMesh</span></a><span class="p">([</span><span class="n">hxind</span><span class="p">,</span> <span class="n">hyind</span><span class="p">,</span> <span class="n">hzind</span><span class="p">],</span> <span class="s2">&quot;CCC&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Lets create a simple Gaussian topo and set the active cells</span>
+    <span class="p">[</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">]</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.meshgrid.html#numpy.meshgrid" title="numpy.meshgrid" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span></a><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vectorNx</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">vectorNy</span><span class="p">)</span>
+    <span class="n">zz</span> <span class="o">=</span> <span class="o">-</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">exp</span></a><span class="p">((</span><span class="n">xx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">yy</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">75</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">mesh</span><span class="o">.</span><span class="n">vectorNz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># We would usually load a topofile</span>
+    <span class="n">topo</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.c_.html#numpy.c_" title="numpy.c_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">c_</span></a><span class="p">[</span><span class="n">utils</span><span class="o">.</span><span class="n">mkvc</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span> <span class="n">utils</span><span class="o">.</span><span class="n">mkvc</span><span class="p">(</span><span class="n">yy</span><span class="p">),</span> <span class="n">utils</span><span class="o">.</span><span class="n">mkvc</span><span class="p">(</span><span class="n">zz</span><span class="p">)]</span>
+
+    <span class="c1"># Go from topo to array of indices of active cells</span>
+    <span class="n">actv</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">surface2ind_topo</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">topo</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">)</span>
+    <span class="n">actv</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.where.html#numpy.where" title="numpy.where" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">where</span></a><span class="p">(</span><span class="n">actv</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Create and array of observation points</span>
+    <span class="n">xr</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html#numpy.linspace" title="numpy.linspace" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="o">-</span><span class="mf">20.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="n">yr</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html#numpy.linspace" title="numpy.linspace" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="o">-</span><span class="mf">20.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.meshgrid.html#numpy.meshgrid" title="numpy.meshgrid" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span></a><span class="p">(</span><span class="n">xr</span><span class="p">,</span> <span class="n">yr</span><span class="p">)</span>
+
+    <span class="c1"># Move the observation points 5m above the topo</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="o">-</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">exp</span></a><span class="p">((</span><span class="n">X</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">Y</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">75</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">mesh</span><span class="o">.</span><span class="n">vectorNz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">5.0</span>
+
+    <span class="c1"># Create a MAGsurvey</span>
+    <span class="n">rxLoc</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.c_.html#numpy.c_" title="numpy.c_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">c_</span></a><span class="p">[</span><span class="n">utils</span><span class="o">.</span><span class="n">mkvc</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">utils</span><span class="o">.</span><span class="n">mkvc</span><span class="p">(</span><span class="n">Y</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">utils</span><span class="o">.</span><span class="n">mkvc</span><span class="p">(</span><span class="n">Z</span><span class="o">.</span><span class="n">T</span><span class="p">)]</span>
+    <span class="n">rxLoc</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">magnetics</span><span class="o">.</span><span class="n">Point</span></a><span class="p">(</span><span class="n">rxLoc</span><span class="p">)</span>
+    <span class="n">srcField</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">magnetics</span><span class="o">.</span><span class="n">SourceField</span></a><span class="p">([</span><span class="n">rxLoc</span><span class="p">],</span> <span class="n">parameters</span><span class="o">=</span><span class="n">H0</span><span class="p">)</span>
+    <span class="n">survey</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">magnetics</span><span class="o">.</span><span class="n">Survey</span></a><span class="p">(</span><span class="n">srcField</span><span class="p">)</span>
+
+    <span class="c1"># We can now create a susceptibility model and generate data</span>
+    <span class="n">model</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">nC</span><span class="p">)</span>
+
+    <span class="c1"># Change values in half the domain</span>
+    <span class="n">model</span><span class="p">[</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridCC</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+    <span class="c1"># Add a block in half-space</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">model_builder</span><span class="o">.</span><span class="n">addBlock</span><span class="p">(</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">gridCC</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">],</span> <span class="mf">0.05</span>
+    <span class="p">)</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">mkvc</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="n">actv</span><span class="p">]</span>
+
+    <span class="c1"># Create active map to go from reduce set to full</span>
+    <span class="n">actvMap</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">maps</span><span class="o">.</span><span class="n">InjectActiveCells</span></a><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">actv</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">nan</span></a><span class="p">)</span>
+
+    <span class="c1"># Create reduced identity map</span>
+    <span class="n">idenMap</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">maps</span><span class="o">.</span><span class="n">IdentityMap</span></a><span class="p">(</span><span class="n">nP</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">actv</span><span class="p">))</span>
+
+    <span class="c1"># Create the forward model operator</span>
+    <span class="n">prob</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">magnetics</span><span class="o">.</span><span class="n">Simulation3DIntegral</span></a><span class="p">(</span>
+        <span class="n">mesh</span><span class="p">,</span>
+        <span class="n">survey</span><span class="o">=</span><span class="n">survey</span><span class="p">,</span>
+        <span class="n">chiMap</span><span class="o">=</span><span class="n">idenMap</span><span class="p">,</span>
+        <span class="n">actInd</span><span class="o">=</span><span class="n">actv</span><span class="p">,</span>
+        <span class="n">store_sensitivities</span><span class="o">=</span><span class="s2">&quot;forward_only&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Compute linear forward operator and compute some data</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">make_synthetic_data</span><span class="p">(</span>
+        <span class="n">model</span><span class="p">,</span> <span class="n">relative_error</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">noise_floor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">add_noise</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Create a homogenous maps for the two domains</span>
+    <span class="n">domains</span> <span class="o">=</span> <span class="p">[</span><span class="n">mesh</span><span class="o">.</span><span class="n">gridCC</span><span class="p">[</span><span class="n">actv</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">gridCC</span><span class="p">[</span><span class="n">actv</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">homogMap</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">maps</span><span class="o">.</span><span class="n">SurjectUnits</span></a><span class="p">(</span><span class="n">domains</span><span class="p">)</span>
+
+    <span class="c1"># Create a wire map for a second model space, voxel based</span>
+    <span class="n">wires</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="n">Wires</span><span class="p">((</span><span class="s2">&quot;homo&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">domains</span><span class="p">)),</span> <span class="p">(</span><span class="s2">&quot;hetero&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">actv</span><span class="p">)))</span>
+
+    <span class="c1"># Create Sum map</span>
+    <span class="n">sumMap</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">maps</span><span class="o">.</span><span class="n">SumMap</span></a><span class="p">([</span><span class="n">homogMap</span> <span class="o">*</span> <span class="n">wires</span><span class="o">.</span><span class="n">homo</span><span class="p">,</span> <span class="n">wires</span><span class="o">.</span><span class="n">hetero</span><span class="p">])</span>
+
+    <span class="c1"># Create the forward model operator</span>
+    <span class="n">prob</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">magnetics</span><span class="o">.</span><span class="n">Simulation3DIntegral</span></a><span class="p">(</span>
+        <span class="n">mesh</span><span class="p">,</span> <span class="n">survey</span><span class="o">=</span><span class="n">survey</span><span class="p">,</span> <span class="n">chiMap</span><span class="o">=</span><span class="n">sumMap</span><span class="p">,</span> <span class="n">actInd</span><span class="o">=</span><span class="n">actv</span><span class="p">,</span> <span class="n">store_sensitivities</span><span class="o">=</span><span class="s2">&quot;ram&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Make depth weighting</span>
+    <span class="n">wr</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><span class="n">sumMap</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="o">.</span><span class="n">nC</span><span class="p">)</span>
+    <span class="c1"># print(prob.M.shape) # why does this reset nC</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">G</span>
+
+    <span class="c1"># Take the cell number out of the scaling.</span>
+    <span class="c1"># Want to keep high sens for large volumes</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">sdiag</span><span class="p">(</span>
+        <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="n">utils</span><span class="o">.</span><span class="n">mkvc</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">homogMap</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)),</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ones_like.html#numpy.ones_like" title="numpy.ones_like" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span></a><span class="p">(</span><span class="n">actv</span><span class="p">)]</span>
+    <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">survey</span><span class="o">.</span><span class="n">nD</span><span class="p">):</span>
+        <span class="n">wr</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">prob</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">prob</span><span class="o">.</span><span class="n">chiMap</span><span class="o">.</span><span class="n">deriv</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ones.html#numpy.ones" title="numpy.ones" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">(</span><span class="n">sumMap</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mf">1e-4</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale</span><span class="p">)</span>
+            <span class="o">/</span> <span class="n">data</span><span class="o">.</span><span class="n">standard_deviation</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span>
+        <span class="p">)</span> <span class="o">**</span> <span class="mf">2.0</span>
+
+    <span class="c1"># Scale the model spaces independently</span>
+    <span class="n">wr</span><span class="p">[</span><span class="n">wires</span><span class="o">.</span><span class="n">homo</span><span class="o">.</span><span class="n">index</span><span class="p">]</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">((</span><span class="n">wires</span><span class="o">.</span><span class="n">homo</span> <span class="o">*</span> <span class="n">wr</span><span class="p">))</span>
+    <span class="n">wr</span><span class="p">[</span><span class="n">wires</span><span class="o">.</span><span class="n">hetero</span><span class="o">.</span><span class="n">index</span><span class="p">]</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">wires</span><span class="o">.</span><span class="n">hetero</span> <span class="o">*</span> <span class="n">wr</span><span class="p">)</span>
+    <span class="n">wr</span> <span class="o">=</span> <span class="n">wr</span> <span class="o">**</span> <span class="mf">0.5</span>
+
+    <span class="c1">## Create a regularization</span>
+    <span class="c1"># For the homogeneous model</span>
+    <span class="n">regMesh</span> <span class="o">=</span> <a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class"><span class="n">discretize</span><span class="o">.</span><span class="n">TensorMesh</span></a><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">domains</span><span class="p">)])</span>
+
+    <span class="n">reg_m1</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">regularization</span><span class="o">.</span><span class="n">Sparse</span></a><span class="p">(</span><span class="n">regMesh</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="n">wires</span><span class="o">.</span><span class="n">homo</span><span class="p">)</span>
+    <span class="n">reg_m1</span><span class="o">.</span><span class="n">cell_weights</span> <span class="o">=</span> <span class="n">wires</span><span class="o">.</span><span class="n">homo</span> <span class="o">*</span> <span class="n">wr</span>
+    <span class="n">reg_m1</span><span class="o">.</span><span class="n">norms</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.c_.html#numpy.c_" title="numpy.c_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">c_</span></a><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">reg_m1</span><span class="o">.</span><span class="n">mref</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><span class="n">sumMap</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># Regularization for the voxel model</span>
+    <span class="n">reg_m2</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">regularization</span><span class="o">.</span><span class="n">Sparse</span></a><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">indActive</span><span class="o">=</span><span class="n">actv</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="n">wires</span><span class="o">.</span><span class="n">hetero</span><span class="p">)</span>
+    <span class="n">reg_m2</span><span class="o">.</span><span class="n">cell_weights</span> <span class="o">=</span> <span class="n">wires</span><span class="o">.</span><span class="n">hetero</span> <span class="o">*</span> <span class="n">wr</span>
+    <span class="n">reg_m2</span><span class="o">.</span><span class="n">norms</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.c_.html#numpy.c_" title="numpy.c_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">c_</span></a><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">reg_m2</span><span class="o">.</span><span class="n">mref</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><span class="n">sumMap</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">reg</span> <span class="o">=</span> <span class="n">reg_m1</span> <span class="o">+</span> <span class="n">reg_m2</span>
+
+    <span class="c1"># Data misfit function</span>
+    <span class="n">dmis</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">data_misfit</span><span class="o">.</span><span class="n">L2DataMisfit</span></a><span class="p">(</span><span class="n">simulation</span><span class="o">=</span><span class="n">prob</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># Add directives to the inversion</span>
+    <span class="n">opt</span> <span class="o">=</span> <span class="n">optimization</span><span class="o">.</span><span class="n">ProjectedGNCG</span><span class="p">(</span>
+        <span class="n">maxIter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">lower</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">upper</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">maxIterLS</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">maxIterCG</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">tolCG</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
+        <span class="n">tolG</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
+        <span class="n">eps</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">invProb</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">inverse_problem</span><span class="o">.</span><span class="n">BaseInvProblem</span></a><span class="p">(</span><span class="n">dmis</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+    <span class="n">betaest</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">BetaEstimate_ByEig</span></a><span class="p">()</span>
+
+    <span class="c1"># Here is where the norms are applied</span>
+    <span class="c1"># Use pick a threshold parameter empirically based on the distribution of</span>
+    <span class="c1">#  model parameters</span>
+    <span class="n">IRLS</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">Update_IRLS</span></a><span class="p">(</span><span class="n">f_min_change</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">minGNiter</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">update_Jacobi</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">UpdatePreconditioner</span></a><span class="p">()</span>
+    <span class="n">inv</span> <span class="o">=</span> <span class="n">inversion</span><span class="o">.</span><span class="n">BaseInversion</span><span class="p">(</span><span class="n">invProb</span><span class="p">,</span> <span class="n">directiveList</span><span class="o">=</span><span class="p">[</span><span class="n">IRLS</span><span class="p">,</span> <span class="n">betaest</span><span class="p">,</span> <span class="n">update_Jacobi</span><span class="p">])</span>
+
+    <span class="c1"># Run the inversion</span>
+    <span class="n">m0</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ones.html#numpy.ones" title="numpy.ones" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">(</span><span class="n">sumMap</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mf">1e-4</span>  <span class="c1"># Starting model</span>
+    <span class="n">prob</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">m0</span>
+    <span class="n">mrecSum</span> <span class="o">=</span> <span class="n">inv</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">m0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">plotIt</span><span class="p">:</span>
+
+        <span class="n">mesh</span><span class="o">.</span><span class="n">plot_3d_slicer</span><span class="p">(</span>
+            <span class="n">actvMap</span> <span class="o">*</span> <span class="n">model</span><span class="p">,</span>
+            <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;equal&quot;</span><span class="p">,</span>
+            <span class="n">zslice</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+            <span class="n">pcolorOpts</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cmap&quot;</span><span class="p">:</span> <span class="s2">&quot;inferno_r&quot;</span><span class="p">},</span>
+            <span class="n">transparent</span><span class="o">=</span><span class="s2">&quot;slider&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">mesh</span><span class="o">.</span><span class="n">plot_3d_slicer</span><span class="p">(</span>
+            <span class="n">actvMap</span> <span class="o">*</span> <span class="n">sumMap</span> <span class="o">*</span> <span class="n">mrecSum</span><span class="p">,</span>
+            <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;equal&quot;</span><span class="p">,</span>
+            <span class="n">zslice</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+            <span class="n">pcolorOpts</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cmap&quot;</span><span class="p">:</span> <span class="s2">&quot;inferno_r&quot;</span><span class="p">},</span>
+            <span class="n">transparent</span><span class="o">=</span><span class="s2">&quot;slider&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">run</span><span class="p">()</span>
+    <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  38.217 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-examples-01-maps-plot-summap-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/c3e7f8e15ca13d9efc8a76f07ad51934/plot_sumMap.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_sumMap.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/f2be57674ac8ad31f80731eab5a98eb5/plot_sumMap.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_sumMap.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../02-gravity/plot_inv_grav_tiled.html" class="btn btn-neutral float-right" title="PF: Gravity: Tiled Inversion Linear" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="plot_mesh2mesh.html" class="btn btn-neutral float-left" title="Maps: Mesh2Mesh" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+
+ 
+
+
+    <div id="disqus_thread"></div>
+    <script>
+
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+    var disqus_config = function () {
+    this.page.url = {path};  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = {path}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://simpeg.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    <div role="contentinfo">
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/" width="60px"; style="float:right;height:3em;line-height:3em;padding:10px 0 0 1em;">
+            <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" />
+        </a>
+        2013-2018,
+        <a href="http://simpeg.xyz">SimPEG Developers.</a><br />
+        Except where noted, this work is licensed under a <br />
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+            Creative Commons Attribution 4.0 International License
+        </a>
+    </div>
+    <br>
+    <div>
+    Built with
+        <a href="http://sphinx-doc.org/">Sphinx</a>
+        using a
+        <a href="https://github.com/snide/sphinx_rtd_theme">theme</a>
+        provided by
+        <a href="https://readthedocs.org">Read the Docs</a>.
+     </div>
+
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

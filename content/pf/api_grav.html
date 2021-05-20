@@ -1,0 +1,1228 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Gravity &mdash; SimPEG 0.15.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/logo-block.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Magnetics" href="api_mag.html" />
+    <link rel="prev" title="Overview of Potential Fields in SimPEG" href="api_base.html" />
+ 
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-45185336-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> SimPEG
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.15.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../basic/big_picture.html">Why SimPEG?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/contributing.html">Contributing to SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/installing.html">Getting Started with SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/getting_started_developers.html">Getting Started: for Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/practices.html">Practices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/01-models_mapping/index.html">Models and Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/02-linear_inversion/index.html">Linear Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/03-gravity/index.html">Gravity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/04-magnetics/index.html">Magnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/05-dcr/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/06-ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/07-fdem/index.html">Frequency-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/08-tdem/index.html">Time-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/09-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/10-vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/11-flow/index.html">Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/12-seismic/index.html">Seismic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/13-pgi/index.html">PGI: Petrophysically and Geologically Guided Geophysical Inversion</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Packages</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../em/index.html">Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dc/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Potential Fields</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="api_base.html">Overview of Potential Fields in SimPEG</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Gravity</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gravity-integral-eq-approach">Gravity Integral eq. approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gravity-survey">Gravity Survey</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gravity-source">Gravity Source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gravity-receiver">Gravity Receiver</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-SimPEG.potential_fields.gravity.analytics">Gravity analytic solutions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api_mag.html">Magnetics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../flow/index.html">Richards Equation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api_core/api_FiniteVolume.html">Finite Volume</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_core/api_ForwardProblem.html">Forward Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_core/api_InversionComponents.html">Inversion Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_core/api_Maps.html">Maps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_core/api_Utilities.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Meta Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../release/index.html">Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SimPEG</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Potential Fields</a> &raquo;</li>
+        
+      <li>Gravity</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            <a href="https://github.com/simpeg/simpeg/edit/main/docs/content/pf/api_grav.rst" class="fa fa-github"> Edit on GitHub</a>
+        
+      </li>
+    
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="gravity">
+<h1>Gravity<a class="headerlink" href="#gravity" title="Permalink to this headline">¶</a></h1>
+<p>The gravity problem uses an integral equation approach for solving the forward
+and inverse problem. This module supports both gravity and gravity gradient modeling.</p>
+<div class="section" id="gravity-integral-eq-approach">
+<h2>Gravity Integral eq. approach<a class="headerlink" href="#gravity-integral-eq-approach" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.potential_fields.gravity.</code><code class="sig-name descname">Simulation3DIntegral</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mesh</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/potential_fields/gravity/simulation.py#L12-L313"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="api_base.html#SimPEG.potential_fields.base.BasePFSimulation" title="SimPEG.potential_fields.base.BasePFSimulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.potential_fields.base.BasePFSimulation</span></code></a></p>
+<blockquote>
+<div><p>Gravity simulation in integral form.</p>
+</div></blockquote>
+<p><strong>Required Properties:</strong></p>
+<ul class="simple">
+<li><p><strong>actInd</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/math.html#properties.Array" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>): Array of active cells (ground), a list or numpy array of &lt;class ‘bool’&gt;, &lt;class ‘int’&gt; with shape (*)</p></li>
+<li><p><strong>counter</strong> (<a class="reference internal" href="../api_core/api_Utils.html#SimPEG.utils.counter_utils.Counter" title="SimPEG.utils.counter_utils.Counter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Counter</span></code></a>): A SimPEG.utils.Counter object, an instance of Counter</p></li>
+<li><p><strong>mesh</strong> (<a class="reference external" href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.base.BaseMesh.html#discretize.base.BaseMesh" title="(in discretize v0.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseMesh</span></code></a>): a discretize mesh instance, an instance of BaseMesh</p></li>
+<li><p><strong>sensitivity_path</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.String" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code></a>): path to store the sensitivty, a unicode string, Default: ./sensitivity/</p></li>
+<li><p>None</p></li>
+<li><p><strong>solver_opts</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/container.html#properties.Dictionary" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dictionary</span></code></a>): solver options as a kwarg dict, a dictionary</p></li>
+<li><p><strong>store_sensitivities</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/other.html#properties.StringChoice" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StringChoice</span></code></a>): Compute and store G, any of “disk”, “ram”, “forward_only”, Default: ram</p></li>
+<li><p><strong>survey</strong> (<a class="reference internal" href="../api_core/api_ForwardProblem.html#SimPEG.survey.BaseSurvey" title="SimPEG.survey.BaseSurvey"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSurvey</span></code></a>): a survey object, an instance of BaseSurvey</p></li>
+</ul>
+<p><strong>Optional Properties:</strong></p>
+<ul class="simple">
+<li><p><strong>linear_model</strong> (<a class="reference internal" href="../api_core/api_Props.html#SimPEG.props.PhysicalProperty" title="SimPEG.props.PhysicalProperty"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicalProperty</span></code></a>): The model for a linear problem, a physical property</p></li>
+<li><p><strong>model</strong> (<a class="reference internal" href="../api_core/api_Props.html#SimPEG.props.Model" title="SimPEG.props.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a>): Inversion model., a numpy array of &lt;class ‘float’&gt;, &lt;class ‘int’&gt; with shape (*) or (*, *)</p></li>
+<li><p><strong>model_map</strong> (<a class="reference internal" href="../api_core/api_Props.html#SimPEG.props.Mapping" title="SimPEG.props.Mapping"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a>): Mapping of The model for a linear problem to the inversion model., a SimPEG Map</p></li>
+<li><p><strong>rho</strong> (<a class="reference internal" href="../api_core/api_Props.html#SimPEG.props.PhysicalProperty" title="SimPEG.props.PhysicalProperty"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicalProperty</span></code></a>): Physical property, a physical property, Default: 1.0</p></li>
+<li><p><strong>rhoMap</strong> (<a class="reference internal" href="../api_core/api_Props.html#SimPEG.props.Mapping" title="SimPEG.props.Mapping"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a>): Mapping of Physical property to the inversion model., a SimPEG Map</p></li>
+</ul>
+<p><strong>Other Properties:</strong></p>
+<ul class="simple">
+<li><p><strong>model_deriv</strong> (<a class="reference internal" href="../api_core/api_Props.html#SimPEG.props.Derivative" title="SimPEG.props.Derivative"><code class="xref py py-class docutils literal notranslate"><span class="pre">Derivative</span></code></a>): Derivative of The model for a linear problem wrt the model.</p></li>
+<li><p><strong>rhoDeriv</strong> (<a class="reference internal" href="../api_core/api_Props.html#SimPEG.props.Derivative" title="SimPEG.props.Derivative"><code class="xref py py-class docutils literal notranslate"><span class="pre">Derivative</span></code></a>): Derivative of Physical property wrt the model.</p></li>
+</ul>
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.rho">
+<em class="property">property </em><code class="sig-name descname">rho</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.rho" title="Permalink to this definition">¶</a></dt>
+<dd><p>Physical property</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.rhoMap">
+<em class="property">property </em><code class="sig-name descname">rhoMap</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.rhoMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping of Physical property to the inversion model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.rhoDeriv">
+<em class="property">property </em><code class="sig-name descname">rhoDeriv</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.rhoDeriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Derivative of Physical property wrt the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.fields">
+<code class="sig-name descname">fields</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/potential_fields/gravity/simulation.py#L26-L36"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>u = fields(m)
+The field given the model.
+:param numpy.ndarray m: model
+:rtype: numpy.ndarray
+:return: u, the fields</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.getJtJdiag">
+<code class="sig-name descname">getJtJdiag</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">W</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/potential_fields/gravity/simulation.py#L38-L56"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.getJtJdiag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the diagonal of JtJ</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.getJ">
+<code class="sig-name descname">getJ</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">f</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/potential_fields/gravity/simulation.py#L58-L62"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.getJ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sensitivity matrix</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.Jvec">
+<code class="sig-name descname">Jvec</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span></em>, <em class="sig-param"><span class="n">f</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/potential_fields/gravity/simulation.py#L64-L69"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.Jvec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sensitivity times a vector</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.Jtvec">
+<code class="sig-name descname">Jtvec</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span></em>, <em class="sig-param"><span class="n">f</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/potential_fields/gravity/simulation.py#L71-L76"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.Jtvec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sensitivity transposed times a vector</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.G">
+<em class="property">property </em><code class="sig-name descname">G</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.G" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gravity forward operator</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.gtg_diagonal">
+<em class="property">property </em><code class="sig-name descname">gtg_diagonal</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.gtg_diagonal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Diagonal of GtG</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.evaluate_integral">
+<code class="sig-name descname">evaluate_integral</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">receiver_location</span></em>, <em class="sig-param"><span class="n">components</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/potential_fields/gravity/simulation.py#L100-L313"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.evaluate_integral" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the forward linear relationship between the model and the physics at a point
+and for all components of the survey.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>receiver_location</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><em>numpy.ndarray</em></a>) – array with shape (n_receivers, 3)
+Array of receiver locations as x, y, z columns.</p></li>
+<li><p><strong>components</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – List of gravity components chosen from:
+‘gx’, ‘gy’, ‘gz’, ‘gxx’, ‘gxy’, ‘gxz’, ‘gyy’, ‘gyz’, ‘gzz’, ‘guv’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Rtype numpy.ndarray</dt>
+<dd class="field-even"><p>rows</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p>ndarray with shape (n_components, n_cells)
+Dense array mapping of the contribution of all active cells to data components:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rows</span> <span class="o">=</span>
+    <span class="n">g_1</span> <span class="o">=</span> <span class="p">[</span><span class="n">g_1x</span> <span class="n">g_1y</span> <span class="n">g_1z</span><span class="p">]</span>
+    <span class="n">g_2</span> <span class="o">=</span> <span class="p">[</span><span class="n">g_2x</span> <span class="n">g_2y</span> <span class="n">g_2z</span><span class="p">]</span>
+           <span class="o">...</span>
+    <span class="n">g_c</span> <span class="o">=</span> <span class="p">[</span><span class="n">g_cx</span> <span class="n">g_cy</span> <span class="n">g_cz</span><span class="p">]</span>
+</pre></div>
+</div>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.Jtvec_approx">
+<code class="sig-name descname">Jtvec_approx</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span></em>, <em class="sig-param"><span class="n">f</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/simulation.py#L322-L332"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.Jtvec_approx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Approximate effect of transpose of J(m) on a vector v.
+:param numpy.ndarray m: model
+:param numpy.ndarray v: vector to multiply
+:param Fields f: fields
+:rtype: numpy.ndarray
+:return: JTv</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.Jvec_approx">
+<code class="sig-name descname">Jvec_approx</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">v</span></em>, <em class="sig-param"><span class="n">f</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/simulation.py#L310-L320"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.Jvec_approx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Approximate effect of J(m) on a vector v
+:param numpy.ndarray m: model
+:param numpy.ndarray v: vector to multiply
+:param Fields f: fields
+:rtype: numpy.ndarray
+:return: approxJv</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.Solver">
+<em class="property">property </em><code class="sig-name descname">Solver</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.Solver" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>Solver</cite> has been deprecated. See <cite>simulation.solver</cite> for documentation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.actInd">
+<em class="property">property </em><code class="sig-name descname">actInd</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.actInd" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>actInd</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/math.html#properties.Array" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>): Array of active cells (ground), a list or numpy array of &lt;class ‘bool’&gt;, &lt;class ‘int’&gt; with shape (*)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.clean_on_model_update">
+<code class="sig-name descname">clean_on_model_update</code><em class="property"> = []</em><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.clean_on_model_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.counter">
+<em class="property">property </em><code class="sig-name descname">counter</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.counter" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>counter</strong> (<a class="reference internal" href="../api_core/api_Utils.html#SimPEG.utils.counter_utils.Counter" title="SimPEG.utils.counter_utils.Counter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Counter</span></code></a>): A SimPEG.utils.Counter object, an instance of Counter</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.deleteTheseOnModelUpdate">
+<code class="sig-name descname">deleteTheseOnModelUpdate</code><em class="property"> = ['_gtg_diagonal', '_gtg_diagonal', '_gtg_diagonal', '_gtg_diagonal', '_gtg_diagonal', '_gtg_diagonal', '_gtg_diagonal', '_gtg_diagonal', '_gtg_diagonal', '_gtg_diagonal', '_gtg_diagonal', '_gtg_diagonal', '_gtg_diagonal']</em><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.deleteTheseOnModelUpdate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.deserialize">
+<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">trusted</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">strict</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">assert_valid</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/../properties/base/base.py#L518-L589"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.deserialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates <strong>HasProperties</strong> instance from serialized dictionary</p>
+<p>This uses the Property deserializers to deserialize all
+JSON-compatible dictionary values into their corresponding Property
+values on a new instance of a <strong>HasProperties</strong> class. Extra keys
+in the dictionary that do not correspond to Properties will be
+ignored.</p>
+<p><strong>Parameters</strong>:</p>
+<ul class="simple">
+<li><p><strong>value</strong> - Dictionary to deserialize new instance from.</p></li>
+<li><p><strong>trusted</strong> - If True (and if the input dictionary has
+<code class="code docutils literal notranslate"><span class="pre">'__class__'</span></code> keyword and this class is in the registry), the
+new <strong>HasProperties</strong> class will come from the dictionary.
+If False (the default), only the <strong>HasProperties</strong> class this
+method is called on will be constructed.</p></li>
+<li><p><strong>strict</strong> - Requires <code class="code docutils literal notranslate"><span class="pre">'__class__'</span></code>, if present on the input
+dictionary, to match the deserialized instance’s class. Also
+disallows unused properties in the input dictionary. Default
+is False.</p></li>
+<li><p><strong>assert_valid</strong> - Require deserialized instance to be valid.
+Default is False.</p></li>
+<li><p>Any other keyword arguments will be passed through to the Property
+deserializers.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.dpred">
+<code class="sig-name descname">dpred</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">f</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/simulation.py#L560-L565"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.dpred" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the projected data from a model.
+The fields, f, (if provided) will be used for the predicted data
+instead of recalculating the fields (which may be expensive!).</p>
+<div class="math notranslate nohighlight">
+\[d_\text{pred} = P(f(m))\]</div>
+<p>Where P is a projection of the fields onto the data space.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.equal">
+<code class="sig-name descname">equal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/../properties/base/base.py#L605-L614"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.equal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if two <strong>HasProperties</strong> instances are equivalent</p>
+<p>Equivalence is determined by checking if all Property values on
+two instances are equal, using <code class="code docutils literal notranslate"><span class="pre">Property.equal</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.forwardOnly">
+<em class="property">property </em><code class="sig-name descname">forwardOnly</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.forwardOnly" title="Permalink to this definition">¶</a></dt>
+<dd><p>The forwardOnly property has been deprecated. Please set the store_sensitivites
+property instead. This will be removed in version 0.16.0 of SimPEG</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.linear_model">
+<em class="property">property </em><code class="sig-name descname">linear_model</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.linear_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>The model for a linear problem</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.linear_operator">
+<code class="sig-name descname">linear_operator</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/potential_fields/base.py#L73-L117"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.linear_operator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.make_synthetic_data">
+<code class="sig-name descname">make_synthetic_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">relative_error</span><span class="o">=</span><span class="default_value">0.05</span></em>, <em class="sig-param"><span class="n">noise_floor</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">f</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">add_noise</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/simulation.py#L350-L388"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.make_synthetic_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make synthetic data given a model, and a standard deviation.
+:param numpy.ndarray m: geophysical model
+:param numpy.ndarray relative_error: standard deviation
+:param numpy.ndarray noise_floor: noise floor
+:param numpy.ndarray f: fields for the given model (if pre-calculated)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.mesh">
+<em class="property">property </em><code class="sig-name descname">mesh</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>mesh</strong> (<a class="reference external" href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.base.BaseMesh.html#discretize.base.BaseMesh" title="(in discretize v0.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseMesh</span></code></a>): a discretize mesh instance, an instance of BaseMesh</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.model">
+<em class="property">property </em><code class="sig-name descname">model</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.model" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>model</strong> (<a class="reference internal" href="../api_core/api_Props.html#SimPEG.props.Model" title="SimPEG.props.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a>): Inversion model., a numpy array of &lt;class ‘float’&gt;, &lt;class ‘int’&gt; with shape (*) or (*, *)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.model_deriv">
+<em class="property">property </em><code class="sig-name descname">model_deriv</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.model_deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Derivative of The model for a linear problem wrt the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.model_map">
+<em class="property">property </em><code class="sig-name descname">model_map</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.model_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping of The model for a linear problem to the inversion model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.n_cpu">
+<em class="property">property </em><code class="sig-name descname">n_cpu</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.n_cpu" title="Permalink to this definition">¶</a></dt>
+<dd><p>The parallelized property has been removed. If interested, try out
+loading dask for parallelism by doing <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">SimPEG.dask</span></code>. This will
+be removed in version 0.16.0 of SimPEG</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.needs_model">
+<em class="property">property </em><code class="sig-name descname">needs_model</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.needs_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if a model is necessary</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.pair">
+<code class="sig-name descname">pair</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">survey</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/simulation.py#L390-L402"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.pair" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated pairing method. Please use <code class="code docutils literal notranslate"><span class="pre">simulation.survey=survey</span></code>
+instead</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.parallelized">
+<em class="property">property </em><code class="sig-name descname">parallelized</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.parallelized" title="Permalink to this definition">¶</a></dt>
+<dd><p>The parallelized property has been removed. If interested, try out
+loading dask for parallelism by doing <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">SimPEG.dask</span></code>. This will
+be removed in version 0.16.0 of SimPEG</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.residual">
+<code class="sig-name descname">residual</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">dobs</span></em>, <em class="sig-param"><span class="n">f</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/simulation.py#L334-L348"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.residual" title="Permalink to this definition">¶</a></dt>
+<dd><p>The data residual:</p>
+<div class="math notranslate nohighlight">
+\[\mu_\text{data} = \mathbf{d}_\text{pred} - \mathbf{d}_\text{obs}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><em>numpy.ndarray</em></a>) – geophysical model</p></li>
+<li><p><strong>f</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><em>numpy.ndarray</em></a>) – fields</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>data residual</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.sensitivity_path">
+<em class="property">property </em><code class="sig-name descname">sensitivity_path</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.sensitivity_path" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>sensitivity_path</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.String" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code></a>): path to store the sensitivty, a unicode string, Default: ./sensitivity/</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.serialize">
+<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">include_class</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">save_dynamic</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/../properties/base/base.py#L476-L516"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.serialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes a <strong>HasProperties</strong> instance to dictionary</p>
+<p>This uses the Property serializers to serialize all Property values
+to a JSON-compatible dictionary. Properties that are undefined are
+not included. If the <strong>HasProperties</strong> instance contains a reference
+to itself, a <code class="code docutils literal notranslate"><span class="pre">properties.SelfReferenceError</span></code> will be raised.</p>
+<p><strong>Parameters</strong>:</p>
+<ul class="simple">
+<li><p><strong>include_class</strong> - If True (the default), the name of the class
+will also be saved to the serialized dictionary under key
+<code class="code docutils literal notranslate"><span class="pre">'__class__'</span></code></p></li>
+<li><p><strong>save_dynamic</strong> - If True, dynamic properties are written to
+the serialized dict (default: False).</p></li>
+<li><p>Any other keyword arguments will be passed through to the Property
+serializers.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.solver">
+<em class="property">property </em><code class="sig-name descname">solver</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.solverOpts">
+<em class="property">property </em><code class="sig-name descname">solverOpts</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.solverOpts" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>solverOpts</cite> has been deprecated. See <cite>solver_opts</cite> for documentation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.solver_opts">
+<em class="property">property </em><code class="sig-name descname">solver_opts</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.solver_opts" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>solver_opts</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/container.html#properties.Dictionary" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dictionary</span></code></a>): solver options as a kwarg dict, a dictionary</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.store_sensitivities">
+<em class="property">property </em><code class="sig-name descname">store_sensitivities</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.store_sensitivities" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>store_sensitivities</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/other.html#properties.StringChoice" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StringChoice</span></code></a>): Compute and store G, any of “disk”, “ram”, “forward_only”, Default: ram</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.summary">
+<code class="sig-name descname">summary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/props.py#L443-L461"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.survey">
+<em class="property">property </em><code class="sig-name descname">survey</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.survey" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>survey</strong> (<a class="reference internal" href="../api_core/api_ForwardProblem.html#SimPEG.survey.BaseSurvey" title="SimPEG.survey.BaseSurvey"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSurvey</span></code></a>): a survey object, an instance of BaseSurvey</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Simulation3DIntegral.validate">
+<code class="sig-name descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/../properties/base/base.py#L401-L443"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Simulation3DIntegral.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call all registered class validator methods</p>
+<p>These are all methods decorated with <code class="code docutils literal notranslate"><span class="pre">&#64;properties.validator</span></code>.
+Validator methods are expected to raise a ValidationError if they
+fail.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="gravity-survey">
+<h2>Gravity Survey<a class="headerlink" href="#gravity-survey" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="SimPEG.potential_fields.gravity.Survey">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.potential_fields.gravity.</code><code class="sig-name descname">Survey</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">source_field</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/potential_fields/gravity/survey.py#L5-L83"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../api_core/api_ForwardProblem.html#SimPEG.survey.BaseSurvey" title="SimPEG.survey.BaseSurvey"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.survey.BaseSurvey</span></code></a></p>
+<p>Base Gravity Survey</p>
+<p><strong>Required Properties:</strong></p>
+<ul class="simple">
+<li><p><strong>counter</strong> (<a class="reference internal" href="../api_core/api_Utils.html#SimPEG.utils.counter_utils.Counter" title="SimPEG.utils.counter_utils.Counter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Counter</span></code></a>): A SimPEG counter object, an instance of Counter</p></li>
+<li><p><strong>source_list</strong> (a list of <a class="reference internal" href="../api_core/api_ForwardProblem.html#SimPEG.survey.BaseSrc" title="SimPEG.survey.BaseSrc"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSrc</span></code></a>): A list of sources for the survey, a list (each item is an instance of BaseSrc)</p></li>
+</ul>
+<dl class="py attribute">
+<dt id="SimPEG.potential_fields.gravity.Survey.rxType">
+<code class="sig-name descname">rxType</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.rxType" title="Permalink to this definition">¶</a></dt>
+<dd><p>receiver type</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.eval">
+<code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fields</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/potential_fields/gravity/survey.py#L16-L17"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.eval" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.nRx">
+<em class="property">property </em><code class="sig-name descname">nRx</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.nRx" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.receiver_locations">
+<em class="property">property </em><code class="sig-name descname">receiver_locations</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.receiver_locations" title="Permalink to this definition">¶</a></dt>
+<dd><p>receiver locations</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.nD">
+<em class="property">property </em><code class="sig-name descname">nD</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.nD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.components">
+<em class="property">property </em><code class="sig-name descname">components</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.components" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.Qfx">
+<em class="property">property </em><code class="sig-name descname">Qfx</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.Qfx" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.Qfy">
+<em class="property">property </em><code class="sig-name descname">Qfy</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.Qfy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.Qfz">
+<em class="property">property </em><code class="sig-name descname">Qfz</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.Qfz" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.counter">
+<em class="property">property </em><code class="sig-name descname">counter</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.counter" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>counter</strong> (<a class="reference internal" href="../api_core/api_Utils.html#SimPEG.utils.counter_utils.Counter" title="SimPEG.utils.counter_utils.Counter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Counter</span></code></a>): A SimPEG counter object, an instance of Counter</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.deserialize">
+<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">trusted</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">strict</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">assert_valid</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/../properties/base/base.py#L518-L589"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.deserialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates <strong>HasProperties</strong> instance from serialized dictionary</p>
+<p>This uses the Property deserializers to deserialize all
+JSON-compatible dictionary values into their corresponding Property
+values on a new instance of a <strong>HasProperties</strong> class. Extra keys
+in the dictionary that do not correspond to Properties will be
+ignored.</p>
+<p><strong>Parameters</strong>:</p>
+<ul class="simple">
+<li><p><strong>value</strong> - Dictionary to deserialize new instance from.</p></li>
+<li><p><strong>trusted</strong> - If True (and if the input dictionary has
+<code class="code docutils literal notranslate"><span class="pre">'__class__'</span></code> keyword and this class is in the registry), the
+new <strong>HasProperties</strong> class will come from the dictionary.
+If False (the default), only the <strong>HasProperties</strong> class this
+method is called on will be constructed.</p></li>
+<li><p><strong>strict</strong> - Requires <code class="code docutils literal notranslate"><span class="pre">'__class__'</span></code>, if present on the input
+dictionary, to match the deserialized instance’s class. Also
+disallows unused properties in the input dictionary. Default
+is False.</p></li>
+<li><p><strong>assert_valid</strong> - Require deserialized instance to be valid.
+Default is False.</p></li>
+<li><p>Any other keyword arguments will be passed through to the Property
+deserializers.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.dpred">
+<code class="sig-name descname">dpred</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">f</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/survey.py#L319-L323"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.dpred" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.equal">
+<code class="sig-name descname">equal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/../properties/base/base.py#L605-L614"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.equal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if two <strong>HasProperties</strong> instances are equivalent</p>
+<p>Equivalence is determined by checking if all Property values on
+two instances are equal, using <code class="code docutils literal notranslate"><span class="pre">Property.equal</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.getSourceIndex">
+<code class="sig-name descname">getSourceIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sources</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/survey.py#L276-L289"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.getSourceIndex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.makeSyntheticData">
+<code class="sig-name descname">makeSyntheticData</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">std</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">f</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">force</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/survey.py#L325-L329"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.makeSyntheticData" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.nSrc">
+<em class="property">property </em><code class="sig-name descname">nSrc</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.nSrc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of Sources</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.pair">
+<code class="sig-name descname">pair</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">simulation</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/survey.py#L331-L391"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.pair" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.projectFields">
+<code class="sig-name descname">projectFields</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">u</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/potential_fields/gravity/survey.py#L59-L83"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.projectFields" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function projects the fields onto the data space.</p>
+<p>First we project our B on to data location</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{B}_{rec} = \mathbf{P} \mathbf{B}\]</div>
+<p>then we take the dot product between B and b_0</p>
+<div class="math notranslate nohighlight">
+\[\text{TMI} = \vec{B}_s \cdot \hat{B}_0\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.serialize">
+<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">include_class</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">save_dynamic</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/../properties/base/base.py#L476-L516"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.serialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes a <strong>HasProperties</strong> instance to dictionary</p>
+<p>This uses the Property serializers to serialize all Property values
+to a JSON-compatible dictionary. Properties that are undefined are
+not included. If the <strong>HasProperties</strong> instance contains a reference
+to itself, a <code class="code docutils literal notranslate"><span class="pre">properties.SelfReferenceError</span></code> will be raised.</p>
+<p><strong>Parameters</strong>:</p>
+<ul class="simple">
+<li><p><strong>include_class</strong> - If True (the default), the name of the class
+will also be saved to the serialized dictionary under key
+<code class="code docutils literal notranslate"><span class="pre">'__class__'</span></code></p></li>
+<li><p><strong>save_dynamic</strong> - If True, dynamic properties are written to
+the serialized dict (default: False).</p></li>
+<li><p>Any other keyword arguments will be passed through to the Property
+serializers.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.source_list">
+<em class="property">property </em><code class="sig-name descname">source_list</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.source_list" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>source_list</strong> (a list of <a class="reference internal" href="../api_core/api_ForwardProblem.html#SimPEG.survey.BaseSrc" title="SimPEG.survey.BaseSrc"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSrc</span></code></a>): A list of sources for the survey, a list (each item is an instance of BaseSrc)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.srcList">
+<em class="property">property </em><code class="sig-name descname">srcList</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.srcList" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>srcList</cite> has been deprecated. See <cite>source_list</cite> for documentation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.validate">
+<code class="sig-name descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/../properties/base/base.py#L401-L443"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call all registered class validator methods</p>
+<p>These are all methods decorated with <code class="code docutils literal notranslate"><span class="pre">&#64;properties.validator</span></code>.
+Validator methods are expected to raise a ValidationError if they
+fail.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Survey.vnD">
+<em class="property">property </em><code class="sig-name descname">vnD</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Survey.vnD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vector number of data</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="gravity-source">
+<h2>Gravity Source<a class="headerlink" href="#gravity-source" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="SimPEG.potential_fields.gravity.SourceField">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.potential_fields.gravity.</code><code class="sig-name descname">SourceField</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">receiver_list</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/potential_fields/gravity/sources.py#L5-L11"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.SourceField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../api_core/api_ForwardProblem.html#SimPEG.survey.BaseSrc" title="SimPEG.survey.BaseSrc"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.survey.BaseSrc</span></code></a></p>
+<p>Define the inducing field</p>
+<p><strong>Required Properties:</strong></p>
+<ul class="simple">
+<li><p><strong>receiver_list</strong> (a list of <a class="reference internal" href="../api_core/api_ForwardProblem.html#SimPEG.survey.BaseRx" title="SimPEG.survey.BaseRx"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseRx</span></code></a>): receiver list, a list (each item is an instance of BaseRx)</p></li>
+</ul>
+<p><strong>Optional Properties:</strong></p>
+<ul class="simple">
+<li><p><strong>location</strong> (<a class="reference internal" href="../api_core/api_ForwardProblem.html#SimPEG.survey.SourceLocationArray" title="SimPEG.survey.SourceLocationArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">SourceLocationArray</span></code></a>): Location of the source [x, y, z] in 3D, a 1D array denoting the source location of &lt;class ‘float’&gt;, &lt;class ‘int’&gt; with shape (*)</p></li>
+</ul>
+<dl class="py attribute">
+<dt id="SimPEG.potential_fields.gravity.SourceField.parameters">
+<code class="sig-name descname">parameters</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.potential_fields.gravity.SourceField.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.SourceField.deserialize">
+<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">trusted</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">strict</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">assert_valid</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/../properties/base/base.py#L518-L589"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.SourceField.deserialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates <strong>HasProperties</strong> instance from serialized dictionary</p>
+<p>This uses the Property deserializers to deserialize all
+JSON-compatible dictionary values into their corresponding Property
+values on a new instance of a <strong>HasProperties</strong> class. Extra keys
+in the dictionary that do not correspond to Properties will be
+ignored.</p>
+<p><strong>Parameters</strong>:</p>
+<ul class="simple">
+<li><p><strong>value</strong> - Dictionary to deserialize new instance from.</p></li>
+<li><p><strong>trusted</strong> - If True (and if the input dictionary has
+<code class="code docutils literal notranslate"><span class="pre">'__class__'</span></code> keyword and this class is in the registry), the
+new <strong>HasProperties</strong> class will come from the dictionary.
+If False (the default), only the <strong>HasProperties</strong> class this
+method is called on will be constructed.</p></li>
+<li><p><strong>strict</strong> - Requires <code class="code docutils literal notranslate"><span class="pre">'__class__'</span></code>, if present on the input
+dictionary, to match the deserialized instance’s class. Also
+disallows unused properties in the input dictionary. Default
+is False.</p></li>
+<li><p><strong>assert_valid</strong> - Require deserialized instance to be valid.
+Default is False.</p></li>
+<li><p>Any other keyword arguments will be passed through to the Property
+deserializers.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.SourceField.equal">
+<code class="sig-name descname">equal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/../properties/base/base.py#L605-L614"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.SourceField.equal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if two <strong>HasProperties</strong> instances are equivalent</p>
+<p>Equivalence is determined by checking if all Property values on
+two instances are equal, using <code class="code docutils literal notranslate"><span class="pre">Property.equal</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.SourceField.getReceiverIndex">
+<code class="sig-name descname">getReceiverIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">receiver</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/survey.py#L215-L227"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.SourceField.getReceiverIndex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.SourceField.loc">
+<em class="property">property </em><code class="sig-name descname">loc</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.SourceField.loc" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>loc</cite> has been deprecated. See <cite>location</cite> for documentation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.SourceField.location">
+<em class="property">property </em><code class="sig-name descname">location</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.SourceField.location" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>location</strong> (<a class="reference internal" href="../api_core/api_ForwardProblem.html#SimPEG.survey.SourceLocationArray" title="SimPEG.survey.SourceLocationArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">SourceLocationArray</span></code></a>): Location of the source [x, y, z] in 3D, a 1D array denoting the source location of &lt;class ‘float’&gt;, &lt;class ‘int’&gt; with shape (*)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.SourceField.nD">
+<em class="property">property </em><code class="sig-name descname">nD</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.SourceField.nD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.SourceField.receiver_list">
+<em class="property">property </em><code class="sig-name descname">receiver_list</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.SourceField.receiver_list" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>receiver_list</strong> (a list of <a class="reference internal" href="../api_core/api_ForwardProblem.html#SimPEG.survey.BaseRx" title="SimPEG.survey.BaseRx"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseRx</span></code></a>): receiver list, a list (each item is an instance of BaseRx)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.SourceField.rxList">
+<em class="property">property </em><code class="sig-name descname">rxList</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.SourceField.rxList" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>rxList</cite> has been deprecated. See <cite>receiver_list</cite> for documentation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.SourceField.serialize">
+<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">include_class</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">save_dynamic</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/../properties/base/base.py#L476-L516"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.SourceField.serialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes a <strong>HasProperties</strong> instance to dictionary</p>
+<p>This uses the Property serializers to serialize all Property values
+to a JSON-compatible dictionary. Properties that are undefined are
+not included. If the <strong>HasProperties</strong> instance contains a reference
+to itself, a <code class="code docutils literal notranslate"><span class="pre">properties.SelfReferenceError</span></code> will be raised.</p>
+<p><strong>Parameters</strong>:</p>
+<ul class="simple">
+<li><p><strong>include_class</strong> - If True (the default), the name of the class
+will also be saved to the serialized dictionary under key
+<code class="code docutils literal notranslate"><span class="pre">'__class__'</span></code></p></li>
+<li><p><strong>save_dynamic</strong> - If True, dynamic properties are written to
+the serialized dict (default: False).</p></li>
+<li><p>Any other keyword arguments will be passed through to the Property
+serializers.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.SourceField.validate">
+<code class="sig-name descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/../properties/base/base.py#L401-L443"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.SourceField.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call all registered class validator methods</p>
+<p>These are all methods decorated with <code class="code docutils literal notranslate"><span class="pre">&#64;properties.validator</span></code>.
+Validator methods are expected to raise a ValidationError if they
+fail.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.SourceField.vnD">
+<em class="property">property </em><code class="sig-name descname">vnD</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.SourceField.vnD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vector number of data</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="gravity-receiver">
+<h2>Gravity Receiver<a class="headerlink" href="#gravity-receiver" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="SimPEG.potential_fields.gravity.Point">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.potential_fields.gravity.</code><code class="sig-name descname">Point</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">locations</span></em>, <em class="sig-param"><span class="n">components</span><span class="o">=</span><span class="default_value">'gz'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/potential_fields/gravity/receivers.py#L7-L61"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../api_core/api_ForwardProblem.html#SimPEG.survey.BaseRx" title="SimPEG.survey.BaseRx"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.survey.BaseRx</span></code></a></p>
+<blockquote>
+<div><p>Gravity point receiver class for integral formulation</p>
+<dl class="field-list simple">
+<dt class="field-odd">param numpy.ndarray locations</dt>
+<dd class="field-odd"><p>receiver locations index (ie. <code class="code docutils literal notranslate"><span class="pre">np.c_[ind_1,</span> <span class="pre">ind_2,</span> <span class="pre">...]</span></code>)</p>
+</dd>
+<dt class="field-even">param string component</dt>
+<dd class="field-even"><p>receiver component
+“gx”, “gy”, “gz”, “gxx”, “gxy”, “gxz”,
+“gyy”, “gyz”, “gzz”, “guv”, “amp” [default]</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Required Properties:</strong></p>
+<ul class="simple">
+<li><p><strong>locations</strong> (<a class="reference internal" href="../api_core/api_ForwardProblem.html#SimPEG.survey.RxLocationArray" title="SimPEG.survey.RxLocationArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">RxLocationArray</span></code></a>): Locations of the receivers (nRx x nDim), an array of receiver locations of &lt;class ‘float’&gt;, &lt;class ‘int’&gt; with shape (*, *)</p></li>
+<li><p><strong>projGLoc</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/other.html#properties.StringChoice" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StringChoice</span></code></a>): Projection grid location, default is CC, any of “CC”, “Fx”, “Fy”, “Fz”, “Ex”, “Ey”, “Ez”, “N”, Default: CC</p></li>
+<li><p><strong>storeProjections</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Boolean" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Boolean</span></code></a>): Store calls to getP (organized by mesh), a boolean, Default: True</p></li>
+</ul>
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Point.nD">
+<code class="sig-name descname">nD</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/potential_fields/gravity/receivers.py#L45-L57"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Point.nD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of data in the receiver.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Point.receiver_index">
+<code class="sig-name descname">receiver_index</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/potential_fields/gravity/receivers.py#L59-L61"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Point.receiver_index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Point.deserialize">
+<em class="property">classmethod </em><code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">trusted</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">strict</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">assert_valid</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/../properties/base/base.py#L518-L589"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Point.deserialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates <strong>HasProperties</strong> instance from serialized dictionary</p>
+<p>This uses the Property deserializers to deserialize all
+JSON-compatible dictionary values into their corresponding Property
+values on a new instance of a <strong>HasProperties</strong> class. Extra keys
+in the dictionary that do not correspond to Properties will be
+ignored.</p>
+<p><strong>Parameters</strong>:</p>
+<ul class="simple">
+<li><p><strong>value</strong> - Dictionary to deserialize new instance from.</p></li>
+<li><p><strong>trusted</strong> - If True (and if the input dictionary has
+<code class="code docutils literal notranslate"><span class="pre">'__class__'</span></code> keyword and this class is in the registry), the
+new <strong>HasProperties</strong> class will come from the dictionary.
+If False (the default), only the <strong>HasProperties</strong> class this
+method is called on will be constructed.</p></li>
+<li><p><strong>strict</strong> - Requires <code class="code docutils literal notranslate"><span class="pre">'__class__'</span></code>, if present on the input
+dictionary, to match the deserialized instance’s class. Also
+disallows unused properties in the input dictionary. Default
+is False.</p></li>
+<li><p><strong>assert_valid</strong> - Require deserialized instance to be valid.
+Default is False.</p></li>
+<li><p>Any other keyword arguments will be passed through to the Property
+deserializers.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Point.equal">
+<code class="sig-name descname">equal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/../properties/base/base.py#L605-L614"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Point.equal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if two <strong>HasProperties</strong> instances are equivalent</p>
+<p>Equivalence is determined by checking if all Property values on
+two instances are equal, using <code class="code docutils literal notranslate"><span class="pre">Property.equal</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Point.eval">
+<code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/survey.py#L105-L108"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Point.eval" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Point.evalDeriv">
+<code class="sig-name descname">evalDeriv</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/survey.py#L110-L113"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Point.evalDeriv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Point.getP">
+<code class="sig-name descname">getP</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mesh</span></em>, <em class="sig-param"><span class="n">projGLoc</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/survey.py#L84-L103"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Point.getP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the projection matrices as a
+list for all components collected by
+the receivers.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Projection matrices are stored as a dictionary listed by meshes.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Point.locations">
+<em class="property">property </em><code class="sig-name descname">locations</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Point.locations" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>locations</strong> (<a class="reference internal" href="../api_core/api_ForwardProblem.html#SimPEG.survey.RxLocationArray" title="SimPEG.survey.RxLocationArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">RxLocationArray</span></code></a>): Locations of the receivers (nRx x nDim), an array of receiver locations of &lt;class ‘float’&gt;, &lt;class ‘int’&gt; with shape (*, *)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Point.locs">
+<em class="property">property </em><code class="sig-name descname">locs</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Point.locs" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>locs</cite> has been deprecated. See <cite>locations</cite> for documentation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Point.projGLoc">
+<em class="property">property </em><code class="sig-name descname">projGLoc</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Point.projGLoc" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>projGLoc</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/other.html#properties.StringChoice" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StringChoice</span></code></a>): Projection grid location, default is CC, any of “CC”, “Fx”, “Fy”, “Fz”, “Ex”, “Ey”, “Ez”, “N”, Default: CC</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Point.serialize">
+<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">include_class</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">save_dynamic</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/../properties/base/base.py#L476-L516"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Point.serialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes a <strong>HasProperties</strong> instance to dictionary</p>
+<p>This uses the Property serializers to serialize all Property values
+to a JSON-compatible dictionary. Properties that are undefined are
+not included. If the <strong>HasProperties</strong> instance contains a reference
+to itself, a <code class="code docutils literal notranslate"><span class="pre">properties.SelfReferenceError</span></code> will be raised.</p>
+<p><strong>Parameters</strong>:</p>
+<ul class="simple">
+<li><p><strong>include_class</strong> - If True (the default), the name of the class
+will also be saved to the serialized dictionary under key
+<code class="code docutils literal notranslate"><span class="pre">'__class__'</span></code></p></li>
+<li><p><strong>save_dynamic</strong> - If True, dynamic properties are written to
+the serialized dict (default: False).</p></li>
+<li><p>Any other keyword arguments will be passed through to the Property
+serializers.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Point.storeProjections">
+<em class="property">property </em><code class="sig-name descname">storeProjections</code><a class="headerlink" href="#SimPEG.potential_fields.gravity.Point.storeProjections" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>storeProjections</strong> (<a class="reference external" href="https://propertiespy.readthedocs.io/en/latest/content/primitive.html#properties.Boolean" title="(in properties v0.5.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Boolean</span></code></a>): Store calls to getP (organized by mesh), a boolean, Default: True</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.potential_fields.gravity.Point.validate">
+<code class="sig-name descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/../properties/base/base.py#L401-L443"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.Point.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call all registered class validator methods</p>
+<p>These are all methods decorated with <code class="code docutils literal notranslate"><span class="pre">&#64;properties.validator</span></code>.
+Validator methods are expected to raise a ValidationError if they
+fail.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="module-SimPEG.potential_fields.gravity.analytics">
+<span id="gravity-analytic-solutions"></span><h3>Gravity analytic solutions<a class="headerlink" href="#module-SimPEG.potential_fields.gravity.analytics" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="SimPEG.potential_fields.gravity.analytics.GravSphereFreeSpace">
+<code class="sig-prename descclassname">SimPEG.potential_fields.gravity.analytics.</code><code class="sig-name descname">GravSphereFreeSpace</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">z</span></em>, <em class="sig-param"><span class="n">R</span></em>, <em class="sig-param"><span class="n">xc</span></em>, <em class="sig-param"><span class="n">yc</span></em>, <em class="sig-param"><span class="n">zc</span></em>, <em class="sig-param"><span class="n">rho</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/potential_fields/gravity/analytics.py#L7-L42"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.analytics.GravSphereFreeSpace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computing the gravity response of a sphere in free-space.
+&gt;&gt; Input
+x, y, z:   Observation locations
+R:     radius of the sphere
+xc, yc, zc: Location of the sphere
+rho: Density of sphere</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="SimPEG.potential_fields.gravity.analytics.GravityGradientSphereFreeSpace">
+<code class="sig-prename descclassname">SimPEG.potential_fields.gravity.analytics.</code><code class="sig-name descname">GravityGradientSphereFreeSpace</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">z</span></em>, <em class="sig-param"><span class="n">R</span></em>, <em class="sig-param"><span class="n">xc</span></em>, <em class="sig-param"><span class="n">yc</span></em>, <em class="sig-param"><span class="n">zc</span></em>, <em class="sig-param"><span class="n">rho</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/potential_fields/gravity/analytics.py#L45-L87"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.potential_fields.gravity.analytics.GravityGradientSphereFreeSpace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computing the induced response of magnetic sphere in free-space.
+&gt;&gt; Input
+x, y, z:   Observation locations
+R:     radius of the sphere
+xc, yc, zc: Location of the sphere
+rho: Density of sphere</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api_mag.html" class="btn btn-neutral float-right" title="Magnetics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="api_base.html" class="btn btn-neutral float-left" title="Overview of Potential Fields in SimPEG" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+
+ 
+
+
+    <div id="disqus_thread"></div>
+    <script>
+
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+    var disqus_config = function () {
+    this.page.url = {path};  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = {path}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://simpeg.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    <div role="contentinfo">
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/" width="60px"; style="float:right;height:3em;line-height:3em;padding:10px 0 0 1em;">
+            <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" />
+        </a>
+        2013-2018,
+        <a href="http://simpeg.xyz">SimPEG Developers.</a><br />
+        Except where noted, this work is licensed under a <br />
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+            Creative Commons Attribution 4.0 International License
+        </a>
+    </div>
+    <br>
+    <div>
+    Built with
+        <a href="http://sphinx-doc.org/">Sphinx</a>
+        using a
+        <a href="https://github.com/snide/sphinx_rtd_theme">theme</a>
+        provided by
+        <a href="https://readthedocs.org">Read the Docs</a>.
+     </div>
+
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

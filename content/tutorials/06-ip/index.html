@@ -1,0 +1,353 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Induced Polarization &mdash; SimPEG 0.15.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/logo-block.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="2.5D Forward Simulation of a DCIP Line" href="plot_fwd_2_dcip2d.html" />
+    <link rel="prev" title="3D Least-Squares Inversion of DC Resistivity Data" href="../05-dcr/plot_inv_3_dcr3d.html" />
+ 
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-45185336-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> SimPEG
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.15.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/big_picture.html">Why SimPEG?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/contributing.html">Contributing to SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/installing.html">Getting Started with SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/getting_started_developers.html">Getting Started: for Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/practices.html">Practices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../01-models_mapping/index.html">Models and Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02-linear_inversion/index.html">Linear Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03-gravity/index.html">Gravity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../04-magnetics/index.html">Magnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../05-dcr/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Induced Polarization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plot_fwd_2_dcip2d.html">2.5D Forward Simulation of a DCIP Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_fwd_3_dcip3d.html">DC/IP Forward Simulation in 3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inv_2_dcip2d.html">2.5D DC Resistivity and IP Least-Squares Inversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inv_3_dcip3d.html">3D Least-Squares Inversion of DC and IP Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../07-fdem/index.html">Frequency-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../08-tdem/index.html">Time-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../09-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../10-vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../11-flow/index.html">Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../12-seismic/index.html">Seismic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../13-pgi/index.html">PGI: Petrophysically and Geologically Guided Geophysical Inversion</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Packages</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../em/index.html">Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dc/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pf/index.html">Potential Fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../flow/index.html">Richards Equation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_FiniteVolume.html">Finite Volume</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_ForwardProblem.html">Forward Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_InversionComponents.html">Inversion Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_Maps.html">Maps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_Utilities.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Meta Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../release/index.html">Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">SimPEG</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Induced Polarization</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            <a href="https://github.com/simpeg/simpeg/edit/main/docs/content/tutorials/06-ip/index.rst" class="fa fa-github"> Edit on GitHub</a>
+        
+      </li>
+    
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="induced-polarization">
+<span id="sphx-glr-content-tutorials-06-ip"></span><h1>Induced Polarization<a class="headerlink" href="#induced-polarization" title="Permalink to this headline">¶</a></h1>
+<div class="sphx-glr-thumbcontainer" tooltip="Here we use the module *SimPEG.electromagnetics.static.resistivity* to predict DC resistivity d..."><div class="figure align-default" id="id1">
+<img alt="2.5D Forward Simulation of a DCIP Line" src="../../../_images/sphx_glr_plot_fwd_2_dcip2d_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="plot_fwd_2_dcip2d.html#sphx-glr-content-tutorials-06-ip-plot-fwd-2-dcip2d-py"><span class="std std-ref">2.5D Forward Simulation of a DCIP Line</span></a></span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="Here we use the module *SimPEG.electromagnetics.static.resistivity* to predict DC resistivity d..."><div class="figure align-default" id="id2">
+<img alt="DC/IP Forward Simulation in 3D" src="../../../_images/sphx_glr_plot_fwd_3_dcip3d_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="plot_fwd_3_dcip3d.html#sphx-glr-content-tutorials-06-ip-plot-fwd-3-dcip3d-py"><span class="std std-ref">DC/IP Forward Simulation in 3D</span></a></span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="Here we invert a line of DC resistivity and induced polarization data to recover electrical con..."><div class="figure align-default" id="id3">
+<img alt="2.5D DC Resistivity and IP Least-Squares Inversion" src="../../../_images/sphx_glr_plot_inv_2_dcip2d_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="plot_inv_2_dcip2d.html#sphx-glr-content-tutorials-06-ip-plot-inv-2-dcip2d-py"><span class="std std-ref">2.5D DC Resistivity and IP Least-Squares Inversion</span></a></span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="Here we invert 5 lines of DC and IP data to recover both an electrical conductivity and a charg..."><div class="figure align-default" id="id4">
+<img alt="3D Least-Squares Inversion of DC and IP Data" src="../../../_images/sphx_glr_plot_inv_3_dcip3d_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="plot_inv_3_dcip3d.html#sphx-glr-content-tutorials-06-ip-plot-inv-3-dcip3d-py"><span class="std std-ref">3D Least-Squares Inversion of DC and IP Data</span></a></span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-clear"></div><div class="sphx-glr-footer class sphx-glr-footer-gallery docutils container">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/f9dc8719d85ea5cfe47216146a2bb63a/06-ip_python.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">06-ip_python.zip</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/960b41fc97aecfc10979ce2f45f88b03/06-ip_jupyter.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Jupyter</span> <span class="pre">notebooks:</span> <span class="pre">06-ip_jupyter.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="plot_fwd_2_dcip2d.html" class="btn btn-neutral float-right" title="2.5D Forward Simulation of a DCIP Line" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../05-dcr/plot_inv_3_dcr3d.html" class="btn btn-neutral float-left" title="3D Least-Squares Inversion of DC Resistivity Data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+
+ 
+
+
+    <div id="disqus_thread"></div>
+    <script>
+
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+    var disqus_config = function () {
+    this.page.url = {path};  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = {path}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://simpeg.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    <div role="contentinfo">
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/" width="60px"; style="float:right;height:3em;line-height:3em;padding:10px 0 0 1em;">
+            <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" />
+        </a>
+        2013-2018,
+        <a href="http://simpeg.xyz">SimPEG Developers.</a><br />
+        Except where noted, this work is licensed under a <br />
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+            Creative Commons Attribution 4.0 International License
+        </a>
+    </div>
+    <br>
+    <div>
+    Built with
+        <a href="http://sphinx-doc.org/">Sphinx</a>
+        using a
+        <a href="https://github.com/snide/sphinx_rtd_theme">theme</a>
+        provided by
+        <a href="https://readthedocs.org">Read the Docs</a>.
+     </div>
+
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

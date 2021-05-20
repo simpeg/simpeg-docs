@@ -1,0 +1,767 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>EM: TDEM: Permeable Target, Inductive Source &mdash; SimPEG 0.15.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/logo-block.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="TDEM: Waveforms" href="plot_fwd_tdem_waveforms.html" />
+    <link rel="prev" title="Time-domain CSEM for a resistive cube in a deep marine setting" href="plot_fwd_tdem_3d_model.html" />
+ 
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-45185336-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> SimPEG
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.15.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../basic/big_picture.html">Why SimPEG?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/contributing.html">Contributing to SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/installing.html">Getting Started with SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/getting_started_developers.html">Getting Started: for Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic/practices.html">Practices</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#mappings">Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#gravity">Gravity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#magnetics">Magnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#dc-resistivity-and-induced-polarization">DC Resistivity and Induced Polarization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#frequency-domain-electromagnetics">Frequency Domain Electromagnetics</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#time-domain-electromagnetics">Time Domain Electromagnetics</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="plot_0_tdem_analytic.html">Simulation with Analytic TDEM Solutions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_fwd_tdem_3d_model.html">Time-domain CSEM for a resistive cube in a deep marine setting</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">EM: TDEM: Permeable Target, Inductive Source</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#model-parameters">Model Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mesh">Mesh</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#waveform-for-the-long-on-time-simulation">Waveform for the Long On-Time Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sources-for-the-2-simulations">Sources for the 2 simulations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#create-the-simulations">Create the simulations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#run-the-long-on-time-simulation">Run the long on-time simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#compute-magnetostatic-fields-from-the-step-off-source">Compute Magnetostatic Fields from the step-off source</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#plot-the-results">Plot the results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#print-the-version-of-simpeg-and-dependencies">Print the version of SimPEG and dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plot_fwd_tdem_waveforms.html">TDEM: Waveforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_inv_tdem_1D.html">EM: TDEM: 1D: Inversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_inv_tdem_1D_raw_waveform.html">EM: TDEM: 1D: Inversion with VTEM waveform</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#natural-source-electromagnetics">Natural Source Electromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#viscous-remanent-magnetization">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#richards-fluid-flow">Richards Fluid Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#in-publication">In Publication</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/01-models_mapping/index.html">Models and Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/02-linear_inversion/index.html">Linear Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/03-gravity/index.html">Gravity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/04-magnetics/index.html">Magnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/05-dcr/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/06-ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/07-fdem/index.html">Frequency-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/08-tdem/index.html">Time-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/09-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/10-vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/11-flow/index.html">Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/12-seismic/index.html">Seismic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/13-pgi/index.html">PGI: Petrophysically and Geologically Guided Geophysical Inversion</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Packages</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../em/index.html">Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dc/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pf/index.html">Potential Fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../flow/index.html">Richards Equation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_FiniteVolume.html">Finite Volume</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_ForwardProblem.html">Forward Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_InversionComponents.html">Inversion Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_Maps.html">Maps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_core/api_Utilities.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Meta Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../release/index.html">Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">SimPEG</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Gallery</a> &raquo;</li>
+        
+      <li>EM: TDEM: Permeable Target, Inductive Source</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            <a href="https://github.com/simpeg/simpeg/edit/main/docs/content/examples/06-tdem/plot_fwd_tdem_inductive_src_permeable_target.rst" class="fa fa-github"> Edit on GitHub</a>
+        
+      </li>
+    
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-content-examples-06-tdem-plot-fwd-tdem-inductive-src-permeable-target-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="em-tdem-permeable-target-inductive-source">
+<span id="sphx-glr-content-examples-06-tdem-plot-fwd-tdem-inductive-src-permeable-target-py"></span><h1>EM: TDEM: Permeable Target, Inductive Source<a class="headerlink" href="#em-tdem-permeable-target-inductive-source" title="Permalink to this headline">¶</a></h1>
+<p>In this example, we demonstrate 2 approaches for simulating TDEM data when
+a permeable target is present in the simulation domain. In the first, we
+use a step-on waveform (QuarterSineRampOnWaveform) and look at the magnetic
+flux at a late on-time. In the second, we solve the magnetostatic problem
+to compute the initial magnetic flux so that a step-off waveform may be used.</p>
+<p>A cylindrically symmetric mesh is employed and a circular loop source is used</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">discretize</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.LogNorm.html#matplotlib.colors.LogNorm" title="matplotlib.colors.LogNorm" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class"><span class="n">LogNorm</span></a>
+<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mu_0</span></a>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pymatsolver</span> <span class="kn">import</span> <span class="n">Pardiso</span> <span class="k">as</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">Solver</span></a>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">SimPEG</span> <span class="kn">import</span> <span class="n">SolverLU</span> <span class="k">as</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">Solver</span></a>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">SimPEG.electromagnetics</span> <span class="kn">import</span> <span class="n">time_domain</span> <span class="k">as</span> <span class="n">TDEM</span>
+<span class="kn">from</span> <span class="nn">SimPEG</span> <span class="kn">import</span> <span class="n">utils</span><span class="p">,</span> <span class="n">maps</span><span class="p">,</span> <span class="n">Report</span>
+</pre></div>
+</div>
+<div class="section" id="model-parameters">
+<h2>Model Parameters<a class="headerlink" href="#model-parameters" title="Permalink to this headline">¶</a></h2>
+<p>Here, we define our simulation parameters. The target has a relative
+permeability of 100 <span class="math notranslate nohighlight">\(\mu_0\)</span></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">target_mur</span></a> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># permeability of the target</span>
+<a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">target_l</span></a> <span class="o">=</span> <span class="mi">500</span>  <span class="c1"># length of target</span>
+<a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">target_r</span></a> <span class="o">=</span> <span class="mi">50</span>  <span class="c1"># radius of the target</span>
+
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sigma_back</span></a> <span class="o">=</span> <span class="mf">1e-5</span>  <span class="c1"># conductivity of the background</span>
+
+<a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radius_loop</span></a> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># radius of the transmitter loop</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="mesh">
+<h2>Mesh<a class="headerlink" href="#mesh" title="Permalink to this headline">¶</a></h2>
+<p>Next, we create a cylindrically symmteric tensor mesh</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">csx</span></a> <span class="o">=</span> <span class="mf">5.0</span>  <span class="c1"># core cell size in the x-direction</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">csz</span></a> <span class="o">=</span> <span class="mf">5.0</span>  <span class="c1"># core cell size in the z-direction</span>
+<a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">domainx</span></a> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># use a uniform cell size out to a radius of 100m</span>
+
+<span class="c1"># padding parameters</span>
+<a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">npadx</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">npadz</span></a> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span>  <span class="c1"># number of padding cells</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">pfx</span></a> <span class="o">=</span> <span class="mf">1.4</span>  <span class="c1"># expansion factor for the padding to infinity in the x-direction</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">pfz</span></a> <span class="o">=</span> <span class="mf">1.4</span>  <span class="c1"># expansion factor for the padding to infinity in the z-direction</span>
+
+<a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ncz</span></a> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">target_l</span></a> <span class="o">/</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">csz</span></a><span class="p">)</span>  <span class="c1"># number of z cells in the core region</span>
+
+<span class="c1"># create the cyl mesh</span>
+<span class="n">mesh</span> <span class="o">=</span> <a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.CylindricalMesh.html#discretize.CylindricalMesh" title="discretize.CylindricalMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class"><span class="n">discretize</span><span class="o">.</span><span class="n">CylMesh</span></a><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">[(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">csx</span></a><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">domainx</span></a> <span class="o">/</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">csx</span></a><span class="p">)),</span> <span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">csx</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">npadx</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">pfx</span></a><span class="p">)],</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="p">[(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">csz</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">npadz</span></a><span class="p">,</span> <span class="o">-</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">pfz</span></a><span class="p">),</span> <span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">csz</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ncz</span></a><span class="p">),</span> <span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">csz</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">npadz</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">pfz</span></a><span class="p">)],</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># put the origin at the top of the target</span>
+<a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.CylindricalMesh.html#discretize.CylindricalMesh.x0" title="discretize.CylindricalMesh.x0" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-attribute"><span class="n">mesh</span><span class="o">.</span><span class="n">x0</span></a> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.CylindricalMesh.html#discretize.CylindricalMesh.hz" title="discretize.CylindricalMesh.hz" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-attribute"><span class="n">mesh</span><span class="o">.</span><span class="n">hz</span></a><span class="p">[:</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">npadz</span></a> <span class="o">+</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ncz</span></a><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()]</span>
+
+<span class="c1"># plot the mesh</span>
+<a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.CylindricalMesh.html#discretize.CylindricalMesh.plotGrid" title="discretize.CylindricalMesh.plotGrid" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-method"><span class="n">mesh</span><span class="o">.</span><span class="n">plotGrid</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="plot fwd tdem inductive src permeable target" class="sphx-glr-single-img" src="../../../_images/sphx_glr_plot_fwd_tdem_inductive_src_permeable_target_001.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;x&#39;, ylabel=&#39;z&#39;&gt;
+</pre></div>
+</div>
+<p>Assign physical properties on the mesh</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mur_model</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ones.html#numpy.ones" title="numpy.ones" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span><span class="o">.</span><span class="n">nC</span></a><span class="p">)</span>
+
+<span class="c1"># find the indices of the target</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x_inds</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span><span class="o">.</span><span class="n">gridCC</span></a><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">target_r</span></a>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">z_inds</span></a> <span class="o">=</span> <span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span><span class="o">.</span><span class="n">gridCC</span></a><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span><span class="o">.</span><span class="n">gridCC</span></a><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="o">-</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">target_l</span></a><span class="p">)</span>
+
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mur_model</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x_inds</span></a> <span class="o">&amp;</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">z_inds</span></a><span class="p">]</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">target_mur</span></a>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mu_model</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mu_0</span></a> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mur_model</span></a>
+
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sigma</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ones.html#numpy.ones" title="numpy.ones" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span><span class="o">.</span><span class="n">nC</span></a><span class="p">)</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sigma_back</span></a>
+</pre></div>
+</div>
+<p>Plot the models</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">xlim</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="o">-</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">]</span>  <span class="c1"># x-limits in meters</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">zlim</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="o">-</span><span class="mf">1.5</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">target_l</span></a><span class="p">,</span> <span class="mf">10.0</span><span class="p">]</span>  <span class="c1"># z-limits in meters. (z-positive up)</span>
+
+<a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="c1"># plot the permeability</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.colorbar.html#matplotlib.pyplot.colorbar" title="matplotlib.pyplot.colorbar" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span></a><span class="p">(</span>
+    <a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.CylindricalMesh.html#discretize.CylindricalMesh.plotImage" title="discretize.CylindricalMesh.plotImage" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-method"><span class="n">mesh</span><span class="o">.</span><span class="n">plotImage</span></a><span class="p">(</span>
+        <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mur_model</span></a><span class="p">,</span>
+        <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a><span class="p">,</span>
+        <span class="n">pcolorOpts</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;norm&quot;</span><span class="p">:</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.LogNorm.html#matplotlib.colors.LogNorm" title="matplotlib.colors.LogNorm" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class"><span class="n">LogNorm</span></a><span class="p">()},</span>  <span class="c1"># plot on a log-scale</span>
+        <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a><span class="p">,</span>
+<span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radius_loop</span></a><span class="p">],</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="mf">0.0</span><span class="p">],</span> <span class="s2">&quot;wo&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="o">-</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radius_loop</span></a><span class="p">],</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="mf">0.0</span><span class="p">],</span> <span class="s2">&quot;wx&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span><span class="o">.</span><span class="n">set_title</span></a><span class="p">(</span><span class="s2">&quot;Relative permeability&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">xlim</span></a><span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">zlim</span></a><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="Relative permeability" class="sphx-glr-single-img" src="../../../_images/sphx_glr_plot_fwd_tdem_inductive_src_permeable_target_002.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(-750.0, 10.0)
+</pre></div>
+</div>
+</div>
+<div class="section" id="waveform-for-the-long-on-time-simulation">
+<h2>Waveform for the Long On-Time Simulation<a class="headerlink" href="#waveform-for-the-long-on-time-simulation" title="Permalink to this headline">¶</a></h2>
+<p>Here, we define our time-steps for the simulation where we will use a
+waveform with a long on-time to reach a steady-state magnetic field and
+define a quarter-sine ramp-on waveform as our transmitter waveform</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ramp</span></a> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="mf">1e-5</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+    <span class="p">(</span><span class="mf">1e-4</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+    <span class="p">(</span><span class="mf">3e-4</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+    <span class="p">(</span><span class="mf">1e-3</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+    <span class="p">(</span><span class="mf">3e-3</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+    <span class="p">(</span><span class="mf">1e-2</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+    <span class="p">(</span><span class="mf">3e-2</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+    <span class="p">(</span><span class="mf">1e-1</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+    <span class="p">(</span><span class="mf">3e-1</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
+<span class="p">]</span>
+<a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">time_mesh</span></a> <span class="o">=</span> <a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class"><span class="n">discretize</span><span class="o">.</span><span class="n">TensorMesh</span></a><span class="p">([</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ramp</span></a><span class="p">])</span>
+
+<span class="c1"># define an off time past when we will simulate to keep the transmitter on</span>
+<a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">offTime</span></a> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">quarter_sine</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">TDEM</span><span class="o">.</span><span class="n">Src</span><span class="o">.</span><span class="n">QuarterSineRampOnWaveform</span></a><span class="p">(</span>
+    <span class="n">ramp_on</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">ramp_off</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">offTime</span></a> <span class="o">-</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># evaluate the waveform at each time in the simulation</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">quarter_sine_plt</span></a> <span class="o">=</span> <span class="p">[</span><span class="n">quarter_sine</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t</span></a><span class="p">)</span> <span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t</span></a> <span class="ow">in</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">time_mesh</span><span class="o">.</span><span class="n">gridN</span></a><span class="p">]</span>
+
+<a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">time_mesh</span><span class="o">.</span><span class="n">gridN</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">quarter_sine_plt</span></a><span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">time_mesh</span><span class="o">.</span><span class="n">gridN</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">time_mesh</span><span class="o">.</span><span class="n">nN</span></a><span class="p">),</span> <span class="s2">&quot;k|&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span><span class="o">.</span><span class="n">set_title</span></a><span class="p">(</span><span class="s2">&quot;quarter sine waveform&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="quarter sine waveform" class="sphx-glr-single-img" src="../../../_images/sphx_glr_plot_fwd_tdem_inductive_src_permeable_target_003.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;quarter sine waveform&#39;)
+</pre></div>
+</div>
+</div>
+<div class="section" id="sources-for-the-2-simulations">
+<h2>Sources for the 2 simulations<a class="headerlink" href="#sources-for-the-2-simulations" title="Permalink to this headline">¶</a></h2>
+<p>We use two sources, one for the magnetostatic simulation and one for the
+ramp on simulation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># For the magnetostatic simulation. The default waveform is a step-off</span>
+<span class="n">src_magnetostatic</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">TDEM</span><span class="o">.</span><span class="n">Src</span><span class="o">.</span><span class="n">CircularLoop</span></a><span class="p">(</span>
+    <span class="p">[],</span> <span class="n">loc</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># For the long on-time simulation. We use the ramp-on waveform</span>
+<span class="n">src_ramp_on</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">TDEM</span><span class="o">.</span><span class="n">Src</span><span class="o">.</span><span class="n">CircularLoop</span></a><span class="p">(</span>
+    <span class="p">[],</span> <span class="n">loc</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">waveform</span><span class="o">=</span><span class="n">quarter_sine</span>
+<span class="p">)</span>
+
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">src_list_magnetostatic</span></a> <span class="o">=</span> <span class="p">[</span><span class="n">src_magnetostatic</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">src_list_ramp_on</span></a> <span class="o">=</span> <span class="p">[</span><span class="n">src_ramp_on</span><span class="p">]</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Users/josephcapriotti/opt/anaconda3/envs/simulation/lib/python3.8/site-packages/SimPEG/utils/code_utils.py:413: FutureWarning:
+
+loc has been deprecated, please use location. It will be removed in version 0.16.0 of SimPEG.
+
+/Users/josephcapriotti/opt/anaconda3/envs/simulation/lib/python3.8/site-packages/SimPEG/utils/code_utils.py:420: FutureWarning:
+
+loc has been deprecated, please use location. It will be removed in version 0.16.0 of SimPEG.
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-the-simulations">
+<h2>Create the simulations<a class="headerlink" href="#create-the-simulations" title="Permalink to this headline">¶</a></h2>
+<p>To simulate magnetic flux data, we use the b-formulation of Maxwell’s
+equations</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">prob_magnetostatic</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">TDEM</span><span class="o">.</span><span class="n">Simulation3DMagneticFluxDensity</span></a><span class="p">(</span>
+    <span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span> <span class="n">sigmaMap</span><span class="o">=</span><a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">maps</span><span class="o">.</span><span class="n">IdentityMap</span></a><span class="p">(</span><span class="n">mesh</span><span class="p">),</span> <span class="n">timeSteps</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ramp</span></a><span class="p">,</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">Solver</span></a><span class="o">=</span><a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">Solver</span></a>
+<span class="p">)</span>
+<span class="n">prob_ramp_on</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">TDEM</span><span class="o">.</span><span class="n">Simulation3DMagneticFluxDensity</span></a><span class="p">(</span>
+    <span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span> <span class="n">sigmaMap</span><span class="o">=</span><a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">maps</span><span class="o">.</span><span class="n">IdentityMap</span></a><span class="p">(</span><span class="n">mesh</span><span class="p">),</span> <span class="n">timeSteps</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ramp</span></a><span class="p">,</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">Solver</span></a><span class="o">=</span><a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">Solver</span></a>
+<span class="p">)</span>
+
+<span class="n">survey_magnetostatic</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">TDEM</span><span class="o">.</span><span class="n">Survey</span></a><span class="p">(</span><span class="n">srcList</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">src_list_magnetostatic</span></a><span class="p">)</span>
+<span class="n">survey_ramp_on</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">TDEM</span><span class="o">.</span><span class="n">Survey</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">src_list_ramp_on</span></a><span class="p">)</span>
+
+<span class="n">prob_magnetostatic</span><span class="o">.</span><span class="n">pair</span><span class="p">(</span><span class="n">survey_magnetostatic</span><span class="p">)</span>
+<span class="n">prob_ramp_on</span><span class="o">.</span><span class="n">pair</span><span class="p">(</span><span class="n">survey_ramp_on</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Users/josephcapriotti/opt/anaconda3/envs/simulation/lib/python3.8/site-packages/SimPEG/utils/code_utils.py:413: FutureWarning:
+
+timeSteps has been deprecated, please use time_steps. It will be removed in version 0.16.0 of SimPEG.
+
+/Users/josephcapriotti/opt/anaconda3/envs/simulation/lib/python3.8/site-packages/SimPEG/utils/code_utils.py:420: FutureWarning:
+
+timeSteps has been deprecated, please use time_steps. It will be removed in version 0.16.0 of SimPEG.
+
+/Users/josephcapriotti/opt/anaconda3/envs/simulation/lib/python3.8/site-packages/SimPEG/utils/code_utils.py:413: FutureWarning:
+
+Solver has been deprecated, please use simulation.solver. It will be removed in version 0.16.0 of SimPEG.
+
+/Users/josephcapriotti/opt/anaconda3/envs/simulation/lib/python3.8/site-packages/SimPEG/utils/code_utils.py:420: FutureWarning:
+
+Solver has been deprecated, please use simulation.solver. It will be removed in version 0.16.0 of SimPEG.
+
+/Users/josephcapriotti/opt/anaconda3/envs/simulation/lib/python3.8/site-packages/SimPEG/utils/code_utils.py:413: FutureWarning:
+
+srcList has been deprecated, please use source_list. It will be removed in version 0.16.0 of SimPEG.
+
+/Users/josephcapriotti/opt/anaconda3/envs/simulation/lib/python3.8/site-packages/SimPEG/utils/code_utils.py:420: FutureWarning:
+
+srcList has been deprecated, please use source_list. It will be removed in version 0.16.0 of SimPEG.
+
+/Users/josephcapriotti/opt/anaconda3/envs/simulation/lib/python3.8/site-packages/SimPEG/simulation.py:395: FutureWarning:
+
+Simulation.pair(survey) will be deprecated. Please update your code to instead use simulation.survey = survey, or pass it upon intialization of the simulation object. This will be removed in version 0.16.0 of SimPEG
+
+/Users/josephcapriotti/opt/anaconda3/envs/simulation/lib/python3.8/site-packages/SimPEG/survey.py:332: FutureWarning:
+
+survey.pair(simulation) will be deprecated. Please update your code to instead use simulation.survey = survey, or pass it upon intialization of the simulation object. This will be removed in version 0.16.0 of SimPEG
+</pre></div>
+</div>
+</div>
+<div class="section" id="run-the-long-on-time-simulation">
+<h2>Run the long on-time simulation<a class="headerlink" href="#run-the-long-on-time-simulation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/time.html#time.time" title="time.time" class="sphx-glr-backref-module-time sphx-glr-backref-type-py-function"><span class="n">time</span><span class="o">.</span><span class="n">time</span></a><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--- Running Long On-Time Simulation ---&quot;</span><span class="p">)</span>
+
+<span class="n">prob_ramp_on</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mu_model</span></a>
+<span class="n">fields</span> <span class="o">=</span> <span class="n">prob_ramp_on</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sigma</span></a><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; ... done. Elapsed time </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><a href="https://docs.python.org/3/library/time.html#time.time" title="time.time" class="sphx-glr-backref-module-time sphx-glr-backref-type-py-function"><span class="n">time</span><span class="o">.</span><span class="n">time</span></a><span class="p">()</span> <span class="o">-</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t</span></a><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># grab the last time-step in the simulation</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">b_ramp_on</span></a> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">mkvc</span><span class="p">(</span><span class="n">fields</span><span class="p">[:,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>--- Running Long On-Time Simulation ---
+/Users/josephcapriotti/opt/anaconda3/envs/simulation/lib/python3.8/site-packages/SimPEG/utils/code_utils.py:413: FutureWarning:
+
+loc has been deprecated, please use location. It will be removed in version 0.16.0 of SimPEG.
+
+ ... done. Elapsed time 1.3295791149139404
+</pre></div>
+</div>
+</div>
+<div class="section" id="compute-magnetostatic-fields-from-the-step-off-source">
+<h2>Compute Magnetostatic Fields from the step-off source<a class="headerlink" href="#compute-magnetostatic-fields-from-the-step-off-source" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">prob_magnetostatic</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mu_model</span></a>
+<span class="n">prob_magnetostatic</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sigma</span></a>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">b_magnetostatic</span></a> <span class="o">=</span> <span class="n">src_magnetostatic</span><span class="o">.</span><span class="n">bInitial</span><span class="p">(</span><span class="n">prob_magnetostatic</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Users/josephcapriotti/opt/anaconda3/envs/simulation/lib/python3.8/site-packages/SimPEG/utils/code_utils.py:413: FutureWarning:
+
+loc has been deprecated, please use location. It will be removed in version 0.16.0 of SimPEG.
+</pre></div>
+</div>
+</div>
+<div class="section" id="plot-the-results">
+<h2>Plot the results<a class="headerlink" href="#plot-the-results" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plotBFieldResults</span><span class="p">(</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">clim_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">clim_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_depth</span><span class="o">=</span><span class="mf">1.5</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">target_l</span></a><span class="p">,</span>
+    <span class="n">max_r</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">top</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+    <span class="n">view</span><span class="o">=</span><span class="s2">&quot;magnetostatic&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="k">if</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+
+    <span class="k">assert</span> <span class="n">view</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;magnetostatic&quot;</span><span class="p">,</span> <span class="s2">&quot;late_ontime&quot;</span><span class="p">,</span> <span class="s2">&quot;diff&quot;</span><span class="p">]</span>
+
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">xlim</span></a> <span class="o">=</span> <span class="n">max_r</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># x-limits in meters</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">zlim</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="o">-</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">top</span><span class="p">]</span>  <span class="c1"># z-limits in meters. (z-positive up)</span>
+
+    <span class="n">clim</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">clim_max</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">clim_max</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">clim</span> <span class="o">=</span> <span class="n">clim_max</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">clim_min</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">clim_min</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">clim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">clim_min</span>
+
+    <span class="k">if</span> <span class="n">view</span> <span class="o">==</span> <span class="s2">&quot;magnetostatic&quot;</span><span class="p">:</span>
+        <span class="n">plotme</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">b_magnetostatic</span></a>
+    <span class="k">elif</span> <span class="n">view</span> <span class="o">==</span> <span class="s2">&quot;late_ontime&quot;</span><span class="p">:</span>
+        <span class="n">plotme</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">b_ramp_on</span></a>
+    <span class="k">elif</span> <span class="n">view</span> <span class="o">==</span> <span class="s2">&quot;diff&quot;</span><span class="p">:</span>
+        <span class="n">plotme</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">b_magnetostatic</span></a> <span class="o">-</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">b_ramp_on</span></a>
+
+    <span class="n">cb</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.colorbar.html#matplotlib.pyplot.colorbar" title="matplotlib.pyplot.colorbar" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span></a><span class="p">(</span>
+        <a href="http://discretize.simpeg.xyz/en/main/api/generated/discretize.CylindricalMesh.html#discretize.CylindricalMesh.plotImage" title="discretize.CylindricalMesh.plotImage" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-method"><span class="n">mesh</span><span class="o">.</span><span class="n">plotImage</span></a><span class="p">(</span>
+            <span class="n">plotme</span><span class="p">,</span>
+            <span class="n">view</span><span class="o">=</span><span class="s2">&quot;vec&quot;</span><span class="p">,</span>
+            <span class="n">v_type</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">,</span>
+            <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a><span class="p">,</span>
+            <span class="n">range_x</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">xlim</span></a><span class="p">,</span>
+            <span class="n">range_y</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">zlim</span></a><span class="p">,</span>
+            <span class="n">sample_grid</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.diff.html#numpy.diff" title="numpy.diff" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">diff</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">xlim</span></a><span class="p">)</span> <span class="o">/</span> <span class="mf">100.0</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.diff.html#numpy.diff" title="numpy.diff" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">diff</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">zlim</span></a><span class="p">)</span> <span class="o">/</span> <span class="mf">100.0</span><span class="p">],</span>
+            <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">pcolor_opts</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;norm&quot;</span><span class="p">:</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.LogNorm.html#matplotlib.colors.LogNorm" title="matplotlib.colors.LogNorm" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class"><span class="n">LogNorm</span></a><span class="p">()},</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+        <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a><span class="p">,</span>
+    <span class="p">)</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span><span class="o">.</span><span class="n">set_title</span></a><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">view</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">xlim</span></a><span class="p">)</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">zlim</span></a><span class="p">)</span>
+    <span class="n">cb</span><span class="o">.</span><span class="n">update_ticks</span><span class="p">()</span>
+
+    <span class="k">return</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a>
+
+
+<a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">a</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">v</span></a> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;magnetostatic&quot;</span><span class="p">,</span> <span class="s2">&quot;late_ontime&quot;</span><span class="p">,</span> <span class="s2">&quot;diff&quot;</span><span class="p">]):</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">plotBFieldResults</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">clim_min</span><span class="o">=</span><span class="mf">1e-15</span><span class="p">,</span> <span class="n">clim_max</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">v</span></a><span class="p">,</span> <span class="n">max_r</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.tight_layout.html#matplotlib.pyplot.tight_layout" title="matplotlib.pyplot.tight_layout" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="magnetostatic, late_ontime, diff" class="sphx-glr-single-img" src="../../../_images/sphx_glr_plot_fwd_tdem_inductive_src_permeable_target_004.png" />
+</div>
+<div class="section" id="print-the-version-of-simpeg-and-dependencies">
+<h2>Print the version of SimPEG and dependencies<a class="headerlink" href="#print-the-version-of-simpeg-and-dependencies" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
+
+<span class="n">Report</span><span class="p">()</span>
+</pre></div>
+</div>
+<table style='border: 3px solid #ddd;'>
+  <tr>
+     <td style='text-align: center; font-weight: bold; font-size: 1.2em; border: 2px solid #fff;' colspan='6'>Wed May 19 13:27:20 2021 PDT</td>
+  </tr>
+  <tr>
+    <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>OS</td>
+    <td style='text-align: left; border: 2px solid #fff;'>Darwin</td>
+    <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>CPU(s)</td>
+    <td style='text-align: left; border: 2px solid #fff;'>8</td>
+    <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>Machine</td>
+    <td style='text-align: left; border: 2px solid #fff;'>x86_64</td>
+  </tr>
+  <tr>
+    <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>Architecture</td>
+    <td style='text-align: left; border: 2px solid #fff;'>64bit</td>
+    <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>RAM</td>
+    <td style='text-align: left; border: 2px solid #fff;'>16.0 GB</td>
+    <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>Environment</td>
+    <td style='text-align: left; border: 2px solid #fff;'>Python</td>
+  </tr>
+  <tr>
+     <td style='text-align: center; border: 2px solid #fff;' colspan='6'>Python 3.8.5 | packaged by conda-forge | (default, Sep 24 2020, 16:37:41)
+[Clang 10.0.1 ]</td>
+  </tr>
+  <tr>
+    <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>SimPEG</td>
+    <td style='text-align: left; border: 2px solid #fff;'>0.15.0</td>
+    <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>discretize</td>
+    <td style='text-align: left; border: 2px solid #fff;'>0.7.0</td>
+    <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>pymatsolver</td>
+    <td style='text-align: left; border: 2px solid #fff;'>0.1.2</td>
+  </tr>
+  <tr>
+    <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>vectormath</td>
+    <td style='text-align: left; border: 2px solid #fff;'>0.2.2</td>
+    <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>properties</td>
+    <td style='text-align: left; border: 2px solid #fff;'>0.6.1</td>
+    <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>numpy</td>
+    <td style='text-align: left; border: 2px solid #fff;'>1.19.1</td>
+  </tr>
+  <tr>
+    <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>scipy</td>
+    <td style='text-align: left; border: 2px solid #fff;'>1.4.1</td>
+    <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>cython</td>
+    <td style='text-align: left; border: 2px solid #fff;'>0.29.14</td>
+    <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>IPython</td>
+    <td style='text-align: left; border: 2px solid #fff;'>7.18.1</td>
+  </tr>
+  <tr>
+    <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>matplotlib</td>
+    <td style='text-align: left; border: 2px solid #fff;'>3.3.2</td>
+    <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>ipywidgets</td>
+    <td style='text-align: left; border: 2px solid #fff;'>7.5.1</td>
+    <td style= border: 2px solid #fff;'></td>
+    <td style= border: 2px solid #fff;'></td>
+  </tr>
+</table>
+<br />
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  7.159 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-examples-06-tdem-plot-fwd-tdem-inductive-src-permeable-target-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/88f2e89e2fa27e4cf4f1064e805b532e/plot_fwd_tdem_inductive_src_permeable_target.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_fwd_tdem_inductive_src_permeable_target.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/7b859adfefff9cf78ce14a065de741b2/plot_fwd_tdem_inductive_src_permeable_target.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_fwd_tdem_inductive_src_permeable_target.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="plot_fwd_tdem_waveforms.html" class="btn btn-neutral float-right" title="TDEM: Waveforms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="plot_fwd_tdem_3d_model.html" class="btn btn-neutral float-left" title="Time-domain CSEM for a resistive cube in a deep marine setting" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+
+ 
+
+
+    <div id="disqus_thread"></div>
+    <script>
+
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+    var disqus_config = function () {
+    this.page.url = {path};  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = {path}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://simpeg.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    <div role="contentinfo">
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/" width="60px"; style="float:right;height:3em;line-height:3em;padding:10px 0 0 1em;">
+            <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" />
+        </a>
+        2013-2018,
+        <a href="http://simpeg.xyz">SimPEG Developers.</a><br />
+        Except where noted, this work is licensed under a <br />
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+            Creative Commons Attribution 4.0 International License
+        </a>
+    </div>
+    <br>
+    <div>
+    Built with
+        <a href="http://sphinx-doc.org/">Sphinx</a>
+        using a
+        <a href="https://github.com/snide/sphinx_rtd_theme">theme</a>
+        provided by
+        <a href="https://readthedocs.org">Read the Docs</a>.
+     </div>
+
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

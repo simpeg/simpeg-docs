@@ -1,0 +1,1352 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Optimize &mdash; SimPEG 0.15.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/logo-block.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="InvProblem" href="api_Inversion.html" />
+    <link rel="prev" title="Regularization" href="api_Regularization.html" />
+ 
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-45185336-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> SimPEG
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.15.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../basic/big_picture.html">Why SimPEG?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/contributing.html">Contributing to SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/installing.html">Getting Started with SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/getting_started_developers.html">Getting Started: for Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/practices.html">Practices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/01-models_mapping/index.html">Models and Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/02-linear_inversion/index.html">Linear Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/03-gravity/index.html">Gravity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/04-magnetics/index.html">Magnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/05-dcr/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/06-ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/07-fdem/index.html">Frequency-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/08-tdem/index.html">Time-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/09-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/10-vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/11-flow/index.html">Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/12-seismic/index.html">Seismic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/13-pgi/index.html">PGI: Petrophysically and Geologically Guided Geophysical Inversion</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Packages</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../em/index.html">Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dc/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pf/index.html">Potential Fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../flow/index.html">Richards Equation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api_FiniteVolume.html">Finite Volume</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_ForwardProblem.html">Forward Simulation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api_InversionComponents.html">Inversion Components</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="api_DataMisfit.html">Data Misfit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_Regularization.html">Regularization</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Optimize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_Inversion.html">InvProblem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_Inversion.html#inversion">Inversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_Inversion.html#module-SimPEG.directives">Directives</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_Maps.html">Maps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_Utilities.html">Utilities</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Meta Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../release/index.html">Release Notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SimPEG</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="api_InversionComponents.html">Inversion Components</a> &raquo;</li>
+        
+      <li>Optimize</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            <a href="https://github.com/simpeg/simpeg/edit/main/docs/content/api_core/api_Optimization.rst" class="fa fa-github"> Edit on GitHub</a>
+        
+      </li>
+    
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-SimPEG.optimization">
+<span id="optimize"></span><h1>Optimize<a class="headerlink" href="#module-SimPEG.optimization" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="SimPEG.optimization.StoppingCriteria">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.optimization.</code><code class="sig-name descname">StoppingCriteria</code><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L39-L124"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.StoppingCriteria" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>docstring for StoppingCriteria</p>
+<dl class="py attribute">
+<dt id="SimPEG.optimization.StoppingCriteria.iteration">
+<code class="sig-name descname">iteration</code><em class="property"> = {'left': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'right': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'stopType': 'critical', 'str': '%d : maxIter   =     %3d    &lt;= iter          =    %3d'}</em><a class="headerlink" href="#SimPEG.optimization.StoppingCriteria.iteration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.StoppingCriteria.iterationLS">
+<code class="sig-name descname">iterationLS</code><em class="property"> = {'left': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'right': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'stopType': 'critical', 'str': '%d : maxIterLS =     %3d    &lt;= iterLS          =    %3d'}</em><a class="headerlink" href="#SimPEG.optimization.StoppingCriteria.iterationLS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.StoppingCriteria.armijoGoldstein">
+<code class="sig-name descname">armijoGoldstein</code><em class="property"> = {'left': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'right': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'stopType': 'optimal', 'str': '%d :    ft     = %1.4e &lt;= alp*descent     = %1.4e'}</em><a class="headerlink" href="#SimPEG.optimization.StoppingCriteria.armijoGoldstein" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.StoppingCriteria.WolfeCurvature">
+<code class="sig-name descname">WolfeCurvature</code><em class="property"> = {'left': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'right': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'stopType': 'optimal', 'str': '%d :    -newgradient*descent  = %1.4e &lt;= -alp*oldgradient*descent     = %1.4e'}</em><a class="headerlink" href="#SimPEG.optimization.StoppingCriteria.WolfeCurvature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.StoppingCriteria.tolerance_f">
+<code class="sig-name descname">tolerance_f</code><em class="property"> = {'left': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'right': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'stopType': 'optimal', 'str': '%d : |fc-fOld| = %1.4e &lt;= tolF*(1+|f0|) = %1.4e'}</em><a class="headerlink" href="#SimPEG.optimization.StoppingCriteria.tolerance_f" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.StoppingCriteria.moving_x">
+<code class="sig-name descname">moving_x</code><em class="property"> = {'left': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'right': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'stopType': 'optimal', 'str': '%d : |xc-x_last| = %1.4e &lt;= tolX*(1+|x0|) = %1.4e'}</em><a class="headerlink" href="#SimPEG.optimization.StoppingCriteria.moving_x" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.StoppingCriteria.tolerance_g">
+<code class="sig-name descname">tolerance_g</code><em class="property"> = {'left': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'right': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'stopType': 'optimal', 'str': '%d : |proj(x-g)-x|    = %1.4e &lt;= tolG          = %1.4e'}</em><a class="headerlink" href="#SimPEG.optimization.StoppingCriteria.tolerance_g" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.StoppingCriteria.norm_g">
+<code class="sig-name descname">norm_g</code><em class="property"> = {'left': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'right': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'stopType': 'critical', 'str': '%d : |proj(x-g)-x|    = %1.4e &lt;= 1e3*eps       = %1.4e'}</em><a class="headerlink" href="#SimPEG.optimization.StoppingCriteria.norm_g" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.StoppingCriteria.bindingSet">
+<code class="sig-name descname">bindingSet</code><em class="property"> = {'left': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'right': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'stopType': 'critical', 'str': '%d : probSize  =    %3d   &lt;= bindingSet      =    %3d'}</em><a class="headerlink" href="#SimPEG.optimization.StoppingCriteria.bindingSet" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.StoppingCriteria.bindingSet_LS">
+<code class="sig-name descname">bindingSet_LS</code><em class="property"> = {'left': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'right': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'stopType': 'critical', 'str': '%d : probSize  =    %3d   &lt;= bindingSet      =    %3d'}</em><a class="headerlink" href="#SimPEG.optimization.StoppingCriteria.bindingSet_LS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.StoppingCriteria.phi_d_target_Minimize">
+<code class="sig-name descname">phi_d_target_Minimize</code><em class="property"> = {'left': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'right': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'stopType': 'critical', 'str': '%d : phi_d  = %1.4e &lt;= phi_d_target  = %1.4e '}</em><a class="headerlink" href="#SimPEG.optimization.StoppingCriteria.phi_d_target_Minimize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.StoppingCriteria.phi_d_target_Inversion">
+<code class="sig-name descname">phi_d_target_Inversion</code><em class="property"> = {'left': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'right': &lt;function StoppingCriteria.&lt;lambda&gt;&gt;, 'stopType': 'critical', 'str': '%d : phi_d  = %1.4e &lt;= phi_d_target  = %1.4e '}</em><a class="headerlink" href="#SimPEG.optimization.StoppingCriteria.phi_d_target_Inversion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.optimization.IterationPrinters">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.optimization.</code><code class="sig-name descname">IterationPrinters</code><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L127-L229"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.IterationPrinters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>docstring for IterationPrinters</p>
+<dl class="py attribute">
+<dt id="SimPEG.optimization.IterationPrinters.iteration">
+<code class="sig-name descname">iteration</code><em class="property"> = {'format': '%3d', 'title': '#', 'value': &lt;function IterationPrinters.&lt;lambda&gt;&gt;, 'width': 5}</em><a class="headerlink" href="#SimPEG.optimization.IterationPrinters.iteration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.IterationPrinters.f">
+<code class="sig-name descname">f</code><em class="property"> = {'format': '%1.2e', 'title': 'f', 'value': &lt;function IterationPrinters.&lt;lambda&gt;&gt;, 'width': 10}</em><a class="headerlink" href="#SimPEG.optimization.IterationPrinters.f" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.IterationPrinters.norm_g">
+<code class="sig-name descname">norm_g</code><em class="property"> = {'format': '%1.2e', 'title': '|proj(x-g)-x|', 'value': &lt;function IterationPrinters.&lt;lambda&gt;&gt;, 'width': 15}</em><a class="headerlink" href="#SimPEG.optimization.IterationPrinters.norm_g" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.IterationPrinters.totalLS">
+<code class="sig-name descname">totalLS</code><em class="property"> = {'format': '%d', 'title': 'LS', 'value': &lt;function IterationPrinters.&lt;lambda&gt;&gt;, 'width': 5}</em><a class="headerlink" href="#SimPEG.optimization.IterationPrinters.totalLS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.IterationPrinters.iterationLS">
+<code class="sig-name descname">iterationLS</code><em class="property"> = {'format': '%3d.%d', 'title': '#', 'value': &lt;function IterationPrinters.&lt;lambda&gt;&gt;, 'width': 5}</em><a class="headerlink" href="#SimPEG.optimization.IterationPrinters.iterationLS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.IterationPrinters.LS_ft">
+<code class="sig-name descname">LS_ft</code><em class="property"> = {'format': '%1.2e', 'title': 'ft', 'value': &lt;function IterationPrinters.&lt;lambda&gt;&gt;, 'width': 10}</em><a class="headerlink" href="#SimPEG.optimization.IterationPrinters.LS_ft" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.IterationPrinters.LS_t">
+<code class="sig-name descname">LS_t</code><em class="property"> = {'format': '%0.5f', 'title': 't', 'value': &lt;function IterationPrinters.&lt;lambda&gt;&gt;, 'width': 10}</em><a class="headerlink" href="#SimPEG.optimization.IterationPrinters.LS_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.IterationPrinters.LS_armijoGoldstein">
+<code class="sig-name descname">LS_armijoGoldstein</code><em class="property"> = {'format': '%1.2e', 'title': 'f + alp*g.T*p', 'value': &lt;function IterationPrinters.&lt;lambda&gt;&gt;, 'width': 16}</em><a class="headerlink" href="#SimPEG.optimization.IterationPrinters.LS_armijoGoldstein" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.IterationPrinters.LS_WolfeCurvature">
+<code class="sig-name descname">LS_WolfeCurvature</code><em class="property"> = {'format': '%1.2e', 'str': '%d :    ft     = %1.4e &gt;= alp*descent     = %1.4e', 'title': 'alp*g.T*p', 'value': &lt;function IterationPrinters.&lt;lambda&gt;&gt;, 'width': 16}</em><a class="headerlink" href="#SimPEG.optimization.IterationPrinters.LS_WolfeCurvature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.IterationPrinters.itType">
+<code class="sig-name descname">itType</code><em class="property"> = {'format': '%s', 'title': 'itType', 'value': &lt;function IterationPrinters.&lt;lambda&gt;&gt;, 'width': 8}</em><a class="headerlink" href="#SimPEG.optimization.IterationPrinters.itType" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.IterationPrinters.aSet">
+<code class="sig-name descname">aSet</code><em class="property"> = {'format': '%d', 'title': 'aSet', 'value': &lt;function IterationPrinters.&lt;lambda&gt;&gt;, 'width': 8}</em><a class="headerlink" href="#SimPEG.optimization.IterationPrinters.aSet" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.IterationPrinters.bSet">
+<code class="sig-name descname">bSet</code><em class="property"> = {'format': '%d', 'title': 'bSet', 'value': &lt;function IterationPrinters.&lt;lambda&gt;&gt;, 'width': 8}</em><a class="headerlink" href="#SimPEG.optimization.IterationPrinters.bSet" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.IterationPrinters.comment">
+<code class="sig-name descname">comment</code><em class="property"> = {'format': '%s', 'title': 'Comment', 'value': &lt;function IterationPrinters.&lt;lambda&gt;&gt;, 'width': 12}</em><a class="headerlink" href="#SimPEG.optimization.IterationPrinters.comment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.IterationPrinters.beta">
+<code class="sig-name descname">beta</code><em class="property"> = {'format': '%1.2e', 'title': 'beta', 'value': &lt;function IterationPrinters.&lt;lambda&gt;&gt;, 'width': 10}</em><a class="headerlink" href="#SimPEG.optimization.IterationPrinters.beta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.IterationPrinters.phi_d">
+<code class="sig-name descname">phi_d</code><em class="property"> = {'format': '%1.2e', 'title': 'phi_d', 'value': &lt;function IterationPrinters.&lt;lambda&gt;&gt;, 'width': 10}</em><a class="headerlink" href="#SimPEG.optimization.IterationPrinters.phi_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.IterationPrinters.phi_m">
+<code class="sig-name descname">phi_m</code><em class="property"> = {'format': '%1.2e', 'title': 'phi_m', 'value': &lt;function IterationPrinters.&lt;lambda&gt;&gt;, 'width': 10}</em><a class="headerlink" href="#SimPEG.optimization.IterationPrinters.phi_m" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.IterationPrinters.phi_s">
+<code class="sig-name descname">phi_s</code><em class="property"> = {'format': '%1.2e', 'title': 'phi_s', 'value': &lt;function IterationPrinters.&lt;lambda&gt;&gt;, 'width': 10}</em><a class="headerlink" href="#SimPEG.optimization.IterationPrinters.phi_s" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.IterationPrinters.phi_x">
+<code class="sig-name descname">phi_x</code><em class="property"> = {'format': '%1.2e', 'title': 'phi_x', 'value': &lt;function IterationPrinters.&lt;lambda&gt;&gt;, 'width': 10}</em><a class="headerlink" href="#SimPEG.optimization.IterationPrinters.phi_x" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.IterationPrinters.phi_y">
+<code class="sig-name descname">phi_y</code><em class="property"> = {'format': '%1.2e', 'title': 'phi_y', 'value': &lt;function IterationPrinters.&lt;lambda&gt;&gt;, 'width': 10}</em><a class="headerlink" href="#SimPEG.optimization.IterationPrinters.phi_y" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.IterationPrinters.phi_z">
+<code class="sig-name descname">phi_z</code><em class="property"> = {'format': '%1.2e', 'title': 'phi_z', 'value': &lt;function IterationPrinters.&lt;lambda&gt;&gt;, 'width': 10}</em><a class="headerlink" href="#SimPEG.optimization.IterationPrinters.phi_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.optimization.Minimize">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.optimization.</code><code class="sig-name descname">Minimize</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L232-L695"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Minimize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Minimize is a general class for derivative based optimization.</p>
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.name">
+<code class="sig-name descname">name</code><em class="property"> = 'General Optimization Algorithm'</em><a class="headerlink" href="#SimPEG.optimization.Minimize.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the optimization algorithm</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.maxIter">
+<code class="sig-name descname">maxIter</code><em class="property"> = 20</em><a class="headerlink" href="#SimPEG.optimization.Minimize.maxIter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum number of iterations</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.maxIterLS">
+<code class="sig-name descname">maxIterLS</code><em class="property"> = 10</em><a class="headerlink" href="#SimPEG.optimization.Minimize.maxIterLS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum number of iterations for the line-search</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.maxStep">
+<code class="sig-name descname">maxStep</code><em class="property"> = inf</em><a class="headerlink" href="#SimPEG.optimization.Minimize.maxStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum step possible, used in scaling before the line-search.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.LSreduction">
+<code class="sig-name descname">LSreduction</code><em class="property"> = 0.0001</em><a class="headerlink" href="#SimPEG.optimization.Minimize.LSreduction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expected decrease in the line-search</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.LScurvature">
+<code class="sig-name descname">LScurvature</code><em class="property"> = 0.9</em><a class="headerlink" href="#SimPEG.optimization.Minimize.LScurvature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.LSshorten">
+<code class="sig-name descname">LSshorten</code><em class="property"> = 0.5</em><a class="headerlink" href="#SimPEG.optimization.Minimize.LSshorten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Line-search step is shortened by this amount each time.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.tolF">
+<code class="sig-name descname">tolF</code><em class="property"> = 0.1</em><a class="headerlink" href="#SimPEG.optimization.Minimize.tolF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tolerance on function value decrease</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.tolX">
+<code class="sig-name descname">tolX</code><em class="property"> = 0.1</em><a class="headerlink" href="#SimPEG.optimization.Minimize.tolX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tolerance on norm(x) movement</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.tolG">
+<code class="sig-name descname">tolG</code><em class="property"> = 0.1</em><a class="headerlink" href="#SimPEG.optimization.Minimize.tolG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tolerance on gradient norm</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.eps">
+<code class="sig-name descname">eps</code><em class="property"> = 1e-05</em><a class="headerlink" href="#SimPEG.optimization.Minimize.eps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Small value</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.stopNextIteration">
+<code class="sig-name descname">stopNextIteration</code><em class="property"> = False</em><a class="headerlink" href="#SimPEG.optimization.Minimize.stopNextIteration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops the optimization program nicely.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.use_WolfeCurvature">
+<code class="sig-name descname">use_WolfeCurvature</code><em class="property"> = False</em><a class="headerlink" href="#SimPEG.optimization.Minimize.use_WolfeCurvature" title="Permalink to this definition">¶</a></dt>
+<dd><p>add the Wolfe Curvature criteria for line search</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.debug">
+<code class="sig-name descname">debug</code><em class="property"> = False</em><a class="headerlink" href="#SimPEG.optimization.Minimize.debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print debugging information</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.debugLS">
+<code class="sig-name descname">debugLS</code><em class="property"> = False</em><a class="headerlink" href="#SimPEG.optimization.Minimize.debugLS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print debugging information for the line-search</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.comment">
+<code class="sig-name descname">comment</code><em class="property"> = ''</em><a class="headerlink" href="#SimPEG.optimization.Minimize.comment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.counter">
+<code class="sig-name descname">counter</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.optimization.Minimize.counter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set this to a SimPEG.utils.Counter() if you want to count things</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.parent">
+<code class="sig-name descname">parent</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.optimization.Minimize.parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the parent of the optimization routine.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.print_type">
+<code class="sig-name descname">print_type</code><em class="property"> = None</em><a class="headerlink" href="#SimPEG.optimization.Minimize.print_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.factor">
+<code class="sig-name descname">factor</code><em class="property"> = 1.0</em><a class="headerlink" href="#SimPEG.optimization.Minimize.factor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.Minimize.callback">
+<em class="property">property </em><code class="sig-name descname">callback</code><a class="headerlink" href="#SimPEG.optimization.Minimize.callback" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.Minimize.minimize">
+<code class="sig-name descname">minimize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">evalFunction</span></em>, <em class="sig-param"><span class="n">x0</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L325-L400"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Minimize.minimize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimizes the function (evalFunction) starting at the location x0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>evalFunction</strong> (<em>callable</em>) – function handle that evaluates: f, g, H = F(x)</p></li>
+<li><p><strong>x0</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><em>numpy.ndarray</em></a>) – starting location</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>x, the last iterate of the optimization algorithm</p>
+</dd>
+</dl>
+<p>evalFunction is a function handle:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">f</span><span class="p">[,</span> <span class="n">g</span><span class="p">][,</span> <span class="n">H</span><span class="p">])</span> <span class="o">=</span> <span class="n">evalFunction</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">return_g</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_H</span><span class="o">=</span><span class="kc">False</span> <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">evalFunction</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">return_g</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_H</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">,)</span>
+    <span class="k">if</span> <span class="n">return_g</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">+=</span> <span class="p">(</span><span class="n">g</span><span class="p">,)</span>
+    <span class="k">if</span> <span class="n">return_H</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">+=</span> <span class="p">(</span><span class="n">H</span><span class="p">,)</span>
+    <span class="k">return</span> <span class="n">out</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The algorithm for general minimization is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">startup</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
+<span class="n">printInit</span><span class="p">()</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">doStartIteration</span><span class="p">()</span>
+    <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="n">evalFunction</span><span class="p">(</span><span class="n">xc</span><span class="p">)</span>
+    <span class="n">printIter</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">stoppingCriteria</span><span class="p">():</span> <span class="k">break</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">findSearchDirection</span><span class="p">()</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">scaleSearchDirection</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">xt</span><span class="p">,</span> <span class="n">passLS</span> <span class="o">=</span> <span class="n">modifySearchDirection</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">passLS</span><span class="p">:</span>
+        <span class="n">xt</span><span class="p">,</span> <span class="n">caught</span> <span class="o">=</span> <span class="n">modifySearchDirectionBreak</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">caught</span><span class="p">:</span> <span class="k">return</span> <span class="n">xc</span>
+    <span class="n">doEndIteration</span><span class="p">(</span><span class="n">xt</span><span class="p">)</span>
+
+<span class="n">printDone</span><span class="p">()</span>
+<span class="n">finish</span><span class="p">()</span>
+<span class="k">return</span> <span class="n">xc</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.Minimize.startup">
+<code class="sig-name descname">startup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x0</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L402-L426"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Minimize.startup" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>startup</strong> is called at the start of any new minimize call.</p>
+<p>This will set:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x0</span> <span class="o">=</span> <span class="n">x0</span>
+<span class="n">xc</span> <span class="o">=</span> <span class="n">x0</span>
+<span class="nb">iter</span> <span class="o">=</span> <span class="n">iterLS</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x0</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><em>numpy.ndarray</em></a>) – initial x</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p>None</p>
+<p>If you have things that also need to run in the method startup, you can create a method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_startup</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">...</span> <span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>Where the * can be any string. If present, _startup* will be called at the start of the default startup call.
+You may also completely overwrite this function.</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.Minimize.doStartIteration">
+<code class="sig-name descname">doStartIteration</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L428-L439"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Minimize.doStartIteration" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>doStartIteration</strong> is called at the start of each minimize
+iteration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>None</p>
+<p>If you have things that also need to run in the method doStartIteration, you can create a method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_doStartIteration</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">...</span> <span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>Where the * can be any string. If present, _doStartIteration* will be called at the start of the default doStartIteration call.
+You may also completely overwrite this function.</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.Minimize.printInit">
+<code class="sig-name descname">printInit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inLS</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L441-L452"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Minimize.printInit" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>printInit</strong> is called at the beginning of the optimization
+routine.</p>
+<p>If there is a parent object, printInit will check for a
+parent.printInit function and call that.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.Minimize.printIter">
+<code class="sig-name descname">printIter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inLS</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L454-L464"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Minimize.printIter" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>printIter</strong> is called directly after function evaluations.</p>
+<p>If there is a parent object, printIter will check for a
+parent.printIter function and call that.</p>
+<blockquote>
+<div><p>If you have things that also need to run in the method printIter, you can create a method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_printIter</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">...</span> <span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>Where the * can be any string. If present, _printIter* will be called at the start of the default printIter call.
+You may also completely overwrite this function.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.Minimize.printDone">
+<code class="sig-name descname">printDone</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inLS</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L466-L494"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Minimize.printDone" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>printDone</strong> is called at the end of the optimization routine.</p>
+<p>If there is a parent object, printDone will check for a
+parent.printDone function and call that.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.Minimize.finish">
+<code class="sig-name descname">finish</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L496-L506"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Minimize.finish" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>finish</strong> is called at the end of the optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>None</p>
+<p>If you have things that also need to run in the method finish, you can create a method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_finish</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">...</span> <span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>Where the * can be any string. If present, _finish* will be called at the start of the default finish call.
+You may also completely overwrite this function.</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.Minimize.stoppingCriteria">
+<code class="sig-name descname">stoppingCriteria</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inLS</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L508-L512"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Minimize.stoppingCriteria" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.Minimize.projection">
+<code class="sig-name descname">projection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L514-L527"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Minimize.projection" title="Permalink to this definition">¶</a></dt>
+<dd><p>projects the search direction.</p>
+<p>by default, no projection is applied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>p</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><em>numpy.ndarray</em></a>) – searchDirection</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p>p, projected search direction</p>
+<p>If you have things that also need to run in the method projection, you can create a method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_projection</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">...</span> <span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>Where the * can be any string. If present, _projection* will be called at the start of the default projection call.
+You may also completely overwrite this function.</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.Minimize.findSearchDirection">
+<code class="sig-name descname">findSearchDirection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L529-L558"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Minimize.findSearchDirection" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>findSearchDirection</strong> should return an approximation of:</p>
+<div class="math notranslate nohighlight">
+\[H p = - g\]</div>
+<p>Where you are solving for the search direction, p</p>
+<p>The default is:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}H = I\\p = - g\end{aligned}\end{align} \]</div>
+<p>And corresponds to SteepestDescent.</p>
+<p>The latest function evaluations are present in:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>p, Search Direction</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.Minimize.scaleSearchDirection">
+<code class="sig-name descname">scaleSearchDirection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L560-L577"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Minimize.scaleSearchDirection" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>scaleSearchDirection</strong> should scale the search direction if
+appropriate.</p>
+<p>Set the parameter <strong>maxStep</strong> in the minimize object, to scale back
+the gradient to a maximum size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>p</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><em>numpy.ndarray</em></a>) – searchDirection</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>p, Scaled Search Direction</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Minimize.nameLS">
+<code class="sig-name descname">nameLS</code><em class="property"> = 'Armijo linesearch'</em><a class="headerlink" href="#SimPEG.optimization.Minimize.nameLS" title="Permalink to this definition">¶</a></dt>
+<dd><p>The line-search name</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.Minimize.modifySearchDirection">
+<code class="sig-name descname">modifySearchDirection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L581-L635"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Minimize.modifySearchDirection" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>modifySearchDirection</strong> changes the search direction based on
+some sort of linesearch or trust-region criteria.</p>
+<p>By default, an Armijo backtracking linesearch is preformed with the
+following parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>maxIterLS, the maximum number of linesearch iterations</p></li>
+<li><p>LSreduction, the expected reduction expected, default: 1e-4</p></li>
+<li><p>LSshorten, how much the step is reduced, default: 0.5</p></li>
+</ul>
+</div></blockquote>
+<p>If the linesearch is completed, and a descent direction is found,
+passLS is returned as True.</p>
+<p>Else, a modifySearchDirectionBreak call is preformed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>p</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><em>numpy.ndarray</em></a>) – searchDirection</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(xt, passLS) numpy.ndarray, bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.Minimize.modifySearchDirectionBreak">
+<code class="sig-name descname">modifySearchDirectionBreak</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L637-L657"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Minimize.modifySearchDirectionBreak" title="Permalink to this definition">¶</a></dt>
+<dd><p>Code is called if modifySearchDirection fails
+to find a descent direction.</p>
+<p>The search direction is passed as input and
+this function must pass back both a new searchDirection,
+and if the searchDirection break has been caught.</p>
+<p>By default, no additional work is done, and the
+evalFunction returns a False indicating the break was not caught.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>p</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><em>numpy.ndarray</em></a>) – searchDirection</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(xt, breakCaught) numpy.ndarray, bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.Minimize.doEndIteration">
+<code class="sig-name descname">doEndIteration</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xt</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L659-L683"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Minimize.doEndIteration" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>doEndIteration</strong> is called at the end of each minimize iteration.</p>
+<p>By default, function values and x locations are shuffled to store 1
+past iteration in memory.</p>
+<p>self.xc must be updated in this code.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xt</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><em>numpy.ndarray</em></a>) – tested new iterate that ensures a descent direction.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p>None</p>
+<p>If you have things that also need to run in the method doEndIteration, you can create a method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_doEndIteration</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">...</span> <span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>Where the * can be any string. If present, _doEndIteration* will be called at the start of the default doEndIteration call.
+You may also completely overwrite this function.</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.Minimize.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">group</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L685-L695"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Minimize.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.optimization.Remember">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.optimization.</code><code class="sig-name descname">Remember</code><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L698-L751"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Remember" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>This mixin remembers all the things you tend to forget.</p>
+<p>You can remember parameters directly, naming the str in Minimize,
+or pass a tuple with the name and the function that takes Minimize.</p>
+<p>For Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">opt</span><span class="o">.</span><span class="n">remember</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,(</span><span class="s1">&#39;norm_g&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">M</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">g</span><span class="p">)))</span>
+
+<span class="n">opt</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">evalFunction</span><span class="p">,</span> <span class="n">x0</span><span class="p">)</span>
+
+<span class="n">opt</span><span class="o">.</span><span class="n">recall</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The param name (str) can also be located in the parent (if no conflicts),
+and it will be looked up by default.</p>
+<dl class="py attribute">
+<dt id="SimPEG.optimization.Remember._rememberThese">
+<code class="sig-name descname">_rememberThese</code><em class="property"> = []</em><a class="headerlink" href="#SimPEG.optimization.Remember._rememberThese" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.Remember.remember">
+<code class="sig-name descname">remember</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L719-L720"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Remember.remember" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.Remember.recall">
+<code class="sig-name descname">recall</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">param</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L722-L728"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Remember.recall" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.Remember._startupRemember">
+<code class="sig-name descname">_startupRemember</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x0</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L730-L736"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Remember._startupRemember" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.Remember._doEndIterationRemember">
+<code class="sig-name descname">_doEndIterationRemember</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L738-L751"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.Remember._doEndIterationRemember" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.optimization.ProjectedGradient">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.optimization.</code><code class="sig-name descname">ProjectedGradient</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L754-L925"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.ProjectedGradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.optimization.Minimize" title="SimPEG.optimization.Minimize"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.optimization.Minimize</span></code></a>, <a class="reference internal" href="#SimPEG.optimization.Remember" title="SimPEG.optimization.Remember"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.optimization.Remember</span></code></a></p>
+<dl class="py attribute">
+<dt id="SimPEG.optimization.ProjectedGradient.name">
+<code class="sig-name descname">name</code><em class="property"> = 'Projected Gradient'</em><a class="headerlink" href="#SimPEG.optimization.ProjectedGradient.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.ProjectedGradient.maxIterCG">
+<code class="sig-name descname">maxIterCG</code><em class="property"> = 5</em><a class="headerlink" href="#SimPEG.optimization.ProjectedGradient.maxIterCG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.ProjectedGradient.tolCG">
+<code class="sig-name descname">tolCG</code><em class="property"> = 0.1</em><a class="headerlink" href="#SimPEG.optimization.ProjectedGradient.tolCG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.ProjectedGradient.lower">
+<code class="sig-name descname">lower</code><em class="property"> = -inf</em><a class="headerlink" href="#SimPEG.optimization.ProjectedGradient.lower" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.ProjectedGradient.upper">
+<code class="sig-name descname">upper</code><em class="property"> = inf</em><a class="headerlink" href="#SimPEG.optimization.ProjectedGradient.upper" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.ProjectedGradient._startup">
+<code class="sig-name descname">_startup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x0</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L778-L792"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.ProjectedGradient._startup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.ProjectedGradient.projection">
+<code class="sig-name descname">projection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L794-L801"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.ProjectedGradient.projection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make sure we are feasible.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.ProjectedGradient.activeSet">
+<code class="sig-name descname">activeSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L803-L810"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.ProjectedGradient.activeSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>If we are on a bound</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.ProjectedGradient.inactiveSet">
+<code class="sig-name descname">inactiveSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L812-L819"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.ProjectedGradient.inactiveSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>The free variables.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.ProjectedGradient.bindingSet">
+<code class="sig-name descname">bindingSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L821-L833"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.ProjectedGradient.bindingSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>If we are on a bound and the negative gradient points away from the
+feasible set.</p>
+<p>Optimality condition. (Satisfies Kuhn-Tucker) MoreToraldo91</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.ProjectedGradient.findSearchDirection">
+<code class="sig-name descname">findSearchDirection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L835-L892"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.ProjectedGradient.findSearchDirection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the search direction based on either CG or steepest descent.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.ProjectedGradient._doEndIteration_ProjectedGradient">
+<code class="sig-name descname">_doEndIteration_ProjectedGradient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xt</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L894-L925"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.ProjectedGradient._doEndIteration_ProjectedGradient" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.optimization.BFGS">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.optimization.</code><code class="sig-name descname">BFGS</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L928-L1002"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.BFGS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.optimization.Minimize" title="SimPEG.optimization.Minimize"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.optimization.Minimize</span></code></a>, <a class="reference internal" href="#SimPEG.optimization.Remember" title="SimPEG.optimization.Remember"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.optimization.Remember</span></code></a></p>
+<dl class="py attribute">
+<dt id="SimPEG.optimization.BFGS.name">
+<code class="sig-name descname">name</code><em class="property"> = 'BFGS'</em><a class="headerlink" href="#SimPEG.optimization.BFGS.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.BFGS.nbfgs">
+<code class="sig-name descname">nbfgs</code><em class="property"> = 10</em><a class="headerlink" href="#SimPEG.optimization.BFGS.nbfgs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.BFGS.bfgsH0">
+<em class="property">property </em><code class="sig-name descname">bfgsH0</code><a class="headerlink" href="#SimPEG.optimization.BFGS.bfgsH0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Approximate Hessian used in preconditioning the problem.</p>
+<p>Must be a SimPEG.Solver</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.BFGS._startup_BFGS">
+<code class="sig-name descname">_startup_BFGS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x0</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L955-L960"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.BFGS._startup_BFGS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.BFGS.bfgs">
+<code class="sig-name descname">bfgs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L962-L965"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.BFGS.bfgs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.BFGS.bfgsrec">
+<code class="sig-name descname">bfgsrec</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">k</span></em>, <em class="sig-param"><span class="n">n</span></em>, <em class="sig-param"><span class="n">nn</span></em>, <em class="sig-param"><span class="n">S</span></em>, <em class="sig-param"><span class="n">Y</span></em>, <em class="sig-param"><span class="n">d</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L967-L981"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.BFGS.bfgsrec" title="Permalink to this definition">¶</a></dt>
+<dd><p>BFGS recursion</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.BFGS.findSearchDirection">
+<code class="sig-name descname">findSearchDirection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L983-L984"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.BFGS.findSearchDirection" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>findSearchDirection</strong> should return an approximation of:</p>
+<div class="math notranslate nohighlight">
+\[H p = - g\]</div>
+<p>Where you are solving for the search direction, p</p>
+<p>The default is:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}H = I\\p = - g\end{aligned}\end{align} \]</div>
+<p>And corresponds to SteepestDescent.</p>
+<p>The latest function evaluations are present in:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>p, Search Direction</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.BFGS._doEndIteration_BFGS">
+<code class="sig-name descname">_doEndIteration_BFGS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xt</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L986-L1002"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.BFGS._doEndIteration_BFGS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.optimization.GaussNewton">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.optimization.</code><code class="sig-name descname">GaussNewton</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L1005-L1013"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.GaussNewton" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.optimization.Minimize" title="SimPEG.optimization.Minimize"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.optimization.Minimize</span></code></a>, <a class="reference internal" href="#SimPEG.optimization.Remember" title="SimPEG.optimization.Remember"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.optimization.Remember</span></code></a></p>
+<dl class="py attribute">
+<dt id="SimPEG.optimization.GaussNewton.name">
+<code class="sig-name descname">name</code><em class="property"> = 'Gauss Newton'</em><a class="headerlink" href="#SimPEG.optimization.GaussNewton.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.GaussNewton.findSearchDirection">
+<code class="sig-name descname">findSearchDirection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L1011-L1013"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.GaussNewton.findSearchDirection" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>findSearchDirection</strong> should return an approximation of:</p>
+<div class="math notranslate nohighlight">
+\[H p = - g\]</div>
+<p>Where you are solving for the search direction, p</p>
+<p>The default is:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}H = I\\p = - g\end{aligned}\end{align} \]</div>
+<p>And corresponds to SteepestDescent.</p>
+<p>The latest function evaluations are present in:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>p, Search Direction</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.optimization.InexactGaussNewton">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.optimization.</code><code class="sig-name descname">InexactGaussNewton</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L1016-L1068"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.InexactGaussNewton" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.optimization.BFGS" title="SimPEG.optimization.BFGS"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.optimization.BFGS</span></code></a>, <a class="reference internal" href="#SimPEG.optimization.Minimize" title="SimPEG.optimization.Minimize"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.optimization.Minimize</span></code></a>, <a class="reference internal" href="#SimPEG.optimization.Remember" title="SimPEG.optimization.Remember"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.optimization.Remember</span></code></a></p>
+<p>Minimizes using CG as the inexact solver of</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{H p = -g}\]</div>
+<p>By default BFGS is used as the preconditioner.</p>
+<p>Use <em>nbfgs</em> to set the memory limitation of BFGS.</p>
+<p>To set the initial H0 to be used in BFGS, set <em>bfgsH0</em> to be a
+SimPEG.Solver</p>
+<dl class="py attribute">
+<dt id="SimPEG.optimization.InexactGaussNewton.name">
+<code class="sig-name descname">name</code><em class="property"> = 'Inexact Gauss Newton'</em><a class="headerlink" href="#SimPEG.optimization.InexactGaussNewton.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.InexactGaussNewton.maxIterCG">
+<code class="sig-name descname">maxIterCG</code><em class="property"> = 5</em><a class="headerlink" href="#SimPEG.optimization.InexactGaussNewton.maxIterCG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.InexactGaussNewton.tolCG">
+<code class="sig-name descname">tolCG</code><em class="property"> = 0.1</em><a class="headerlink" href="#SimPEG.optimization.InexactGaussNewton.tolCG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.InexactGaussNewton.approxHinv">
+<em class="property">property </em><code class="sig-name descname">approxHinv</code><a class="headerlink" href="#SimPEG.optimization.InexactGaussNewton.approxHinv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The approximate Hessian inverse is used to precondition CG.</p>
+<p>Default uses BFGS, with an initial H0 of <em>bfgsH0</em>.</p>
+<p>Must be a scipy.sparse.linalg.LinearOperator</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.InexactGaussNewton.findSearchDirection">
+<code class="sig-name descname">findSearchDirection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L1062-L1068"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.InexactGaussNewton.findSearchDirection" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>findSearchDirection</strong> should return an approximation of:</p>
+<div class="math notranslate nohighlight">
+\[H p = - g\]</div>
+<p>Where you are solving for the search direction, p</p>
+<p>The default is:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}H = I\\p = - g\end{aligned}\end{align} \]</div>
+<p>And corresponds to SteepestDescent.</p>
+<p>The latest function evaluations are present in:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>p, Search Direction</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.optimization.SteepestDescent">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.optimization.</code><code class="sig-name descname">SteepestDescent</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L1071-L1079"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.SteepestDescent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimPEG.optimization.Minimize" title="SimPEG.optimization.Minimize"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.optimization.Minimize</span></code></a>, <a class="reference internal" href="#SimPEG.optimization.Remember" title="SimPEG.optimization.Remember"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.optimization.Remember</span></code></a></p>
+<dl class="py attribute">
+<dt id="SimPEG.optimization.SteepestDescent.name">
+<code class="sig-name descname">name</code><em class="property"> = 'Steepest Descent'</em><a class="headerlink" href="#SimPEG.optimization.SteepestDescent.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.SteepestDescent.findSearchDirection">
+<code class="sig-name descname">findSearchDirection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L1077-L1079"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.SteepestDescent.findSearchDirection" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>findSearchDirection</strong> should return an approximation of:</p>
+<div class="math notranslate nohighlight">
+\[H p = - g\]</div>
+<p>Where you are solving for the search direction, p</p>
+<p>The default is:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}H = I\\p = - g\end{aligned}\end{align} \]</div>
+<p>And corresponds to SteepestDescent.</p>
+<p>The latest function evaluations are present in:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)">numpy.ndarray</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>p, Search Direction</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.optimization.NewtonRoot">
+<em class="property">class </em><code class="sig-prename descclassname">SimPEG.optimization.</code><code class="sig-name descname">NewtonRoot</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L1082-L1171"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.NewtonRoot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Newton Method - Root Finding</p>
+<p>root = newtonRoot(fun,x);</p>
+<p>Where fun is the function that returns the function value as well as
+the gradient.</p>
+<p>For iterative solving of dh = -Jr, use O.solveTol = TOL. For direct
+solves, use SOLVETOL = 0 (default)</p>
+<p>Rowan Cockett
+16-May-2013 16:29:51
+University of British Columbia
+<a class="reference external" href="mailto:rcockett&#37;&#52;&#48;eos&#46;ubc&#46;ca">rcockett<span>&#64;</span>eos<span>&#46;</span>ubc<span>&#46;</span>ca</a></p>
+<dl class="py attribute">
+<dt id="SimPEG.optimization.NewtonRoot.tol">
+<code class="sig-name descname">tol</code><em class="property"> = 1e-06</em><a class="headerlink" href="#SimPEG.optimization.NewtonRoot.tol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.NewtonRoot.maxIter">
+<code class="sig-name descname">maxIter</code><em class="property"> = 20</em><a class="headerlink" href="#SimPEG.optimization.NewtonRoot.maxIter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.NewtonRoot.stepDcr">
+<code class="sig-name descname">stepDcr</code><em class="property"> = 0.5</em><a class="headerlink" href="#SimPEG.optimization.NewtonRoot.stepDcr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.NewtonRoot.maxLS">
+<code class="sig-name descname">maxLS</code><em class="property"> = 30</em><a class="headerlink" href="#SimPEG.optimization.NewtonRoot.maxLS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.NewtonRoot.comments">
+<code class="sig-name descname">comments</code><em class="property"> = False</em><a class="headerlink" href="#SimPEG.optimization.NewtonRoot.comments" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.NewtonRoot.doLS">
+<code class="sig-name descname">doLS</code><em class="property"> = True</em><a class="headerlink" href="#SimPEG.optimization.NewtonRoot.doLS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt id="SimPEG.optimization.NewtonRoot.Solver">
+<em class="property">class </em><code class="sig-name descname">Solver</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">A</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/utils/solver_utils.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.NewtonRoot.Solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt id="SimPEG.optimization.NewtonRoot.Solver.clean">
+<code class="sig-name descname">clean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/utils/solver_utils.py#L99-L101"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.NewtonRoot.Solver.clean" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimPEG.optimization.NewtonRoot.solverOpts">
+<code class="sig-name descname">solverOpts</code><em class="property"> = {}</em><a class="headerlink" href="#SimPEG.optimization.NewtonRoot.solverOpts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SimPEG.optimization.NewtonRoot.root">
+<code class="sig-name descname">root</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fun</span></em>, <em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/optimization.py#L1114-L1171"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimPEG.optimization.NewtonRoot.root" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function Should have the form:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">evalFunction</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">return_g</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">,)</span>
+        <span class="k">if</span> <span class="n">return_g</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">+=</span> <span class="p">(</span><span class="n">g</span><span class="p">,)</span>
+        <span class="k">return</span> <span class="n">out</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api_Inversion.html" class="btn btn-neutral float-right" title="InvProblem" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="api_Regularization.html" class="btn btn-neutral float-left" title="Regularization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+
+ 
+
+
+    <div id="disqus_thread"></div>
+    <script>
+
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+    var disqus_config = function () {
+    this.page.url = {path};  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = {path}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://simpeg.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+    <div role="contentinfo">
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/" width="60px"; style="float:right;height:3em;line-height:3em;padding:10px 0 0 1em;">
+            <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" />
+        </a>
+        2013-2018,
+        <a href="http://simpeg.xyz">SimPEG Developers.</a><br />
+        Except where noted, this work is licensed under a <br />
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+            Creative Commons Attribution 4.0 International License
+        </a>
+    </div>
+    <br>
+    <div>
+    Built with
+        <a href="http://sphinx-doc.org/">Sphinx</a>
+        using a
+        <a href="https://github.com/snide/sphinx_rtd_theme">theme</a>
+        provided by
+        <a href="https://readthedocs.org">Read the Docs</a>.
+     </div>
+
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
