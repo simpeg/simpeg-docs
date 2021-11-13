@@ -479,26 +479,11 @@ Here, we define the physics of the DC resistivity simulation.
 
 
     dc_simulation = dc.simulation.Simulation3DNodal(
-        mesh, survey=dc_survey, sigmaMap=conductivity_map, Solver=Solver
+        mesh, survey=dc_survey, sigmaMap=conductivity_map, solver=Solver, storeJ=True
     )
 
 
 
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:413: FutureWarning:
-
-    Solver has been deprecated, please use simulation.solver. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:420: FutureWarning:
-
-    Solver has been deprecated, please use simulation.solver. It will be removed in version 0.16.0 of SimPEG.
 
 
 
@@ -517,7 +502,7 @@ The inverse problem is defined by 3 things:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 342-371
+.. GENERATED FROM PYTHON SOURCE LINES 342-365
 
 .. code-block:: default
 
@@ -531,13 +516,7 @@ The inverse problem is defined by 3 things:
 
     # Define the regularization (model objective function)
     dc_regularization = regularization.Simple(
-        mesh,
-        indActive=ind_active,
-        mref=starting_conductivity_model,
-        alpha_s=0.01,
-        alpha_x=1,
-        alpha_y=1,
-        alpha_z=1,
+        mesh, indActive=ind_active, mref=starting_conductivity_model,
     )
 
     dc_regularization.mrefInSmooth = True  # Include reference model in smoothness
@@ -557,7 +536,7 @@ The inverse problem is defined by 3 things:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 372-380
+.. GENERATED FROM PYTHON SOURCE LINES 366-374
 
 Define DC Inversion Directives
 ------------------------------
@@ -568,7 +547,7 @@ criteria for the inversion and saving inversion results at each iteration.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 380-411
+.. GENERATED FROM PYTHON SOURCE LINES 374-405
 
 .. code-block:: default
 
@@ -610,7 +589,7 @@ criteria for the inversion and saving inversion results at each iteration.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 412-418
+.. GENERATED FROM PYTHON SOURCE LINES 406-412
 
 Running the DC Inversion
 ------------------------
@@ -619,7 +598,7 @@ To define the inversion object, we need to define the inversion problem and
 the set of directives. We can then run the inversion.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 418-427
+.. GENERATED FROM PYTHON SOURCE LINES 412-421
 
 .. code-block:: default
 
@@ -645,38 +624,48 @@ the set of directives. We can then run the inversion.
 
             SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
             ***Done using same Solver and solverOpts as the problem***
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/pymatsolver/direct.py:26: PardisoTypeConversionWarning:
+
+    Converting csc_matrix matrix to CSR format, will slow down.
+
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/pymatsolver/direct.py:73: PardisoTypeConversionWarning:
+
+    Converting csc_matrix matrix to CSR format, will slow down.
+
     model has any nan: 0
     ============================ Inexact Gauss Newton ============================
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  3.86e+02  1.84e+04  0.00e+00  1.84e+04    1.81e+03      0              
-       1  3.86e+02  1.92e+03  2.36e+00  2.84e+03    1.85e+02      0              
-       2  1.54e+02  1.17e+03  3.34e+00  1.68e+03    8.51e+01      0   Skip BFGS  
-       3  1.54e+02  7.20e+02  5.38e+00  1.55e+03    1.01e+01      0   Skip BFGS  
-       4  6.18e+01  7.21e+02  5.35e+00  1.05e+03    7.38e+01      0              
-       5  6.18e+01  3.82e+02  8.68e+00  9.18e+02    6.20e+00      0              
-       6  2.47e+01  3.76e+02  8.72e+00  5.91e+02    4.73e+01      0              
-       7  2.47e+01  1.96e+02  1.30e+01  5.18e+02    3.64e+00      0              
-       8  9.89e+00  1.93e+02  1.31e+01  3.23e+02    2.91e+01      0              
+       0  2.92e-02  1.86e+04  0.00e+00  1.86e+04    2.02e+03      0              
+       1  2.92e-02  4.68e+03  1.51e+05  9.08e+03    1.71e+02      0              
+       2  1.17e-02  5.59e+03  1.12e+05  6.90e+03    4.63e+02      0              
+       3  1.17e-02  2.69e+03  3.07e+05  6.28e+03    9.79e+01      0              
+       4  4.68e-03  3.30e+03  2.43e+05  4.44e+03    3.01e+02      0              
+       5  4.68e-03  1.42e+03  5.79e+05  4.13e+03    6.46e+01      0              
+       6  1.87e-03  1.80e+03  4.70e+05  2.68e+03    1.88e+02      0              
+       7  1.87e-03  7.05e+02  9.95e+05  2.56e+03    3.92e+01      0              
+       8  7.48e-04  9.09e+02  8.35e+05  1.53e+03    1.11e+02      0              
+       9  7.48e-04  3.40e+02  1.44e+06  1.42e+03    1.42e+01      0              
+      10  2.99e-04  3.97e+02  1.34e+06  7.97e+02    5.71e+01      0              
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 1.8429e+03
-    1 : |xc-x_last| = 5.4752e+01 <= tolX*(1+|x0|) = 8.6933e+01
-    0 : |proj(x-g)-x|    = 2.9100e+01 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 2.9100e+01 <= 1e3*eps       = 1.0000e-02
-    0 : maxIter   =      15    <= iter          =      9
+    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 1.8637e+03
+    1 : |xc-x_last| = 1.7158e+01 <= tolX*(1+|x0|) = 8.6927e+01
+    0 : |proj(x-g)-x|    = 5.7092e+01 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 5.7092e+01 <= 1e3*eps       = 1.0000e-02
+    0 : maxIter   =      15    <= iter          =     11
     ------------------------- DONE! -------------------------
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 428-431
+.. GENERATED FROM PYTHON SOURCE LINES 422-425
 
 Recreate True Conductivity Model
 --------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 431-448
+.. GENERATED FROM PYTHON SOURCE LINES 425-442
 
 .. code-block:: default
 
@@ -704,13 +693,13 @@ Recreate True Conductivity Model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 449-452
+.. GENERATED FROM PYTHON SOURCE LINES 443-446
 
 Plotting True and Recovered Conductivity Model
 ----------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 452-513
+.. GENERATED FROM PYTHON SOURCE LINES 446-508
 
 .. code-block:: default
 
@@ -774,6 +763,7 @@ Plotting True and Recovered Conductivity Model
         ax2, cmap=mpl.cm.viridis, norm=norm, orientation="vertical", format="$10^{%.1f}$"
     )
     cbar.set_label("Conductivity [S/m]", rotation=270, labelpad=15, size=12)
+    plt.show()
 
 
 
@@ -783,21 +773,23 @@ Plotting True and Recovered Conductivity Model
 
     *
 
-      .. image:: /content/tutorials/06-ip/images/sphx_glr_plot_inv_3_dcip3d_003.png
-          :alt: True Conductivity Model
-          :class: sphx-glr-multi-img
+      .. image-sg:: /content/tutorials/06-ip/images/sphx_glr_plot_inv_3_dcip3d_003.png
+         :alt: True Conductivity Model
+         :srcset: /content/tutorials/06-ip/images/sphx_glr_plot_inv_3_dcip3d_003.png
+         :class: sphx-glr-multi-img
 
     *
 
-      .. image:: /content/tutorials/06-ip/images/sphx_glr_plot_inv_3_dcip3d_004.png
-          :alt: Recovered Conductivity Model
-          :class: sphx-glr-multi-img
+      .. image-sg:: /content/tutorials/06-ip/images/sphx_glr_plot_inv_3_dcip3d_004.png
+         :alt: Recovered Conductivity Model
+         :srcset: /content/tutorials/06-ip/images/sphx_glr_plot_inv_3_dcip3d_004.png
+         :class: sphx-glr-multi-img
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 514-521
+.. GENERATED FROM PYTHON SOURCE LINES 509-516
 
 Plotting Normalized Data Misfit or Predicted DC Data
 ----------------------------------------------------
@@ -807,7 +799,7 @@ it is a good idea to compare the predicted and observed data.
 Here, we accomplish this by plotting the normalized misfit.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 521-557
+.. GENERATED FROM PYTHON SOURCE LINES 516-552
 
 .. code-block:: default
 
@@ -857,7 +849,7 @@ Here, we accomplish this by plotting the normalized misfit.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 558-567
+.. GENERATED FROM PYTHON SOURCE LINES 553-562
 
 Starting/Reference Model for IP Inversion
 -----------------------------------------
@@ -869,7 +861,7 @@ structures. Here, the starting model is the 1e-6 V/V.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 567-582
+.. GENERATED FROM PYTHON SOURCE LINES 562-577
 
 .. code-block:: default
 
@@ -895,7 +887,7 @@ structures. Here, the starting model is the 1e-6 V/V.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 583-592
+.. GENERATED FROM PYTHON SOURCE LINES 578-587
 
 Define the Physics of the IP Simulation
 ---------------------------------------
@@ -907,7 +899,7 @@ entire mesh.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 592-601
+.. GENERATED FROM PYTHON SOURCE LINES 587-597
 
 .. code-block:: default
 
@@ -917,32 +909,18 @@ entire mesh.
         survey=ip_survey,
         etaMap=chargeability_map,
         sigma=conductivity_map * recovered_conductivity_model,
-        Solver=Solver,
+        solver=Solver,
+        storeJ=True,
     )
 
 
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:413: FutureWarning:
-
-    Solver has been deprecated, please use simulation.solver. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:420: FutureWarning:
-
-    Solver has been deprecated, please use simulation.solver. It will be removed in version 0.16.0 of SimPEG.
 
 
 
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 602-607
+.. GENERATED FROM PYTHON SOURCE LINES 598-603
 
 Define IP Inverse Problem
 -------------------------
@@ -950,7 +928,7 @@ Define IP Inverse Problem
 Here we define the inverse problem in the same manner as the DC inverse problem.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 607-632
+.. GENERATED FROM PYTHON SOURCE LINES 603-628
 
 .. code-block:: default
 
@@ -986,7 +964,7 @@ Here we define the inverse problem in the same manner as the DC inverse problem.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 633-638
+.. GENERATED FROM PYTHON SOURCE LINES 629-634
 
 Define IP Inversion Directives
 ------------------------------
@@ -994,7 +972,7 @@ Define IP Inversion Directives
 Here we define the directives in the same manner as the DC inverse problem.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 638-656
+.. GENERATED FROM PYTHON SOURCE LINES 634-652
 
 .. code-block:: default
 
@@ -1023,13 +1001,13 @@ Here we define the directives in the same manner as the DC inverse problem.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 657-660
+.. GENERATED FROM PYTHON SOURCE LINES 653-656
 
 Running the IP Inversion
 ------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 660-669
+.. GENERATED FROM PYTHON SOURCE LINES 656-665
 
 .. code-block:: default
 
@@ -1056,32 +1034,38 @@ Running the IP Inversion
 
             SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
             ***Done using same Solver and solverOpts as the problem***
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/pymatsolver/direct.py:26: PardisoTypeConversionWarning:
+
+    Converting csc_matrix matrix to CSR format, will slow down.
+
+    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/pymatsolver/direct.py:73: PardisoTypeConversionWarning:
+
+    Converting csc_matrix matrix to CSR format, will slow down.
+
     model has any nan: 0
     =============================== Projected GNCG ===============================
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  2.37e+05  3.73e+03  0.00e+00  3.73e+03    7.87e+02      0              
-       1  9.49e+04  6.91e+02  2.66e-03  9.44e+02    2.64e+02      0              
-       2  3.80e+04  3.22e+02  5.07e-03  5.15e+02    2.04e+02      0   Skip BFGS  
+       0  5.33e-01  3.73e+03  0.00e+00  3.73e+03    7.91e+02      0              
     ------------------------- STOP! -------------------------
     1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 3.7352e+02
-    0 : |xc-x_last| = 2.9117e-01 <= tolX*(1+|x0|) = 1.0002e-01
-    0 : |proj(x-g)-x|    = 2.0428e+02 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 2.0428e+02 <= 1e3*eps       = 1.0000e-02
-    0 : maxIter   =      15    <= iter          =      3
+    0 : |xc-x_last| = 1.6015e+00 <= tolX*(1+|x0|) = 1.0002e-01
+    0 : |proj(x-g)-x|    = 7.9049e+02 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 7.9049e+02 <= 1e3*eps       = 1.0000e-02
+    0 : maxIter   =      15    <= iter          =      1
     ------------------------- DONE! -------------------------
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 670-673
+.. GENERATED FROM PYTHON SOURCE LINES 666-669
 
 Recreate True Chargeability Model
 ---------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 673-684
+.. GENERATED FROM PYTHON SOURCE LINES 669-680
 
 .. code-block:: default
 
@@ -1103,13 +1087,13 @@ Recreate True Chargeability Model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 685-688
+.. GENERATED FROM PYTHON SOURCE LINES 681-684
 
 Plot True and Recovered Chargeability Model
 --------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 688-747
+.. GENERATED FROM PYTHON SOURCE LINES 684-744
 
 .. code-block:: default
 
@@ -1172,6 +1156,7 @@ Plot True and Recovered Chargeability Model
     )
     cbar.set_label("Intrinsic Chargeability [V/V]", rotation=270, labelpad=15, size=12)
 
+    plt.show()
 
 
 
@@ -1180,27 +1165,29 @@ Plot True and Recovered Chargeability Model
 
     *
 
-      .. image:: /content/tutorials/06-ip/images/sphx_glr_plot_inv_3_dcip3d_006.png
-          :alt: True Chargeability Model
-          :class: sphx-glr-multi-img
+      .. image-sg:: /content/tutorials/06-ip/images/sphx_glr_plot_inv_3_dcip3d_006.png
+         :alt: True Chargeability Model
+         :srcset: /content/tutorials/06-ip/images/sphx_glr_plot_inv_3_dcip3d_006.png
+         :class: sphx-glr-multi-img
 
     *
 
-      .. image:: /content/tutorials/06-ip/images/sphx_glr_plot_inv_3_dcip3d_007.png
-          :alt: Recovered Chargeability Model
-          :class: sphx-glr-multi-img
+      .. image-sg:: /content/tutorials/06-ip/images/sphx_glr_plot_inv_3_dcip3d_007.png
+         :alt: Recovered Chargeability Model
+         :srcset: /content/tutorials/06-ip/images/sphx_glr_plot_inv_3_dcip3d_007.png
+         :class: sphx-glr-multi-img
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 748-751
+.. GENERATED FROM PYTHON SOURCE LINES 745-748
 
 Plotting Normalized Data Misfit or Predicted IP Data
 ----------------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 751-785
+.. GENERATED FROM PYTHON SOURCE LINES 748-782
 
 .. code-block:: default
 
@@ -1251,9 +1238,9 @@ Plotting Normalized Data Misfit or Predicted IP Data
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 11 minutes  21.777 seconds)
+   **Total running time of the script:** ( 2 minutes  6.399 seconds)
 
-**Estimated memory usage:**  518 MB
+**Estimated memory usage:**  9 MB
 
 
 .. _sphx_glr_download_content_tutorials_06-ip_plot_inv_3_dcip3d.py:

@@ -37,7 +37,7 @@ Volume 219, Issue 3, December 2019, Pages 1989–2012, DOI:
 Thibaut Astic, Lindsey J. Heagy, Douglas W Oldenburg,
 Petrophysically and geologically guided multi-physics inversion using a dynamic
 Gaussian mixture model, Geophysical Journal International,
-Volume 224, Issue 1, Januaray 2021, Pages 40-68, DOI: `10.1093/gji/ggaa378
+Volume 224, Issue 1, January 2021, Pages 40-68, DOI: `10.1093/gji/ggaa378
 <https://doi.org/10.1093/gji/ggaa378>`_.
 
 .. GENERATED FROM PYTHON SOURCE LINES 26-29
@@ -85,7 +85,7 @@ Setup
 -----
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 55-242
+.. GENERATED FROM PYTHON SOURCE LINES 55-248
 
 .. code-block:: default
 
@@ -267,12 +267,18 @@ Setup
     idenMap = maps.IdentityMap(nP=nactv)
     # Grav problem
     simulation_grav = pf.gravity.simulation.Simulation3DIntegral(
-        survey=data_grav.survey, mesh=mesh, rhoMap=wires.den, actInd=actv,
+        survey=data_grav.survey,
+        mesh=mesh,
+        rhoMap=wires.den,
+        actInd=actv,
     )
     dmis_grav = data_misfit.L2DataMisfit(data=data_grav, simulation=simulation_grav)
     # Mag problem
     simulation_mag = pf.magnetics.simulation.Simulation3DIntegral(
-        survey=data_mag.survey, mesh=mesh, chiMap=wires.sus, actInd=actv,
+        survey=data_mag.survey,
+        mesh=mesh,
+        chiMap=wires.sus,
+        actInd=actv,
     )
     dmis_mag = data_misfit.L2DataMisfit(data=data_mag, simulation=simulation_mag)
 
@@ -284,15 +290,17 @@ Setup
 
     *
 
-      .. image:: /content/tutorials/13-pgi/images/sphx_glr_plot_inv_1_joint_pf_pgi_full_info_tutorial_001.png
-          :alt: Slice -17, X = 557287.50, Slice 16, Y = 7133612.50, Slice -10, Z = 255.00
-          :class: sphx-glr-multi-img
+      .. image-sg:: /content/tutorials/13-pgi/images/sphx_glr_plot_inv_1_joint_pf_pgi_full_info_tutorial_001.png
+         :alt: Slice -17, X = 557287.50, Slice 16, Y = 7133612.50, Slice -10, Z = 255.00
+         :srcset: /content/tutorials/13-pgi/images/sphx_glr_plot_inv_1_joint_pf_pgi_full_info_tutorial_001.png
+         :class: sphx-glr-multi-img
 
     *
 
-      .. image:: /content/tutorials/13-pgi/images/sphx_glr_plot_inv_1_joint_pf_pgi_full_info_tutorial_002.png
-          :alt: Gravity data values and locations, with mesh and geology overlays, Magnetic data values and locations, with mesh and geology overlays, mGal, nT
-          :class: sphx-glr-multi-img
+      .. image-sg:: /content/tutorials/13-pgi/images/sphx_glr_plot_inv_1_joint_pf_pgi_full_info_tutorial_002.png
+         :alt: Gravity data values and locations, with mesh and geology overlays, Magnetic data values and locations, with mesh and geology overlays, mGal, nT
+         :srcset: /content/tutorials/13-pgi/images/sphx_glr_plot_inv_1_joint_pf_pgi_full_info_tutorial_002.png
+         :class: sphx-glr-multi-img
 
 
 .. rst-class:: sphx-glr-script-out
@@ -320,12 +328,12 @@ Setup
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 243-245
+.. GENERATED FROM PYTHON SOURCE LINES 249-251
 
 Create a joint Data Misfit
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 245-252
+.. GENERATED FROM PYTHON SOURCE LINES 251-258
 
 .. code-block:: default
 
@@ -343,13 +351,13 @@ Create a joint Data Misfit
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 253-256
+.. GENERATED FROM PYTHON SOURCE LINES 259-262
 
 Inversion with full petrophysical information
 ---------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 258-271
+.. GENERATED FROM PYTHON SOURCE LINES 264-277
 
 Create and plot a petrophysical GMM with full information
 ---------------------------------------------------------
@@ -365,7 +373,7 @@ for both unit. Finally the background unit is set at null contrasts (0 g/cc
 0 SI) with a petrophysical noise level of half of the above.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 271-429
+.. GENERATED FROM PYTHON SOURCE LINES 277-311
 
 .. code-block:: default
 
@@ -396,155 +404,32 @@ for both unit. Finally the background unit is set at null contrasts (0 g/cc
     gmmref.weights_ = np.r_[0.9, 0.075, 0.025]
 
     # Plot the 2D GMM
-    ticksize, labelsize = 10, 12
-    fig = plt.figure(figsize=(10, 10))
-    ax1 = plt.subplot2grid((4, 4), (0, 1), colspan=3, rowspan=3)
-    ax2 = plt.subplot2grid((4, 4), (3, 1), colspan=3)
-    ax3 = plt.subplot2grid((4, 4), (0, 0), rowspan=3)
-
-    ax1.set_xlim(-1.2, 0.1)
-    ax1.set_ylim(-0.0025, 0.03)
-    ax2.set_xlim(-1.2, 0.1)
-    ax3.set_ylim(-0.0025, 0.03)
-
-    ax1.set_xticks([-1.2, -1.0, -0.8, -0.6, -0.4, -0.2, 0.0])
-    ax2.set_xticks([-1.2, -1.0, -0.8, -0.6, -0.4, -0.2, 0.0])
-
-    ax1.set_yticks([0, 0.005, 0.01, 0.015, 0.02, 0.025])
-    ax3.set_yticks([0, 0.005, 0.01, 0.015, 0.02, 0.025])
-
-    x, y = np.mgrid[-1.21:0.1:0.01, -0.01:0.031:0.001]
-    pos = np.empty(x.shape + (2,))
-    pos[:, :, 0] = x
-    pos[:, :, 1] = y
-    rvm = gmmref.predict(pos.reshape(-1, 2))
-    rvsmooth = gmmref.score_samples(pos.reshape(-1, 2))
-    surf = ax1.contourf(x, y, (rvsmooth).reshape(x.shape), 25, cmap="viridis")
-    ax1.contour(
-        x,
-        y,
-        rvsmooth.reshape(x.shape),
-        25,
-        colors="k",
-        linewidths=1.0,
-        linestyles="dashdot",
-    )
-    ax1.scatter(
-        gmmref.means_[:, 0],
-        gmmref.means_[:, 1],
-        label="True petrophysical means",
-        cmap="inferno_r",
-        c=[0, 1, 2],
-        marker="v",
-        edgecolors="k",
-        s=200,
-    )
-
-    axbar = inset_axes(ax1, width="40%", height="3%", loc="upper right", borderpad=1,)
-    cbpetro = fig.colorbar(surf, cax=axbar, orientation="horizontal")
-    cbpetro.set_ticks([rvsmooth.min(), rvsmooth.max()])
-    cbpetro.set_ticklabels(["Low", "High"])
-    cbpetro.set_label("2D Probability Density Distribution", fontsize=labelsize)
-    cbpetro.ax.tick_params(labelsize=ticksize)
-    cbpetro.outline.set_edgecolor("k")
-
-    # create the 1D GMM profile for density
-    from sklearn.mixture import GaussianMixture
-
-    means_init_grav = gmmref.means_[:, 0].reshape(3, 1)
-    cov_init_grav = np.array([gmmref.covariances_[:, 0]]).reshape((3, 1, 1))
-    clfgrav = utils.pgi_utils.GaussianMixture(
-        n_components=3,
-        means_init=means_init_grav,
-        precisions_init=cov_init_grav,
-        n_init=1,
-        max_iter=2,
-        tol=np.inf,
-    )
-    # random fit, we set values after.
-    clfgrav.fit(np.random.randn(10, 1))
-    clfgrav.means_ = means_init_grav
-    clfgrav.covariances_ = cov_init_grav
-    from sklearn.mixture._gaussian_mixture import _compute_precision_cholesky
-
-    clfgrav.precisions_cholesky_ = _compute_precision_cholesky(
-        clfgrav.covariances_, clfgrav.covariance_type
-    )
-    clfgrav.weights_ = gmmref.weights_
-    testXplot_grav = np.linspace(-1.2, 0.1, 1000)[:, np.newaxis]
-    score_grav = clfgrav.score_samples(testXplot_grav)
-    ax2.plot(
-        testXplot_grav,
-        np.exp(score_grav),
-        linewidth=3.0,
-        label="1D Probability Density Distribution",
-        c="k",
-    )
-    ax2.set_ylim([0.0, 2])
-    ax2.legend(fontsize=ticksize)
-
-    # create the 1D GMM profile for mag. susc.
-    means_init_mag = gmmref.means_[:, 1].reshape(3, 1)
-    cov_init_mag = np.array([gmmref.covariances_[:, 1]]).reshape((3, 1, 1))
-    clfmag = GaussianMixture(
-        n_components=3,
-        means_init=means_init_mag,
-        precisions_init=cov_init_mag,
-        n_init=1,
-        max_iter=2,
-        tol=np.inf,
-    )
-    # random fit, we set values after.
-    clfmag.fit(np.random.randn(10, 1))
-    clfmag.means_ = means_init_mag
-    clfmag.covariances_ = cov_init_mag
-    clfmag.precisions_cholesky_ = _compute_precision_cholesky(
-        clfmag.covariances_, clfmag.covariance_type
-    )
-    clfmag.weights_ = gmmref.weights_
-    testXplot_mag = np.linspace(-0.025, 0.03, 1000)[:, np.newaxis]
-    score_mag = clfmag.score_samples(testXplot_mag)
-    ax3.plot(np.exp(score_mag), testXplot_mag, linewidth=3.0, c="k")
-
-    ax3.set_xlim([0.0, 50])
-    ax3.set_xlabel(
-        "1D Probability Density values", fontsize=labelsize, rotation=-45, labelpad=0, x=0.5
-    )
-    ax2.set_xlabel("Density (g/cc)", fontsize=labelsize)
-    ax3.set_ylabel("Magnetic Susceptibility (SI)", fontsize=labelsize)
-    ax2.tick_params(labelsize=ticksize)
-    ax3.tick_params(labelsize=ticksize)
-    ax1.text(-0.9, 0.0025, "PK", fontsize=labelsize)
-    ax1.text(-0.175, 0.02, "HK", fontsize=labelsize)
-    ax1.text(-0.2, 0.002, "BCKGRD", fontsize=labelsize)  # , color='white')
-    ax1.legend(fontsize=labelsize, loc=3)
-    ax1.tick_params(labelleft=False)
-    ax1.tick_params(labelbottom=False)
-    ax1.set_ylabel("")
-    ax1.set_xlabel("")
-    ax2.tick_params(axis="both", which="both", labelsize=ticksize)
-    ax3.tick_params(axis="both", which="both", labelsize=ticksize)
+    ax = gmmref.plot_pdf(flag2d=True)
+    ax[0].set_xlabel("Density contrast [g/cc]")
+    ax[0].set_ylim([0, 5])
+    ax[2].set_ylabel("magnetic Susceptibility [SI]")
+    ax[2].set_xlim([0, 100])
     plt.show()
 
 
 
 
-
-.. image:: /content/tutorials/13-pgi/images/sphx_glr_plot_inv_1_joint_pf_pgi_full_info_tutorial_003.png
-    :alt: plot inv 1 joint pf pgi full info tutorial
-    :class: sphx-glr-single-img
-
-
+.. image-sg:: /content/tutorials/13-pgi/images/sphx_glr_plot_inv_1_joint_pf_pgi_full_info_tutorial_003.png
+   :alt: plot inv 1 joint pf pgi full info tutorial
+   :srcset: /content/tutorials/13-pgi/images/sphx_glr_plot_inv_1_joint_pf_pgi_full_info_tutorial_003.png
+   :class: sphx-glr-single-img
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 430-433
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 312-315
 
 Create PGI regularization
 -------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 433-459
+.. GENERATED FROM PYTHON SOURCE LINES 315-340
 
 .. code-block:: default
 
@@ -557,12 +442,11 @@ Create PGI regularization
     wr_mag = wr_mag / np.max(wr_mag)
 
     # create joint PGI regularization with smoothness
-    reg = utils.make_SimplePGI_regularization(
+    reg = utils.make_PGI_regularization(
         gmmref=gmmref,
         mesh=mesh,
         wiresmap=wires,
         maplist=[idenMap, idenMap],
-        mref=m0,
         indActive=actv,
         alpha_s=1.0,
         alpha_x=1.0,
@@ -581,13 +465,13 @@ Create PGI regularization
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 460-463
+.. GENERATED FROM PYTHON SOURCE LINES 341-344
 
 Inverse problem with full petrophysical information
 ---------------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 463-872
+.. GENERATED FROM PYTHON SOURCE LINES 344-639
 
 .. code-block:: default
 
@@ -605,12 +489,20 @@ Inverse problem with full petrophysical information
     # initialize beta and beta/alpha_s schedule
     beta = directives.BetaEstimate_ByEig(beta0_ratio=1e-2)
     betaIt = directives.PGI_BetaAlphaSchedule(
-        verbose=True, coolingFactor=2.0, tolerance=0.2, progress=0.2,
+        verbose=True,
+        coolingFactor=2.0,
+        tolerance=0.2,
+        progress=0.2,
     )
     # geophy. and petro. target misfits
-    targets = directives.MultiTargetMisfits(verbose=True,)
+    targets = directives.MultiTargetMisfits(
+        verbose=True,
+    )
     # add learned mref in smooth once stable
-    MrefInSmooth = directives.PGI_AddMrefInSmooth(wait_till_stable=True, verbose=True,)
+    MrefInSmooth = directives.PGI_AddMrefInSmooth(
+        wait_till_stable=True,
+        verbose=True,
+    )
     # update the parameters in smallness (L2-approx of PGI)
     update_smallness = directives.PGI_UpdateParameters(
         update_gmm=False  # keep GMM model fixed
@@ -658,7 +550,7 @@ Inverse problem with full petrophysical information
     # Extract the results
     density_model = gravmap * pgi_model
     magsus_model = magmap * pgi_model
-    quasi_geology_model = actvMap * reg.objfcts[0].membership(reg.objfcts[0].mref)
+    quasi_geology_model = actvMap * reg.objfcts[0].compute_quasi_geology_model()
 
     # Plot the result with full petrophysical information
     fig, ax = plt.subplots(3, 4, figsize=(15, 10))
@@ -855,42 +747,17 @@ Inverse problem with full petrophysical information
     plt.show()
 
     # Plot the 2D GMM
-    ticksize, labelsize = 10, 12
     fig = plt.figure(figsize=(10, 10))
+    ax0 = plt.subplot2grid((4, 4), (3, 1), colspan=3)
     ax1 = plt.subplot2grid((4, 4), (0, 1), colspan=3, rowspan=3)
-    ax2 = plt.subplot2grid((4, 4), (3, 1), colspan=3)
-    ax3 = plt.subplot2grid((4, 4), (0, 0), rowspan=3)
-
-    ax1.set_xlim(-1.2, 0.1)
-    ax1.set_ylim(-0.0025, 0.03)
-    ax2.set_xlim(-1.2, 0.1)
-    ax3.set_ylim(-0.0025, 0.03)
-
-    ax1.set_xticks([-1.2, -1.0, -0.8, -0.6, -0.4, -0.2, 0.0])
-    ax2.set_xticks([-1.2, -1.0, -0.8, -0.6, -0.4, -0.2, 0.0])
-
-    ax1.set_yticks([0, 0.005, 0.01, 0.015, 0.02, 0.025])
-    ax3.set_yticks([0, 0.005, 0.01, 0.015, 0.02, 0.025])
-
-    x, y = np.mgrid[-1.21:0.1:0.01, -0.01:0.031:0.001]
-    pos = np.empty(x.shape + (2,))
-    pos[:, :, 0] = x
-    pos[:, :, 1] = y
-    rvm = gmmref.predict(pos.reshape(-1, 2))
-    rvsmooth = gmmref.score_samples(pos.reshape(-1, 2))
-    surf = ax1.contourf(
-        x, y, (rvsmooth).reshape(x.shape), 25, cmap="viridis"
-    )  # linestyles='dashdot', linewidths=2.,
-    ax1.contour(
-        x,
-        y,
-        rvsmooth.reshape(x.shape),
-        25,
-        colors="k",
-        linewidths=1.0,
-        linestyles="dashdot",
-    )
-    ax1.scatter(
+    ax2 = plt.subplot2grid((4, 4), (0, 0), rowspan=3)
+    ax = [ax0, ax1, ax2]
+    reg.objfcts[0].gmm.plot_pdf(flag2d=True, ax=ax, padding=0.5)
+    ax[0].set_xlabel("Density contrast [g/cc]")
+    ax[0].set_ylim([0, 5])
+    ax[2].set_xlim([0, 50])
+    ax[2].set_ylabel("magnetic Susceptibility [SI]")
+    ax[1].scatter(
         density_model[actv],
         magsus_model[actv],
         c=quasi_geology_model[actv],
@@ -899,106 +766,9 @@ Inverse problem with full petrophysical information
         label="recovered PGI model",
         alpha=0.5,
     )
-    ax1.scatter(
-        gmmref.means_[:, 0],
-        gmmref.means_[:, 1],
-        label="True petrophysical means",
-        cmap="inferno_r",
-        c=[0, 1, 2],
-        marker="v",
-        edgecolors="k",
-        s=200,
-    )
-
-    axbar = inset_axes(
-        ax1,
-        width="40%",  # width = 50% of parent_bbox width
-        height="3%",  # height : 5%
-        loc="upper right",
-        borderpad=1,
-    )
-    cbpetro = fig.colorbar(surf, cax=axbar, orientation="horizontal")
-    cbpetro.set_ticks([rvsmooth.min(), rvsmooth.max()])
-    cbpetro.set_ticklabels(["Low", "High"])
-    cbpetro.set_label("Probability Density", fontsize=labelsize)
-    cbpetro.ax.tick_params(labelsize=ticksize)
-    cbpetro.outline.set_edgecolor("k")
-
-    # create the 1D GMM profile for density
-    from sklearn.mixture import GaussianMixture
-
-    means_init_grav = gmmref.means_[:, 0].reshape(3, 1)
-    cov_init_grav = np.array([gmmref.covariances_[:, 0]]).reshape((3, 1, 1))
-    clfgrav = utils.pgi_utils.GaussianMixture(
-        n_components=3,
-        means_init=means_init_grav,
-        precisions_init=cov_init_grav,
-        n_init=1,
-        max_iter=2,
-        tol=np.inf,
-    )
-    # random fit, we set values after.
-    clfgrav.fit(np.random.randn(10, 1))
-    clfgrav.means_ = means_init_grav
-    clfgrav.covariances_ = cov_init_grav
-    from sklearn.mixture._gaussian_mixture import _compute_precision_cholesky
-
-    clfgrav.precisions_cholesky_ = _compute_precision_cholesky(
-        clfgrav.covariances_, clfgrav.covariance_type
-    )
-    clfgrav.weights_ = gmmref.weights_
-    testXplot_grav = np.linspace(-1.2, 0.1, 1000)[:, np.newaxis]
-    score_grav = clfgrav.score_samples(testXplot_grav)
-    ax2.plot(
-        testXplot_grav, np.exp(score_grav), linewidth=3.0, label="proba.\ndensity", c="k"
-    )
-    ax2.set_ylim([0.0, 2])
-    ax2.legend(fontsize=ticksize)
-
-    # create the 1D GMM profile for mag. susc.
-    means_init_mag = gmmref.means_[:, 1].reshape(3, 1)
-    cov_init_mag = np.array([gmmref.covariances_[:, 1]]).reshape((3, 1, 1))
-    clfmag = GaussianMixture(
-        n_components=3,
-        means_init=means_init_mag,
-        precisions_init=cov_init_mag,
-        n_init=1,
-        max_iter=2,
-        tol=np.inf,
-    )
-    # random fit, we set values after.
-    clfmag.fit(np.random.randn(10, 1))
-    clfmag.means_ = means_init_mag
-    clfmag.covariances_ = cov_init_mag
-    clfmag.precisions_cholesky_ = _compute_precision_cholesky(
-        clfmag.covariances_, clfmag.covariance_type
-    )
-    clfmag.weights_ = gmmref.weights_
-    testXplot_mag = np.linspace(-0.025, 0.03, 1000)[:, np.newaxis]
-    score_mag = clfmag.score_samples(testXplot_mag)
-    ax3.plot(np.exp(score_mag), testXplot_mag, linewidth=3.0, c="k")
-
-    ax3.set_xlim([0.0, 50])
-    ax3.set_xlabel(
-        "Probability\nDensity", fontsize=labelsize, rotation=-45, labelpad=0, x=0.5
-    )
-    ax2.set_xlabel("Density (g/cc)", fontsize=labelsize)
-    ax3.set_ylabel("Magnetic Susceptibility (SI)", fontsize=labelsize)
-    ax2.tick_params(labelsize=ticksize)
-    ax3.tick_params(labelsize=ticksize)
-    ax1.text(-0.9, 0.0025, "PK/VK", fontsize=labelsize)
-    ax1.text(-0.175, 0.02, "HK", fontsize=labelsize)
-    ax1.text(-0.2, 0.002, "BCKGRD", fontsize=labelsize)  # , color='white')
-    ax1.tick_params(labelleft=False)
-    ax1.tick_params(labelbottom=False)
-    ax1.set_ylabel("")
-    ax1.set_xlabel("")
-    ax2.tick_params(axis="both", which="both", labelsize=ticksize)
-    ax3.tick_params(axis="both", which="both", labelsize=ticksize)
-
-    ax1.legend(fontsize=labelsize, loc=3)
-    ax2.hist(density_model[actv], density=True, bins=50)
-    ax3.hist(magsus_model[actv], density=True, bins=50, orientation="horizontal")
+    ax[1].legend()
+    ax[0].hist(density_model[actv], density=True, bins=50)
+    ax[2].hist(magsus_model[actv], density=True, bins=50, orientation="horizontal")
     plt.show()
 
 
@@ -1008,15 +778,17 @@ Inverse problem with full petrophysical information
 
     *
 
-      .. image:: /content/tutorials/13-pgi/images/sphx_glr_plot_inv_1_joint_pf_pgi_full_info_tutorial_004.png
-          :alt: Slice 15, X = 557287.50, Slice 17, Y = 7133637.50, Slice -9, Z = 280.00, Slice 15, X = 557287.50, Slice 17, Y = 7133637.50, Slice -9, Z = 280.00, Slice 15, X = 557287.50, Slice 17, Y = 7133637.50, Slice -9, Z = 280.00
-          :class: sphx-glr-multi-img
+      .. image-sg:: /content/tutorials/13-pgi/images/sphx_glr_plot_inv_1_joint_pf_pgi_full_info_tutorial_004.png
+         :alt: Slice 15, X = 557287.50, Slice 17, Y = 7133637.50, Slice -9, Z = 280.00, Slice 15, X = 557287.50, Slice 17, Y = 7133637.50, Slice -9, Z = 280.00, Slice 15, X = 557287.50, Slice 17, Y = 7133637.50, Slice -9, Z = 280.00
+         :srcset: /content/tutorials/13-pgi/images/sphx_glr_plot_inv_1_joint_pf_pgi_full_info_tutorial_004.png
+         :class: sphx-glr-multi-img
 
     *
 
-      .. image:: /content/tutorials/13-pgi/images/sphx_glr_plot_inv_1_joint_pf_pgi_full_info_tutorial_005.png
-          :alt: plot inv 1 joint pf pgi full info tutorial
-          :class: sphx-glr-multi-img
+      .. image-sg:: /content/tutorials/13-pgi/images/sphx_glr_plot_inv_1_joint_pf_pgi_full_info_tutorial_005.png
+         :alt: plot inv 1 joint pf pgi full info tutorial
+         :srcset: /content/tutorials/13-pgi/images/sphx_glr_plot_inv_1_joint_pf_pgi_full_info_tutorial_005.png
+         :class: sphx-glr-multi-img
 
 
 .. rst-class:: sphx-glr-script-out
@@ -1025,75 +797,133 @@ Inverse problem with full petrophysical information
 
  .. code-block:: none
 
+    SimPEG.InvProblem will set Regularization.mref to m0.
+    SimPEG.InvProblem will set Regularization.mref to m0.
+    SimPEG.InvProblem will set Regularization.mref to m0.
 
             SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
             ***Done using same Solver and solver_opts as the Simulation3DIntegral problem***
     Alpha scales:  [1, 1, 1]
-    Alpha scales:  [1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-    Alpha scales:  [0.0, 193.2430079347746, 117.27414966407947, 325.7008308637537]
-    Alpha scales:  [0.0, 12411.230214763389, 8726.258274458645, 26963.211696726255]
-    Initial data misfit scales:  [0.96658918 0.03341082]
+    Alpha scales:  [1.0]
+    Alpha scales:  [0.0, 100740.4648902905, 0.0, 104325.76465409387, 0.0, 99147.0478523942, 0.0]
+    Alpha scales:  [0.0, 39794935.42484303, 0.0, 26969335.86698685, 0.0, 85524560.98711911, 0.0]
+    Initial data misfit scales:  [0.97038301 0.02961699]
     model has any nan: 0
     =============================== Projected GNCG ===============================
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  6.92e-02  2.11e+06  0.00e+00  2.11e+06    2.17e+02      0              
-    geophys. misfits: 122953.5 (target 288.0 [False]); 23557.3 (target 288.0 [False]) | smallness misfit: 165166.0 (target: 11727.0 [False])
-    Beta cooling evaluation: progress: [122953.5  23557.3] ; minimum progress targets: [1735115.6  286362. ]
-    mref changed in  906  places
-       1  6.92e-02  1.20e+05  8.20e+03  1.20e+05    1.40e+01      0              
-    geophys. misfits: 4452.7 (target 288.0 [False]); 913.5 (target 288.0 [False]) | smallness misfit: 29881.1 (target: 11727.0 [False])
-    Beta cooling evaluation: progress: [4452.7  913.5] ; minimum progress targets: [98362.8 18845.9]
-    mref changed in  42  places
-       2  6.92e-02  4.33e+03  4.66e+03  4.66e+03    2.02e+01      0              
-    geophys. misfits: 2875.6 (target 288.0 [False]); 151.0 (target 288.0 [True]) | smallness misfit: 25761.0 (target: 11727.0 [False])
-    Updating scaling for data misfits by  1.9070477807568238
-    New scales: [0.98219744 0.01780256]
-    Beta cooling evaluation: progress: [2875.6  151. ] ; minimum progress targets: [3562.1  730.8]
+       0  8.57e-07  2.12e+06  2.15e+00  2.12e+06    2.17e+02      0              
+    geophys. misfits: 69038.3 (target 288.0 [False]); 32660.8 (target 288.0 [False]) | smallness misfit: 195816.8 (target: 11727.0 [False])
+    Beta cooling evaluation: progress: [69038.3 32660.8] ; minimum progress targets: [1735115.6  286362. ]
+    mref changed in  1959  places
+       1  8.57e-07  6.80e+04  1.18e+08  6.81e+04    1.61e+01      0              
+    geophys. misfits: 13354.4 (target 288.0 [False]); 16070.4 (target 288.0 [False]) | smallness misfit: 65293.5 (target: 11727.0 [False])
+    Beta cooling evaluation: progress: [13354.4 16070.4] ; minimum progress targets: [55230.6 26128.7]
+    mref changed in  442  places
+       2  8.57e-07  1.34e+04  8.57e+07  1.35e+04    2.01e+01      0              
+    geophys. misfits: 2890.6 (target 288.0 [False]); 1553.0 (target 288.0 [False]) | smallness misfit: 49081.3 (target: 11727.0 [False])
+    Beta cooling evaluation: progress: [2890.6 1553. ] ; minimum progress targets: [10683.5 12856.3]
+    mref changed in  340  places
+       3  8.57e-07  2.85e+03  8.53e+07  2.92e+03    2.01e+01      0   Skip BFGS  
+    geophys. misfits: 269.4 (target 288.0 [True]); 800.2 (target 288.0 [False]) | smallness misfit: 37618.7 (target: 11727.0 [False])
+    Updating scaling for data misfits by  1.0691534955767306
+    New scales: [0.96839961 0.03160039]
+    Beta cooling evaluation: progress: [269.4 800.2] ; minimum progress targets: [2312.5 1242.4]
+    mref changed in  17  places
+       4  8.57e-07  2.86e+02  8.45e+07  3.59e+02    1.98e+01      0   Skip BFGS  
+    geophys. misfits: 102.5 (target 288.0 [True]); 59.9 (target 288.0 [True]) | smallness misfit: 38667.3 (target: 11727.0 [False])
+    Beta cooling evaluation: progress: [102.5  59.9] ; minimum progress targets: [345.6 640.2]
+    Warming alpha_s to favor clustering:  3.80845119001089
+    mref changed in  28  places
+       5  8.57e-07  1.01e+02  2.25e+08  2.94e+02    2.42e+01      0   Skip BFGS  
+    geophys. misfits: 136.1 (target 288.0 [True]); 457.0 (target 288.0 [False]) | smallness misfit: 19910.0 (target: 11727.0 [False])
+    Updating scaling for data misfits by  2.1159993592476765
+    New scales: [0.93541138 0.06458862]
+    Beta cooling evaluation: progress: [136.1 457. ] ; minimum progress targets: [345.6 345.6]
+    Decreasing beta to counter data misfit increase.
     mref changed in  1  places
-       3  6.92e-02  2.83e+03  4.19e+03  3.12e+03    2.08e+01      0   Skip BFGS  
-    geophys. misfits: 406.0 (target 288.0 [False]); 88.9 (target 288.0 [True]) | smallness misfit: 24654.6 (target: 11727.0 [False])
-    Updating scaling for data misfits by  3.238586363450199
-    New scales: [0.9944345 0.0055655]
-    Beta cooling evaluation: progress: [406.   88.9] ; minimum progress targets: [2300.5  345.6]
-    mref changed in  0  places
-       4  6.92e-02  4.04e+02  4.26e+03  6.99e+02    2.12e+01      0   Skip BFGS  
-    geophys. misfits: 199.2 (target 288.0 [True]); 156.6 (target 288.0 [True]) | smallness misfit: 24461.7 (target: 11727.0 [False])
-    Beta cooling evaluation: progress: [199.2 156.6] ; minimum progress targets: [345.6 345.6]
-    Warming alpha_s to favor clustering:  1.6424262571979273
-    mref changed in  3  places
-       5  6.92e-02  1.99e+02  5.92e+03  6.09e+02    3.04e+01      0   Skip BFGS  
-    geophys. misfits: 216.3 (target 288.0 [True]); 405.9 (target 288.0 [False]) | smallness misfit: 19289.3 (target: 11727.0 [False])
-    Updating scaling for data misfits by  1.3315373256761682
-    New scales: [0.99260297 0.00739703]
-    Beta cooling evaluation: progress: [216.3 405.9] ; minimum progress targets: [345.6 345.6]
+       6  4.28e-07  1.57e+02  1.52e+08  2.22e+02    2.47e+01      0              
+    geophys. misfits: 105.4 (target 288.0 [True]); 300.1 (target 288.0 [False]) | smallness misfit: 22874.2 (target: 11727.0 [False])
+    Updating scaling for data misfits by  2.7329255160474357
+    New scales: [0.84125231 0.15874769]
+    Beta cooling evaluation: progress: [105.4 300.1] ; minimum progress targets: [345.6 365.6]
+    mref changed in  2  places
+       7  4.28e-07  1.36e+02  1.87e+08  2.16e+02    2.09e+01      0              
+    geophys. misfits: 94.2 (target 288.0 [True]); 368.1 (target 288.0 [False]) | smallness misfit: 23552.1 (target: 11727.0 [False])
+    Updating scaling for data misfits by  3.056690504698936
+    New scales: [0.63419191 0.36580809]
+    Beta cooling evaluation: progress: [ 94.2 368.1] ; minimum progress targets: [345.6 345.6]
     Decreasing beta to counter data misfit increase.
     mref changed in  0  places
-       6  3.46e-02  2.18e+02  5.43e+03  4.06e+02    4.46e+01      0              
-    geophys. misfits: 171.0 (target 288.0 [True]); 136.2 (target 288.0 [True]) | smallness misfit: 18861.7 (target: 11727.0 [False])
-    Beta cooling evaluation: progress: [171.  136.2] ; minimum progress targets: [345.6 345.6]
-    Warming alpha_s to favor clustering:  3.119769377400095
+       8  2.14e-07  1.94e+02  1.80e+08  2.33e+02    1.95e+01      0              
+    geophys. misfits: 84.4 (target 288.0 [True]); 229.8 (target 288.0 [True]) | smallness misfit: 26824.8 (target: 11727.0 [False])
+    Beta cooling evaluation: progress: [ 84.4 229.8] ; minimum progress targets: [345.6 345.6]
+    Warming alpha_s to favor clustering:  8.885063234070177
     mref changed in  2  places
-       7  3.46e-02  1.71e+02  9.51e+03  5.00e+02    2.11e+01      0              
-    geophys. misfits: 181.7 (target 288.0 [True]); 204.3 (target 288.0 [True]) | smallness misfit: 13390.1 (target: 11727.0 [False])
-    Beta cooling evaluation: progress: [181.7 204.3] ; minimum progress targets: [345.6 345.6]
-    Warming alpha_s to favor clustering:  4.671235658442182
+       9  2.14e-07  1.38e+02  4.09e+08  2.25e+02    2.20e+01      0              
+    geophys. misfits: 101.7 (target 288.0 [True]); 243.4 (target 288.0 [True]) | smallness misfit: 20545.8 (target: 11727.0 [False])
+    Beta cooling evaluation: progress: [101.7 243.4] ; minimum progress targets: [345.6 345.6]
+    Warming alpha_s to favor clustering:  17.838897864011354
     mref changed in  0  places
     Add mref to Smoothness. Changes in mref happened in 0.0 % of the cells
-       8  3.46e-02  1.82e+02  9.19e+03  5.00e+02    2.24e+01      0              
-    geophys. misfits: 256.1 (target 288.0 [True]); 282.0 (target 288.0 [True]) | smallness misfit: 10202.2 (target: 11727.0 [True])
+      10  2.14e-07  1.54e+02  5.32e+08  2.68e+02    2.14e+01      0              
+    geophys. misfits: 112.8 (target 288.0 [True]); 210.2 (target 288.0 [True]) | smallness misfit: 18400.4 (target: 11727.0 [False])
+    Beta cooling evaluation: progress: [112.8 210.2] ; minimum progress targets: [345.6 345.6]
+    Warming alpha_s to favor clustering:  34.985722624136365
+    mref changed in  0  places
+    Add mref to Smoothness. Changes in mref happened in 0.0 % of the cells
+      11  2.14e-07  1.48e+02  8.92e+08  3.39e+02    2.15e+01      1   Skip BFGS  
+    geophys. misfits: 165.9 (target 288.0 [True]); 264.1 (target 288.0 [True]) | smallness misfit: 14467.4 (target: 11727.0 [False])
+    Beta cooling evaluation: progress: [165.9 264.1] ; minimum progress targets: [345.6 345.6]
+    Warming alpha_s to favor clustering:  49.44724661152978
+    mref changed in  0  places
+    Add mref to Smoothness. Changes in mref happened in 0.0 % of the cells
+      12  2.14e-07  2.02e+02  8.99e+08  3.94e+02    2.22e+01      0   Skip BFGS  
+    geophys. misfits: 176.9 (target 288.0 [True]); 29.8 (target 288.0 [True]) | smallness misfit: 15619.4 (target: 11727.0 [False])
+    Beta cooling evaluation: progress: [176.9  29.8] ; minimum progress targets: [345.6 345.6]
+    Warming alpha_s to favor clustering:  279.0500749643431
+    mref changed in  0  places
+    Add mref to Smoothness. Changes in mref happened in 0.0 % of the cells
+      13  2.14e-07  1.23e+02  4.71e+09  1.13e+03    4.97e+01      0              
+    geophys. misfits: 420.0 (target 288.0 [False]); 233.6 (target 288.0 [True]) | smallness misfit: 11261.1 (target: 11727.0 [True])
+    Updating scaling for data misfits by  1.2326929466101992
+    New scales: [0.68123299 0.31876701]
+    Beta cooling evaluation: progress: [420.  233.6] ; minimum progress targets: [345.6 345.6]
+    Decreasing beta to counter data misfit increase.
+    mref changed in  0  places
+      14  1.07e-07  3.61e+02  2.97e+09  6.79e+02    7.99e+01      0              
+    geophys. misfits: 278.9 (target 288.0 [True]); 413.8 (target 288.0 [False]) | smallness misfit: 9554.1 (target: 11727.0 [True])
+    Updating scaling for data misfits by  1.0326368154462944
+    New scales: [0.67421873 0.32578127]
+    Beta cooling evaluation: progress: [278.9 413.8] ; minimum progress targets: [345.6 345.6]
+    Decreasing beta to counter data misfit increase.
+    mref changed in  0  places
+      15  5.35e-08  3.23e+02  3.25e+09  4.97e+02    3.42e+01      0              
+    geophys. misfits: 265.3 (target 288.0 [True]); 83.2 (target 288.0 [True]) | smallness misfit: 12219.4 (target: 11727.0 [False])
+    Beta cooling evaluation: progress: [265.3  83.2] ; minimum progress targets: [345.6 345.6]
+    Warming alpha_s to favor clustering:  634.7352198226187
+    mref changed in  0  places
+    Add mref to Smoothness. Changes in mref happened in 0.0 % of the cells
+      16  5.35e-08  2.06e+02  8.96e+09  6.86e+02    2.21e+01      0              
+    geophys. misfits: 295.3 (target 288.0 [False]); 110.6 (target 288.0 [True]) | smallness misfit: 11027.2 (target: 11727.0 [True])
+    Updating scaling for data misfits by  2.604454525695354
+    New scales: [0.8435063 0.1564937]
+    Beta cooling evaluation: progress: [295.3 110.6] ; minimum progress targets: [345.6 345.6]
+    mref changed in  0  places
+      17  5.35e-08  2.66e+02  7.22e+09  6.53e+02    3.76e+01      0              
+    geophys. misfits: 279.4 (target 288.0 [True]); 107.5 (target 288.0 [True]) | smallness misfit: 10474.9 (target: 11727.0 [True])
     All targets have been reached
-    Beta cooling evaluation: progress: [256.1 282. ] ; minimum progress targets: [345.6 345.6]
-    Warming alpha_s to favor clustering:  5.012276787102012
+    Beta cooling evaluation: progress: [279.4 107.5] ; minimum progress targets: [345.6 345.6]
+    Warming alpha_s to favor clustering:  1177.6864054331088
     mref changed in  0  places
     Add mref to Smoothness. Changes in mref happened in 0.0 % of the cells
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 2.1084e+05
-    0 : |xc-x_last| = 2.9677e+00 <= tolX*(1+|x0|) = 1.0153e-01
-    0 : |proj(x-g)-x|    = 2.2918e+01 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 2.2918e+01 <= 1e3*eps       = 1.0000e-02
-    0 : maxIter   =      30    <= iter          =      9
+    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 2.1153e+05
+    1 : |xc-x_last| = 8.0133e-02 <= tolX*(1+|x0|) = 1.0153e-01
+    0 : |proj(x-g)-x|    = 3.7605e+01 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 3.7605e+01 <= 1e3*eps       = 1.0000e-02
+    0 : maxIter   =      30    <= iter          =     18
     ------------------------- DONE! -------------------------
 
 
@@ -1102,9 +932,9 @@ Inverse problem with full petrophysical information
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 4 minutes  9.346 seconds)
+   **Total running time of the script:** ( 5 minutes  39.515 seconds)
 
-**Estimated memory usage:**  113 MB
+**Estimated memory usage:**  107 MB
 
 
 .. _sphx_glr_download_content_tutorials_13-pgi_plot_inv_1_joint_pf_pgi_full_info_tutorial.py:
