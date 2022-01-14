@@ -345,7 +345,7 @@ Create our true model which we will use to generate synthetic data for
     rx_offsets = np.vstack([np.r_[sep, 0.0, 0.0] for sep in coil_separations])
 
     # create our source list - one source per location
-    srcList = []
+    source_list = []
     for x in src_locations:
         src_loc = np.r_[x, 0.0, src_z]
         rx_locs = src_loc - rx_offsets
@@ -359,52 +359,21 @@ Create our true model which we will use to generate synthetic data for
 
         src = FDEM.Src.MagDipole(
             receiver_list=[rx_real, rx_imag],
-            loc=src_loc,
+            location=src_loc,
             orientation=orientation,
-            freq=freq,
+            frequency=freq,
         )
 
-        srcList.append(src)
+        source_list.append(src)
 
     # create the survey and problem objects for running the forward simulation
-    survey = FDEM.Survey(srcList)
+    survey = FDEM.Survey(source_list)
     prob = FDEM.Simulation3DMagneticFluxDensity(
-        mesh, survey=survey, sigmaMap=mapping, Solver=Solver
+        mesh, survey=survey, sigmaMap=mapping, solver=Solver
     )
 
 
 
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:413: FutureWarning:
-
-    loc has been deprecated, please use location. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:420: FutureWarning:
-
-    loc has been deprecated, please use location. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:413: FutureWarning:
-
-    freq has been deprecated, please use frequency. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:420: FutureWarning:
-
-    freq has been deprecated, please use frequency. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:413: FutureWarning:
-
-    Solver has been deprecated, please use simulation.solver. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:420: FutureWarning:
-
-    Solver has been deprecated, please use simulation.solver. It will be removed in version 0.16.0 of SimPEG.
 
 
 
@@ -493,7 +462,7 @@ assign a standard deviation of 0.05, and a floor of 1e-11.
 
     Converting csc_matrix matrix to CSR format, will slow down.
 
-    Done forward simulation. Elapsed time = 14.38 s
+    Done forward simulation. Elapsed time = 14.44 s
 
 
 
@@ -598,17 +567,17 @@ We start from a half-space equal to the deep conductivity.
        1  5.15e+00  8.52e+02  3.77e+01  1.05e+03    2.18e+02      0              
        2  5.15e+00  1.36e+02  8.46e+01  5.72e+02    1.96e+01      0   Skip BFGS  
        3  5.15e+00  1.42e+02  8.20e+01  5.65e+02    1.97e+01      0              
-       4  5.15e+00  1.33e+02  8.34e+01  5.63e+02    1.29e+01      0              
+       4  5.15e+00  1.33e+02  8.34e+01  5.63e+02    1.28e+01      0              
        5  5.15e+00  1.34e+02  8.20e+01  5.57e+02    6.64e+00      1              
     ------------------------- STOP! -------------------------
     1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 7.0960e+02
-    1 : |xc-x_last| = 2.8436e-01 <= tolX*(1+|x0|) = 1.3056e+01
-    0 : |proj(x-g)-x|    = 6.6436e+00 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 6.6436e+00 <= 1e3*eps       = 1.0000e-02
+    1 : |xc-x_last| = 2.8405e-01 <= tolX*(1+|x0|) = 1.3056e+01
+    0 : |proj(x-g)-x|    = 6.6422e+00 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 6.6422e+00 <= 1e3*eps       = 1.0000e-02
     0 : maxIter   =      20    <= iter          =      6
     ------------------------- DONE! -------------------------
 
-     Inversion Complete. Elapsed Time = 1055.69 s
+     Inversion Complete. Elapsed Time = 1123.62 s
 
 
 
@@ -722,7 +691,7 @@ Print the version of SimPEG and dependencies
     <div class="output_subarea output_html rendered_html output_result">
     <table style='border: 3px solid #ddd;'>
       <tr>
-         <td style='text-align: center; font-weight: bold; font-size: 1.2em; border: 2px solid #fff;' colspan='6'>Sat Nov 13 00:17:44 2021 UTC</td>
+         <td style='text-align: center; font-weight: bold; font-size: 1.2em; border: 2px solid #fff;' colspan='6'>Fri Jan 14 22:19:46 2022 UTC</td>
       </tr>
       <tr>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>OS</td>
@@ -741,14 +710,18 @@ Print the version of SimPEG and dependencies
         <td style='text-align: left; border: 2px solid #fff;'>Python</td>
       </tr>
       <tr>
+        <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>File system</td>
+        <td style='text-align: left; border: 2px solid #fff;'>ext4</td>
+      </tr>
+      <tr>
          <td style='text-align: center; border: 2px solid #fff;' colspan='6'>Python 3.7.11 (default, Jul 27 2021, 14:32:16) 
     [GCC 7.5.0]</td>
       </tr>
       <tr>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>SimPEG</td>
-        <td style='text-align: left; border: 2px solid #fff;'>0.15.2</td>
+        <td style='text-align: left; border: 2px solid #fff;'>0.16.0</td>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>discretize</td>
-        <td style='text-align: left; border: 2px solid #fff;'>0.7.1</td>
+        <td style='text-align: left; border: 2px solid #fff;'>0.7.2</td>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>pymatsolver</td>
         <td style='text-align: left; border: 2px solid #fff;'>0.2.0</td>
       </tr>
@@ -758,19 +731,19 @@ Print the version of SimPEG and dependencies
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>properties</td>
         <td style='text-align: left; border: 2px solid #fff;'>0.6.1</td>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>numpy</td>
-        <td style='text-align: left; border: 2px solid #fff;'>1.21.2</td>
+        <td style='text-align: left; border: 2px solid #fff;'>1.20.3</td>
       </tr>
       <tr>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>scipy</td>
-        <td style='text-align: left; border: 2px solid #fff;'>1.7.1</td>
+        <td style='text-align: left; border: 2px solid #fff;'>1.7.3</td>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>cython</td>
-        <td style='text-align: left; border: 2px solid #fff;'>0.29.24</td>
+        <td style='text-align: left; border: 2px solid #fff;'>0.29.26</td>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>IPython</td>
         <td style='text-align: left; border: 2px solid #fff;'>7.29.0</td>
       </tr>
       <tr>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>matplotlib</td>
-        <td style='text-align: left; border: 2px solid #fff;'>3.4.3</td>
+        <td style='text-align: left; border: 2px solid #fff;'>3.5.0</td>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>ipywidgets</td>
         <td style='text-align: left; border: 2px solid #fff;'>7.6.5</td>
         <td style= border: 2px solid #fff;'></td>
@@ -801,9 +774,9 @@ You might try:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 17 minutes  55.468 seconds)
+   **Total running time of the script:** ( 19 minutes  3.350 seconds)
 
-**Estimated memory usage:**  1578 MB
+**Estimated memory usage:**  1631 MB
 
 
 .. _sphx_glr_download_content_examples_05-fdem_plot_inv_fdem_loop_loop_2Dinversion.py:

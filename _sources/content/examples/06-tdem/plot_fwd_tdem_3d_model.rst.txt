@@ -21,7 +21,7 @@
 Time-domain CSEM for a resistive cube in a deep marine setting
 ==============================================================
 
-.. GENERATED FROM PYTHON SOURCE LINES 5-19
+.. GENERATED FROM PYTHON SOURCE LINES 5-18
 
 .. code-block:: default
 
@@ -34,7 +34,6 @@ Time-domain CSEM for a resistive cube in a deep marine setting
         from SimPEG import SolverLU as Solver
 
     import numpy as np
-    import SimPEG
     from SimPEG import maps
     from SimPEG.electromagnetics import time_domain as TDEM
     import matplotlib.pyplot as plt
@@ -46,12 +45,12 @@ Time-domain CSEM for a resistive cube in a deep marine setting
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 20-22
+.. GENERATED FROM PYTHON SOURCE LINES 19-21
 
 (A) Model
 ---------
 
-.. GENERATED FROM PYTHON SOURCE LINES 22-78
+.. GENERATED FROM PYTHON SOURCE LINES 21-77
 
 .. code-block:: default
 
@@ -123,7 +122,7 @@ Time-domain CSEM for a resistive cube in a deep marine setting
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 79-94
+.. GENERATED FROM PYTHON SOURCE LINES 78-93
 
 .. code-block:: default
 
@@ -149,12 +148,12 @@ Time-domain CSEM for a resistive cube in a deep marine setting
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 95-97
+.. GENERATED FROM PYTHON SOURCE LINES 94-96
 
 (B) Survey
 ----------
 
-.. GENERATED FROM PYTHON SOURCE LINES 97-110
+.. GENERATED FROM PYTHON SOURCE LINES 96-109
 
 .. code-block:: default
 
@@ -178,7 +177,7 @@ Time-domain CSEM for a resistive cube in a deep marine setting
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 111-116
+.. GENERATED FROM PYTHON SOURCE LINES 110-115
 
 (C) Modelling parameters
 ------------------------
@@ -186,7 +185,7 @@ Time-domain CSEM for a resistive cube in a deep marine setting
 Check diffusion distances
 """""""""""""""""""""""""
 
-.. GENERATED FROM PYTHON SOURCE LINES 116-127
+.. GENERATED FROM PYTHON SOURCE LINES 115-126
 
 .. code-block:: default
 
@@ -219,12 +218,12 @@ Check diffusion distances
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 128-130
+.. GENERATED FROM PYTHON SOURCE LINES 127-129
 
 Time-steps
 """"""""""
 
-.. GENERATED FROM PYTHON SOURCE LINES 130-167
+.. GENERATED FROM PYTHON SOURCE LINES 129-166
 
 .. code-block:: default
 
@@ -233,7 +232,7 @@ Time-steps
     time_steps = [1e-1, (1e-2, 21), (3e-2, 23), (1e-1, 21), (3e-1, 23)]
 
     # Create mesh with time steps
-    ts = discretize.TensorMesh([time_steps]).vectorNx
+    ts = discretize.TensorMesh([time_steps]).nodes_x
 
     # Plot them
     plt.figure(figsize=(9, 1.5))
@@ -286,12 +285,12 @@ Time-steps
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 168-170
+.. GENERATED FROM PYTHON SOURCE LINES 167-169
 
 Create mesh (`discretize`)
 """"""""""""""""""""""""""
 
-.. GENERATED FROM PYTHON SOURCE LINES 170-202
+.. GENERATED FROM PYTHON SOURCE LINES 169-201
 
 .. code-block:: default
 
@@ -389,7 +388,7 @@ Create mesh (`discretize`)
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 203-208
+.. GENERATED FROM PYTHON SOURCE LINES 202-207
 
 Check if source and receiver are exactly at x-edges.
 """"""""""""""""""""""""""""""""""""""""""""""""""""
@@ -397,7 +396,7 @@ Check if source and receiver are exactly at x-edges.
 No requirement; if receiver are exactly on x-edges then no interpolation is
 required to get the responses (cell centers in x, cell edges in y, z).
 
-.. GENERATED FROM PYTHON SOURCE LINES 208-228
+.. GENERATED FROM PYTHON SOURCE LINES 207-227
 
 .. code-block:: default
 
@@ -439,12 +438,12 @@ required to get the responses (cell centers in x, cell edges in y, z).
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 229-231
+.. GENERATED FROM PYTHON SOURCE LINES 228-230
 
 Put model on mesh
 """""""""""""""""
 
-.. GENERATED FROM PYTHON SOURCE LINES 231-258
+.. GENERATED FROM PYTHON SOURCE LINES 230-257
 
 .. code-block:: default
 
@@ -487,7 +486,7 @@ Put model on mesh
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 259-264
+.. GENERATED FROM PYTHON SOURCE LINES 258-263
 
 (D) `empymod`
 -------------
@@ -495,7 +494,7 @@ Put model on mesh
 Compute the 1D background semi-analytically, using 5 points to approximate
 the 100-m long dipole.
 
-.. GENERATED FROM PYTHON SOURCE LINES 264-280
+.. GENERATED FROM PYTHON SOURCE LINES 263-279
 
 .. code-block:: default
 
@@ -522,14 +521,14 @@ the 100-m long dipole.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 281-285
+.. GENERATED FROM PYTHON SOURCE LINES 280-284
 
 (E) `SimPEG`
 ------------
 
 Set-up SimPEG-specific parameters.
 
-.. GENERATED FROM PYTHON SOURCE LINES 285-315
+.. GENERATED FROM PYTHON SOURCE LINES 284-316
 
 .. code-block:: default
 
@@ -538,14 +537,16 @@ Set-up SimPEG-specific parameters.
     # Set up the receiver list
     rec_list = [
         TDEM.Rx.PointElectricField(
-            orientation="x", times=times, locs=np.array([[*rec[:3]],]),
+            orientation="x", times=times, locations=np.array([[*rec[:3]],]),
         ),
     ]
 
 
     # Set up the source list
     src_list = [
-        TDEM.Src.LineCurrent(rxList=rec_list, loc=np.array([[*src[::2]], [*src[1::2]]]),),
+        TDEM.Src.LineCurrent(
+            receiver_list=rec_list, location=np.array([[*src[::2]], [*src[1::2]]]),
+        ),
     ]
 
 
@@ -558,8 +559,8 @@ Set-up SimPEG-specific parameters.
         mesh,
         survey=survey,
         rhoMap=maps.IdentityMap(mesh),
-        Solver=Solver,
-        timeSteps=time_steps,
+        solver=Solver,
+        time_steps=time_steps,
     )
 
 
@@ -567,62 +568,15 @@ Set-up SimPEG-specific parameters.
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:413: FutureWarning:
-
-    locs has been deprecated, please use locations. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:420: FutureWarning:
-
-    locs has been deprecated, please use locations. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:413: FutureWarning:
-
-    rxList has been deprecated, please use receiver_list. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:420: FutureWarning:
-
-    rxList has been deprecated, please use receiver_list. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:413: FutureWarning:
-
-    loc has been deprecated, please use location. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:420: FutureWarning:
-
-    loc has been deprecated, please use location. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:413: FutureWarning:
-
-    Solver has been deprecated, please use simulation.solver. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:420: FutureWarning:
-
-    Solver has been deprecated, please use simulation.solver. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:413: FutureWarning:
-
-    timeSteps has been deprecated, please use time_steps. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:420: FutureWarning:
-
-    timeSteps has been deprecated, please use time_steps. It will be removed in version 0.16.0 of SimPEG.
 
 
 
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 316-318
+.. GENERATED FROM PYTHON SOURCE LINES 317-319
 
 Compute
 """""""
 
-.. GENERATED FROM PYTHON SOURCE LINES 318-323
+.. GENERATED FROM PYTHON SOURCE LINES 319-324
 
 .. code-block:: default
 
@@ -653,12 +607,12 @@ Compute
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 324-326
+.. GENERATED FROM PYTHON SOURCE LINES 325-327
 
 (F) Plots
 ---------
 
-.. GENERATED FROM PYTHON SOURCE LINES 326-353
+.. GENERATED FROM PYTHON SOURCE LINES 327-354
 
 .. code-block:: default
 
@@ -701,16 +655,16 @@ Compute
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 354-355
+.. GENERATED FROM PYTHON SOURCE LINES 355-356
 
 empymod.Report([SimPEG, discretize, pymatsolver])
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 3 minutes  6.837 seconds)
+   **Total running time of the script:** ( 3 minutes  6.244 seconds)
 
-**Estimated memory usage:**  2118 MB
+**Estimated memory usage:**  2095 MB
 
 
 .. _sphx_glr_download_content_examples_06-tdem_plot_fwd_tdem_3d_model.py:

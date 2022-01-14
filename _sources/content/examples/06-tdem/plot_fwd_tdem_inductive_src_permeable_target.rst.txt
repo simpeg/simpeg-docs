@@ -292,19 +292,23 @@ Sources for the 2 simulations
 We use two sources, one for the magnetostatic simulation and one for the
 ramp on simulation.
 
-.. GENERATED FROM PYTHON SOURCE LINES 159-173
+.. GENERATED FROM PYTHON SOURCE LINES 159-177
 
 .. code-block:: default
 
 
     # For the magnetostatic simulation. The default waveform is a step-off
     src_magnetostatic = TDEM.Src.CircularLoop(
-        [], loc=np.r_[0.0, 0.0, 0.0], orientation="z", radius=100,
+        [], location=np.r_[0.0, 0.0, 0.0], orientation="z", radius=100,
     )
 
     # For the long on-time simulation. We use the ramp-on waveform
     src_ramp_on = TDEM.Src.CircularLoop(
-        [], loc=np.r_[0.0, 0.0, 0.0], orientation="z", radius=100, waveform=quarter_sine
+        [],
+        location=np.r_[0.0, 0.0, 0.0],
+        orientation="z",
+        radius=100,
+        waveform=quarter_sine,
     )
 
     src_list_magnetostatic = [src_magnetostatic]
@@ -314,25 +318,10 @@ ramp on simulation.
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:413: FutureWarning:
-
-    loc has been deprecated, please use location. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:420: FutureWarning:
-
-    loc has been deprecated, please use location. It will be removed in version 0.16.0 of SimPEG.
 
 
 
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 174-179
+.. GENERATED FROM PYTHON SOURCE LINES 178-183
 
 Create the simulations
 ----------------------
@@ -340,76 +329,42 @@ Create the simulations
 To simulate magnetic flux data, we use the b-formulation of Maxwell's
 equations
 
-.. GENERATED FROM PYTHON SOURCE LINES 179-193
+.. GENERATED FROM PYTHON SOURCE LINES 183-202
 
 .. code-block:: default
 
 
-    prob_magnetostatic = TDEM.Simulation3DMagneticFluxDensity(
-        mesh=mesh, sigmaMap=maps.IdentityMap(mesh), timeSteps=ramp, Solver=Solver
-    )
-    prob_ramp_on = TDEM.Simulation3DMagneticFluxDensity(
-        mesh=mesh, sigmaMap=maps.IdentityMap(mesh), timeSteps=ramp, Solver=Solver
-    )
-
-    survey_magnetostatic = TDEM.Survey(srcList=src_list_magnetostatic)
+    survey_magnetostatic = TDEM.Survey(source_list=src_list_magnetostatic)
     survey_ramp_on = TDEM.Survey(src_list_ramp_on)
 
-    prob_magnetostatic.pair(survey_magnetostatic)
-    prob_ramp_on.pair(survey_ramp_on)
+    prob_magnetostatic = TDEM.Simulation3DMagneticFluxDensity(
+        mesh=mesh,
+        survey=survey_magnetostatic,
+        sigmaMap=maps.IdentityMap(mesh),
+        time_steps=ramp,
+        solver=Solver,
+    )
+    prob_ramp_on = TDEM.Simulation3DMagneticFluxDensity(
+        mesh=mesh,
+        survey=survey_ramp_on,
+        sigmaMap=maps.IdentityMap(mesh),
+        time_steps=ramp,
+        solver=Solver,
+    )
 
 
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:413: FutureWarning:
-
-    timeSteps has been deprecated, please use time_steps. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:420: FutureWarning:
-
-    timeSteps has been deprecated, please use time_steps. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:413: FutureWarning:
-
-    Solver has been deprecated, please use simulation.solver. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:420: FutureWarning:
-
-    Solver has been deprecated, please use simulation.solver. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:413: FutureWarning:
-
-    srcList has been deprecated, please use source_list. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:420: FutureWarning:
-
-    srcList has been deprecated, please use source_list. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/simulation.py:399: FutureWarning:
-
-    Simulation.pair(survey) will be deprecated. Please update your code to instead use simulation.survey = survey, or pass it upon intialization of the simulation object. This will be removed in version 0.16.0 of SimPEG
-
-    /home/vsts/work/1/s/SimPEG/survey.py:337: FutureWarning:
-
-    survey.pair(simulation) will be deprecated. Please update your code to instead use simulation.survey = survey, or pass it upon intialization of the simulation object. This will be removed in version 0.16.0 of SimPEG
 
 
 
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 194-196
+.. GENERATED FROM PYTHON SOURCE LINES 203-205
 
 Run the long on-time simulation
 -------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 196-209
+.. GENERATED FROM PYTHON SOURCE LINES 205-218
 
 .. code-block:: default
 
@@ -441,27 +396,23 @@ Run the long on-time simulation
 
     Converting csc_matrix matrix to CSR format, will slow down.
 
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:413: FutureWarning:
-
-    loc has been deprecated, please use location. It will be removed in version 0.16.0 of SimPEG.
-
     /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/pymatsolver/direct.py:73: PardisoTypeConversionWarning:
 
     Converting csc_matrix matrix to CSR format, will slow down.
 
-     ... done. Elapsed time 1.7873694896697998
+     ... done. Elapsed time 1.4841408729553223
 
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 210-212
+.. GENERATED FROM PYTHON SOURCE LINES 219-221
 
 Compute Magnetostatic Fields from the step-off source
 -----------------------------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 212-218
+.. GENERATED FROM PYTHON SOURCE LINES 221-227
 
 .. code-block:: default
 
@@ -475,26 +426,15 @@ Compute Magnetostatic Fields from the step-off source
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:413: FutureWarning:
-
-    loc has been deprecated, please use location. It will be removed in version 0.16.0 of SimPEG.
 
 
 
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 219-221
+.. GENERATED FROM PYTHON SOURCE LINES 228-230
 
 Plot the results
 -----------------------------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 221-283
+.. GENERATED FROM PYTHON SOURCE LINES 230-292
 
 .. code-block:: default
 
@@ -572,13 +512,13 @@ Plot the results
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 284-287
+.. GENERATED FROM PYTHON SOURCE LINES 293-296
 
 Print the version of SimPEG and dependencies
 --------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 287-290
+.. GENERATED FROM PYTHON SOURCE LINES 296-299
 
 .. code-block:: default
 
@@ -595,7 +535,7 @@ Print the version of SimPEG and dependencies
     <div class="output_subarea output_html rendered_html output_result">
     <table style='border: 3px solid #ddd;'>
       <tr>
-         <td style='text-align: center; font-weight: bold; font-size: 1.2em; border: 2px solid #fff;' colspan='6'>Sat Nov 13 00:21:17 2021 UTC</td>
+         <td style='text-align: center; font-weight: bold; font-size: 1.2em; border: 2px solid #fff;' colspan='6'>Fri Jan 14 22:23:15 2022 UTC</td>
       </tr>
       <tr>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>OS</td>
@@ -614,14 +554,18 @@ Print the version of SimPEG and dependencies
         <td style='text-align: left; border: 2px solid #fff;'>Python</td>
       </tr>
       <tr>
+        <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>File system</td>
+        <td style='text-align: left; border: 2px solid #fff;'>ext4</td>
+      </tr>
+      <tr>
          <td style='text-align: center; border: 2px solid #fff;' colspan='6'>Python 3.7.11 (default, Jul 27 2021, 14:32:16) 
     [GCC 7.5.0]</td>
       </tr>
       <tr>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>SimPEG</td>
-        <td style='text-align: left; border: 2px solid #fff;'>0.15.2</td>
+        <td style='text-align: left; border: 2px solid #fff;'>0.16.0</td>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>discretize</td>
-        <td style='text-align: left; border: 2px solid #fff;'>0.7.1</td>
+        <td style='text-align: left; border: 2px solid #fff;'>0.7.2</td>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>pymatsolver</td>
         <td style='text-align: left; border: 2px solid #fff;'>0.2.0</td>
       </tr>
@@ -631,19 +575,19 @@ Print the version of SimPEG and dependencies
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>properties</td>
         <td style='text-align: left; border: 2px solid #fff;'>0.6.1</td>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>numpy</td>
-        <td style='text-align: left; border: 2px solid #fff;'>1.21.2</td>
+        <td style='text-align: left; border: 2px solid #fff;'>1.20.3</td>
       </tr>
       <tr>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>scipy</td>
-        <td style='text-align: left; border: 2px solid #fff;'>1.7.1</td>
+        <td style='text-align: left; border: 2px solid #fff;'>1.7.3</td>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>cython</td>
-        <td style='text-align: left; border: 2px solid #fff;'>0.29.24</td>
+        <td style='text-align: left; border: 2px solid #fff;'>0.29.26</td>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>IPython</td>
         <td style='text-align: left; border: 2px solid #fff;'>7.29.0</td>
       </tr>
       <tr>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>matplotlib</td>
-        <td style='text-align: left; border: 2px solid #fff;'>3.4.3</td>
+        <td style='text-align: left; border: 2px solid #fff;'>3.5.0</td>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>ipywidgets</td>
         <td style='text-align: left; border: 2px solid #fff;'>7.6.5</td>
         <td style= border: 2px solid #fff;'></td>
@@ -660,7 +604,7 @@ Print the version of SimPEG and dependencies
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  12.299 seconds)
+   **Total running time of the script:** ( 0 minutes  10.943 seconds)
 
 **Estimated memory usage:**  9 MB
 

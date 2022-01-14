@@ -81,14 +81,6 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
     Downloading https://storage.googleapis.com/simpeg/bookpurnong/bookpurnong_inversion.tar.gz
        saved to: /home/vsts/work/1/s/examples/20-published/bookpurnong_inversion.tar.gz
     Download completed!
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:413: FutureWarning:
-
-    Solver has been deprecated, please use simulation.solver. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:420: FutureWarning:
-
-    Solver has been deprecated, please use simulation.solver. It will be removed in version 0.16.0 of SimPEG.
-
 
             SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
             ***Done using same Solver and solverOpts as the problem***
@@ -106,22 +98,14 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
     Converting csc_matrix matrix to CSR format, will slow down.
 
        0  2.00e+00  1.24e+02  0.00e+00  1.24e+02    2.84e+01      0              
-       1  2.00e+00  1.18e+01  2.19e+00  1.62e+01    8.65e+00      0              
+       1  2.00e+00  1.20e+01  2.19e+00  1.64e+01    8.73e+00      0              
     ------------------------- STOP! -------------------------
     1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 1.2510e+01
-    0 : |xc-x_last| = 2.1330e+01 <= tolX*(1+|x0|) = 1.3820e+00
-    0 : |proj(x-g)-x|    = 8.6451e+00 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 8.6451e+00 <= 1e3*eps       = 1.0000e-02
+    0 : |xc-x_last| = 2.1279e+01 <= tolX*(1+|x0|) = 1.3820e+00
+    0 : |proj(x-g)-x|    = 8.7312e+00 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 8.7312e+00 <= 1e3*eps       = 1.0000e-02
     0 : maxIter   =       5    <= iter          =      2
     ------------------------- DONE! -------------------------
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:413: FutureWarning:
-
-    loc has been deprecated, please use location. It will be removed in version 0.16.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:420: FutureWarning:
-
-    loc has been deprecated, please use location. It will be removed in version 0.16.0 of SimPEG.
-
 
             SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
             ***Done using same Solver and solverOpts as the problem***
@@ -138,14 +122,14 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
 
     Converting csc_matrix matrix to CSR format, will slow down.
 
-       0  2.00e+01  2.28e+02  9.10e+00  4.10e+02    6.55e+01      0              
-       1  2.00e+01  4.91e+01  1.67e+00  8.25e+01    4.54e+01      0              
-       2  2.00e+01  1.51e+01  6.36e-01  2.79e+01    3.06e+01      0              
+       0  2.00e+01  2.28e+02  9.17e+00  4.12e+02    6.56e+01      0              
+       1  2.00e+01  4.89e+01  1.68e+00  8.25e+01    4.54e+01      0              
+       2  2.00e+01  1.47e+01  6.37e-01  2.75e+01    3.01e+01      0              
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 4.1128e+01
-    1 : |xc-x_last| = 8.1257e-01 <= tolX*(1+|x0|) = 1.3820e+00
-    0 : |proj(x-g)-x|    = 3.0621e+01 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 3.0621e+01 <= 1e3*eps       = 1.0000e-02
+    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 4.1265e+01
+    1 : |xc-x_last| = 7.8982e-01 <= tolX*(1+|x0|) = 1.3820e+00
+    0 : |proj(x-g)-x|    = 3.0080e+01 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 3.0080e+01 <= 1e3*eps       = 1.0000e-02
     0 : maxIter   =       5    <= iter          =      3
     ------------------------- DONE! -------------------------
     /home/vsts/work/1/s/examples/20-published/plot_booky_1D_time_freq_inv.py:474: UserWarning:
@@ -347,13 +331,13 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
         frequency_cp = resolve["frequency_cp"][()]
         freqs = frequency_cp.copy()
         srcLoc = np.array([0.0, 0.0, src_height_resolve])
-        srcList = [
+        source_list = [
             FDEM.Src.MagDipole([bzr, bzi], freq, srcLoc, orientation="Z") for freq in freqs
         ]
 
         # Set FDEM survey (In-phase and Quadrature)
-        survey = FDEM.Survey(srcList)
-        prb = FDEM.Simulation3DMagneticFluxDensity(mesh, sigmaMap=mapping, Solver=Solver)
+        survey = FDEM.Survey(source_list)
+        prb = FDEM.Simulation3DMagneticFluxDensity(mesh, sigmaMap=mapping, solver=Solver)
         prb.survey = survey
 
         # ------------------ RESOLVE Inversion ------------------ #
@@ -434,11 +418,11 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
             locations=rxLoc, times=times_off[:-3] + offTime, orientation="z"
         )  # vertical db_dt
 
-        rxList = [dbdt_z]  # list of receivers
-        srcList = [
+        receiver_list = [dbdt_z]  # list of receivers
+        source_list = [
             TDEM.Src.CircularLoop(
-                rxList,
-                loc=srcLoc,
+                receiver_list,
+                location=srcLoc,
                 radius=radius,
                 orientation="z",
                 waveform=TDEM.Src.VTEMWaveform(offTime=offTime, peakTime=peakTime, a=3.0),
@@ -454,12 +438,12 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
             (5e-4, 15),
         ]
         prob = TDEM.Simulation3DElectricField(
-            mesh, time_steps=timeSteps, sigmaMap=mapping, Solver=Solver
+            mesh, time_steps=timeSteps, sigmaMap=mapping, solver=Solver
         )
-        survey = TDEM.Survey(srcList)
+        survey = TDEM.Survey(source_list)
         prob.survey = survey
 
-        src = srcList[0]
+        src = source_list[0]
         rx = src.receiver_list[0]
         wave = []
         for time in prob.times:
@@ -635,7 +619,7 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  12.201 seconds)
+   **Total running time of the script:** ( 0 minutes  11.890 seconds)
 
 **Estimated memory usage:**  15 MB
 

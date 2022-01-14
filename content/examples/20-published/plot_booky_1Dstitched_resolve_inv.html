@@ -5,7 +5,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Heagy et al., 2017 1D RESOLVE Bookpurnong Inversion &mdash; SimPEG 0.15.2 documentation</title>
+  <title>Heagy et al., 2017 1D RESOLVE Bookpurnong Inversion &mdash; SimPEG 0.16.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
@@ -55,7 +55,7 @@
             <a href="../../../index.html" class="icon icon-home"> SimPEG
           </a>
               <div class="version">
-                0.15.2
+                0.16.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -114,7 +114,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/10-vrm/index.html">Viscous Remanent Magnetization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/11-flow/index.html">Flow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/12-seismic/index.html">Seismic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/13-pgi/index.html">PGI: Petrophysically and Geologically Guided Geophysical Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/13-joint_inversion/index.html">Joint Inversion</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Packages</span></p>
 <ul>
@@ -306,12 +306,12 @@ Download completed!
 
     <span class="c1"># source location</span>
     <span class="n">srcLoc</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">src_height</span><span class="p">])</span>
-    <span class="n">srcList</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">source_list</span> <span class="o">=</span> <span class="p">[</span>
         <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">FDEM</span><span class="o">.</span><span class="n">Src</span><span class="o">.</span><span class="n">MagDipole</span></a><span class="p">([</span><span class="n">bzr</span><span class="p">,</span> <span class="n">bzi</span><span class="p">],</span> <span class="n">freq</span><span class="p">,</span> <span class="n">srcLoc</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;Z&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">freq</span> <span class="ow">in</span> <span class="n">freqs</span>
     <span class="p">]</span>
 
     <span class="c1"># construct a forward simulation</span>
-    <span class="n">survey</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">FDEM</span><span class="o">.</span><span class="n">Survey</span></a><span class="p">(</span><span class="n">srcList</span><span class="p">)</span>
+    <span class="n">survey</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">FDEM</span><span class="o">.</span><span class="n">Survey</span></a><span class="p">(</span><span class="n">source_list</span><span class="p">)</span>
     <span class="n">prb</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">FDEM</span><span class="o">.</span><span class="n">Simulation3DMagneticFluxDensity</span></a><span class="p">(</span>
         <span class="n">mesh</span><span class="p">,</span> <span class="n">sigmaMap</span><span class="o">=</span><span class="n">mapping</span><span class="p">,</span> <span class="n">Solver</span><span class="o">=</span><span class="n">PardisoSolver</span>
     <span class="p">)</span>
@@ -600,7 +600,7 @@ Download completed!
     <span class="n">run</span><span class="p">(</span><span class="n">runIt</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plotIt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">saveIt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">saveFig</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cleanup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.268 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.087 seconds)</p>
 <p><strong>Estimated memory usage:</strong>  9 MB</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-examples-20-published-plot-booky-1dstitched-resolve-inv-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">

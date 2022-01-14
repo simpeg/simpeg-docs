@@ -145,7 +145,7 @@ of the VRM response. Next we define the sources, receivers and time channels
 for the survey. Our example is similar to an EM-63 survey.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 89-110
+.. GENERATED FROM PYTHON SOURCE LINES 89-114
 
 .. code-block:: default
 
@@ -157,18 +157,22 @@ for the survey. Our example is similar to an EM-63 survey.
     z = 0.5 * np.ones(x.shape)
     loc = np.c_[utils.mkvc(x), utils.mkvc(y), utils.mkvc(z)]  # Src and Rx Locations
 
-    srcListVRM = []
+    source_listVRM = []
 
     for pp in range(0, loc.shape[0]):
 
         loc_pp = np.reshape(loc[pp, :], (1, 3))
-        rxListVRM = [VRM.Rx.Point(loc_pp, times=times, fieldType="dbdt", orientation="z")]
+        receiver_listVRM = [
+            VRM.Rx.Point(loc_pp, times=times, fieldType="dbdt", orientation="z")
+        ]
 
-        srcListVRM.append(
-            VRM.Src.MagDipole(rxListVRM, utils.mkvc(loc[pp, :]), [0.0, 0.0, 0.01], waveform)
+        source_listVRM.append(
+            VRM.Src.MagDipole(
+                receiver_listVRM, utils.mkvc(loc[pp, :]), [0.0, 0.0, 0.01], waveform
+            )
         )
 
-    survey_vrm = VRM.Survey(srcListVRM)
+    survey_vrm = VRM.Survey(source_listVRM)
 
 
 
@@ -177,7 +181,7 @@ for the survey. Our example is similar to an EM-63 survey.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 111-119
+.. GENERATED FROM PYTHON SOURCE LINES 115-123
 
 Forward Simulation
 ------------------
@@ -188,7 +192,7 @@ transmitters. This is controlled through the *refinement_factor* and *refinement
 properties.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 119-161
+.. GENERATED FROM PYTHON SOURCE LINES 123-165
 
 .. code-block:: default
 
@@ -250,7 +254,7 @@ properties.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 162-169
+.. GENERATED FROM PYTHON SOURCE LINES 166-173
 
 Inverse Problem
 ---------------
@@ -260,13 +264,13 @@ recover the equivalent source model, only cells at the surface are set
 as active in the inversion.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 169-214
+.. GENERATED FROM PYTHON SOURCE LINES 173-218
 
 .. code-block:: default
 
 
     # Define problem
-    # survey_inv = VRM.Survey(srcListVRM)
+    # survey_inv = VRM.Survey(source_listVRM)
     actCells = (mesh.gridCC[:, 2] < 0.0) & (mesh.gridCC[:, 2] > -2.0)
     problem_inv = VRM.Simulation3DLinear(
         mesh,
@@ -350,13 +354,13 @@ as active in the inversion.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 215-218
+.. GENERATED FROM PYTHON SOURCE LINES 219-222
 
 Plotting
 --------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 218-353
+.. GENERATED FROM PYTHON SOURCE LINES 222-357
 
 .. code-block:: default
 
@@ -510,7 +514,7 @@ Plotting
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  24.100 seconds)
+   **Total running time of the script:** ( 0 minutes  21.350 seconds)
 
 **Estimated memory usage:**  9 MB
 

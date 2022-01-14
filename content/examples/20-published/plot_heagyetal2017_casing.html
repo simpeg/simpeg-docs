@@ -5,7 +5,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Heagy et al., 2017 Casing Example &mdash; SimPEG 0.15.2 documentation</title>
+  <title>Heagy et al., 2017 Casing Example &mdash; SimPEG 0.16.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
@@ -55,7 +55,7 @@
             <a href="../../../index.html" class="icon icon-home"> SimPEG
           </a>
               <div class="version">
-                0.15.2
+                0.16.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -114,7 +114,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/10-vrm/index.html">Viscous Remanent Magnetization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/11-flow/index.html">Flow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/12-seismic/index.html">Seismic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/13-pgi/index.html">PGI: Petrophysically and Geologically Guided Geophysical Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/13-joint_inversion/index.html">Joint Inversion</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Packages</span></p>
 <ul>
@@ -248,19 +248,11 @@ Secondary Mesh ...
  nC, vnC 137700 (45, 45, 68)
 ... done building secondary mapping
 Setting up Secondary Problem
-/home/vsts/work/1/s/SimPEG/utils/code_utils.py:420: FutureWarning:
-
-Solver has been deprecated, please use simulation.solver. It will be removed in version 0.16.0 of SimPEG.
-
 ... done setting up secondary problem
 Building primaryMap2meshs
 ... done building primaryMap2meshs
 Setting up Secondary Survey
 ... done secondary survey
-/home/vsts/work/1/s/examples/20-published/plot_heagyetal2017_casing.py:767: MatplotlibDeprecationWarning:
-
-shading=&#39;flat&#39; when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading=&#39;auto&#39;, &#39;nearest&#39; or &#39;gouraud&#39;, or set rcParams[&#39;pcolor.shading&#39;].  This will become an error two minor releases later.
-
 Setting up Secondary Survey
 ... done secondary survey
 Removing /home/vsts/Downloads/simpegtemp
@@ -672,8 +664,8 @@ Removing /home/vsts/Downloads/simpegtemp
 
                 <span class="k">return</span> <span class="n">dg_p</span>
 
-            <span class="n">srcList</span> <span class="o">=</span> <span class="n">setupPrimarySource</span><span class="p">()</span>  <span class="c1"># create primary source</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_primarySurvey</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">FDEM</span><span class="o">.</span><span class="n">Survey</span></a><span class="p">(</span><span class="n">srcList</span><span class="p">)</span>  <span class="c1"># primary survey</span>
+            <span class="n">source_list</span> <span class="o">=</span> <span class="n">setupPrimarySource</span><span class="p">()</span>  <span class="c1"># create primary source</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_primarySurvey</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">FDEM</span><span class="o">.</span><span class="n">Survey</span></a><span class="p">(</span><span class="n">source_list</span><span class="p">)</span>  <span class="c1"># primary survey</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;... done building primary survey&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_primarySurvey</span>
 
@@ -811,7 +803,7 @@ Removing /home/vsts/Downloads/simpegtemp
         <span class="k">if</span> <span class="n">mapping</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">mapping</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">maps</span><span class="o">.</span><span class="n">IdentityMap</span></a><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meshs</span><span class="p">))]</span>
         <span class="n">sec_problem</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">FDEM</span><span class="o">.</span><span class="n">Simulation3DElectricField</span></a><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meshs</span><span class="p">,</span> <span class="n">sigmaMap</span><span class="o">=</span><span class="n">mapping</span><span class="p">)</span>
-        <span class="n">sec_problem</span><span class="o">.</span><span class="n">Solver</span> <span class="o">=</span> <span class="n">Solver</span>
+        <span class="n">sec_problem</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="n">Solver</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;... done setting up secondary problem&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">sec_problem</span>
 
@@ -1720,8 +1712,8 @@ Removing /home/vsts/Downloads/simpegtemp
     <span class="n">run</span><span class="p">(</span><span class="n">plotIt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">runTests</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reRun</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">saveFig</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 4 minutes  39.387 seconds)</p>
-<p><strong>Estimated memory usage:</strong>  1416 MB</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 11 minutes  26.915 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  1412 MB</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-examples-20-published-plot-heagyetal2017-casing-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/8ccf82c5067a8a36b26d6751f72889a2/plot_heagyetal2017_casing.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_heagyetal2017_casing.py</span></code></a></p>
