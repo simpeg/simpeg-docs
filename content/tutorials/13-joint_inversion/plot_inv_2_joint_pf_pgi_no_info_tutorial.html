@@ -5,7 +5,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Joint PGI of Gravity + Magnetic on an Octree mesh without petrophysical information &mdash; SimPEG 0.16.0 documentation</title>
+  <title>Joint PGI of Gravity + Magnetic on an Octree mesh without petrophysical information &mdash; SimPEG 0.17.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
@@ -55,7 +55,7 @@
             <a href="../../../index.html" class="icon icon-home"> SimPEG
           </a>
               <div class="version">
-                0.16.0
+                0.17.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -398,12 +398,18 @@ Volume 224, Issue 1, January 2021, Pages 40-68, DOI: <a class="reference externa
 <span class="n">idenMap</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">maps</span><span class="o">.</span><span class="n">IdentityMap</span></a><span class="p">(</span><span class="n">nP</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nactv</span></a><span class="p">)</span>
 <span class="c1"># Grav problem</span>
 <span class="n">simulation_grav</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">pf</span><span class="o">.</span><span class="n">gravity</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">Simulation3DIntegral</span></a><span class="p">(</span>
-    <span class="n">survey</span><span class="o">=</span><span class="n">data_grav</span><span class="o">.</span><span class="n">survey</span><span class="p">,</span> <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="o">=</span><a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span> <span class="n">rhoMap</span><span class="o">=</span><span class="n">wires</span><span class="o">.</span><span class="n">den</span><span class="p">,</span> <span class="n">actInd</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">actv</span></a><span class="p">,</span>
+    <span class="n">survey</span><span class="o">=</span><span class="n">data_grav</span><span class="o">.</span><span class="n">survey</span><span class="p">,</span>
+    <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="o">=</span><a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span>
+    <span class="n">rhoMap</span><span class="o">=</span><span class="n">wires</span><span class="o">.</span><span class="n">den</span><span class="p">,</span>
+    <span class="n">actInd</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">actv</span></a><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">dmis_grav</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">data_misfit</span><span class="o">.</span><span class="n">L2DataMisfit</span></a><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data_grav</span><span class="p">,</span> <span class="n">simulation</span><span class="o">=</span><span class="n">simulation_grav</span><span class="p">)</span>
 <span class="c1"># Mag problem</span>
 <span class="n">simulation_mag</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">pf</span><span class="o">.</span><span class="n">magnetics</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">Simulation3DIntegral</span></a><span class="p">(</span>
-    <span class="n">survey</span><span class="o">=</span><span class="n">data_mag</span><span class="o">.</span><span class="n">survey</span><span class="p">,</span> <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="o">=</span><a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span> <span class="n">chiMap</span><span class="o">=</span><span class="n">wires</span><span class="o">.</span><span class="n">sus</span><span class="p">,</span> <span class="n">actInd</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">actv</span></a><span class="p">,</span>
+    <span class="n">survey</span><span class="o">=</span><span class="n">data_mag</span><span class="o">.</span><span class="n">survey</span><span class="p">,</span>
+    <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="o">=</span><a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span>
+    <span class="n">chiMap</span><span class="o">=</span><span class="n">wires</span><span class="o">.</span><span class="n">sus</span><span class="p">,</span>
+    <span class="n">actInd</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">actv</span></a><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">dmis_mag</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">data_misfit</span><span class="o">.</span><span class="n">L2DataMisfit</span></a><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data_mag</span><span class="p">,</span> <span class="n">simulation</span><span class="o">=</span><span class="n">simulation_mag</span><span class="p">)</span>
 </pre></div>
@@ -549,14 +555,21 @@ for both unit. The background unit is set at a fixed null contrasts (0 g/cc
 <span class="c1"># initialize beta and beta/alpha_s schedule</span>
 <span class="n">beta</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">BetaEstimate_ByEig</span></a><span class="p">(</span><span class="n">beta0_ratio</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
 <span class="n">betaIt</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">PGI_BetaAlphaSchedule</span></a><span class="p">(</span>
-    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">coolingFactor</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">coolingFactor</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">progress</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="c1"># geophy. and petro. target misfits</span>
 <span class="n">targets</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">MultiTargetMisfits</span></a><span class="p">(</span>
-    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">chiSmall</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>  <span class="c1"># ask for twice as much clustering (target value is /2)</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">chiSmall</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>  <span class="c1"># ask for twice as much clustering (target value is /2)</span>
 <span class="p">)</span>
 <span class="c1"># add learned mref in smooth once stable</span>
-<span class="n">MrefInSmooth</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">PGI_AddMrefInSmooth</span></a><span class="p">(</span><span class="n">wait_till_stable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,)</span>
+<span class="n">MrefInSmooth</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">PGI_AddMrefInSmooth</span></a><span class="p">(</span>
+    <span class="n">wait_till_stable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="c1"># update the parameters in smallness (L2-approx of PGI)</span>
 <span class="n">update_smallness</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">PGI_UpdateParameters</span></a><span class="p">(</span>
     <span class="n">update_gmm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># update the GMM each iteration</span>
@@ -895,63 +908,63 @@ Beta cooling evaluation: progress: [90.2 27.9] ; minimum progress targets: [1908
 Warming alpha_s to favor clustering:  6.757331479565207
 mref changed in  146  places
    5  1.39e-08  8.87e+01  3.41e+09  1.36e+02    2.49e+01      0   Skip BFGS
-geophys. misfits: 89.6 (target 288.0 [True]); 16.9 (target 288.0 [True]) | smallness misfit: 30228.9 (target: 5863.5 [False])
+geophys. misfits: 89.6 (target 288.0 [True]); 16.9 (target 288.0 [True]) | smallness misfit: 30226.8 (target: 5863.5 [False])
 Beta cooling evaluation: progress: [89.6 16.9] ; minimum progress targets: [345.6 345.6]
-Warming alpha_s to favor clustering:  68.5412472188689
+Warming alpha_s to favor clustering:  68.41575786269532
 mref changed in  3  places
-   6  1.39e-08  8.79e+01  5.57e+09  1.65e+02    3.13e+01      0   Skip BFGS
-geophys. misfits: 66.3 (target 288.0 [True]); 690.8 (target 288.0 [False]) | smallness misfit: 21186.4 (target: 5863.5 [False])
-Updating scaling for data misfits by  4.344936827310542
-New scales: [0.90545281 0.09454719]
-Beta cooling evaluation: progress: [ 66.3 690.8] ; minimum progress targets: [345.6 345.6]
+   6  1.39e-08  8.79e+01  5.56e+09  1.65e+02    3.14e+01      0   Skip BFGS
+geophys. misfits: 66.3 (target 288.0 [True]); 697.9 (target 288.0 [False]) | smallness misfit: 21023.9 (target: 5863.5 [False])
+Updating scaling for data misfits by  4.342351765738581
+New scales: [0.90550375 0.09449625]
+Beta cooling evaluation: progress: [ 66.3 697.9] ; minimum progress targets: [345.6 345.6]
 Decreasing beta to counter data misfit increase.
 mref changed in  21  places
-   7  6.95e-09  1.25e+02  5.47e+09  1.63e+02    1.83e+01      0
-geophys. misfits: 82.2 (target 288.0 [True]); 406.5 (target 288.0 [False]) | smallness misfit: 20799.4 (target: 5863.5 [False])
-Updating scaling for data misfits by  3.505454683295256
-New scales: [0.73204361 0.26795639]
-Beta cooling evaluation: progress: [ 82.2 406.5] ; minimum progress targets: [345.6 552.6]
+   7  6.95e-09  1.26e+02  5.47e+09  1.64e+02    1.81e+01      0
+geophys. misfits: 82.0 (target 288.0 [True]); 410.6 (target 288.0 [False]) | smallness misfit: 20649.8 (target: 5863.5 [False])
+Updating scaling for data misfits by  3.51335345361344
+New scales: [0.73171873 0.26828127]
+Beta cooling evaluation: progress: [ 82.  410.6] ; minimum progress targets: [345.6 558.3]
 Decreasing beta to counter data misfit increase.
 mref changed in  14  places
-   8  3.48e-09  1.69e+02  5.43e+09  1.88e+02    1.74e+01      2
-geophys. misfits: 83.3 (target 288.0 [True]); 115.7 (target 288.0 [True]) | smallness misfit: 21164.0 (target: 5863.5 [False])
-Beta cooling evaluation: progress: [ 83.3 115.7] ; minimum progress targets: [345.6 345.6]
-Warming alpha_s to favor clustering:  203.75206489410755
-mref changed in  38  places
-   9  3.48e-09  9.20e+01  9.89e+09  1.26e+02    1.72e+01      1
-geophys. misfits: 48.0 (target 288.0 [True]); 29.4 (target 288.0 [True]) | smallness misfit: 16812.4 (target: 5863.5 [False])
-Beta cooling evaluation: progress: [48.  29.4] ; minimum progress targets: [345.6 345.6]
-Warming alpha_s to favor clustering:  1608.568835081619
+   8  3.48e-09  1.70e+02  5.43e+09  1.89e+02    1.74e+01      2
+geophys. misfits: 83.3 (target 288.0 [True]); 116.9 (target 288.0 [True]) | smallness misfit: 21019.0 (target: 5863.5 [False])
+Beta cooling evaluation: progress: [ 83.3 116.9] ; minimum progress targets: [345.6 345.6]
+Warming alpha_s to favor clustering:  202.55525637393777
+mref changed in  39  places
+   9  3.48e-09  9.23e+01  9.85e+09  1.27e+02    1.72e+01      1
+geophys. misfits: 47.7 (target 288.0 [True]); 28.5 (target 288.0 [True]) | smallness misfit: 16729.1 (target: 5863.5 [False])
+Beta cooling evaluation: progress: [47.7 28.5] ; minimum progress targets: [345.6 345.6]
+Warming alpha_s to favor clustering:  1635.3077037759701
 mref changed in  11  places
-  10  3.48e-09  4.30e+01  4.35e+10  1.94e+02    1.74e+01      0   Skip BFGS
-geophys. misfits: 73.9 (target 288.0 [True]); 52.5 (target 288.0 [True]) | smallness misfit: 8669.5 (target: 5863.5 [False])
-Beta cooling evaluation: progress: [73.9 52.5] ; minimum progress targets: [345.6 345.6]
-Warming alpha_s to favor clustering:  7542.909050740589
+  10  3.48e-09  4.26e+01  4.42e+10  1.96e+02    1.76e+01      0   Skip BFGS
+geophys. misfits: 74.6 (target 288.0 [True]); 55.9 (target 288.0 [True]) | smallness misfit: 8624.2 (target: 5863.5 [False])
+Beta cooling evaluation: progress: [74.6 55.9] ; minimum progress targets: [345.6 345.6]
+Warming alpha_s to favor clustering:  7372.690135302652
 mref changed in  1  places
-  11  3.48e-09  6.82e+01  1.01e+11  4.21e+02    2.48e+01      0
-geophys. misfits: 154.6 (target 288.0 [True]); 195.6 (target 288.0 [True]) | smallness misfit: 5974.5 (target: 5863.5 [False])
-Beta cooling evaluation: progress: [154.6 195.6] ; minimum progress targets: [345.6 345.6]
-Warming alpha_s to favor clustering:  12578.051962948433
+  11  3.48e-09  6.96e+01  9.87e+10  4.13e+02    2.46e+01      0
+geophys. misfits: 152.4 (target 288.0 [True]); 201.8 (target 288.0 [True]) | smallness misfit: 5967.5 (target: 5863.5 [False])
+Beta cooling evaluation: progress: [152.4 201.8] ; minimum progress targets: [345.6 345.6]
+Warming alpha_s to favor clustering:  12224.80294439492
 mref changed in  0  places
 Add mref to Smoothness. Changes in mref happened in 0.0 % of the cells
-  12  3.48e-09  1.66e+02  9.13e+10  4.83e+02    2.63e+01      0
-geophys. misfits: 207.5 (target 288.0 [True]); 93.8 (target 288.0 [True]) | smallness misfit: 5210.5 (target: 5863.5 [True])
+  12  3.48e-09  1.66e+02  8.91e+10  4.76e+02    2.72e+01      0
+geophys. misfits: 204.2 (target 288.0 [True]); 103.1 (target 288.0 [True]) | smallness misfit: 5243.5 (target: 5863.5 [True])
 All targets have been reached
-Beta cooling evaluation: progress: [207.5  93.8] ; minimum progress targets: [345.6 345.6]
-Warming alpha_s to favor clustering:  28027.334285001903
+Beta cooling evaluation: progress: [204.2 103.1] ; minimum progress targets: [345.6 345.6]
+Warming alpha_s to favor clustering:  25701.012410876934
 mref changed in  0  places
 Add mref to Smoothness. Changes in mref happened in 0.0 % of the cells
 ------------------------- STOP! -------------------------
 1 : |fc-fOld| = 0.0000e+00 &lt;= tolF*(1+|f0|) = 2.1153e+05
-0 : |xc-x_last| = 5.6294e-01 &lt;= tolX*(1+|x0|) = 1.0153e-01
-0 : |proj(x-g)-x|    = 2.6208e+01 &lt;= tolG          = 1.0000e-01
-0 : |proj(x-g)-x|    = 2.6208e+01 &lt;= 1e3*eps       = 1.0000e-02
+0 : |xc-x_last| = 5.8089e-01 &lt;= tolX*(1+|x0|) = 1.0153e-01
+0 : |proj(x-g)-x|    = 2.7125e+01 &lt;= tolG          = 1.0000e-01
+0 : |proj(x-g)-x|    = 2.7125e+01 &lt;= 1e3*eps       = 1.0000e-02
 0 : maxIter   =      30    &lt;= iter          =     13
 ------------------------- DONE! -------------------------
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 4 minutes  10.270 seconds)</p>
-<p><strong>Estimated memory usage:</strong>  92 MB</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 3 minutes  42.433 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  105 MB</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-tutorials-13-joint-inversion-plot-inv-2-joint-pf-pgi-no-info-tutorial-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/fe5069495203efbc599e3bda0796d381/plot_inv_2_joint_pf_pgi_no_info_tutorial.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_inv_2_joint_pf_pgi_no_info_tutorial.py</span></code></a></p>
@@ -981,29 +994,6 @@ Add mref to Smoothness. Changes in mref happened in 0.0 % of the cells
   
 
  
-
-
-    <div id="disqus_thread"></div>
-    <script>
-
-    /**
-    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-
-    var disqus_config = function () {
-    this.page.url = {path};  // Replace PAGE_URL with your page's canonical URL variable
-    this.page.identifier = {path}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-
-    (function() { // DON'T EDIT BELOW THIS LINE
-    var d = document, s = d.createElement('script');
-    s.src = 'https://simpeg.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-    })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
 
     <div role="contentinfo">
         <a rel="license" href="http://creativecommons.org/licenses/by/4.0/" width="60px"; style="float:right;height:3em;line-height:3em;padding:10px 0 0 1em;">

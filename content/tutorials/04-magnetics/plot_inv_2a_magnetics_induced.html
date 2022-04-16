@@ -5,7 +5,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sparse Norm Inversion for Total Magnetic Intensity Data on a Tensor Mesh &mdash; SimPEG 0.16.0 documentation</title>
+  <title>Sparse Norm Inversion for Total Magnetic Intensity Data on a Tensor Mesh &mdash; SimPEG 0.17.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
@@ -55,7 +55,7 @@
             <a href="../../../index.html" class="icon icon-home"> SimPEG
           </a>
               <div class="version">
-                0.16.0
+                0.17.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -454,7 +454,7 @@ class.</p>
 </section>
 <section id="define-inversion-directives">
 <h2>Define Inversion Directives<a class="headerlink" href="#define-inversion-directives" title="Permalink to this headline">¶</a></h2>
-<p>Here we define any directiveas that are carried out during the inversion. This
+<p>Here we define any directives that are carried out during the inversion. This
 includes the cooling schedule for the trade-off parameter (beta), stopping
 criteria for the inversion and saving inversion results at each iteration.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Defining a starting value for the trade-off parameter (beta) between the data</span>
@@ -467,10 +467,13 @@ criteria for the inversion and saving inversion results at each iteration.</p>
 <span class="c1"># Defines the directives for the IRLS regularization. This includes setting</span>
 <span class="c1"># the cooling schedule for the trade-off parameter.</span>
 <span class="n">update_IRLS</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">Update_IRLS</span></a><span class="p">(</span>
-    <span class="n">f_min_change</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span> <span class="n">max_irls_iterations</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">coolEpsFact</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">beta_tol</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span>
+    <span class="n">f_min_change</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span>
+    <span class="n">max_irls_iterations</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+    <span class="n">coolEpsFact</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+    <span class="n">beta_tol</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="c1"># Updating the preconditionner if it is model dependent.</span>
+<span class="c1"># Updating the preconditioner if it is model dependent.</span>
 <span class="n">update_jacobi</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">UpdatePreconditioner</span></a><span class="p">()</span>
 
 <span class="c1"># Setting a stopping criteria for the inversion.</span>
@@ -512,24 +515,24 @@ model has any nan: 0
   #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment
 -----------------------------------------------------------------------------
 x0 has any nan: 0
-   0  1.83e+05  1.05e+04  0.00e+00  1.05e+04    1.39e+02      0
-   1  9.15e+04  2.47e+02  5.51e-03  7.52e+02    1.23e+02      0
+   0  1.79e+05  1.05e+04  0.00e+00  1.05e+04    1.39e+02      0
+   1  8.96e+04  2.40e+02  5.55e-03  7.38e+02    1.23e+02      0
 Reached starting chifact with l2-norm regularization: Start IRLS steps...
-eps_p: 0.001414190763178717 eps_q: 0.001414190763178717
-   2  4.58e+04  8.78e+01  1.14e-02  6.09e+02    1.84e+02      0   Skip BFGS
-   3  1.17e+05  4.62e+01  1.54e-02  1.85e+03    1.87e+02      0
+eps_p: 0.0014184191489376408 eps_q: 0.0014184191489376408
+   2  4.48e+04  8.51e+01  1.14e-02  5.98e+02    1.83e+02      0   Skip BFGS
+   3  1.17e+05  4.46e+01  1.54e-02  1.86e+03    1.87e+02      0
    4  7.61e+04  2.64e+02  1.48e-02  1.39e+03    1.86e+02      0
    5  6.13e+04  1.68e+02  1.73e-02  1.23e+03    1.83e+02      0
-   6  9.95e+04  1.16e+02  1.64e-02  1.75e+03    1.75e+02      0
-   7  7.11e+04  2.13e+02  1.25e-02  1.10e+03    1.64e+02      0
-   8  1.17e+05  1.11e+02  1.16e-02  1.47e+03    1.50e+02      0
-   9  8.54e+04  2.05e+02  9.33e-03  1.00e+03    1.42e+02      0
-  10  1.40e+05  1.14e+02  9.13e-03  1.39e+03    1.42e+02      0
+   6  9.94e+04  1.16e+02  1.65e-02  1.75e+03    1.75e+02      0
+   7  7.10e+04  2.13e+02  1.25e-02  1.10e+03    1.64e+02      0
+   8  1.17e+05  1.11e+02  1.16e-02  1.47e+03    1.51e+02      0
+   9  8.53e+04  2.05e+02  9.34e-03  1.00e+03    1.42e+02      0
+  10  1.40e+05  1.14e+02  9.14e-03  1.39e+03    1.42e+02      0
 ------------------------- STOP! -------------------------
-1 : |fc-fOld| = 3.8778e+02 &lt;= tolF*(1+|f0|) = 1.0518e+03
-1 : |xc-x_last| = 4.6321e-03 &lt;= tolX*(1+|x0|) = 1.0219e-01
-0 : |proj(x-g)-x|    = 1.4155e+02 &lt;= tolG          = 1.0000e-01
-0 : |proj(x-g)-x|    = 1.4155e+02 &lt;= 1e3*eps       = 1.0000e-02
+1 : |fc-fOld| = 3.8783e+02 &lt;= tolF*(1+|f0|) = 1.0518e+03
+1 : |xc-x_last| = 4.6430e-03 &lt;= tolX*(1+|x0|) = 1.0219e-01
+0 : |proj(x-g)-x|    = 1.4153e+02 &lt;= tolG          = 1.0000e-01
+0 : |proj(x-g)-x|    = 1.4153e+02 &lt;= 1e3*eps       = 1.0000e-02
 1 : maxIter   =      10    &lt;= iter          =     10
 ------------------------- DONE! -------------------------
 </pre></div>
@@ -651,7 +654,7 @@ eps_p: 0.001414190763178717 eps_q: 0.001414190763178717
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../../_images/sphx_glr_plot_inv_2a_magnetics_induced_004.png" srcset="../../../_images/sphx_glr_plot_inv_2a_magnetics_induced_004.png" alt="Observed, Predicted, Normalized Misfit" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  48.067 seconds)</p>
+<img src="../../../_images/sphx_glr_plot_inv_2a_magnetics_induced_004.png" srcset="../../../_images/sphx_glr_plot_inv_2a_magnetics_induced_004.png" alt="Observed, Predicted, Normalized Misfit" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  48.976 seconds)</p>
 <p><strong>Estimated memory usage:</strong>  9 MB</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-tutorials-04-magnetics-plot-inv-2a-magnetics-induced-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
@@ -682,29 +685,6 @@ eps_p: 0.001414190763178717 eps_q: 0.001414190763178717
   
 
  
-
-
-    <div id="disqus_thread"></div>
-    <script>
-
-    /**
-    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-
-    var disqus_config = function () {
-    this.page.url = {path};  // Replace PAGE_URL with your page's canonical URL variable
-    this.page.identifier = {path}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-
-    (function() { // DON'T EDIT BELOW THIS LINE
-    var d = document, s = d.createElement('script');
-    s.src = 'https://simpeg.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-    })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
 
     <div role="contentinfo">
         <a rel="license" href="http://creativecommons.org/licenses/by/4.0/" width="60px"; style="float:right;height:3em;line-height:3em;padding:10px 0 0 1em;">

@@ -142,10 +142,10 @@ As a simple case, we pick a vertical inducing field of magnitude 50,000 nT.
 Inversion Mesh
 --------------
 
-Here, we create a TreeMesh with base cell size of 5 m. We reated a small
+Here, we create a TreeMesh with base cell size of 5 m. We created a small
 utility function to center the mesh around points and to figure out the
-outer most dimension for adequate padding distance.
-The second stage allows to refine the mesh around points or surfaces
+outermost dimension for adequate padding distance.
+The second stage allows us to refine the mesh around points or surfaces
 (point assumed to follow an horiontal interface such as topo)
 
 
@@ -165,7 +165,7 @@ The second stage allows to refine the mesh around points or surfaces
         mesh, topo, method="surface", octree_levels=[4, 4], finalize=True
     )
 
-    # Define an active cells from topo
+    # Define the active cells from topo
     actv = utils.surface2ind_topo(mesh, topo)
     nC = int(actv.sum())
 
@@ -184,17 +184,19 @@ Forward modeling data
 We can now generate TMI data
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 125-201
+.. GENERATED FROM PYTHON SOURCE LINES 125-203
 
 .. code-block:: default
 
 
-    # Convert the inclination declination to vector in Cartesian
+    # Convert the inclination and declination to vector in Cartesian
     M_xyz = utils.mat_utils.dip_azimuth2cartesian(np.ones(nC) * M[0], np.ones(nC) * M[1])
 
     # Get the indicies of the magnetized block
     ind = utils.model_builder.getIndicesBlock(
-        np.r_[-20, -20, -10], np.r_[20, 20, 25], mesh.gridCC,
+        np.r_[-20, -20, -10],
+        np.r_[20, 20, 25],
+        mesh.gridCC,
     )[0]
 
     # Assign magnetization value, inducing field strength will
@@ -205,7 +207,7 @@ We can now generate TMI data
     # Remove air cells
     model = model[actv]
 
-    # Creat reduced identity map
+    # Create reduced identity map
     idenMap = maps.IdentityMap(nP=nC)
 
     # Create the forward model operator
@@ -228,7 +230,7 @@ We can now generate TMI data
     synthetic_data += np.random.randn(nD) * std
     wd = np.ones(nD) * std
 
-    # Assigne data and uncertainties to the survey
+    # Assign data and uncertainties to the survey
     data_object = data.Data(survey, dobs=synthetic_data, standard_deviation=wd)
 
 
@@ -276,22 +278,22 @@ We can now generate TMI data
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 202-209
+.. GENERATED FROM PYTHON SOURCE LINES 204-211
 
 Equivalent Source
 -----------------
 
 We first need to convert the TMI data into amplitude. We do this by
-for an effective susceptibility layer, from which we can forward component
+an effective susceptibility layer, from which we can forward component
 data
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 209-262
+.. GENERATED FROM PYTHON SOURCE LINES 211-264
 
 .. code-block:: default
 
 
-    # Get the active cells for equivalent source is the top only
+    # Get the active cells for equivalent source is the topo only
     surf = surface2ind_topo(mesh, topo)
     # surf = utils.plot_utils.surface_layer_index(mesh, topo)
     nC = np.count_nonzero(surf)  # Number of active cells
@@ -381,16 +383,16 @@ data
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 263-269
+.. GENERATED FROM PYTHON SOURCE LINES 265-271
 
 Forward Amplitude Data
 ----------------------
 
-Now that we have an equialent source layer, we can forward model alh three
+Now that we have an equialent source layer, we can forward model all three
 components of the field and add them up: :math:`|B| = \sqrt{( Bx^2 + Bx^2 + Bx^2 )}`
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 269-314
+.. GENERATED FROM PYTHON SOURCE LINES 271-316
 
 .. code-block:: default
 
@@ -451,7 +453,7 @@ components of the field and add them up: :math:`|B| = \sqrt{( Bx^2 + Bx^2 + Bx^2
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 315-321
+.. GENERATED FROM PYTHON SOURCE LINES 317-323
 
 Amplitude Inversion
 -------------------
@@ -460,7 +462,7 @@ Now that we have amplitude data, we can invert for an effective
 susceptibility. This is a non-linear inversion.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 321-378
+.. GENERATED FROM PYTHON SOURCE LINES 323-380
 
 .. code-block:: default
 
@@ -509,7 +511,7 @@ susceptibility. This is a non-linear inversion.
     )
 
     # Special directive specific to the mag amplitude problem. The sensitivity
-    # weights are update between each iteration.
+    # weights are updated between each iteration.
     update_SensWeight = directives.UpdateSensitivityWeights()
     update_Jacobi = directives.UpdatePreconditioner()
 
@@ -565,20 +567,20 @@ susceptibility. This is a non-linear inversion.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 379-389
+.. GENERATED FROM PYTHON SOURCE LINES 381-391
 
 Final Plot
 ----------
 
 Let's compare the smooth and compact model
-Note that the recovered effective susceptibility block is slightly offseted
+Note that the recovered effective susceptibility block is slightly offset
 to the left of the true model. This is due to the wrong assumption of a
 vertical magnetization. Important to remember that the amplitude inversion
 is weakly sensitive to the magnetization direction, but can still have
 an impact.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 389-434
+.. GENERATED FROM PYTHON SOURCE LINES 391-436
 
 .. code-block:: default
 
@@ -642,9 +644,9 @@ an impact.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  56.056 seconds)
+   **Total running time of the script:** ( 1 minutes  52.559 seconds)
 
-**Estimated memory usage:**  501 MB
+**Estimated memory usage:**  583 MB
 
 
 .. _sphx_glr_download_content_examples_03-magnetics_plot_inv_mag_nonLinear_Amplitude.py:

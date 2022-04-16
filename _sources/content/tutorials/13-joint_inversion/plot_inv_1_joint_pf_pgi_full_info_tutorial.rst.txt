@@ -85,7 +85,7 @@ Setup
 -----
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 55-242
+.. GENERATED FROM PYTHON SOURCE LINES 55-248
 
 .. code-block:: default
 
@@ -267,12 +267,18 @@ Setup
     idenMap = maps.IdentityMap(nP=nactv)
     # Grav problem
     simulation_grav = pf.gravity.simulation.Simulation3DIntegral(
-        survey=data_grav.survey, mesh=mesh, rhoMap=wires.den, actInd=actv,
+        survey=data_grav.survey,
+        mesh=mesh,
+        rhoMap=wires.den,
+        actInd=actv,
     )
     dmis_grav = data_misfit.L2DataMisfit(data=data_grav, simulation=simulation_grav)
     # Mag problem
     simulation_mag = pf.magnetics.simulation.Simulation3DIntegral(
-        survey=data_mag.survey, mesh=mesh, chiMap=wires.sus, actInd=actv,
+        survey=data_mag.survey,
+        mesh=mesh,
+        chiMap=wires.sus,
+        actInd=actv,
     )
     dmis_mag = data_misfit.L2DataMisfit(data=data_mag, simulation=simulation_mag)
 
@@ -322,12 +328,12 @@ Setup
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 243-245
+.. GENERATED FROM PYTHON SOURCE LINES 249-251
 
 Create a joint Data Misfit
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 245-252
+.. GENERATED FROM PYTHON SOURCE LINES 251-258
 
 .. code-block:: default
 
@@ -345,13 +351,13 @@ Create a joint Data Misfit
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 253-256
+.. GENERATED FROM PYTHON SOURCE LINES 259-262
 
 Inversion with full petrophysical information
 ---------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 258-271
+.. GENERATED FROM PYTHON SOURCE LINES 264-277
 
 Create and plot a petrophysical GMM with full information
 ---------------------------------------------------------
@@ -367,7 +373,7 @@ for both unit. Finally the background unit is set at null contrasts (0 g/cc
 0 SI) with a petrophysical noise level of half of the above.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 271-305
+.. GENERATED FROM PYTHON SOURCE LINES 277-311
 
 .. code-block:: default
 
@@ -417,13 +423,13 @@ for both unit. Finally the background unit is set at null contrasts (0 g/cc
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 306-309
+.. GENERATED FROM PYTHON SOURCE LINES 312-315
 
 Create PGI regularization
 -------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 309-334
+.. GENERATED FROM PYTHON SOURCE LINES 315-340
 
 .. code-block:: default
 
@@ -459,13 +465,13 @@ Create PGI regularization
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 335-338
+.. GENERATED FROM PYTHON SOURCE LINES 341-344
 
 Inverse problem with full petrophysical information
 ---------------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 338-625
+.. GENERATED FROM PYTHON SOURCE LINES 344-639
 
 .. code-block:: default
 
@@ -483,12 +489,20 @@ Inverse problem with full petrophysical information
     # initialize beta and beta/alpha_s schedule
     beta = directives.BetaEstimate_ByEig(beta0_ratio=1e-2)
     betaIt = directives.PGI_BetaAlphaSchedule(
-        verbose=True, coolingFactor=2.0, tolerance=0.2, progress=0.2,
+        verbose=True,
+        coolingFactor=2.0,
+        tolerance=0.2,
+        progress=0.2,
     )
     # geophy. and petro. target misfits
-    targets = directives.MultiTargetMisfits(verbose=True,)
+    targets = directives.MultiTargetMisfits(
+        verbose=True,
+    )
     # add learned mref in smooth once stable
-    MrefInSmooth = directives.PGI_AddMrefInSmooth(wait_till_stable=True, verbose=True,)
+    MrefInSmooth = directives.PGI_AddMrefInSmooth(
+        wait_till_stable=True,
+        verbose=True,
+    )
     # update the parameters in smallness (L2-approx of PGI)
     update_smallness = directives.PGI_UpdateParameters(
         update_gmm=False  # keep GMM model fixed
@@ -858,9 +872,9 @@ Inverse problem with full petrophysical information
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 2 minutes  27.117 seconds)
+   **Total running time of the script:** ( 2 minutes  28.022 seconds)
 
-**Estimated memory usage:**  91 MB
+**Estimated memory usage:**  112 MB
 
 
 .. _sphx_glr_download_content_tutorials_13-joint_inversion_plot_inv_1_joint_pf_pgi_full_info_tutorial.py:

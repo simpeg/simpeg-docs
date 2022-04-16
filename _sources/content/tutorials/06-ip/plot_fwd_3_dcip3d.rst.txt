@@ -366,7 +366,7 @@ argument *rhoMap* is defined, the simulation will expect a resistivity model.
 
 
     # Define the DC simulation
-    dc_simulation = dc.simulation.Simulation3DNodal(
+    dc_simulation = dc.Simulation3DNodal(
         mesh, survey=dc_survey, sigmaMap=conductivity_map, solver=Solver
     )
 
@@ -376,21 +376,6 @@ argument *rhoMap* is defined, the simulation will expect a resistivity model.
 
 
 
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/pymatsolver/direct.py:26: PardisoTypeConversionWarning:
-
-    Converting csc_matrix matrix to CSR format, will slow down.
-
-    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/pymatsolver/direct.py:73: PardisoTypeConversionWarning:
-
-    Converting csc_matrix matrix to CSR format, will slow down.
 
 
 
@@ -410,14 +395,17 @@ points, or plot the pseudosection plots that lie within some distance of
 one or more planes.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 285-337
+.. GENERATED FROM PYTHON SOURCE LINES 285-340
 
 .. code-block:: default
 
 
     # Since the data are normalized voltage, we must convert predicted
     # to apparent conductivities.
-    apparent_conductivity = 1 / apparent_resistivity_from_voltage(dc_survey, dpred_dc,)
+    apparent_conductivity = 1 / apparent_resistivity_from_voltage(
+        dc_survey,
+        dpred_dc,
+    )
 
     # For large datasets or for surveys with unconventional electrode geometry,
     # interpretation can be challenging if we plot every datum. Here, we plot
@@ -476,7 +464,7 @@ one or more planes.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 338-345
+.. GENERATED FROM PYTHON SOURCE LINES 341-348
 
 Define IP Survey
 ----------------
@@ -486,7 +474,7 @@ to generate an IP survey whose receivers define the data in
 terms of the apparent chargeability (V/V).
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 345-367
+.. GENERATED FROM PYTHON SOURCE LINES 348-370
 
 .. code-block:: default
 
@@ -519,7 +507,7 @@ terms of the apparent chargeability (V/V).
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 368-377
+.. GENERATED FROM PYTHON SOURCE LINES 371-380
 
 Create Chargeability Model and Mapping for OcTree Mesh
 ------------------------------------------------------
@@ -531,7 +519,7 @@ chargeability of the Earth (V/V).
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 377-423
+.. GENERATED FROM PYTHON SOURCE LINES 380-426
 
 .. code-block:: default
 
@@ -593,7 +581,7 @@ chargeability of the Earth (V/V).
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 424-431
+.. GENERATED FROM PYTHON SOURCE LINES 427-434
 
 Predict IP Data
 ---------------
@@ -603,7 +591,7 @@ model to predict IP data.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 431-446
+.. GENERATED FROM PYTHON SOURCE LINES 434-449
 
 .. code-block:: default
 
@@ -611,7 +599,7 @@ model to predict IP data.
     # We use the keyword argument *sigma* to define the background conductivity on
     # the mesh. We could use the keyword argument *rho* to accomplish the same thing
     # using a background resistivity model.
-    ip_simulation = ip.simulation.Simulation3DNodal(
+    ip_simulation = ip.Simulation3DNodal(
         mesh,
         survey=ip_survey,
         etaMap=chargeability_map,
@@ -626,25 +614,10 @@ model to predict IP data.
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/pymatsolver/direct.py:26: PardisoTypeConversionWarning:
-
-    Converting csc_matrix matrix to CSR format, will slow down.
-
-    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/pymatsolver/direct.py:73: PardisoTypeConversionWarning:
-
-    Converting csc_matrix matrix to CSR format, will slow down.
 
 
 
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 447-457
+.. GENERATED FROM PYTHON SOURCE LINES 450-460
 
 Plot IP Data in 3D Pseudosection
 --------------------------------
@@ -657,7 +630,7 @@ we can plot the data directly.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 457-486
+.. GENERATED FROM PYTHON SOURCE LINES 460-489
 
 .. code-block:: default
 
@@ -700,13 +673,13 @@ we can plot the data directly.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 487-490
+.. GENERATED FROM PYTHON SOURCE LINES 490-493
 
 Optional: Write Outputs
 -----------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 490-575
+.. GENERATED FROM PYTHON SOURCE LINES 493-578
 
 .. code-block:: default
 
@@ -805,7 +778,7 @@ Optional: Write Outputs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  23.369 seconds)
+   **Total running time of the script:** ( 0 minutes  22.625 seconds)
 
 **Estimated memory usage:**  9 MB
 

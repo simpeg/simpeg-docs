@@ -454,15 +454,7 @@ assign a standard deviation of 0.05, and a floor of 1e-11.
 
  .. code-block:: none
 
-    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/pymatsolver/direct.py:26: PardisoTypeConversionWarning:
-
-    Converting csc_matrix matrix to CSR format, will slow down.
-
-    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/pymatsolver/direct.py:73: PardisoTypeConversionWarning:
-
-    Converting csc_matrix matrix to CSR format, will slow down.
-
-    Done forward simulation. Elapsed time = 14.44 s
+    Done forward simulation. Elapsed time = 11.71 s
 
 
 
@@ -550,14 +542,6 @@ We start from a half-space equal to the deep conductivity.
 
             SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
             ***Done using same Solver and solverOpts as the problem***
-    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/pymatsolver/direct.py:26: PardisoTypeConversionWarning:
-
-    Converting csc_matrix matrix to CSR format, will slow down.
-
-    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/pymatsolver/direct.py:73: PardisoTypeConversionWarning:
-
-    Converting csc_matrix matrix to CSR format, will slow down.
-
     model has any nan: 0
     ============================ Inexact Gauss Newton ============================
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
@@ -567,17 +551,17 @@ We start from a half-space equal to the deep conductivity.
        1  5.15e+00  8.52e+02  3.77e+01  1.05e+03    2.18e+02      0              
        2  5.15e+00  1.36e+02  8.46e+01  5.72e+02    1.96e+01      0   Skip BFGS  
        3  5.15e+00  1.42e+02  8.20e+01  5.65e+02    1.97e+01      0              
-       4  5.15e+00  1.33e+02  8.34e+01  5.63e+02    1.28e+01      0              
+       4  5.15e+00  1.33e+02  8.34e+01  5.63e+02    1.29e+01      0              
        5  5.15e+00  1.34e+02  8.20e+01  5.57e+02    6.64e+00      1              
     ------------------------- STOP! -------------------------
     1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 7.0960e+02
-    1 : |xc-x_last| = 2.8405e-01 <= tolX*(1+|x0|) = 1.3056e+01
-    0 : |proj(x-g)-x|    = 6.6422e+00 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 6.6422e+00 <= 1e3*eps       = 1.0000e-02
+    1 : |xc-x_last| = 2.8435e-01 <= tolX*(1+|x0|) = 1.3056e+01
+    0 : |proj(x-g)-x|    = 6.6435e+00 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 6.6435e+00 <= 1e3*eps       = 1.0000e-02
     0 : maxIter   =      20    <= iter          =      6
     ------------------------- DONE! -------------------------
 
-     Inversion Complete. Elapsed Time = 1123.62 s
+     Inversion Complete. Elapsed Time = 913.39 s
 
 
 
@@ -626,7 +610,7 @@ Plot the recovered model
 ------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 324-350
+.. GENERATED FROM PYTHON SOURCE LINES 324-356
 
 .. code-block:: default
 
@@ -637,12 +621,18 @@ Plot the recovered model
     clim = np.r_[np.log(sigma_surface), np.log(sigma_deep)]
 
     # recovered model
-    cb = plt.colorbar(inversion_mesh.plotImage(mrec, ax=ax[0], clim=clim)[0], ax=ax[0],)
+    cb = plt.colorbar(
+        inversion_mesh.plotImage(mrec, ax=ax[0], clim=clim)[0],
+        ax=ax[0],
+    )
     ax[0].set_title("recovered model")
     cb.set_label("$\log(\sigma)$")
 
     # true model
-    cb = plt.colorbar(inversion_mesh.plotImage(m_true, ax=ax[1], clim=clim)[0], ax=ax[1],)
+    cb = plt.colorbar(
+        inversion_mesh.plotImage(m_true, ax=ax[1], clim=clim)[0],
+        ax=ax[1],
+    )
     ax[1].set_title("true model")
     cb.set_label("$\log(\sigma)$")
 
@@ -668,13 +658,13 @@ Plot the recovered model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 351-354
+.. GENERATED FROM PYTHON SOURCE LINES 357-360
 
 Print the version of SimPEG and dependencies
 --------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 354-357
+.. GENERATED FROM PYTHON SOURCE LINES 360-363
 
 .. code-block:: default
 
@@ -691,7 +681,7 @@ Print the version of SimPEG and dependencies
     <div class="output_subarea output_html rendered_html output_result">
     <table style='border: 3px solid #ddd;'>
       <tr>
-         <td style='text-align: center; font-weight: bold; font-size: 1.2em; border: 2px solid #fff;' colspan='6'>Fri Jan 14 22:19:46 2022 UTC</td>
+         <td style='text-align: center; font-weight: bold; font-size: 1.2em; border: 2px solid #fff;' colspan='6'>Sat Apr 16 01:49:54 2022 UTC</td>
       </tr>
       <tr>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>OS</td>
@@ -714,16 +704,16 @@ Print the version of SimPEG and dependencies
         <td style='text-align: left; border: 2px solid #fff;'>ext4</td>
       </tr>
       <tr>
-         <td style='text-align: center; border: 2px solid #fff;' colspan='6'>Python 3.7.11 (default, Jul 27 2021, 14:32:16) 
+         <td style='text-align: center; border: 2px solid #fff;' colspan='6'>Python 3.7.13 (default, Mar 29 2022, 02:18:16) 
     [GCC 7.5.0]</td>
       </tr>
       <tr>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>SimPEG</td>
-        <td style='text-align: left; border: 2px solid #fff;'>0.16.0</td>
+        <td style='text-align: left; border: 2px solid #fff;'>0.17.0</td>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>discretize</td>
-        <td style='text-align: left; border: 2px solid #fff;'>0.7.2</td>
+        <td style='text-align: left; border: 2px solid #fff;'>0.7.0</td>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>pymatsolver</td>
-        <td style='text-align: left; border: 2px solid #fff;'>0.2.0</td>
+        <td style='text-align: left; border: 2px solid #fff;'>0.1.3</td>
       </tr>
       <tr>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>vectormath</td>
@@ -731,21 +721,21 @@ Print the version of SimPEG and dependencies
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>properties</td>
         <td style='text-align: left; border: 2px solid #fff;'>0.6.1</td>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>numpy</td>
-        <td style='text-align: left; border: 2px solid #fff;'>1.20.3</td>
+        <td style='text-align: left; border: 2px solid #fff;'>1.21.5</td>
       </tr>
       <tr>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>scipy</td>
         <td style='text-align: left; border: 2px solid #fff;'>1.7.3</td>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>cython</td>
-        <td style='text-align: left; border: 2px solid #fff;'>0.29.26</td>
+        <td style='text-align: left; border: 2px solid #fff;'>0.29.28</td>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>IPython</td>
-        <td style='text-align: left; border: 2px solid #fff;'>7.29.0</td>
+        <td style='text-align: left; border: 2px solid #fff;'>7.31.1</td>
       </tr>
       <tr>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>matplotlib</td>
-        <td style='text-align: left; border: 2px solid #fff;'>3.5.0</td>
+        <td style='text-align: left; border: 2px solid #fff;'>3.5.1</td>
         <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>ipywidgets</td>
-        <td style='text-align: left; border: 2px solid #fff;'>7.6.5</td>
+        <td style='text-align: left; border: 2px solid #fff;'>7.7.0</td>
         <td style= border: 2px solid #fff;'></td>
         <td style= border: 2px solid #fff;'></td>
       </tr>
@@ -757,7 +747,7 @@ Print the version of SimPEG and dependencies
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 358-369
+.. GENERATED FROM PYTHON SOURCE LINES 364-375
 
 Moving Forward
 --------------
@@ -774,9 +764,9 @@ You might try:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 19 minutes  3.350 seconds)
+   **Total running time of the script:** ( 15 minutes  29.628 seconds)
 
-**Estimated memory usage:**  1631 MB
+**Estimated memory usage:**  3117 MB
 
 
 .. _sphx_glr_download_content_examples_05-fdem_plot_inv_fdem_loop_loop_2Dinversion.py:

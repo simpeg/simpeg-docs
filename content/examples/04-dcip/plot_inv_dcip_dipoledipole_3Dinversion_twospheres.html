@@ -5,7 +5,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3D DC inversion of Dipole Dipole array &mdash; SimPEG 0.16.0 documentation</title>
+  <title>3D DC inversion of Dipole Dipole array &mdash; SimPEG 0.17.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
@@ -56,7 +56,7 @@
             <a href="../../../index.html" class="icon icon-home"> SimPEG
           </a>
               <div class="version">
-                0.16.0
+                0.17.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -213,9 +213,9 @@ indicates transformation of our model to a different space:</p>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">pymatsolver</span> <span class="kn">import</span> <span class="n">Pardiso</span> <span class="k">as</span> <span class="n">Solver</span>
+    <span class="kn">from</span> <span class="nn">pymatsolver</span> <span class="kn">import</span> <span class="n">Pardiso</span> <span class="k">as</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">Solver</span></a>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">SimPEG</span> <span class="kn">import</span> <span class="n">SolverLU</span> <span class="k">as</span> <span class="n">Solver</span>
+    <span class="kn">from</span> <span class="nn">SimPEG</span> <span class="kn">import</span> <span class="n">SolverLU</span> <span class="k">as</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">Solver</span></a>
 
 <a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="numpy.random.seed" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span></a><span class="p">(</span><span class="mi">12345</span><span class="p">)</span>
 
@@ -331,12 +331,18 @@ indicates transformation of our model to a different space:</p>
 <span class="n">mapactive</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">maps</span><span class="o">.</span><span class="n">InjectActiveCells</span></a><span class="p">(</span><a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="o">=</span><a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span> <span class="n">indActive</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">actind</span></a><span class="p">,</span> <span class="n">valInactive</span><span class="o">=-</span><span class="mf">5.0</span><span class="p">)</span>
 <span class="n">mapping</span> <span class="o">=</span> <span class="n">expmap</span> <span class="o">*</span> <span class="n">mapactive</span>
 <span class="n">problem</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">DC</span><span class="o">.</span><span class="n">Simulation3DCellCentered</span></a><span class="p">(</span>
-    <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span> <span class="n">survey</span><span class="o">=</span><span class="n">survey</span><span class="p">,</span> <span class="n">sigmaMap</span><span class="o">=</span><span class="n">mapping</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="n">Solver</span><span class="p">,</span> <span class="n">bc_type</span><span class="o">=</span><span class="s2">&quot;Neumann&quot;</span>
+    <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span> <span class="n">survey</span><span class="o">=</span><span class="n">survey</span><span class="p">,</span> <span class="n">sigmaMap</span><span class="o">=</span><span class="n">mapping</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">Solver</span></a><span class="p">,</span> <span class="n">bc_type</span><span class="o">=</span><span class="s2">&quot;Neumann&quot;</span>
 <span class="p">)</span>
 
 <span class="n">data</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">make_synthetic_data</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mtrue</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">actind</span></a><span class="p">],</span> <span class="n">relative_error</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">add_noise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Tikhonov Inversion</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/vsts/work/1/s/SimPEG/utils/code_utils.py:466: FutureWarning:
+
+gen_DCIPsurvey has been deprecated, please use generate_dcip_survey. It will be removed in version 0.17.0 of SimPEG.
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initial Model</span>
@@ -425,24 +431,23 @@ model has any nan: 0
 x0 has any nan: 0
    0  4.49e+01  2.54e+03  0.00e+00  2.54e+03    5.66e+02      0
    1  4.49e+01  3.96e+02  4.75e+00  6.10e+02    4.69e+01      0
-   2  8.99e+00  3.14e+02  6.06e+00  3.68e+02    6.13e+01      0   Skip BFGS
-   3  8.99e+00  1.31e+02  1.47e+01  2.63e+02    2.26e+01      0
-   4  1.80e+00  1.11e+02  1.57e+01  1.39e+02    2.77e+01      0
-   5  1.80e+00  8.09e+01  2.16e+01  1.20e+02    2.99e+01      0
-   6  3.59e-01  7.49e+01  2.20e+01  8.28e+01    3.15e+01      0
-   7  3.59e-01  6.65e+01  2.52e+01  7.56e+01    3.35e+01      0
-   8  7.19e-02  5.61e+01  2.92e+01  5.82e+01    2.54e+01      0
+   2  8.99e+00  3.14e+02  6.06e+00  3.68e+02    6.15e+01      0   Skip BFGS
+   3  8.99e+00  1.24e+02  1.52e+01  2.60e+02    1.90e+01      0
+   4  1.80e+00  1.13e+02  1.55e+01  1.40e+02    2.86e+01      0
+   5  1.80e+00  9.00e+01  1.95e+01  1.25e+02    3.38e+01      0
+   6  3.59e-01  8.05e+01  2.07e+01  8.80e+01    3.05e+01      0
+   7  3.59e-01  7.23e+01  2.34e+01  8.07e+01    3.72e+01      0
 ------------------------- STOP! -------------------------
 1 : |fc-fOld| = 0.0000e+00 &lt;= tolF*(1+|f0|) = 2.5374e+02
-1 : |xc-x_last| = 1.8214e+00 &lt;= tolX*(1+|x0|) = 7.5300e+01
-0 : |proj(x-g)-x|    = 2.5389e+01 &lt;= tolG          = 1.0000e-01
-0 : |proj(x-g)-x|    = 2.5389e+01 &lt;= 1e3*eps       = 1.0000e-02
-0 : maxIter   =      10    &lt;= iter          =      9
+1 : |xc-x_last| = 5.8237e+00 &lt;= tolX*(1+|x0|) = 7.5300e+01
+0 : |proj(x-g)-x|    = 3.7245e+01 &lt;= tolG          = 1.0000e-01
+0 : |proj(x-g)-x|    = 3.7245e+01 &lt;= 1e3*eps       = 1.0000e-02
+0 : maxIter   =      10    &lt;= iter          =      8
 ------------------------- DONE! -------------------------
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  56.111 seconds)</p>
-<p><strong>Estimated memory usage:</strong>  105 MB</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  8.339 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  212 MB</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-examples-04-dcip-plot-inv-dcip-dipoledipole-3dinversion-twospheres-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/549803d4dccc9cc8045a08b5231b7e14/plot_inv_dcip_dipoledipole_3Dinversion_twospheres.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_inv_dcip_dipoledipole_3Dinversion_twospheres.py</span></code></a></p>
@@ -471,29 +476,6 @@ x0 has any nan: 0
   
 
  
-
-
-    <div id="disqus_thread"></div>
-    <script>
-
-    /**
-    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-
-    var disqus_config = function () {
-    this.page.url = {path};  // Replace PAGE_URL with your page's canonical URL variable
-    this.page.identifier = {path}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-
-    (function() { // DON'T EDIT BELOW THIS LINE
-    var d = document, s = d.createElement('script');
-    s.src = 'https://simpeg.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-    })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
 
     <div role="contentinfo">
         <a rel="license" href="http://creativecommons.org/licenses/by/4.0/" width="60px"; style="float:right;height:3em;line-height:3em;padding:10px 0 0 1em;">

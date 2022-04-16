@@ -5,7 +5,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Joint PGI of Gravity + Magnetic on an Octree mesh using full petrophysical information &mdash; SimPEG 0.16.0 documentation</title>
+  <title>Joint PGI of Gravity + Magnetic on an Octree mesh using full petrophysical information &mdash; SimPEG 0.17.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
@@ -55,7 +55,7 @@
             <a href="../../../index.html" class="icon icon-home"> SimPEG
           </a>
               <div class="version">
-                0.16.0
+                0.17.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -398,12 +398,18 @@ Volume 224, Issue 1, January 2021, Pages 40-68, DOI: <a class="reference externa
 <span class="n">idenMap</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">maps</span><span class="o">.</span><span class="n">IdentityMap</span></a><span class="p">(</span><span class="n">nP</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nactv</span></a><span class="p">)</span>
 <span class="c1"># Grav problem</span>
 <span class="n">simulation_grav</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">pf</span><span class="o">.</span><span class="n">gravity</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">Simulation3DIntegral</span></a><span class="p">(</span>
-    <span class="n">survey</span><span class="o">=</span><span class="n">data_grav</span><span class="o">.</span><span class="n">survey</span><span class="p">,</span> <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="o">=</span><a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span> <span class="n">rhoMap</span><span class="o">=</span><span class="n">wires</span><span class="o">.</span><span class="n">den</span><span class="p">,</span> <span class="n">actInd</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">actv</span></a><span class="p">,</span>
+    <span class="n">survey</span><span class="o">=</span><span class="n">data_grav</span><span class="o">.</span><span class="n">survey</span><span class="p">,</span>
+    <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="o">=</span><a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span>
+    <span class="n">rhoMap</span><span class="o">=</span><span class="n">wires</span><span class="o">.</span><span class="n">den</span><span class="p">,</span>
+    <span class="n">actInd</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">actv</span></a><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">dmis_grav</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">data_misfit</span><span class="o">.</span><span class="n">L2DataMisfit</span></a><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data_grav</span><span class="p">,</span> <span class="n">simulation</span><span class="o">=</span><span class="n">simulation_grav</span><span class="p">)</span>
 <span class="c1"># Mag problem</span>
 <span class="n">simulation_mag</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">pf</span><span class="o">.</span><span class="n">magnetics</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">Simulation3DIntegral</span></a><span class="p">(</span>
-    <span class="n">survey</span><span class="o">=</span><span class="n">data_mag</span><span class="o">.</span><span class="n">survey</span><span class="p">,</span> <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="o">=</span><a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span> <span class="n">chiMap</span><span class="o">=</span><span class="n">wires</span><span class="o">.</span><span class="n">sus</span><span class="p">,</span> <span class="n">actInd</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">actv</span></a><span class="p">,</span>
+    <span class="n">survey</span><span class="o">=</span><span class="n">data_mag</span><span class="o">.</span><span class="n">survey</span><span class="p">,</span>
+    <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="o">=</span><a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span>
+    <span class="n">chiMap</span><span class="o">=</span><span class="n">wires</span><span class="o">.</span><span class="n">sus</span><span class="p">,</span>
+    <span class="n">actInd</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">actv</span></a><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">dmis_mag</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">data_misfit</span><span class="o">.</span><span class="n">L2DataMisfit</span></a><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data_mag</span><span class="p">,</span> <span class="n">simulation</span><span class="o">=</span><span class="n">simulation_mag</span><span class="p">)</span>
 </pre></div>
@@ -531,12 +537,20 @@ for both unit. Finally the background unit is set at null contrasts (0 g/cc
 <span class="c1"># initialize beta and beta/alpha_s schedule</span>
 <span class="n">beta</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">BetaEstimate_ByEig</span></a><span class="p">(</span><span class="n">beta0_ratio</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
 <span class="n">betaIt</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">PGI_BetaAlphaSchedule</span></a><span class="p">(</span>
-    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">coolingFactor</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">coolingFactor</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">progress</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="c1"># geophy. and petro. target misfits</span>
-<span class="n">targets</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">MultiTargetMisfits</span></a><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,)</span>
+<span class="n">targets</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">MultiTargetMisfits</span></a><span class="p">(</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="c1"># add learned mref in smooth once stable</span>
-<span class="n">MrefInSmooth</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">PGI_AddMrefInSmooth</span></a><span class="p">(</span><span class="n">wait_till_stable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,)</span>
+<span class="n">MrefInSmooth</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">PGI_AddMrefInSmooth</span></a><span class="p">(</span>
+    <span class="n">wait_till_stable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="c1"># update the parameters in smallness (L2-approx of PGI)</span>
 <span class="n">update_smallness</span> <span class="o">=</span> <a href="https://propertiespy.readthedocs.io/en/latest/content/hasproperties.html#properties.HasProperties" title="properties.HasProperties" class="sphx-glr-backref-module-properties sphx-glr-backref-type-py-class"><span class="n">directives</span><span class="o">.</span><span class="n">PGI_UpdateParameters</span></a><span class="p">(</span>
     <span class="n">update_gmm</span><span class="o">=</span><span class="kc">False</span>  <span class="c1"># keep GMM model fixed</span>
@@ -881,8 +895,8 @@ Add mref to Smoothness. Changes in mref happened in 0.0 % of the cells
 ------------------------- DONE! -------------------------
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 2 minutes  27.117 seconds)</p>
-<p><strong>Estimated memory usage:</strong>  91 MB</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 2 minutes  28.022 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  112 MB</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-tutorials-13-joint-inversion-plot-inv-1-joint-pf-pgi-full-info-tutorial-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/5d03ddfe812645e1eecf5e7dc8852bd5/plot_inv_1_joint_pf_pgi_full_info_tutorial.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_inv_1_joint_pf_pgi_full_info_tutorial.py</span></code></a></p>
@@ -912,29 +926,6 @@ Add mref to Smoothness. Changes in mref happened in 0.0 % of the cells
   
 
  
-
-
-    <div id="disqus_thread"></div>
-    <script>
-
-    /**
-    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-
-    var disqus_config = function () {
-    this.page.url = {path};  // Replace PAGE_URL with your page's canonical URL variable
-    this.page.identifier = {path}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-
-    (function() { // DON'T EDIT BELOW THIS LINE
-    var d = document, s = d.createElement('script');
-    s.src = 'https://simpeg.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-    })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
 
     <div role="contentinfo">
         <a rel="license" href="http://creativecommons.org/licenses/by/4.0/" width="60px"; style="float:right;height:3em;line-height:3em;padding:10px 0 0 1em;">

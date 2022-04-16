@@ -88,7 +88,7 @@ Create a global survey and mesh and simulate some data
     # Create a topo array
     topo = np.c_[utils.mkvc(X.T), utils.mkvc(Y.T), utils.mkvc(Z.T)]
 
-    # Create station locations drapped 0.1 m above topo
+    # Create station locations draped 0.1 m above topo
     rxLoc = np.c_[utils.mkvc(X.T), utils.mkvc(Y.T), utils.mkvc(Z.T) + 0.1]
 
 
@@ -158,7 +158,7 @@ Create a global mesh survey for simulation
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 104-157
+.. GENERATED FROM PYTHON SOURCE LINES 104-159
 
 .. code-block:: default
 
@@ -167,7 +167,7 @@ Create a global mesh survey for simulation
         topo, h, padding_distance=padDist, depth_core=100, mesh_type="tree"
     )
 
-    # This garantees that the local meshes are always coarser or equal
+    # This guarantees that the local meshes are always coarser or equal
     for local_mesh in local_meshes:
         mesh.insert_cells(
             local_mesh.gridCC,
@@ -184,8 +184,10 @@ Create a global mesh survey for simulation
     # Here a simple block in half-space
     # Get the indices of the magnetized block
     model = np.zeros(mesh.nC)
-    ind = utils.ModelBuilder.getIndicesBlock(
-        np.r_[-10, -10, -30], np.r_[10, 10, -10], mesh.gridCC,
+    ind = utils.model_builder.getIndicesBlock(
+        np.r_[-10, -10, -30],
+        np.r_[10, 10, -10],
+        mesh.gridCC,
     )[0]
 
     # Assign magnetization values
@@ -222,7 +224,7 @@ Create a global mesh survey for simulation
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 158-163
+.. GENERATED FROM PYTHON SOURCE LINES 160-165
 
 Tiled misfits
 
@@ -230,7 +232,7 @@ Tiled misfits
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 163-220
+.. GENERATED FROM PYTHON SOURCE LINES 165-222
 
 .. code-block:: default
 
@@ -303,7 +305,7 @@ Tiled misfits
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 221-227
+.. GENERATED FROM PYTHON SOURCE LINES 223-229
 
 Invert on the global mesh
 
@@ -312,7 +314,7 @@ Invert on the global mesh
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 227-272
+.. GENERATED FROM PYTHON SOURCE LINES 229-277
 
 .. code-block:: default
 
@@ -336,7 +338,10 @@ Invert on the global mesh
     # Use a threshold parameter empirically based on the distribution of
     # model parameters
     update_IRLS = directives.Update_IRLS(
-        f_min_change=1e-4, max_irls_iterations=0, coolEpsFact=1.5, beta_tol=1e-2,
+        f_min_change=1e-4,
+        max_irls_iterations=0,
+        coolEpsFact=1.5,
+        beta_tol=1e-2,
     )
     saveDict = directives.SaveOutputEveryIteration(save_txt=False)
     update_Jacobi = directives.UpdatePreconditioner()
@@ -409,9 +414,9 @@ Invert on the global mesh
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  5.131 seconds)
+   **Total running time of the script:** ( 0 minutes  4.774 seconds)
 
-**Estimated memory usage:**  22 MB
+**Estimated memory usage:**  26 MB
 
 
 .. _sphx_glr_download_content_examples_02-gravity_plot_inv_grav_tiled.py:
