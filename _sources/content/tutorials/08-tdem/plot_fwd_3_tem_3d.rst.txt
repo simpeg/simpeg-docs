@@ -18,8 +18,8 @@
 .. _sphx_glr_content_tutorials_08-tdem_plot_fwd_3_tem_3d.py:
 
 
-Forward Simulation with User-Defined Waveform on a Tree Mesh
-============================================================
+3D Forward Simulation with User-Defined Waveforms
+=================================================
 
 Here we use the module *SimPEG.electromagnetics.time_domain* to predict the
 TDEM response for a trapezoidal waveform. We consider an airborne survey
@@ -132,12 +132,12 @@ is important you are cognizant of the off time!!!
     # For the trapezoidal waveform we define the ramp on interval, the
     # ramp-off interval and the off-time.
     waveform = tdem.sources.TrapezoidWaveform(
-        ramp_on=np.r_[-0.002, -0.001], ramp_off=np.r_[-0.001, 0.0], offTime=0.0
+        ramp_on=np.r_[-0.002, -0.001], ramp_off=np.r_[-0.001, 0.0], off_time=0.0
     )
 
     # Uncomment to try a quarter sine wave ramp on, followed by a linear ramp-off.
     # waveform = tdem.sources.QuarterSineRampOnWaveform(
-    #     ramp_on=np.r_[-0.002, -0.001],  ramp_off=np.r_[-0.001, 0.], offTime=0.
+    #     ramp_on=np.r_[-0.002, -0.001],  ramp_off=np.r_[-0.001, 0.], off_time=0.
     # )
 
     # Uncomment to try a custom waveform (just a linear ramp-off). This requires
@@ -145,7 +145,7 @@ is important you are cognizant of the off time!!!
     # def wave_function(t):
     #     return - t/(np.max(waveform_times) - np.min(waveform_times))
     #
-    # waveform = tdem.sources.RawWaveform(waveFct=wave_function, offTime=0.)
+    # waveform = tdem.sources.RawWaveform(waveform_function=wave_function, off_time=0.)
 
     # Evaluate the waveform for each on time.
     waveform_value = [waveform.eval(t) for t in waveform_times]
@@ -170,17 +170,7 @@ is important you are cognizant of the off time!!!
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:427: FutureWarning:
-
-    off_time.offTime has been deprecated, please use off_time. It will be removed in version 0.17.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:436: FutureWarning:
-
-    off_time.offTime has been deprecated, please use off_time. It will be removed in version 0.17.0 of SimPEG.
 
 
     Text(0.5, 1.0, 'Waveform')
@@ -352,11 +342,11 @@ resistive background.
     plotting_map = maps.InjectActiveCells(mesh, ind_active, np.nan)
 
     ax1 = fig.add_axes([0.13, 0.1, 0.6, 0.85])
-    mesh.plotSlice(
+    mesh.plot_slice(
         plotting_map * log_model,
         normal="Y",
         ax=ax1,
-        ind=int(mesh.hx.size / 2),
+        ind=int(mesh.h[0].size / 2),
         grid=True,
         clim=(np.min(log_model), np.max(log_model)),
     )
@@ -558,30 +548,25 @@ Write the true model, data and topography
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  18.070 seconds)
+   **Total running time of the script:** ( 1 minutes  24.113 seconds)
 
-**Estimated memory usage:**  751 MB
+**Estimated memory usage:**  760 MB
 
 
 .. _sphx_glr_download_content_tutorials_08-tdem_plot_fwd_3_tem_3d.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_fwd_3_tem_3d.py <plot_fwd_3_tem_3d.py>`
 
-     :download:`Download Python source code: plot_fwd_3_tem_3d.py <plot_fwd_3_tem_3d.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_fwd_3_tem_3d.ipynb <plot_fwd_3_tem_3d.ipynb>`
+      :download:`Download Jupyter notebook: plot_fwd_3_tem_3d.ipynb <plot_fwd_3_tem_3d.ipynb>`
 
 
 .. only:: html

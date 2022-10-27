@@ -35,14 +35,23 @@ Here we will create and run a TDEM 1D inversion.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    SimPEG.InvProblem will set Regularization.mref to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
 
-            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
-            ***Done using same Solver and solverOpts as the problem***
+                            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
+                            ***Done using same Solver, and solver_opts as the Simulation3DElectricField problem***
+                        
+    /usr/share/miniconda/envs/test/lib/python3.7/site-packages/pymatsolver/direct.py:26: PardisoTypeConversionWarning:
+
+    Converting csc_matrix matrix to CSR format, will slow down.
+
+    /usr/share/miniconda/envs/test/lib/python3.7/site-packages/pymatsolver/direct.py:73: PardisoTypeConversionWarning:
+
+    Converting csc_matrix matrix to CSR format, will slow down.
+
     model has any nan: 0
     ============================ Inexact Gauss Newton ============================
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
@@ -92,16 +101,16 @@ Here we will create and run a TDEM 1D inversion.
         cs, ncx, ncz, npad = 5.0, 25, 15, 15
         hx = [(cs, ncx), (cs, npad, 1.3)]
         hz = [(cs, npad, -1.3), (cs, ncz), (cs, npad, 1.3)]
-        mesh = discretize.CylMesh([hx, 1, hz], "00C")
+        mesh = discretize.CylindricalMesh([hx, 1, hz], "00C")
 
-        active = mesh.vectorCCz < 0.0
-        layer = (mesh.vectorCCz < 0.0) & (mesh.vectorCCz >= -100.0)
-        actMap = maps.InjectActiveCells(mesh, active, np.log(1e-8), nC=mesh.nCz)
+        active = mesh.cell_centers_z < 0.0
+        layer = (mesh.cell_centers_z < 0.0) & (mesh.cell_centers_z >= -100.0)
+        actMap = maps.InjectActiveCells(mesh, active, np.log(1e-8), nC=mesh.shape_cells[2])
         mapping = maps.ExpMap(mesh) * maps.SurjectVertical1D(mesh) * actMap
         sig_half = 2e-3
         sig_air = 1e-8
         sig_layer = 1e-3
-        sigma = np.ones(mesh.nCz) * sig_air
+        sigma = np.ones(mesh.shape_cells[2]) * sig_air
         sigma[active] = sig_half
         sigma[layer] = sig_layer
         mtrue = np.log(sigma[active])
@@ -123,8 +132,8 @@ Here we will create and run a TDEM 1D inversion.
         data = simulation.make_synthetic_data(mtrue, relative_error=rel_err)
 
         dmisfit = data_misfit.L2DataMisfit(simulation=simulation, data=data)
-        regMesh = discretize.TensorMesh([mesh.hz[mapping.maps[-1].indActive]])
-        reg = regularization.Tikhonov(regMesh, alpha_s=1e-2, alpha_x=1.0)
+        regMesh = discretize.TensorMesh([mesh.h[2][mapping.maps[-1].indActive]])
+        reg = regularization.WeightedLeastSquares(regMesh, alpha_s=1e-2, alpha_x=1.0)
         opt = optimization.InexactGaussNewton(maxIter=5, LSshorten=0.5)
         invProb = inverse_problem.BaseInvProblem(dmisfit, reg, opt)
 
@@ -148,8 +157,8 @@ Here we will create and run a TDEM 1D inversion.
             ax[0].set_xlabel("Time (s)", fontsize=14)
             ax[0].grid(color="k", alpha=0.5, linestyle="dashed", linewidth=0.5)
 
-            plt.semilogx(sigma[active], mesh.vectorCCz[active])
-            plt.semilogx(np.exp(mopt), mesh.vectorCCz[active])
+            plt.semilogx(sigma[active], mesh.cell_centers_z[active])
+            plt.semilogx(np.exp(mopt), mesh.cell_centers_z[active])
             ax[1].set_ylim(-600, 0)
             ax[1].set_xlim(1e-4, 1e-2)
             ax[1].set_xlabel("Conductivity (S/m)", fontsize=14)
@@ -165,30 +174,25 @@ Here we will create and run a TDEM 1D inversion.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  11.408 seconds)
+   **Total running time of the script:** ( 0 minutes  20.331 seconds)
 
-**Estimated memory usage:**  9 MB
+**Estimated memory usage:**  18 MB
 
 
 .. _sphx_glr_download_content_examples_06-tdem_plot_inv_tdem_1D.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_inv_tdem_1D.py <plot_inv_tdem_1D.py>`
 
-     :download:`Download Python source code: plot_inv_tdem_1D.py <plot_inv_tdem_1D.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_inv_tdem_1D.ipynb <plot_inv_tdem_1D.ipynb>`
+      :download:`Download Jupyter notebook: plot_inv_tdem_1D.ipynb <plot_inv_tdem_1D.ipynb>`
 
 
 .. only:: html

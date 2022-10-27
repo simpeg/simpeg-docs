@@ -136,8 +136,6 @@ tar-file on our google cloud bucket:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     Downloading https://storage.googleapis.com/simpeg/doc-assets/dcip2d.tar.gz
@@ -344,11 +342,9 @@ resistivity and IP data.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/scipy/interpolate/interpolate.py:630: RuntimeWarning:
+    /usr/share/miniconda/envs/test/lib/python3.7/site-packages/scipy/interpolate/interpolate.py:630: RuntimeWarning:
 
     invalid value encountered in true_divide
 
@@ -486,10 +482,10 @@ The inverse problem is defined by 3 things:
     dc_data_misfit = data_misfit.L2DataMisfit(data=dc_data, simulation=dc_simulation)
 
     # Define the regularization (model objective function)
-    dc_regularization = regularization.Simple(
+    dc_regularization = regularization.WeightedLeastSquares(
         mesh,
         indActive=ind_active,
-        mref=starting_conductivity_model,
+        reference_model=starting_conductivity_model,
         alpha_s=0.01,
         alpha_x=1,
         alpha_y=1,
@@ -591,29 +587,30 @@ the set of directives. We can then run the inversion.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
-            ***Done using same Solver and solverOpts as the problem***
+                            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
+                            ***Done using same Solver, and solver_opts as the Simulation2DNodal problem***
+                        
     model has any nan: 0
     ============================ Inexact Gauss Newton ============================
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  9.45e+01  1.58e+04  0.00e+00  1.58e+04    3.00e+03      0              
-       1  9.45e+01  1.13e+03  6.57e+00  1.76e+03    3.33e+02      0              
-       2  3.15e+01  2.54e+02  9.49e+00  5.53e+02    1.03e+02      0   Skip BFGS  
-       3  3.15e+01  8.16e+01  1.22e+01  4.67e+02    2.68e+01      0   Skip BFGS  
-       4  1.05e+01  9.23e+01  1.15e+01  2.13e+02    4.65e+01      0              
+       0  1.45e+03  1.58e+04  0.00e+00  1.58e+04    3.00e+03      0              
+       1  1.45e+03  1.94e+03  1.70e+00  4.40e+03    2.17e+02      0              
+       2  4.83e+02  1.75e+03  1.83e+00  2.64e+03    3.66e+02      0   Skip BFGS  
+       3  4.83e+02  6.13e+02  3.35e+00  2.23e+03    5.71e+01      0              
+       4  1.61e+02  6.33e+02  3.28e+00  1.16e+03    1.92e+02      0              
+       5  1.61e+02  1.76e+02  4.78e+00  9.44e+02    2.20e+01      0              
+       6  5.37e+01  1.61e+02  4.72e+00  4.14e+02    7.49e+01      0              
     ------------------------- STOP! -------------------------
     1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 1.5820e+03
-    1 : |xc-x_last| = 5.2174e+00 <= tolX*(1+|x0|) = 3.1119e+01
-    0 : |proj(x-g)-x|    = 4.6515e+01 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 4.6515e+01 <= 1e3*eps       = 1.0000e-02
-    0 : maxIter   =      40    <= iter          =      5
+    1 : |xc-x_last| = 2.8533e+00 <= tolX*(1+|x0|) = 3.1119e+01
+    0 : |proj(x-g)-x|    = 7.4886e+01 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 7.4886e+01 <= 1e3*eps       = 1.0000e-02
+    0 : maxIter   =      40    <= iter          =      7
     ------------------------- DONE! -------------------------
 
 
@@ -672,8 +669,8 @@ Plotting True and Recovered Conductivity Model
     recovered_conductivity[~ind_active] = np.NaN
 
     ax1 = fig.add_axes([0.14, 0.17, 0.68, 0.7])
-    mesh.plotImage(
-        recovered_conductivity, normal="Y", ax=ax1, grid=False, pcolorOpts={"norm": norm}
+    mesh.plot_image(
+        recovered_conductivity, normal="Y", ax=ax1, grid=False, pcolor_opts={"norm": norm}
     )
     ax1.set_xlim(-600, 600)
     ax1.set_ylim(-600, 0)
@@ -857,7 +854,7 @@ Here we define the inverse problem in the same manner as the DC inverse problem.
     ip_data_misfit = data_misfit.L2DataMisfit(data=ip_data, simulation=ip_simulation)
 
     # Define the regularization (model objective function)
-    ip_regularization = regularization.Simple(
+    ip_regularization = regularization.WeightedLeastSquares(
         mesh,
         indActive=ind_active,
         mapping=maps.IdentityMap(nP=nC),
@@ -948,25 +945,28 @@ Here we define the directives in the same manner as the DC inverse problem.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    SimPEG.InvProblem will set Regularization.mref to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
 
-            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
-            ***Done using same Solver and solverOpts as the problem***
+                            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
+                            ***Done using same Solver, and solver_opts as the Simulation2DNodal problem***
+                        
     model has any nan: 0
     =============================== Projected GNCG ===============================
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  1.45e+03  1.73e+03  0.00e+00  1.73e+03    5.42e+03      0              
+       0  1.49e+03  1.73e+03  0.00e+00  1.73e+03    5.40e+03      0              
     ------------------------- STOP! -------------------------
     1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 1.7288e+02
-    0 : |xc-x_last| = 6.8365e-01 <= tolX*(1+|x0|) = 1.0001e-01
-    0 : |proj(x-g)-x|    = 5.4188e+03 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 5.4188e+03 <= 1e3*eps       = 1.0000e-02
+    0 : |xc-x_last| = 6.6768e-01 <= tolX*(1+|x0|) = 1.0001e-01
+    0 : |proj(x-g)-x|    = 5.4005e+03 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 5.4005e+03 <= 1e3*eps       = 1.0000e-02
     0 : maxIter   =      15    <= iter          =      1
     ------------------------- DONE! -------------------------
 
@@ -1130,30 +1130,25 @@ Plotting Predicted Data and Misfit
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  26.797 seconds)
+   **Total running time of the script:** ( 2 minutes  41.788 seconds)
 
-**Estimated memory usage:**  17 MB
+**Estimated memory usage:**  18 MB
 
 
 .. _sphx_glr_download_content_tutorials_06-ip_plot_inv_2_dcip2d.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_inv_2_dcip2d.py <plot_inv_2_dcip2d.py>`
 
-     :download:`Download Python source code: plot_inv_2_dcip2d.py <plot_inv_2_dcip2d.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_inv_2_dcip2d.ipynb <plot_inv_2_dcip2d.ipynb>`
+      :download:`Download Jupyter notebook: plot_inv_2_dcip2d.ipynb <plot_inv_2_dcip2d.ipynb>`
 
 
 .. only:: html

@@ -119,9 +119,9 @@ the model-space to the entire mesh.
     # We can plot a slice of the model at Y=-2.5
     fig = plt.figure(figsize=(5, 5))
     ax = fig.add_subplot(111)
-    ind_slice = int(mesh.nCy / 2)
-    mesh.plotSlice(model_map * model, normal="Y", ax=ax, ind=ind_slice, grid=True)
-    ax.set_title("Model slice at y = {} m".format(mesh.vectorCCy[ind_slice]))
+    ind_slice = int(mesh.shape_cells[1] / 2)
+    mesh.plot_slice(model_map * model, normal="Y", ax=ax, ind=ind_slice, grid=True)
+    ax.set_title("Model slice at y = {} m".format(mesh.cell_centers_y[ind_slice]))
     plt.show()
 
 
@@ -159,7 +159,7 @@ to find the cells which lie below a set of xyz points defining a surface.
 
     # Define surface topography as an (N, 3) np.array. You could also load a file
     # containing the xyz points
-    [xx, yy] = np.meshgrid(mesh.vectorNx, mesh.vectorNy)
+    [xx, yy] = np.meshgrid(mesh.nodes_x, mesh.nodes_y)
     zz = -3 * np.exp((xx ** 2 + yy ** 2) / 75 ** 2) + 40.0
     topo = np.c_[mkvc(xx), mkvc(yy), mkvc(zz)]
 
@@ -185,9 +185,9 @@ to find the cells which lie below a set of xyz points defining a surface.
     # Plot
     fig = plt.figure(figsize=(5, 5))
     ax = fig.add_subplot(111)
-    ind_slice = int(mesh.nCy / 2)
-    mesh.plotSlice(model_map * model, normal="Y", ax=ax, ind=ind_slice, grid=True)
-    ax.set_title("Model slice at y = {} m".format(mesh.vectorCCy[ind_slice]))
+    ind_slice = int(mesh.shape_cells[1] / 2)
+    mesh.plot_slice(model_map * model, normal="Y", ax=ax, ind=ind_slice, grid=True)
+    ax.set_title("Model slice at y = {} m".format(mesh.cell_centers_y[ind_slice]))
     plt.show()
 
 
@@ -227,7 +227,7 @@ then map from below surface cell to the mesh.
     block_value = np.log(1.0 / 70.0)
 
     # Define surface topography
-    [xx, yy] = np.meshgrid(mesh.vectorNx, mesh.vectorNy)
+    [xx, yy] = np.meshgrid(mesh.nodes_x, mesh.nodes_y)
     zz = -3 * np.exp((xx ** 2 + yy ** 2) / 75 ** 2) + 40.0
     topo = np.c_[mkvc(xx), mkvc(yy), mkvc(zz)]
 
@@ -258,9 +258,9 @@ then map from below surface cell to the mesh.
     # Plot
     fig = plt.figure(figsize=(5, 5))
     ax = fig.add_subplot(111)
-    ind_slice = int(mesh.nCy / 2)
-    mesh.plotSlice(model_map * model, normal="Y", ax=ax, ind=ind_slice, grid=True)
-    ax.set_title("Model slice at y = {} m".format(mesh.vectorCCy[ind_slice]))
+    ind_slice = int(mesh.shape_cells[1] / 2)
+    mesh.plot_slice(model_map * model, normal="Y", ax=ax, ind=ind_slice, grid=True)
+    ax.set_title("Model slice at y = {} m".format(mesh.cell_centers_y[ind_slice]))
     plt.show()
 
 
@@ -299,7 +299,7 @@ replace the prexisting physical property value for those cells.
     sphere_value = 70.0
 
     # Define surface topography
-    [xx, yy] = np.meshgrid(mesh.vectorNx, mesh.vectorNy)
+    [xx, yy] = np.meshgrid(mesh.nodes_x, mesh.nodes_y)
     zz = -3 * np.exp((xx ** 2 + yy ** 2) / 75 ** 2) + 40.0
     topo = np.c_[mkvc(xx), mkvc(yy), mkvc(zz)]
 
@@ -321,16 +321,16 @@ replace the prexisting physical property value for those cells.
     yp = np.kron([-1000.0, 1000.0], np.ones((4)))
     zp = np.kron(np.ones((2)), [-120.0, -120.0, 35.0, 35.0])
     xyz_pts = np.c_[mkvc(xp), mkvc(yp), mkvc(zp)]
-    ind_polygon = model_builder.PolygonInd(mesh, xyz_pts)
+    ind_polygon = model_builder.get_indices_polygon(mesh, xyz_pts)
     ind_polygon = ind_polygon[ind_active]  # So same size and order as model
     model[ind_polygon] = dyke_value
 
     # Plot
     fig = plt.figure(figsize=(5, 5))
     ax = fig.add_subplot(111)
-    ind_slice = int(mesh.nCy / 2)
-    mesh.plotSlice(model_map * model, normal="Y", ax=ax, ind=ind_slice, grid=True)
-    ax.set_title("Model slice at y = {} m".format(mesh.vectorCCy[ind_slice]))
+    ind_slice = int(mesh.shape_cells[1] / 2)
+    mesh.plot_slice(model_map * model, normal="Y", ax=ax, ind=ind_slice, grid=True)
+    ax.set_title("Model slice at y = {} m".format(mesh.cell_centers_y[ind_slice]))
     plt.show()
 
 
@@ -370,7 +370,7 @@ this model onto the mesh.
     dx, dy, dz = 30.0, 40.0, 30.0  # dimensions in x,y,z
 
     # Define surface topography
-    [xx, yy] = np.meshgrid(mesh.vectorNx, mesh.vectorNy)
+    [xx, yy] = np.meshgrid(mesh.nodes_x, mesh.nodes_y)
     zz = -3 * np.exp((xx ** 2 + yy ** 2) / 75 ** 2) + 40.0
     topo = np.c_[mkvc(xx), mkvc(yy), mkvc(zz)]
 
@@ -389,9 +389,9 @@ this model onto the mesh.
     # Plot
     fig = plt.figure(figsize=(5, 5))
     ax = fig.add_subplot(111)
-    ind_slice = int(mesh.nCy / 2)
-    mesh.plotSlice(model_map * model, normal="Y", ax=ax, ind=ind_slice, grid=True)
-    ax.set_title("Model slice at y = {} m".format(mesh.vectorCCy[ind_slice]))
+    ind_slice = int(mesh.shape_cells[1] / 2)
+    mesh.plot_slice(model_map * model, normal="Y", ax=ax, ind=ind_slice, grid=True)
+    ax.set_title("Model slice at y = {} m".format(mesh.cell_centers_y[ind_slice]))
     plt.show()
 
 
@@ -437,7 +437,7 @@ between the model vector and a particular physical property type.
     sphere_mu = 1.25
 
     # Define surface topography
-    [xx, yy] = np.meshgrid(mesh.vectorNx, mesh.vectorNy)
+    [xx, yy] = np.meshgrid(mesh.nodes_x, mesh.nodes_y)
     zz = -3 * np.exp((xx ** 2 + yy ** 2) / 75 ** 2) + 40.0
     topo = np.c_[mkvc(xx), mkvc(yy), mkvc(zz)]
 
@@ -460,7 +460,7 @@ between the model vector and a particular physical property type.
     yp = np.kron([-1000.0, 1000.0], np.ones((4)))
     zp = np.kron(np.ones((2)), [-120.0, -120.0, 35.0, 35.0])
     xyz_pts = np.c_[mkvc(xp), mkvc(yp), mkvc(zp)]
-    ind_polygon = model_builder.PolygonInd(mesh, xyz_pts)
+    ind_polygon = model_builder.get_indices_polygon(mesh, xyz_pts)
     ind_polygon = ind_polygon[ind_active]  # So same size and order as model
     model[ind_polygon, 0] = dyke_sigma
 
@@ -475,9 +475,9 @@ between the model vector and a particular physical property type.
     # Plot
     fig = plt.figure(figsize=(5, 5))
     ax = fig.add_subplot(111)
-    ind_slice = int(mesh.nCy / 2)
-    mesh.plotSlice(sigma_map * model, normal="Y", ax=ax, ind=ind_slice, grid=True)
-    ax.set_title("Model slice at y = {} m".format(mesh.vectorCCy[ind_slice]))
+    ind_slice = int(mesh.shape_cells[1] / 2)
+    mesh.plot_slice(sigma_map * model, normal="Y", ax=ax, ind=ind_slice, grid=True)
+    ax.set_title("Model slice at y = {} m".format(mesh.cell_centers_y[ind_slice]))
     plt.show()
 
 
@@ -494,30 +494,25 @@ between the model vector and a particular physical property type.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  5.888 seconds)
+   **Total running time of the script:** ( 0 minutes  5.509 seconds)
 
-**Estimated memory usage:**  9 MB
+**Estimated memory usage:**  18 MB
 
 
 .. _sphx_glr_download_content_tutorials_01-models_mapping_plot_1_tensor_models.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_1_tensor_models.py <plot_1_tensor_models.py>`
 
-     :download:`Download Python source code: plot_1_tensor_models.py <plot_1_tensor_models.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_1_tensor_models.ipynb <plot_1_tensor_models.ipynb>`
+      :download:`Download Jupyter notebook: plot_1_tensor_models.ipynb <plot_1_tensor_models.ipynb>`
 
 
 .. only:: html

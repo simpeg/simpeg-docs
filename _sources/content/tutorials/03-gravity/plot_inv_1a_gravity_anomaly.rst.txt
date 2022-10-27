@@ -119,8 +119,6 @@ tar-file on our google cloud bucket:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     Downloading https://storage.googleapis.com/simpeg/doc-assets/gravity.tar.gz
@@ -308,18 +306,13 @@ Starting/Reference Model and Mapping on Tensor Mesh
 Here, we create starting and/or reference models for the inversion as
 well as the mapping from the model space to the active cells. Starting and
 reference models can be a constant background value or contain a-priori
-structures. Here, the background is 1e-6 g/cc.
+structures.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 190-207
+.. GENERATED FROM PYTHON SOURCE LINES 190-202
 
 .. code-block:: default
 
-
-    # Define density contrast values for each unit in g/cc. Don't make this 0!
-    # Otherwise the gradient for the 1st iteration is zero and the inversion will
-    # not converge.
-    background_density = 1e-6
 
     # Find the indices of the active cells in forward model (ones below surface)
     ind_active = surface2ind_topo(mesh, xyz_topo)
@@ -329,7 +322,7 @@ structures. Here, the background is 1e-6 g/cc.
     model_map = maps.IdentityMap(nP=nC)  # model consists of a value for each active cell
 
     # Define and plot starting model
-    starting_model = background_density * np.ones(nC)
+    starting_model = np.zeros(nC)
 
 
 
@@ -339,7 +332,7 @@ structures. Here, the background is 1e-6 g/cc.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 208-214
+.. GENERATED FROM PYTHON SOURCE LINES 203-209
 
 Define the Physics
 ------------------
@@ -348,13 +341,13 @@ Here, we define the physics of the gravity problem by using the simulation
 class.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 214-220
+.. GENERATED FROM PYTHON SOURCE LINES 209-215
 
 .. code-block:: default
 
 
     simulation = gravity.simulation.Simulation3DIntegral(
-        survey=survey, mesh=mesh, rhoMap=model_map, actInd=ind_active
+        survey=survey, mesh=mesh, rhoMap=model_map, ind_active=ind_active
     )
 
 
@@ -365,7 +358,7 @@ class.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 221-230
+.. GENERATED FROM PYTHON SOURCE LINES 216-225
 
 Define the Inverse Problem
 --------------------------
@@ -377,7 +370,7 @@ The inverse problem is defined by 3 things:
     3) Optimization: the numerical approach used to solve the inverse problem
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 230-249
+.. GENERATED FROM PYTHON SOURCE LINES 225-244
 
 .. code-block:: default
 
@@ -389,7 +382,7 @@ The inverse problem is defined by 3 things:
     dmis = data_misfit.L2DataMisfit(data=data_object, simulation=simulation)
 
     # Define the regularization (model objective function).
-    reg = regularization.Simple(mesh, indActive=ind_active, mapping=model_map)
+    reg = regularization.WeightedLeastSquares(mesh, indActive=ind_active, mapping=model_map)
 
     # Define how the optimization problem is solved. Here we will use a projected
     # Gauss-Newton approach that employs the conjugate gradient solver.
@@ -407,7 +400,7 @@ The inverse problem is defined by 3 things:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 250-257
+.. GENERATED FROM PYTHON SOURCE LINES 245-252
 
 Define Inversion Directives
 ---------------------------
@@ -417,7 +410,7 @@ includes the cooling schedule for the trade-off parameter (beta), stopping
 criteria for the inversion and saving inversion results at each iteration.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 257-288
+.. GENERATED FROM PYTHON SOURCE LINES 252-283
 
 .. code-block:: default
 
@@ -459,7 +452,7 @@ criteria for the inversion and saving inversion results at each iteration.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 289-295
+.. GENERATED FROM PYTHON SOURCE LINES 284-290
 
 Running the Inversion
 ---------------------
@@ -468,7 +461,7 @@ To define the inversion object, we need to define the inversion problem and
 the set of directives. We can then run the inversion.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 295-303
+.. GENERATED FROM PYTHON SOURCE LINES 290-298
 
 .. code-block:: default
 
@@ -486,42 +479,47 @@ the set of directives. We can then run the inversion.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    SimPEG.InvProblem will set Regularization.mref to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
 
-            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
-            ***Done using same Solver and solverOpts as the problem***
+                        SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
+                        ***Done using the default solver Pardiso and no solver_opts.***
+                    
     model has any nan: 0
     =============================== Projected GNCG ===============================
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  2.83e+04  1.33e+05  0.00e+00  1.33e+05    2.19e+02      0              
-       1  5.65e+03  5.70e+04  8.90e-01  6.20e+04    2.18e+02      0              
-       2  1.13e+03  1.86e+04  4.06e+00  2.32e+04    2.17e+02      0   Skip BFGS  
-       3  2.26e+02  2.99e+03  9.70e+00  5.18e+03    2.11e+02      0   Skip BFGS  
-       4  4.52e+01  3.41e+02  1.41e+01  9.79e+02    1.87e+02      0   Skip BFGS  
+       0  2.91e+04  1.33e+05  0.00e+00  1.33e+05    2.19e+02      0              
+       1  5.82e+03  5.78e+04  8.62e-01  6.28e+04    2.18e+02      0              
+       2  1.16e+03  1.91e+04  3.97e+00  2.37e+04    2.17e+02      0   Skip BFGS  
+       3  2.33e+02  3.10e+03  9.61e+00  5.34e+03    2.11e+02      0   Skip BFGS  
+       4  4.65e+01  3.54e+02  1.40e+01  1.01e+03    1.88e+02      0   Skip BFGS  
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 1.3312e+04
-    1 : |xc-x_last| = 8.6424e-02 <= tolX*(1+|x0|) = 1.0002e-01
-    0 : |proj(x-g)-x|    = 1.8667e+02 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 1.8667e+02 <= 1e3*eps       = 1.0000e-02
+    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 1.3311e+04
+    1 : |xc-x_last| = 8.7427e-02 <= tolX*(1+|x0|) = 1.0000e-01
+    0 : |proj(x-g)-x|    = 1.8777e+02 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 1.8777e+02 <= 1e3*eps       = 1.0000e-02
     0 : maxIter   =      10    <= iter          =      5
     ------------------------- DONE! -------------------------
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 304-307
+.. GENERATED FROM PYTHON SOURCE LINES 299-302
 
 Recreate True Model
 -------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 307-334
+.. GENERATED FROM PYTHON SOURCE LINES 302-329
 
 .. code-block:: default
 
@@ -559,13 +557,13 @@ Recreate True Model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 335-338
+.. GENERATED FROM PYTHON SOURCE LINES 330-333
 
 Plotting True Model and Recovered Model
 ---------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 338-390
+.. GENERATED FROM PYTHON SOURCE LINES 333-385
 
 .. code-block:: default
 
@@ -575,14 +573,14 @@ Plotting True Model and Recovered Model
     plotting_map = maps.InjectActiveCells(mesh, ind_active, np.nan)
 
     ax1 = fig.add_axes([0.1, 0.1, 0.73, 0.8])
-    mesh.plotSlice(
+    mesh.plot_slice(
         plotting_map * true_model,
         normal="Y",
         ax=ax1,
-        ind=int(mesh.nCy / 2),
+        ind=int(mesh.shape_cells[1] / 2),
         grid=True,
         clim=(np.min(true_model), np.max(true_model)),
-        pcolorOpts={"cmap": "viridis"},
+        pcolor_opts={"cmap": "viridis"},
     )
     ax1.set_title("Model slice at y = 0 m")
 
@@ -601,14 +599,14 @@ Plotting True Model and Recovered Model
     plotting_map = maps.InjectActiveCells(mesh, ind_active, np.nan)
 
     ax1 = fig.add_axes([0.1, 0.1, 0.73, 0.8])
-    mesh.plotSlice(
+    mesh.plot_slice(
         plotting_map * recovered_model,
         normal="Y",
         ax=ax1,
-        ind=int(mesh.nCy / 2),
+        ind=int(mesh.shape_cells[1] / 2),
         grid=True,
         clim=(np.min(recovered_model), np.max(recovered_model)),
-        pcolorOpts={"cmap": "viridis"},
+        pcolor_opts={"cmap": "viridis"},
     )
     ax1.set_title("Model slice at y = 0 m")
 
@@ -645,13 +643,13 @@ Plotting True Model and Recovered Model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 391-394
+.. GENERATED FROM PYTHON SOURCE LINES 386-389
 
 Plotting Predicted Data and Normalized Misfit
 ---------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 394-437
+.. GENERATED FROM PYTHON SOURCE LINES 389-432
 
 .. code-block:: default
 
@@ -713,30 +711,25 @@ Plotting Predicted Data and Normalized Misfit
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  22.197 seconds)
+   **Total running time of the script:** ( 0 minutes  14.466 seconds)
 
-**Estimated memory usage:**  9 MB
+**Estimated memory usage:**  118 MB
 
 
 .. _sphx_glr_download_content_tutorials_03-gravity_plot_inv_1a_gravity_anomaly.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_inv_1a_gravity_anomaly.py <plot_inv_1a_gravity_anomaly.py>`
 
-     :download:`Download Python source code: plot_inv_1a_gravity_anomaly.py <plot_inv_1a_gravity_anomaly.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_inv_1a_gravity_anomaly.ipynb <plot_inv_1a_gravity_anomaly.ipynb>`
+      :download:`Download Jupyter notebook: plot_inv_1a_gravity_anomaly.ipynb <plot_inv_1a_gravity_anomaly.ipynb>`
 
 
 .. only:: html

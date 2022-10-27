@@ -67,8 +67,21 @@ Rowan Cockett - 21/12/2016
    :class: sphx-glr-single-img
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    /usr/share/miniconda/envs/test/lib/python3.7/site-packages/discretize/operators/differential_operators.py:1795: UserWarning:
+
+    cell_gradient_BC is deprecated and is not longer used. See cell_gradient
 
 
+
+
+
+
+
+|
 
 .. code-block:: default
 
@@ -84,7 +97,7 @@ Rowan Cockett - 21/12/2016
     def run(plotIt=True):
 
         M = discretize.TensorMesh([np.ones(40)], x0="N")
-        M.setCellGradBC("dirichlet")
+        M.set_cell_gradient_BC("dirichlet")
         # We will use the haverkamp empirical model with parameters from Celia1990
         k_fun, theta_fun = richards.empirical.haverkamp(
             M,
@@ -117,7 +130,7 @@ Rowan Cockett - 21/12/2016
 
         # Create the survey
         locs = -np.arange(2, 38, 4.0).reshape(-1, 1)
-        times = np.arange(30, prob.time_mesh.vectorCCx[-1], 60)
+        times = np.arange(30, prob.time_mesh.cell_centers_x[-1], 60)
         rxSat = richards.receivers.Saturation(locs, times)
         survey = richards.Survey([rxSat])
         prob.survey = survey
@@ -151,9 +164,9 @@ Rowan Cockett - 21/12/2016
             plt.ylabel("Saturation")
 
             ax = plt.subplot(212)
-            mesh2d = discretize.TensorMesh([prob.time_mesh.hx / 60, prob.mesh.hx], "0N")
+            mesh2d = discretize.TensorMesh([prob.time_mesh.h[0] / 60, prob.mesh.h[0]], "0N")
             sats = [theta_fun(_) for _ in Hs]
-            clr = mesh2d.plotImage(np.c_[sats][1:, :], ax=ax)
+            clr = mesh2d.plot_image(np.c_[sats][1:, :], ax=ax)
             cmap0 = matplotlib.cm.RdYlBu_r
             clr[0].set_cmap(cmap0)
             c = plt.colorbar(clr[0])
@@ -172,30 +185,25 @@ Rowan Cockett - 21/12/2016
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.057 seconds)
+   **Total running time of the script:** ( 0 minutes  2.805 seconds)
 
-**Estimated memory usage:**  9 MB
+**Estimated memory usage:**  18 MB
 
 
 .. _sphx_glr_download_content_examples_09-flow_plot_fwd_flow_richards_1D.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_fwd_flow_richards_1D.py <plot_fwd_flow_richards_1D.py>`
 
-     :download:`Download Python source code: plot_fwd_flow_richards_1D.py <plot_fwd_flow_richards_1D.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_fwd_flow_richards_1D.ipynb <plot_fwd_flow_richards_1D.ipynb>`
+      :download:`Download Jupyter notebook: plot_fwd_flow_richards_1D.ipynb <plot_fwd_flow_richards_1D.ipynb>`
 
 
 .. only:: html

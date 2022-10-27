@@ -18,13 +18,12 @@
 .. _sphx_glr_content_tutorials_07-fdem_plot_fwd_2_fem_cyl.py:
 
 
-Forward Simulation on a Cylindrical Mesh
-========================================
+3D Forward Simulation on a Cylindrical Mesh
+===========================================
 
 Here we use the module *SimPEG.electromagnetics.frequency_domain* to simulate the
-FDEM response for an airborne survey using a cylindrical mesh and a conductivity
-model. We simulate a single line of airborne data at many frequencies for a vertical
-coplanar survey geometry. For this tutorial, we focus on the following:
+FDEM response for a borehole survey using a cylindrical mesh and radially symmetric
+conductivity model. For this tutorial, we focus on the following:
 
     - How to define the transmitters and receivers
     - How to define the survey
@@ -36,18 +35,18 @@ Please note that we have used a coarse mesh to shorten the time of the simulatio
 Proper discretization is required to simulate the fields at each frequency with
 sufficient accuracy.
 
-.. GENERATED FROM PYTHON SOURCE LINES 24-27
+.. GENERATED FROM PYTHON SOURCE LINES 23-26
 
 Import modules
 --------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 27-48
+.. GENERATED FROM PYTHON SOURCE LINES 26-47
 
 .. code-block:: default
 
 
-    from discretize import CylMesh
+    from discretize import CylindricalMesh
     from discretize.utils import mkvc
 
     from SimPEG import maps
@@ -74,17 +73,17 @@ Import modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 49-56
+.. GENERATED FROM PYTHON SOURCE LINES 48-55
 
 Create Airborne Survey
 ----------------------
 
-Here we define an airborne survey that consists of a single line of EM data
-measurements over a range of frequencies. The loop geometry is horizontal
-coplanar.
+Here we define a x-offset borehole survey that consists of a single vertical line
+of source-receiver pairs which measred the secondary magnetic flux density
+ over a range of frequencies.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 56-97
+.. GENERATED FROM PYTHON SOURCE LINES 55-96
 
 .. code-block:: default
 
@@ -93,12 +92,12 @@ coplanar.
     frequencies = np.logspace(1, 4, 16)
 
     # Defining transmitter locations
-    xtx, ytx, ztx = np.meshgrid(np.linspace(0, 200, 41), [0], [55])
+    xtx, ytx, ztx = np.meshgrid([0], [0], np.linspace(0, -500, 21))
     source_locations = np.c_[mkvc(xtx), mkvc(ytx), mkvc(ztx)]
     ntx = np.size(xtx)
 
     # Define receiver locations
-    xrx, yrx, zrx = np.meshgrid(np.linspace(0, 200, 41), [0], [50])
+    xrx, yrx, zrx = np.meshgrid([100], [0], np.linspace(0, -500, 21))
     receiver_locations = np.c_[mkvc(xrx), mkvc(yrx), mkvc(zrx)]
 
     source_list = []  # Create empty list to store sources
@@ -136,7 +135,7 @@ coplanar.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 98-110
+.. GENERATED FROM PYTHON SOURCE LINES 97-109
 
 Create Cylindrical Mesh
 -----------------------
@@ -151,19 +150,19 @@ When designing a mesh to solve practical frequency domain problems:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 110-120
+.. GENERATED FROM PYTHON SOURCE LINES 109-119
 
 .. code-block:: default
 
 
-    hr = [(10.0, 50), (10.0, 10, 1.5)]  # discretization in the radial direction
+    hr = [(10.0, 30), (10.0, 10, 1.5)]  # discretization in the radial direction
     hz = [
         (10.0, 10, -1.5),
-        (10.0, 100),
+        (10.0, 200),
         (10.0, 10, 1.5),
     ]  # discretization in vertical direction
 
-    mesh = CylMesh([hr, 1, hz], x0="00C")
+    mesh = CylindricalMesh([hr, 1, hz], x0="00C")
 
 
 
@@ -172,18 +171,17 @@ When designing a mesh to solve practical frequency domain problems:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 121-129
+.. GENERATED FROM PYTHON SOURCE LINES 120-127
 
 Create Conductivity/Resistivity Model and Mapping
 -------------------------------------------------
 
 Here, we create the model that will be used to predict frequency domain
 data and the mapping from the model to the mesh. The model
-consists of a long vertical conductive pipe and a resistive
-surface layer. For this example, we will have only flat topography.
+consists of several layers. For this example, we will have only flat topography.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 129-181
+.. GENERATED FROM PYTHON SOURCE LINES 127-177
 
 .. code-block:: default
 
@@ -191,25 +189,25 @@ surface layer. For this example, we will have only flat topography.
     # Conductivity in S/m (or resistivity in Ohm m)
     air_conductivity = 1e-8
     background_conductivity = 1e-1
-    layer_conductivity = 1e-2
-    pipe_conductivity = 1e1
+    layer_conductivity_1 = 1e0
+    layer_conductivity_2 = 1e-2
 
     # Find cells that are active in the forward modeling (cells below surface)
-    ind_active = mesh.gridCC[:, 2] < 0
+    ind_active = mesh.cell_centers[:, 2] < 0
 
     # Define mapping from model to active cells
     model_map = maps.InjectActiveCells(mesh, ind_active, air_conductivity)
 
     # Define the model
     model = background_conductivity * np.ones(ind_active.sum())
-    ind_layer = (mesh.gridCC[ind_active, 2] > -100.0) & (mesh.gridCC[ind_active, 2] < -0)
-    model[ind_layer] = layer_conductivity
-    ind_pipe = (
-        (mesh.gridCC[ind_active, 0] < 60.0)
-        & (mesh.gridCC[ind_active, 2] > -10000.0)
-        & (mesh.gridCC[ind_active, 2] < 0.0)
+    ind = (mesh.cell_centers[ind_active, 2] > -200.0) & (
+        mesh.cell_centers[ind_active, 2] < -0
     )
-    model[ind_pipe] = pipe_conductivity
+    model[ind] = layer_conductivity_1
+    ind = (mesh.cell_centers[ind_active, 2] > -400.0) & (
+        mesh.cell_centers[ind_active, 2] < -200
+    )
+    model[ind] = layer_conductivity_2
 
     # Plot Conductivity Model
     mpl.rcParams.update({"font.size": 14})
@@ -219,19 +217,17 @@ surface layer. For this example, we will have only flat topography.
     log_model = np.log10(model)
 
     ax1 = fig.add_axes([0.14, 0.1, 0.6, 0.85])
-    mesh.plotImage(
+    mesh.plot_image(
         plotting_map * log_model,
         ax=ax1,
         grid=False,
-        clim=(np.log10(layer_conductivity), np.log10(pipe_conductivity)),
+        clim=(np.log10(layer_conductivity_2), np.log10(layer_conductivity_1)),
     )
-    ax1.set_title("Conductivity Model (Survey in red)")
-
-    ax1.plot(receiver_locations[:, 0], receiver_locations[:, 2], "r.")
+    ax1.set_title("Conductivity Model")
 
     ax2 = fig.add_axes([0.76, 0.1, 0.05, 0.85])
     norm = mpl.colors.Normalize(
-        vmin=np.log10(layer_conductivity), vmax=np.log10(pipe_conductivity)
+        vmin=np.log10(layer_conductivity_2), vmax=np.log10(layer_conductivity_1)
     )
     cbar = mpl.colorbar.ColorbarBase(
         ax2, norm=norm, orientation="vertical", format="$10^{%.1f}$"
@@ -243,7 +239,7 @@ surface layer. For this example, we will have only flat topography.
 
 
 .. image-sg:: /content/tutorials/07-fdem/images/sphx_glr_plot_fwd_2_fem_cyl_001.png
-   :alt: Conductivity Model (Survey in red)
+   :alt: Conductivity Model
    :srcset: /content/tutorials/07-fdem/images/sphx_glr_plot_fwd_2_fem_cyl_001.png
    :class: sphx-glr-single-img
 
@@ -251,7 +247,7 @@ surface layer. For this example, we will have only flat topography.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 182-191
+.. GENERATED FROM PYTHON SOURCE LINES 178-187
 
 Simulation: Predicting FDEM Data
 --------------------------------
@@ -263,7 +259,7 @@ the mapping for the conductivity model. If you defined a resistivity model,
 use the kwarg *rhoMap* instead of *sigmaMap*
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 191-196
+.. GENERATED FROM PYTHON SOURCE LINES 187-192
 
 .. code-block:: default
 
@@ -279,7 +275,7 @@ use the kwarg *rhoMap* instead of *sigmaMap*
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 197-202
+.. GENERATED FROM PYTHON SOURCE LINES 193-198
 
 Predict and Plot Data
 ---------------------
@@ -287,7 +283,7 @@ Predict and Plot Data
 Here we show how the simulation is used to predict data.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 202-239
+.. GENERATED FROM PYTHON SOURCE LINES 198-234
 
 .. code-block:: default
 
@@ -305,29 +301,28 @@ Here we show how the simulation is used to predict data.
     bz_real = np.reshape(bz_real, (ntx, len(frequencies)))
     bz_imag = np.reshape(bz_imag, (ntx, len(frequencies)))
 
-    # Plot secondary field along the profile at f = 1 Hz
-    fig = plt.figure(figsize=(7, 5))
-    ax1 = fig.add_axes([0.15, 0.1, 0.8, 0.85])
+    # Plot secondary field along the profile at f = 10000 Hz
+    fig = plt.figure(figsize=(5, 5))
+    ax1 = fig.add_axes([0.2, 0.15, 0.75, 0.75])
     frequencies_index = 0
-    ax1.plot(receiver_locations[:, 0], bz_real[:, frequencies_index], "b", lw=3)
-    ax1.plot(receiver_locations[:, 0], bz_imag[:, frequencies_index], "r", lw=3)
-    ax1.set_xlim((0, np.max(xtx)))
-    ax1.set_xlabel("Easting [m]")
-    ax1.set_ylabel("Bz secondary [T]")
-    ax1.set_title("Secondary Bz-field at 1 Hz")
-    ax1.legend(["Real", "Imaginary"], loc="lower right")
+    ax1.plot(bz_real[:, frequencies_index], receiver_locations[:, -1], "b-", lw=3)
+    ax1.plot(bz_imag[:, frequencies_index], receiver_locations[:, -1], "b--", lw=3)
+    ax1.set_xlabel("Bz secondary [T]")
+    ax1.set_ylabel("Elevation [m]")
+    ax1.set_title("Response at 10000 Hz")
+    ax1.legend(["Real", "Imaginary"], loc="upper right")
 
-    # Plot FEM sounding over the pipe
-    fig = plt.figure(figsize=(7, 5))
-    ax1 = fig.add_axes([0.15, 0.1, 0.8, 0.85])
+    # Plot FEM response for all frequencies
+    fig = plt.figure(figsize=(5, 5))
+    ax1 = fig.add_axes([0.2, 0.15, 0.75, 0.75])
     location_index = 0
-    ax1.semilogx(frequencies, bz_real[location_index, :], "b", lw=3)
-    ax1.semilogx(frequencies, bz_imag[location_index, :], "r", lw=3)
+    ax1.semilogx(frequencies, bz_real[location_index, :], "b-", lw=3)
+    ax1.semilogx(frequencies, bz_imag[location_index, :], "b--", lw=3)
     ax1.set_xlim((np.min(frequencies), np.max(frequencies)))
     ax1.set_xlabel("Frequency [Hz]")
     ax1.set_ylabel("Bz secondary [T]")
-    ax1.set_title("Secondary Bz-field over pipe")
-    ax1.legend(["Real", "Imaginary"], loc="lower left")
+    ax1.set_title("Response at Smallest Offset")
+    ax1.legend(["Real", "Imaginary"], loc="upper left")
 
 
 
@@ -337,56 +332,49 @@ Here we show how the simulation is used to predict data.
     *
 
       .. image-sg:: /content/tutorials/07-fdem/images/sphx_glr_plot_fwd_2_fem_cyl_002.png
-         :alt: Secondary Bz-field at 1 Hz
+         :alt: Response at 10000 Hz
          :srcset: /content/tutorials/07-fdem/images/sphx_glr_plot_fwd_2_fem_cyl_002.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /content/tutorials/07-fdem/images/sphx_glr_plot_fwd_2_fem_cyl_003.png
-         :alt: Secondary Bz-field over pipe
+         :alt: Response at Smallest Offset
          :srcset: /content/tutorials/07-fdem/images/sphx_glr_plot_fwd_2_fem_cyl_003.png
          :class: sphx-glr-multi-img
 
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f9e587cca90>
+    <matplotlib.legend.Legend object at 0x7fd421b23990>
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  8.271 seconds)
+   **Total running time of the script:** ( 0 minutes  8.237 seconds)
 
-**Estimated memory usage:**  9 MB
+**Estimated memory usage:**  18 MB
 
 
 .. _sphx_glr_download_content_tutorials_07-fdem_plot_fwd_2_fem_cyl.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_fwd_2_fem_cyl.py <plot_fwd_2_fem_cyl.py>`
 
-     :download:`Download Python source code: plot_fwd_2_fem_cyl.py <plot_fwd_2_fem_cyl.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_fwd_2_fem_cyl.ipynb <plot_fwd_2_fem_cyl.ipynb>`
+      :download:`Download Jupyter notebook: plot_fwd_2_fem_cyl.ipynb <plot_fwd_2_fem_cyl.ipynb>`
 
 
 .. only:: html

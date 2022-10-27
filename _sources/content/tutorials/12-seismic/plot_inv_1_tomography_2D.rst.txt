@@ -114,8 +114,6 @@ storage bucket where we have the data
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     Downloading https://storage.googleapis.com/simpeg/doc-assets/seismic.tar.gz
@@ -349,7 +347,7 @@ The inverse problem is defined by 3 things:
     p = 0
     qx = 0.5
     qy = 0.5
-    reg.norms = np.c_[p, qx, qy]
+    reg.norms = [p, qx, qy]
 
     # Define how the optimization problem is solved.
     opt = optimization.ProjectedGNCG(
@@ -435,36 +433,37 @@ the set of directives. We can then run the inversion.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    /home/vsts/work/1/s/SimPEG/directives/directives.py:1472: UserWarning:
+    /home/vsts/work/1/s/SimPEG/directives/directives.py:2008: UserWarning:
 
     Without a Linear preconditioner, convergence may be slow. Consider adding `Directives.UpdatePreconditioner` to your directives list
 
-    SimPEG.InvProblem will set Regularization.mref to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
 
-            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
-            ***Done using same Solver and solverOpts as the problem***
+                        SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
+                        ***Done using the default solver Pardiso and no solver_opts.***
+                    
     model has any nan: 0
     =============================== Projected GNCG ===============================
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  2.59e-08  8.64e+02  0.00e+00  8.64e+02    1.27e-01      0              
+       0  2.61e-08  8.64e+02  0.00e+00  8.64e+02    1.27e-01      0              
     Reached starting chifact with l2-norm regularization: Start IRLS steps...
-    eps_p: 964.3143541436334 eps_q: 964.3143541436334
-       1  1.30e-08  2.66e+01  8.19e+09  1.33e+02    2.40e-02      0              
-       2  3.57e-08  1.73e+01  7.85e+09  2.97e+02    5.55e-02      0              
-       3  6.25e-08  4.02e+01  5.98e+09  4.14e+02    8.28e-02      0              
-       4  4.80e-08  7.71e+01  4.26e+09  2.81e+02    4.30e-02      0              
-       5  8.07e-08  4.43e+01  3.54e+09  3.30e+02    9.27e-02      0              
+    irls_threshold 962.7531507907684
+       1  1.31e-08  2.67e+01  7.87e+09  1.29e+02    2.38e-02      0              
+       2  4.28e-08  1.33e+01  7.70e+09  3.43e+02    6.65e-02      0              
+       3  7.05e-08  4.68e+01  5.63e+09  4.43e+02    8.81e-02      0              
+       4  4.94e-08  9.26e+01  4.07e+09  2.94e+02    3.83e-02      0              
+       5  4.04e-08  6.83e+01  3.78e+09  2.21e+02    2.83e-02      0   Skip BFGS  
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 4.8327e+01 <= tolF*(1+|f0|) = 8.6501e+01
-    1 : |xc-x_last| = 1.7189e+03 <= tolX*(1+|x0|) = 6.3001e+03
-    1 : |proj(x-g)-x|    = 9.2688e-02 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 9.2688e-02 <= 1e3*eps       = 1.0000e-02
+    1 : |fc-fOld| = 7.2447e+01 <= tolF*(1+|f0|) = 8.6501e+01
+    1 : |xc-x_last| = 1.4069e+03 <= tolX*(1+|x0|) = 6.3001e+03
+    1 : |proj(x-g)-x|    = 2.8304e-02 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 2.8304e-02 <= 1e3*eps       = 1.0000e-02
     0 : maxIter   =     100    <= iter          =      5
     ------------------------- DONE! -------------------------
 
@@ -489,7 +488,7 @@ Plotting True Model and Recovered Model
     fig = plt.figure(figsize=(6, 5.5))
 
     ax1 = fig.add_axes([0.15, 0.15, 0.65, 0.75])
-    mesh.plotImage(true_model, ax=ax1, grid=True, pcolorOpts={"cmap": "viridis"})
+    mesh.plot_image(true_model, ax=ax1, grid=True, pcolor_opts={"cmap": "viridis"})
     ax1.set_title("True Model")
 
     ax2 = fig.add_axes([0.82, 0.15, 0.05, 0.75])
@@ -505,7 +504,7 @@ Plotting True Model and Recovered Model
     fig = plt.figure(figsize=(6, 5.5))
 
     ax1 = fig.add_axes([0.15, 0.15, 0.65, 0.75])
-    mesh.plotImage(recovered_model, ax=ax1, grid=True, pcolorOpts={"cmap": "viridis"})
+    mesh.plot_image(recovered_model, ax=ax1, grid=True, pcolor_opts={"cmap": "viridis"})
     ax1.set_title("Recovered Model")
 
     ax2 = fig.add_axes([0.82, 0.15, 0.05, 0.75])
@@ -543,30 +542,25 @@ Plotting True Model and Recovered Model
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  13.915 seconds)
+   **Total running time of the script:** ( 0 minutes  12.560 seconds)
 
-**Estimated memory usage:**  9 MB
+**Estimated memory usage:**  18 MB
 
 
 .. _sphx_glr_download_content_tutorials_12-seismic_plot_inv_1_tomography_2D.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_inv_1_tomography_2D.py <plot_inv_1_tomography_2D.py>`
 
-     :download:`Download Python source code: plot_inv_1_tomography_2D.py <plot_inv_1_tomography_2D.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_inv_1_tomography_2D.ipynb <plot_inv_1_tomography_2D.ipynb>`
+      :download:`Download Jupyter notebook: plot_inv_1_tomography_2D.ipynb <plot_inv_1_tomography_2D.ipynb>`
 
 
 .. only:: html

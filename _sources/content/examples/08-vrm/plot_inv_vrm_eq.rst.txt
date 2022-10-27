@@ -163,7 +163,7 @@ for the survey. Our example is similar to an EM-63 survey.
 
         loc_pp = np.reshape(loc[pp, :], (1, 3))
         receiver_listVRM = [
-            VRM.Rx.Point(loc_pp, times=times, fieldType="dbdt", orientation="z")
+            VRM.Rx.Point(loc_pp, times=times, field_type="dbdt", orientation="z")
         ]
 
         source_listVRM.append(
@@ -244,8 +244,6 @@ properties.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     CREATING T MATRIX
@@ -295,7 +293,7 @@ as active in the inversion.
     w = w / np.max(w)
     w = w
 
-    reg = regularization.SimpleSmall(mesh=mesh, indActive=actCells, cell_weights=w)
+    reg = regularization.Smallness(mesh=mesh, indActive=actCells, cell_weights=w)
     opt = optimization.ProjectedGNCG(
         maxIter=20, lower=0.0, upper=1e-2, maxIterLS=20, tolCG=1e-4
     )
@@ -319,15 +317,14 @@ as active in the inversion.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     CREATING A MATRIX
-    SimPEG.InvProblem will set Regularization.mref to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
 
-            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
-            ***Done using same Solver and solverOpts as the problem***
+                            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
+                            ***Done using same Solver, and solver_opts as the Simulation3DLinear problem***
+                        
     model has any nan: 0
     =============================== Projected GNCG ===============================
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
@@ -378,12 +375,12 @@ Plotting
 
     for qq in range(0, 2):
         ax1[qq] = Fig.add_axes([0.15 + 0.35 * qq, 0.7, 0.25, 0.25])
-        cplot1[qq] = mesh.plotSlice(
+        cplot1[qq] = mesh.plot_slice(
             map_mod[qq] * xi_mod[qq],
             ind=int((ncz + 2 * npad) / 2 - 1),
             ax=ax1[qq],
             grid=True,
-            pcolorOpts={"cmap": "gist_heat_r"},
+            pcolor_opts={"cmap": "gist_heat_r"},
         )
         cplot1[qq][0].set_clim((0.0, max_val))
         ax1[qq].set_xlabel("X [m]", fontsize=font_size)
@@ -506,30 +503,25 @@ Plotting
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  19.287 seconds)
+   **Total running time of the script:** ( 0 minutes  21.733 seconds)
 
-**Estimated memory usage:**  111 MB
+**Estimated memory usage:**  120 MB
 
 
 .. _sphx_glr_download_content_examples_08-vrm_plot_inv_vrm_eq.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_inv_vrm_eq.py <plot_inv_vrm_eq.py>`
 
-     :download:`Download Python source code: plot_inv_vrm_eq.py <plot_inv_vrm_eq.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_inv_vrm_eq.ipynb <plot_inv_vrm_eq.ipynb>`
+      :download:`Download Jupyter notebook: plot_inv_vrm_eq.ipynb <plot_inv_vrm_eq.ipynb>`
 
 
 .. only:: html

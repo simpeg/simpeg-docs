@@ -142,8 +142,6 @@ tar-file on our google cloud bucket:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     overwriting /home/vsts/work/1/s/tutorials/05-dcr/dcr3d.tar.gz
@@ -237,10 +235,20 @@ and the IP data as apparent chargeabilities.
 
 
 
+.. rst-class:: sphx-glr-script-out
 
-.. raw:: html
-    :file: images/sphx_glr_plot_inv_3_dcr3d_001.html
+.. code-block:: pytb
 
+    Traceback (most recent call last):
+      File "/home/vsts/work/1/s/tutorials/05-dcr/plot_inv_3_dcr3d.py", line 161, in <module>
+        plotly.io.show(fig)
+      File "/usr/share/miniconda/envs/test/lib/python3.7/site-packages/plotly/io/_renderers.py", line 403, in show
+        renderers._perform_external_rendering(fig_dict, renderers_string=renderer, **kwargs)
+      File "/usr/share/miniconda/envs/test/lib/python3.7/site-packages/plotly/io/_renderers.py", line 340, in _perform_external_rendering
+        renderer.render(fig_dict)
+      File "/usr/share/miniconda/envs/test/lib/python3.7/site-packages/plotly/io/_base_renderers.py", line 889, in render
+        "orca and psutil are required to use the `sphinx-gallery-orca` renderer. "
+    ImportError: orca and psutil are required to use the `sphinx-gallery-orca` renderer. See https://plotly.com/python/static-image-export/ for instructions on how to install orca. Alternatively, you can use the `sphinx-gallery` renderer (note that png thumbnails can only be generated with the `sphinx-gallery-orca` renderer).
 
 
 
@@ -262,12 +270,6 @@ noise in our data. For DC data, the uncertainties are 10% of the absolute value.
 
 
     dc_data.standard_deviation = 0.1 * np.abs(dc_data.dobs)
-
-
-
-
-
-
 
 
 
@@ -322,12 +324,6 @@ DC data.
     mesh.finalize()
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 225-233
 
 Project Electrodes to Discretized Topography
@@ -355,12 +351,6 @@ lie on the discretized surface.
 
     # Reset survey in data object
     dc_data.survey = dc_survey
-
-
-
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 247-256
@@ -395,12 +385,6 @@ structures. Here, the starting model is the natural log of 0.01 S/m.
     starting_conductivity_model = background_conductivity * np.ones(nC)
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 272-278
 
 Define the Physics of the DC Simulation
@@ -420,12 +404,6 @@ Here, we define the physics of the DC resistivity simulation.
     )
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 284-294
 
 Define DC Inverse Problem
@@ -439,7 +417,7 @@ The inverse problem is defined by 3 things:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 294-321
+.. GENERATED FROM PYTHON SOURCE LINES 294-323
 
 .. code-block:: default
 
@@ -452,13 +430,15 @@ The inverse problem is defined by 3 things:
     dc_data_misfit = data_misfit.L2DataMisfit(data=dc_data, simulation=dc_simulation)
 
     # Define the regularization (model objective function)
-    dc_regularization = regularization.Simple(
+    dc_regularization = regularization.WeightedLeastSquares(
         mesh,
         indActive=ind_active,
-        mref=starting_conductivity_model,
+        reference_model=starting_conductivity_model,
     )
 
-    dc_regularization.mrefInSmooth = True  # Include reference model in smoothness
+    dc_regularization.reference_model_in_smooth = (
+        True  # Include reference model in smoothness
+    )
 
     # Define how the optimization problem is solved.
     dc_optimization = optimization.InexactGaussNewton(
@@ -471,13 +451,7 @@ The inverse problem is defined by 3 things:
     )
 
 
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 322-330
+.. GENERATED FROM PYTHON SOURCE LINES 324-332
 
 Define DC Inversion Directives
 ------------------------------
@@ -488,7 +462,7 @@ criteria for the inversion and saving inversion results at each iteration.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 330-361
+.. GENERATED FROM PYTHON SOURCE LINES 332-363
 
 .. code-block:: default
 
@@ -524,13 +498,7 @@ criteria for the inversion and saving inversion results at each iteration.
     ]
 
 
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 362-368
+.. GENERATED FROM PYTHON SOURCE LINES 364-370
 
 Running the DC Inversion
 ------------------------
@@ -539,7 +507,7 @@ To define the inversion object, we need to define the inversion problem and
 the set of directives. We can then run the inversion.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 368-378
+.. GENERATED FROM PYTHON SOURCE LINES 370-380
 
 .. code-block:: default
 
@@ -554,50 +522,13 @@ the set of directives. We can then run the inversion.
 
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-
-            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
-            ***Done using same Solver and solverOpts as the problem***
-    model has any nan: 0
-    ============================ Inexact Gauss Newton ============================
-      #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
-    -----------------------------------------------------------------------------
-    x0 has any nan: 0
-       0  1.15e-02  9.09e+03  0.00e+00  9.09e+03    8.30e+02      0              
-       1  1.15e-02  2.63e+03  1.73e+05  4.61e+03    8.38e+01      0              
-       2  4.58e-03  2.93e+03  1.42e+05  3.58e+03    2.13e+02      0              
-       3  4.58e-03  1.57e+03  3.69e+05  3.26e+03    4.06e+01      0              
-       4  1.83e-03  1.76e+03  3.20e+05  2.35e+03    1.50e+02      0              
-       5  1.83e-03  8.28e+02  7.25e+05  2.16e+03    2.93e+01      0              
-       6  7.33e-04  9.49e+02  6.20e+05  1.40e+03    1.05e+02      0              
-       7  7.33e-04  3.84e+02  1.21e+06  1.27e+03    1.57e+01      0              
-       8  2.93e-04  4.36e+02  1.06e+06  7.48e+02    6.31e+01      0              
-    ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 9.0894e+02
-    1 : |xc-x_last| = 1.2110e+01 <= tolX*(1+|x0|) = 8.6273e+01
-    0 : |proj(x-g)-x|    = 6.3137e+01 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 6.3137e+01 <= 1e3*eps       = 1.0000e-02
-    0 : maxIter   =      15    <= iter          =      9
-    ------------------------- DONE! -------------------------
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 379-382
+.. GENERATED FROM PYTHON SOURCE LINES 381-384
 
 Recreate True Conductivity Model
 --------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 382-403
+.. GENERATED FROM PYTHON SOURCE LINES 384-405
 
 .. code-block:: default
 
@@ -623,19 +554,13 @@ Recreate True Conductivity Model
 
 
 
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 404-407
+.. GENERATED FROM PYTHON SOURCE LINES 406-409
 
 Plotting True and Recovered Conductivity Model
 ----------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 407-470
+.. GENERATED FROM PYTHON SOURCE LINES 409-472
 
 .. code-block:: default
 
@@ -647,11 +572,11 @@ Plotting True and Recovered Conductivity Model
     plotting_map = maps.InjectActiveCells(mesh, ind_active, np.nan)
 
     ax1 = fig.add_axes([0.15, 0.15, 0.67, 0.75])
-    mesh.plotSlice(
+    mesh.plot_slice(
         plotting_map * true_conductivity_model_log10,
         ax=ax1,
         normal="Y",
-        ind=int(len(mesh.hy) / 2),
+        ind=int(len(mesh.h[1]) / 2),
         grid=False,
         clim=(true_conductivity_model_log10.min(), true_conductivity_model_log10.max()),
         pcolor_opts={"cmap": mpl.cm.viridis},
@@ -677,11 +602,11 @@ Plotting True and Recovered Conductivity Model
     fig = plt.figure(figsize=(10, 4))
 
     ax1 = fig.add_axes([0.15, 0.15, 0.67, 0.75])
-    mesh.plotSlice(
+    mesh.plot_slice(
         plotting_map * recovered_conductivity_model_log10,
         ax=ax1,
         normal="Y",
-        ind=int(len(mesh.hy) / 2),
+        ind=int(len(mesh.h[1]) / 2),
         grid=False,
         clim=(true_conductivity_model_log10.min(), true_conductivity_model_log10.max()),
         pcolor_opts={"cmap": mpl.cm.viridis},
@@ -703,30 +628,7 @@ Plotting True and Recovered Conductivity Model
     plt.show()
 
 
-
-
-.. rst-class:: sphx-glr-horizontal
-
-
-    *
-
-      .. image-sg:: /content/tutorials/05-dcr/images/sphx_glr_plot_inv_3_dcr3d_002.png
-         :alt: True Conductivity Model
-         :srcset: /content/tutorials/05-dcr/images/sphx_glr_plot_inv_3_dcr3d_002.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /content/tutorials/05-dcr/images/sphx_glr_plot_inv_3_dcr3d_003.png
-         :alt: Recovered Conductivity Model
-         :srcset: /content/tutorials/05-dcr/images/sphx_glr_plot_inv_3_dcr3d_003.png
-         :class: sphx-glr-multi-img
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 471-478
+.. GENERATED FROM PYTHON SOURCE LINES 473-480
 
 Plotting Normalized Data Misfit or Predicted DC Data
 ----------------------------------------------------
@@ -736,7 +638,7 @@ it is a good idea to compare the predicted and observed data.
 Here, we accomplish this by plotting the normalized misfit.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 478-512
+.. GENERATED FROM PYTHON SOURCE LINES 480-514
 
 .. code-block:: default
 
@@ -776,41 +678,27 @@ Here, we accomplish this by plotting the normalized misfit.
         print("INSTALL 'PLOTLY' TO VISUALIZE 3D PSEUDOSECTIONS")
 
 
-
-.. raw:: html
-    :file: images/sphx_glr_plot_inv_3_dcr3d_004.html
-
-
-
-
-
-
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  15.124 seconds)
+   **Total running time of the script:** ( 0 minutes  1.901 seconds)
 
-**Estimated memory usage:**  9 MB
+**Estimated memory usage:**  1745 MB
 
 
 .. _sphx_glr_download_content_tutorials_05-dcr_plot_inv_3_dcr3d.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_inv_3_dcr3d.py <plot_inv_3_dcr3d.py>`
 
-     :download:`Download Python source code: plot_inv_3_dcr3d.py <plot_inv_3_dcr3d.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_inv_3_dcr3d.ipynb <plot_inv_3_dcr3d.ipynb>`
+      :download:`Download Jupyter notebook: plot_inv_3_dcr3d.ipynb <plot_inv_3_dcr3d.ipynb>`
 
 
 .. only:: html

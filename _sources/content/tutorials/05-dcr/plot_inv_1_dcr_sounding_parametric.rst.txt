@@ -117,8 +117,6 @@ results. These files are stored as a tar-file on our google cloud bucket:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     overwriting /home/vsts/work/1/s/tutorials/05-dcr/dcr1d.tar.gz
@@ -292,8 +290,6 @@ define a model consisting of 3 layers.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
@@ -350,7 +346,7 @@ The inverse problem is defined by 3 things:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 214-239
+.. GENERATED FROM PYTHON SOURCE LINES 214-243
 
 .. code-block:: default
 
@@ -362,12 +358,16 @@ The inverse problem is defined by 3 things:
     dmis = data_misfit.L2DataMisfit(simulation=simulation, data=data_object)
 
     # Define the regularization on the parameters related to resistivity
-    mesh_rho = TensorMesh([mesh.hx.size])
-    reg_rho = regularization.Simple(mesh_rho, alpha_s=0.01, alpha_x=1, mapping=wire_map.rho)
+    mesh_rho = TensorMesh([mesh.h[0].size])
+    reg_rho = regularization.WeightedLeastSquares(
+        mesh_rho, alpha_s=0.01, alpha_x=1, mapping=wire_map.rho
+    )
 
     # Define the regularization on the parameters related to layer thickness
-    mesh_t = TensorMesh([mesh.hx.size - 1])
-    reg_t = regularization.Simple(mesh_t, alpha_s=0.01, alpha_x=1, mapping=wire_map.t)
+    mesh_t = TensorMesh([mesh.h[0].size - 1])
+    reg_t = regularization.WeightedLeastSquares(
+        mesh_t, alpha_s=0.01, alpha_x=1, mapping=wire_map.t
+    )
 
     # Combine to make regularization for the inversion problem
     reg = reg_rho + reg_t
@@ -386,7 +386,7 @@ The inverse problem is defined by 3 things:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 240-247
+.. GENERATED FROM PYTHON SOURCE LINES 244-251
 
 Define Inversion Directives
 ---------------------------
@@ -396,7 +396,7 @@ includes the cooling schedule for the trade-off parameter (beta), stopping
 criteria for the inversion and saving inversion results at each iteration.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 247-274
+.. GENERATED FROM PYTHON SOURCE LINES 251-278
 
 .. code-block:: default
 
@@ -434,7 +434,7 @@ criteria for the inversion and saving inversion results at each iteration.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 275-281
+.. GENERATED FROM PYTHON SOURCE LINES 279-285
 
 Running the Inversion
 ---------------------
@@ -443,7 +443,7 @@ To define the inversion object, we need to define the inversion problem and
 the set of directives. We can then run the inversion.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 281-288
+.. GENERATED FROM PYTHON SOURCE LINES 285-292
 
 .. code-block:: default
 
@@ -460,61 +460,60 @@ the set of directives. We can then run the inversion.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    SimPEG.InvProblem will set Regularization.mref to m0.
-    SimPEG.InvProblem will set Regularization.mref to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
 
-            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
-            ***Done using same Solver and solverOpts as the problem***
+                            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
+                            ***Done using same Solver, and solver_opts as the Simulation1DLayers problem***
+                        
     model has any nan: 0
     ============================ Inexact Gauss Newton ============================
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  2.24e+05  7.45e+02  0.00e+00  7.45e+02    2.99e+03      0              
-       1  2.24e+05  3.55e+02  8.20e-05  3.73e+02    2.74e+02      0              
-       2  2.24e+05  3.55e+02  7.42e-05  3.71e+02    1.52e+01      0              
-       3  4.47e+04  3.55e+02  6.62e-05  3.58e+02    4.00e+02      1              
-       4  4.47e+04  3.46e+02  2.09e-04  3.56e+02    2.08e+02      0              
-       5  4.47e+04  3.45e+02  1.46e-04  3.51e+02    3.36e+02      2              
-       6  8.94e+03  3.44e+02  1.72e-04  3.46e+02    2.82e+02      2              
-       7  8.94e+03  3.42e+02  1.99e-04  3.43e+02    3.24e+02      3              
-       8  8.94e+03  3.35e+02  4.87e-04  3.40e+02    1.48e+02      1              
-       9  1.79e+03  3.33e+02  5.12e-04  3.34e+02    2.15e+02      2              
-      10  1.79e+03  3.12e+02  8.26e-03  3.27e+02    7.65e+02      0              
-      11  1.79e+03  1.97e+02  4.34e-02  2.74e+02    4.19e+02      0              
-      12  3.58e+02  1.78e+02  5.68e-02  1.98e+02    5.75e+02      2              
-      13  3.58e+02  1.45e+02  9.41e-02  1.78e+02    5.95e+02      2              
-      14  3.58e+02  5.16e+01  2.32e-01  1.34e+02    1.80e+01      0   Skip BFGS  
-      15  7.16e+01  5.16e+01  2.29e-01  6.80e+01    1.65e+02      1   Skip BFGS  
-      16  7.16e+01  3.81e+01  3.07e-01  6.01e+01    5.17e+02      1              
-      17  7.16e+01  3.05e+01  3.33e-01  5.43e+01    2.10e+02      0              
-      18  1.43e+01  2.79e+01  3.43e-01  3.28e+01    3.15e+02      1              
-      19  1.43e+01  1.62e+01  4.66e-01  2.29e+01    4.15e+02      1              
-      20  1.43e+01  1.22e+01  4.74e-01  1.90e+01    2.48e+02      1   Skip BFGS  
-      21  2.86e+00  1.17e+01  4.66e-01  1.30e+01    2.15e+02      2              
-      22  2.86e+00  9.25e+00  7.49e-01  1.14e+01    4.98e+02      0              
+       0  2.49e+04  7.45e+02  0.00e+00  7.45e+02    2.99e+03      0              
+       1  2.49e+04  3.57e+02  1.20e-04  3.60e+02    3.16e+02      0              
+       2  2.49e+04  3.54e+02  1.21e-04  3.57e+02    6.90e+00      0              
+       3  4.98e+03  3.54e+02  1.08e-04  3.55e+02    3.67e+02      4              
+       4  4.98e+03  3.45e+02  9.76e-04  3.50e+02    8.96e+01      0              
+       5  4.98e+03  3.44e+02  8.42e-04  3.48e+02    2.49e+02      2   Skip BFGS  
+       6  9.97e+02  3.44e+02  9.73e-04  3.45e+02    2.72e+02      3              
+       7  9.97e+02  3.42e+02  1.23e-03  3.43e+02    2.88e+02      3              
+       8  9.97e+02  3.39e+02  2.72e-03  3.42e+02    2.41e+02      2              
+       9  1.99e+02  3.37e+02  2.79e-03  3.37e+02    2.42e+02      3              
+      10  1.99e+02  3.17e+02  2.10e-02  3.21e+02    5.32e+02      2              
+      11  1.99e+02  2.82e+02  1.02e-01  3.02e+02    6.94e+02      2              
+      12  3.99e+01  2.29e+02  1.81e-01  2.36e+02    4.57e+02      1              
+      13  3.99e+01  2.15e+02  4.26e-01  2.32e+02    8.13e+02      2              
+      14  3.99e+01  1.10e+02  9.75e-01  1.49e+02    3.52e+02      1              
+      15  7.97e+00  8.84e+01  1.19e+00  9.79e+01    4.22e+02      1              
+      16  7.97e+00  5.02e+01  3.10e+00  7.49e+01    8.75e+02      0              
+      17  7.97e+00  1.17e+01  3.89e+00  4.27e+01    1.75e+02      0              
+      18  1.59e+00  1.26e+01  3.23e+00  1.77e+01    1.64e+02      1              
+      19  1.59e+00  8.28e+00  4.19e+00  1.50e+01    2.41e+02      1              
+      20  1.59e+00  2.71e+00  5.51e+00  1.15e+01    8.54e+01      0   Skip BFGS  
+      21  3.19e-01  2.60e+00  5.42e+00  4.33e+00    1.06e+01      0              
+      22  3.19e-01  1.91e+00  5.99e+00  3.82e+00    1.08e+02      1              
     ------------------------- STOP! -------------------------
     1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 7.4614e+01
-    1 : |xc-x_last| = 1.7496e-01 <= tolX*(1+|x0|) = 1.4182e+00
-    0 : |proj(x-g)-x|    = 4.9826e+02 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 4.9826e+02 <= 1e3*eps       = 1.0000e-02
+    1 : |xc-x_last| = 2.0191e-01 <= tolX*(1+|x0|) = 1.4182e+00
+    0 : |proj(x-g)-x|    = 1.0806e+02 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 1.0806e+02 <= 1e3*eps       = 1.0000e-02
     0 : maxIter   =      50    <= iter          =     23
     ------------------------- DONE! -------------------------
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 289-292
+.. GENERATED FROM PYTHON SOURCE LINES 293-296
 
 Examining the Results
 ---------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 292-325
+.. GENERATED FROM PYTHON SOURCE LINES 296-329
 
 .. code-block:: default
 
@@ -578,30 +577,25 @@ Examining the Results
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  26.442 seconds)
+   **Total running time of the script:** ( 0 minutes  27.400 seconds)
 
-**Estimated memory usage:**  9 MB
+**Estimated memory usage:**  18 MB
 
 
 .. _sphx_glr_download_content_tutorials_05-dcr_plot_inv_1_dcr_sounding_parametric.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_inv_1_dcr_sounding_parametric.py <plot_inv_1_dcr_sounding_parametric.py>`
 
-     :download:`Download Python source code: plot_inv_1_dcr_sounding_parametric.py <plot_inv_1_dcr_sounding_parametric.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_inv_1_dcr_sounding_parametric.ipynb <plot_inv_1_dcr_sounding_parametric.ipynb>`
+      :download:`Download Jupyter notebook: plot_inv_1_dcr_sounding_parametric.ipynb <plot_inv_1_dcr_sounding_parametric.ipynb>`
 
 
 .. only:: html

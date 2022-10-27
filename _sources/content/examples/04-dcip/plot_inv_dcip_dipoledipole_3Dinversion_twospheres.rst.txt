@@ -85,7 +85,7 @@ Following example will show you how user can implement a 3D DC inversion.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 59-159
+.. GENERATED FROM PYTHON SOURCE LINES 59-165
 
 .. code-block:: default
 
@@ -128,7 +128,7 @@ Following example will show you how user can implement a 3D DC inversion.
     ymin, ymax = -15.0, 15.0
     zmin, zmax = -10.0, 0.0
     xyzlim = np.r_[[[xmin, xmax], [ymin, ymax], [zmin, zmax]]]
-    actind, meshCore = utils.mesh_utils.ExtractCoreMesh(xyzlim, mesh)
+    actind, meshCore = utils.mesh_utils.extract_core_mesh(xyzlim, mesh)
 
 
     # Function to plot cylinder border
@@ -159,21 +159,27 @@ Following example will show you how user can implement a 3D DC inversion.
     ymin, ymax = 0.0, 0.0
     zmin, zmax = 0, 0
     endl = np.array([[xmin, ymin, zmin], [xmax, ymax, zmax]])
-    survey1 = DCutils.gen_DCIPsurvey(endl, "dipole-dipole", dim=mesh.dim, a=3, b=3, n=8)
+    survey1 = DCutils.generate_dcip_survey(
+        endl, "dipole-dipole", dim=mesh.dim, a=3, b=3, n=8
+    )
 
     # Line 2
     xmin, xmax = -15.0, 15.0
     ymin, ymax = 5.0, 5.0
     zmin, zmax = 0, 0
     endl = np.array([[xmin, ymin, zmin], [xmax, ymax, zmax]])
-    survey2 = DCutils.gen_DCIPsurvey(endl, "dipole-dipole", dim=mesh.dim, a=3, b=3, n=8)
+    survey2 = DCutils.generate_dcip_survey(
+        endl, "dipole-dipole", dim=mesh.dim, a=3, b=3, n=8
+    )
 
     # Line 3
     xmin, xmax = -15.0, 15.0
     ymin, ymax = -5.0, -5.0
     zmin, zmax = 0, 0
     endl = np.array([[xmin, ymin, zmin], [xmax, ymax, zmax]])
-    survey3 = DCutils.gen_DCIPsurvey(endl, "dipole-dipole", dim=mesh.dim, a=3, b=3, n=8)
+    survey3 = DCutils.generate_dcip_survey(
+        endl, "dipole-dipole", dim=mesh.dim, a=3, b=3, n=8
+    )
 
     # Concatenate lines
     survey = DC.Survey(survey1.source_list + survey2.source_list + survey3.source_list)
@@ -188,26 +194,15 @@ Following example will show you how user can implement a 3D DC inversion.
 
     data = problem.make_synthetic_data(mtrue[actind], relative_error=0.05, add_noise=True)
 
-    # Tikhonov Inversion
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:466: FutureWarning:
-
-    gen_DCIPsurvey has been deprecated, please use generate_dcip_survey. It will be removed in version 0.17.0 of SimPEG.
+    # Least Squares Inversion
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 160-233
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 166-241
 
 .. code-block:: default
 
@@ -217,8 +212,8 @@ Following example will show you how user can implement a 3D DC inversion.
     # Data Misfit
     dmis = data_misfit.L2DataMisfit(simulation=problem, data=data)
     # Regularization
-    regT = regularization.Simple(
-        mesh, indActive=actind, alpha_s=1e-6, alpha_x=1.0, alpha_y=1.0, alpha_z=1.0
+    regT = regularization.WeightedLeastSquares(
+        mesh, active_cells=actind, alpha_s=1e-6, alpha_x=1.0, alpha_y=1.0, alpha_z=1.0
     )
 
     # Optimization Scheme
@@ -251,21 +246,23 @@ Following example will show you how user can implement a 3D DC inversion.
 
     clim = [(mtrue[actind]).min(), (mtrue[actind]).max()]
 
-    dat = meshCore.plotSlice(
+    dat = meshCore.plot_slice(
         ((mtrue[actind])), ax=ax[0], normal="Y", clim=clim, ind=int(ncy / 2)
     )
     ax[0].set_title("Ground Truth, Vertical")
     ax[0].set_aspect("equal")
 
-    meshCore.plotSlice((minv), ax=ax[1], normal="Y", clim=clim, ind=int(ncy / 2))
+    meshCore.plot_slice((minv), ax=ax[1], normal="Y", clim=clim, ind=int(ncy / 2))
     ax[1].set_aspect("equal")
     ax[1].set_title("Inverted Model, Vertical")
 
-    meshCore.plotSlice(((mtrue[actind])), ax=ax[2], normal="Z", clim=clim, ind=int(ncz / 2))
+    meshCore.plot_slice(
+        ((mtrue[actind])), ax=ax[2], normal="Z", clim=clim, ind=int(ncz / 2)
+    )
     ax[2].set_title("Ground Truth, Horizontal")
     ax[2].set_aspect("equal")
 
-    meshCore.plotSlice((minv), ax=ax[3], normal="Z", clim=clim, ind=int(ncz / 2))
+    meshCore.plot_slice((minv), ax=ax[3], normal="Z", clim=clim, ind=int(ncz / 2))
     ax[3].set_title("Inverted Model, Horizontal")
     ax[3].set_aspect("equal")
 
@@ -295,33 +292,36 @@ Following example will show you how user can implement a 3D DC inversion.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    SimPEG.InvProblem will set Regularization.mref to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
 
-            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
-            ***Done using same Solver and solverOpts as the problem***
+                            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
+                            ***Done using same Solver, and solver_opts as the Simulation3DCellCentered problem***
+                        
     model has any nan: 0
     ============================ Inexact Gauss Newton ============================
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  4.49e+01  2.54e+03  0.00e+00  2.54e+03    5.66e+02      0              
-       1  4.49e+01  3.96e+02  4.75e+00  6.10e+02    4.69e+01      0              
-       2  8.99e+00  3.14e+02  6.06e+00  3.68e+02    6.15e+01      0   Skip BFGS  
-       3  8.99e+00  1.24e+02  1.52e+01  2.60e+02    1.90e+01      0              
-       4  1.80e+00  1.13e+02  1.55e+01  1.40e+02    2.86e+01      0              
-       5  1.80e+00  9.00e+01  1.95e+01  1.25e+02    3.38e+01      0              
-       6  3.59e-01  8.05e+01  2.07e+01  8.80e+01    3.05e+01      0              
-       7  3.59e-01  7.23e+01  2.34e+01  8.07e+01    3.72e+01      0              
+       0  2.20e+01  2.54e+03  0.00e+00  2.54e+03    5.66e+02      0              
+       1  2.20e+01  3.39e+02  7.01e+00  4.93e+02    5.58e+01      0              
+       2  4.40e+00  2.24e+02  1.04e+01  2.70e+02    4.71e+01      0   Skip BFGS  
+       3  4.40e+00  1.01e+02  2.17e+01  1.97e+02    2.36e+01      0              
+       4  8.81e-01  8.36e+01  2.34e+01  1.04e+02    2.12e+01      0              
+       5  8.81e-01  5.63e+01  3.32e+01  8.55e+01    2.34e+01      0              
     ------------------------- STOP! -------------------------
     1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 2.5374e+02
-    1 : |xc-x_last| = 5.8237e+00 <= tolX*(1+|x0|) = 7.5300e+01
-    0 : |proj(x-g)-x|    = 3.7245e+01 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 3.7245e+01 <= 1e3*eps       = 1.0000e-02
-    0 : maxIter   =      10    <= iter          =      8
+    1 : |xc-x_last| = 2.0143e+00 <= tolX*(1+|x0|) = 7.5300e+01
+    0 : |proj(x-g)-x|    = 2.3421e+01 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 2.3421e+01 <= 1e3*eps       = 1.0000e-02
+    0 : maxIter   =      10    <= iter          =      6
     ------------------------- DONE! -------------------------
 
 
@@ -330,30 +330,25 @@ Following example will show you how user can implement a 3D DC inversion.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  8.339 seconds)
+   **Total running time of the script:** ( 3 minutes  24.702 seconds)
 
-**Estimated memory usage:**  212 MB
+**Estimated memory usage:**  124 MB
 
 
 .. _sphx_glr_download_content_examples_04-dcip_plot_inv_dcip_dipoledipole_3Dinversion_twospheres.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_inv_dcip_dipoledipole_3Dinversion_twospheres.py <plot_inv_dcip_dipoledipole_3Dinversion_twospheres.py>`
 
-     :download:`Download Python source code: plot_inv_dcip_dipoledipole_3Dinversion_twospheres.py <plot_inv_dcip_dipoledipole_3Dinversion_twospheres.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_inv_dcip_dipoledipole_3Dinversion_twospheres.ipynb <plot_inv_dcip_dipoledipole_3Dinversion_twospheres.ipynb>`
+      :download:`Download Jupyter notebook: plot_inv_dcip_dipoledipole_3Dinversion_twospheres.ipynb <plot_inv_dcip_dipoledipole_3Dinversion_twospheres.ipynb>`
 
 
 .. only:: html

@@ -130,8 +130,6 @@ tar-file on our google cloud bucket:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     Downloading https://storage.googleapis.com/simpeg/doc-assets/dcr2d.tar.gz
@@ -330,11 +328,9 @@ Here, we create the Tree mesh that will be used to invert DC data.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    /usr/share/miniconda/envs/deploy/lib/python3.7/site-packages/scipy/interpolate/interpolate.py:630: RuntimeWarning:
+    /usr/share/miniconda/envs/test/lib/python3.7/site-packages/scipy/interpolate/interpolate.py:630: RuntimeWarning:
 
     invalid value encountered in true_divide
 
@@ -457,7 +453,7 @@ The inverse problem is defined by 3 things:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 287-313
+.. GENERATED FROM PYTHON SOURCE LINES 287-310
 
 .. code-block:: default
 
@@ -469,16 +465,13 @@ The inverse problem is defined by 3 things:
     dmis = data_misfit.L2DataMisfit(data=dc_data, simulation=simulation)
 
     # Define the regularization (model objective function)
-    reg = regularization.Simple(
+    reg = regularization.WeightedLeastSquares(
         mesh,
-        indActive=ind_active,
-        mref=starting_conductivity_model,
-        alpha_s=0.01,
-        alpha_x=1,
-        alpha_y=1,
+        active_cells=ind_active,
+        reference_model=starting_conductivity_model,
     )
 
-    reg.mrefInSmooth = True  # Reference model in smoothness term
+    reg.reference_model_in_smooth = True  # Reference model in smoothness term
 
     # Define how the optimization problem is solved. Here we will use an
     # Inexact Gauss Newton approach.
@@ -494,7 +487,7 @@ The inverse problem is defined by 3 things:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 314-321
+.. GENERATED FROM PYTHON SOURCE LINES 311-318
 
 Define DC Inversion Directives
 ------------------------------
@@ -504,7 +497,7 @@ includes the cooling schedule for the trade-off parameter (beta), stopping
 criteria for the inversion and saving inversion results at each iteration.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 321-352
+.. GENERATED FROM PYTHON SOURCE LINES 318-349
 
 .. code-block:: default
 
@@ -546,7 +539,7 @@ criteria for the inversion and saving inversion results at each iteration.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 353-359
+.. GENERATED FROM PYTHON SOURCE LINES 350-356
 
 Running the DC Inversion
 ------------------------
@@ -555,7 +548,7 @@ To define the inversion object, we need to define the inversion problem and
 the set of directives. We can then run the inversion.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 359-366
+.. GENERATED FROM PYTHON SOURCE LINES 356-363
 
 .. code-block:: default
 
@@ -572,41 +565,45 @@ the set of directives. We can then run the inversion.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
-            ***Done using same Solver and solverOpts as the problem***
+                            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
+                            ***Done using same Solver, and solver_opts as the Simulation2DNodal problem***
+                        
     model has any nan: 0
     ============================ Inexact Gauss Newton ============================
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  8.00e+01  1.58e+04  0.00e+00  1.58e+04    3.00e+03      0              
-       1  8.00e+01  1.11e+03  6.89e+00  1.66e+03    3.23e+02      0              
-       2  2.67e+01  2.17e+02  9.99e+00  4.84e+02    9.62e+01      0   Skip BFGS  
-       3  2.67e+01  7.08e+01  1.26e+01  4.07e+02    2.25e+01      0   Skip BFGS  
-       4  8.89e+00  7.79e+01  1.19e+01  1.84e+02    4.10e+01      0              
+       0  6.71e+01  1.58e+04  0.00e+00  1.58e+04    3.00e+03      0              
+       1  6.71e+01  4.68e+03  5.78e+01  8.55e+03    3.27e+02      0              
+       2  2.24e+01  5.29e+03  4.78e+01  6.36e+03    8.67e+02      0              
+       3  2.24e+01  2.27e+03  1.35e+02  5.28e+03    1.25e+02      0              
+       4  7.45e+00  2.49e+03  1.26e+02  3.42e+03    4.92e+02      0              
+       5  7.45e+00  8.84e+02  2.62e+02  2.84e+03    7.46e+01      0              
+       6  2.48e+00  9.21e+02  2.57e+02  1.56e+03    2.46e+02      0              
+       7  2.48e+00  2.65e+02  4.13e+02  1.29e+03    3.23e+01      0              
+       8  8.28e-01  2.63e+02  3.99e+02  5.93e+02    1.08e+02      0              
+       9  8.28e-01  7.07e+01  4.99e+02  4.84e+02    1.27e+01      0              
     ------------------------- STOP! -------------------------
     1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 1.5820e+03
-    1 : |xc-x_last| = 4.5866e+00 <= tolX*(1+|x0|) = 3.1119e+01
-    0 : |proj(x-g)-x|    = 4.0985e+01 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 4.0985e+01 <= 1e3*eps       = 1.0000e-02
-    0 : maxIter   =      40    <= iter          =      5
+    1 : |xc-x_last| = 1.7123e+00 <= tolX*(1+|x0|) = 3.1119e+01
+    0 : |proj(x-g)-x|    = 1.2666e+01 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 1.2666e+01 <= 1e3*eps       = 1.0000e-02
+    0 : maxIter   =      40    <= iter          =     10
     ------------------------- DONE! -------------------------
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 367-370
+.. GENERATED FROM PYTHON SOURCE LINES 364-367
 
 Recreate True Conductivity Model
 --------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 370-385
+.. GENERATED FROM PYTHON SOURCE LINES 367-382
 
 .. code-block:: default
 
@@ -632,13 +629,13 @@ Recreate True Conductivity Model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 386-389
+.. GENERATED FROM PYTHON SOURCE LINES 383-386
 
 Plotting True and Recovered Conductivity Model
 ----------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 389-432
+.. GENERATED FROM PYTHON SOURCE LINES 386-429
 
 .. code-block:: default
 
@@ -671,7 +668,7 @@ Plotting True and Recovered Conductivity Model
 
     ax1 = fig.add_axes([0.14, 0.17, 0.68, 0.7])
     mesh.plot_image(
-        recovered_conductivity, normal="Y", ax=ax1, grid=False, pcolorOpts={"norm": norm}
+        recovered_conductivity, normal="Y", ax=ax1, grid=False, pcolor_opts={"norm": norm}
     )
     ax1.set_xlim(-600, 600)
     ax1.set_ylim(-600, 0)
@@ -709,13 +706,13 @@ Plotting True and Recovered Conductivity Model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 433-436
+.. GENERATED FROM PYTHON SOURCE LINES 430-433
 
 Plotting Predicted DC Data and Misfit
 -------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 436-472
+.. GENERATED FROM PYTHON SOURCE LINES 433-469
 
 .. code-block:: default
 
@@ -770,30 +767,25 @@ Plotting Predicted DC Data and Misfit
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  19.106 seconds)
+   **Total running time of the script:** ( 3 minutes  38.095 seconds)
 
-**Estimated memory usage:**  9 MB
+**Estimated memory usage:**  18 MB
 
 
 .. _sphx_glr_download_content_tutorials_05-dcr_plot_inv_2_dcr2d.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_inv_2_dcr2d.py <plot_inv_2_dcr2d.py>`
 
-     :download:`Download Python source code: plot_inv_2_dcr2d.py <plot_inv_2_dcr2d.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_inv_2_dcr2d.ipynb <plot_inv_2_dcr2d.ipynb>`
+      :download:`Download Jupyter notebook: plot_inv_2_dcr2d.ipynb <plot_inv_2_dcr2d.ipynb>`
 
 
 .. only:: html

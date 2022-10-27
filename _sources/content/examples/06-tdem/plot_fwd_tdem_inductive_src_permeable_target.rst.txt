@@ -109,7 +109,7 @@ Next, we create a cylindrically symmteric tensor mesh
     ncz = int(target_l / csz)  # number of z cells in the core region
 
     # create the cyl mesh
-    mesh = discretize.CylMesh(
+    mesh = discretize.CylindricalMesh(
         [
             [(csx, int(domainx / csx)), (csx, npadx, pfx)],
             1,
@@ -118,10 +118,10 @@ Next, we create a cylindrically symmteric tensor mesh
     )
 
     # put the origin at the top of the target
-    mesh.x0 = [0, 0, -mesh.hz[: npadz + ncz].sum()]
+    mesh.x0 = [0, 0, -mesh.h[2][: npadz + ncz].sum()]
 
     # plot the mesh
-    mesh.plotGrid()
+    mesh.plot_grid()
 
 
 
@@ -134,8 +134,6 @@ Next, we create a cylindrically symmteric tensor mesh
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -187,10 +185,10 @@ Plot the models
 
     # plot the permeability
     plt.colorbar(
-        mesh.plotImage(
+        mesh.plot_image(
             mur_model,
             ax=ax,
-            pcolorOpts={"norm": LogNorm()},  # plot on a log-scale
+            pcolor_opts={"norm": LogNorm()},  # plot on a log-scale
             mirror=True,
         )[0],
         ax=ax,
@@ -212,8 +210,6 @@ Plot the models
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -251,9 +247,9 @@ define a quarter-sine ramp-on waveform as our transmitter waveform
     time_mesh = discretize.TensorMesh([ramp])
 
     # define an off time past when we will simulate to keep the transmitter on
-    offTime = 100
+    off_time = 100
     quarter_sine = TDEM.Src.QuarterSineRampOnWaveform(
-        ramp_on=np.r_[0.0, 3], ramp_off=offTime - np.r_[1.0, 0]
+        ramp_on=np.r_[0.0, 3], ramp_off=off_time - np.r_[1.0, 0]
     )
 
     # evaluate the waveform at each time in the simulation
@@ -274,8 +270,6 @@ define a quarter-sine ramp-on waveform as our transmitter waveform
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -390,12 +384,10 @@ Run the long on-time simulation
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     --- Running Long On-Time Simulation ---
-     ... done. Elapsed time 1.4483742713928223
+     ... done. Elapsed time 1.768244743347168
 
 
 
@@ -468,7 +460,7 @@ Plot the results
             plotme = b_magnetostatic - b_ramp_on
 
         cb = plt.colorbar(
-            mesh.plotImage(
+            mesh.plot_image(
                 plotme,
                 view="vec",
                 v_type="F",
@@ -528,68 +520,65 @@ Print the version of SimPEG and dependencies
 .. raw:: html
 
     <div class="output_subarea output_html rendered_html output_result">
-    <table style='border: 3px solid #ddd;'>
+    <table style='border: 1.5px solid;'>
       <tr>
-         <td style='text-align: center; font-weight: bold; font-size: 1.2em; border: 2px solid #fff;' colspan='6'>Sat Apr 16 01:52:57 2022 UTC</td>
+         <td style='text-align: center; font-weight: bold; font-size: 1.2em; border: 1px solid;' colspan='6'>Thu Oct 27 21:31:19 2022 UTC</td>
       </tr>
       <tr>
-        <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>OS</td>
-        <td style='text-align: left; border: 2px solid #fff;'>Linux</td>
-        <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>CPU(s)</td>
-        <td style='text-align: left; border: 2px solid #fff;'>2</td>
-        <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>Machine</td>
-        <td style='text-align: left; border: 2px solid #fff;'>x86_64</td>
+        <td style='text-align: right; border: 1px solid;'>OS</td>
+        <td style='text-align: left; border: 1px solid;'>Linux</td>
+        <td style='text-align: right; border: 1px solid;'>CPU(s)</td>
+        <td style='text-align: left; border: 1px solid;'>2</td>
+        <td style='text-align: right; border: 1px solid;'>Machine</td>
+        <td style='text-align: left; border: 1px solid;'>x86_64</td>
       </tr>
       <tr>
-        <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>Architecture</td>
-        <td style='text-align: left; border: 2px solid #fff;'>64bit</td>
-        <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>RAM</td>
-        <td style='text-align: left; border: 2px solid #fff;'>6.8 GiB</td>
-        <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>Environment</td>
-        <td style='text-align: left; border: 2px solid #fff;'>Python</td>
+        <td style='text-align: right; border: 1px solid;'>Architecture</td>
+        <td style='text-align: left; border: 1px solid;'>64bit</td>
+        <td style='text-align: right; border: 1px solid;'>RAM</td>
+        <td style='text-align: left; border: 1px solid;'>6.8 GiB</td>
+        <td style='text-align: right; border: 1px solid;'>Environment</td>
+        <td style='text-align: left; border: 1px solid;'>Python</td>
       </tr>
       <tr>
-        <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>File system</td>
-        <td style='text-align: left; border: 2px solid #fff;'>ext4</td>
+        <td style='text-align: right; border: 1px solid;'>File system</td>
+        <td style='text-align: left; border: 1px solid;'>ext4</td>
       </tr>
       <tr>
-         <td style='text-align: center; border: 2px solid #fff;' colspan='6'>Python 3.7.13 (default, Mar 29 2022, 02:18:16) 
-    [GCC 7.5.0]</td>
+         <td style='text-align: center; border: 1px solid;' colspan='6'>Python 3.7.12 | packaged by conda-forge | (default, Oct 26 2021, 06:08:21) 
+    [GCC 9.4.0]</td>
       </tr>
       <tr>
-        <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>SimPEG</td>
-        <td style='text-align: left; border: 2px solid #fff;'>0.17.0</td>
-        <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>discretize</td>
-        <td style='text-align: left; border: 2px solid #fff;'>0.7.0</td>
-        <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>pymatsolver</td>
-        <td style='text-align: left; border: 2px solid #fff;'>0.1.3</td>
+        <td style='text-align: right; border: 1px solid;'>SimPEG</td>
+        <td style='text-align: left; border: 1px solid;'>0.18.0</td>
+        <td style='text-align: right; border: 1px solid;'>discretize</td>
+        <td style='text-align: left; border: 1px solid;'>0.8.2</td>
+        <td style='text-align: right; border: 1px solid;'>pymatsolver</td>
+        <td style='text-align: left; border: 1px solid;'>0.2.0</td>
       </tr>
       <tr>
-        <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>vectormath</td>
-        <td style='text-align: left; border: 2px solid #fff;'>0.2.2</td>
-        <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>properties</td>
-        <td style='text-align: left; border: 2px solid #fff;'>0.6.1</td>
-        <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>numpy</td>
-        <td style='text-align: left; border: 2px solid #fff;'>1.21.5</td>
+        <td style='text-align: right; border: 1px solid;'>vectormath</td>
+        <td style='text-align: left; border: 1px solid;'>Module not found</td>
+        <td style='text-align: right; border: 1px solid;'>properties</td>
+        <td style='text-align: left; border: 1px solid;'>Module not found</td>
+        <td style='text-align: right; border: 1px solid;'>numpy</td>
+        <td style='text-align: left; border: 1px solid;'>1.21.6</td>
       </tr>
       <tr>
-        <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>scipy</td>
-        <td style='text-align: left; border: 2px solid #fff;'>1.7.3</td>
-        <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>cython</td>
-        <td style='text-align: left; border: 2px solid #fff;'>0.29.28</td>
-        <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>IPython</td>
-        <td style='text-align: left; border: 2px solid #fff;'>7.31.1</td>
+        <td style='text-align: right; border: 1px solid;'>scipy</td>
+        <td style='text-align: left; border: 1px solid;'>1.7.3</td>
+        <td style='text-align: right; border: 1px solid;'>cython</td>
+        <td style='text-align: left; border: 1px solid;'>Module not found</td>
+        <td style='text-align: right; border: 1px solid;'>IPython</td>
+        <td style='text-align: left; border: 1px solid;'>7.33.0</td>
       </tr>
       <tr>
-        <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>matplotlib</td>
-        <td style='text-align: left; border: 2px solid #fff;'>3.5.1</td>
-        <td style='text-align: right; background-color: #ccc; border: 2px solid #fff;'>ipywidgets</td>
-        <td style='text-align: left; border: 2px solid #fff;'>7.7.0</td>
-        <td style= border: 2px solid #fff;'></td>
-        <td style= border: 2px solid #fff;'></td>
-      </tr>
-      <tr>
-         <td style='text-align: center; background-color: #ddd;border: 2px solid #fff;' colspan='6'>Intel(R) oneAPI Math Kernel Library Version 2021.4-Product Build 20210904 for Intel(R) 64 architecture applications</td>
+        <td style='text-align: right; border: 1px solid;'>matplotlib</td>
+        <td style='text-align: left; border: 1px solid;'>3.5.3</td>
+        <td style='text-align: right; border: 1px solid;'>ipywidgets</td>
+        <td style='text-align: left; border: 1px solid;'>8.0.2</td>
+        <td style= border: 1px solid;'></td>
+        <td style= border: 1px solid;'></td>
       </tr>
     </table>
     </div>
@@ -599,30 +588,25 @@ Print the version of SimPEG and dependencies
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  8.962 seconds)
+   **Total running time of the script:** ( 0 minutes  9.269 seconds)
 
-**Estimated memory usage:**  9 MB
+**Estimated memory usage:**  18 MB
 
 
 .. _sphx_glr_download_content_examples_06-tdem_plot_fwd_tdem_inductive_src_permeable_target.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_fwd_tdem_inductive_src_permeable_target.py <plot_fwd_tdem_inductive_src_permeable_target.py>`
 
-     :download:`Download Python source code: plot_fwd_tdem_inductive_src_permeable_target.py <plot_fwd_tdem_inductive_src_permeable_target.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_fwd_tdem_inductive_src_permeable_target.ipynb <plot_fwd_tdem_inductive_src_permeable_target.ipynb>`
+      :download:`Download Jupyter notebook: plot_fwd_tdem_inductive_src_permeable_target.ipynb <plot_fwd_tdem_inductive_src_permeable_target.ipynb>`
 
 
 .. only:: html

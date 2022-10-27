@@ -37,42 +37,31 @@ is zero, but have some on- and off-time.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:436: FutureWarning:
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
 
-    waveform_function.waveFct has been deprecated, please use waveform_function. It will be removed in version 0.17.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:427: FutureWarning:
-
-    off_time.offTime has been deprecated, please use off_time. It will be removed in version 0.17.0 of SimPEG.
-
-    /home/vsts/work/1/s/SimPEG/utils/code_utils.py:436: FutureWarning:
-
-    off_time.offTime has been deprecated, please use off_time. It will be removed in version 0.17.0 of SimPEG.
-
-    SimPEG.InvProblem will set Regularization.mref to m0.
-
-            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
-            ***Done using same Solver and solverOpts as the problem***
+                            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
+                            ***Done using same Solver, and solver_opts as the Simulation3DMagneticFluxDensity problem***
+                        
     model has any nan: 0
     ============================ Inexact Gauss Newton ============================
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
        0  1.00e+02  1.92e+04  0.00e+00  1.92e+04    1.75e+03      0              
-       1  1.00e+02  9.61e+03  4.18e+01  1.38e+04    1.30e+04      0              
-       2  1.00e+02  7.77e+02  2.95e+01  3.73e+03    1.81e+03      0              
-       3  1.00e+02  1.45e+02  2.17e+01  2.32e+03    8.33e+02      0   Skip BFGS  
-       4  1.00e+02  7.41e+01  2.03e+01  2.11e+03    6.70e+02      0   Skip BFGS  
-       5  1.00e+02  6.47e+01  1.96e+01  2.02e+03    3.10e+02      0   Skip BFGS  
+       1  1.00e+02  1.56e+04  1.21e+01  1.68e+04    1.19e+03      0              
+       2  1.00e+02  1.18e+04  3.22e+01  1.50e+04    1.33e+03      0   Skip BFGS  
+       3  1.00e+02  9.15e+03  4.76e+01  1.39e+04    9.41e+02      0              
+       4  1.00e+02  8.42e+03  5.26e+01  1.37e+04    3.82e+02      0   Skip BFGS  
+       5  1.00e+02  8.30e+03  5.35e+01  1.37e+04    1.38e+02      0   Skip BFGS  
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 8.5442e+01 <= tolF*(1+|f0|) = 1.9220e+03
-    1 : |xc-x_last| = 6.4384e-01 <= tolX*(1+|x0|) = 3.6894e+00
-    0 : |proj(x-g)-x|    = 3.1006e+02 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 3.1006e+02 <= 1e3*eps       = 1.0000e-02
+    1 : |fc-fOld| = 3.2096e+01 <= tolF*(1+|f0|) = 1.9220e+03
+    1 : |xc-x_last| = 1.5739e-01 <= tolX*(1+|x0|) = 3.6894e+00
+    0 : |proj(x-g)-x|    = 1.3810e+02 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 1.3810e+02 <= 1e3*eps       = 1.0000e-02
     1 : maxIter   =       5    <= iter          =      5
     ------------------------- DONE! -------------------------
 
@@ -112,16 +101,16 @@ is zero, but have some on- and off-time.
         cs, ncx, ncz, npad = 5.0, 25, 24, 15
         hx = [(cs, ncx), (cs, npad, 1.3)]
         hz = [(cs, npad, -1.3), (cs, ncz), (cs, npad, 1.3)]
-        mesh = discretize.CylMesh([hx, 1, hz], "00C")
+        mesh = discretize.CylindricalMesh([hx, 1, hz], "00C")
 
-        active = mesh.vectorCCz < 0.0
-        layer = (mesh.vectorCCz < -50.0) & (mesh.vectorCCz >= -150.0)
-        actMap = maps.InjectActiveCells(mesh, active, np.log(1e-8), nC=mesh.nCz)
+        active = mesh.cell_centers_z < 0.0
+        layer = (mesh.cell_centers_z < -50.0) & (mesh.cell_centers_z >= -150.0)
+        actMap = maps.InjectActiveCells(mesh, active, np.log(1e-8), nC=mesh.shape_cells[2])
         mapping = maps.ExpMap(mesh) * maps.SurjectVertical1D(mesh) * actMap
         sig_half = 1e-3
         sig_air = 1e-8
         sig_layer = 1e-2
-        sigma = np.ones(mesh.nCz) * sig_air
+        sigma = np.ones(mesh.shape_cells[2]) * sig_air
         sigma[active] = sig_half
         sigma[layer] = sig_layer
         mtrue = np.log(sigma[active])
@@ -144,7 +133,7 @@ is zero, but have some on- and off-time.
         # Forming function handle for waveform using 1D linear interpolation
         wavefun = interp1d(prb.times, out)
         t0 = 0.006
-        waveform = TDEM.Src.RawWaveform(offTime=t0, waveFct=wavefun)
+        waveform = TDEM.Src.RawWaveform(off_time=t0, waveform_function=wavefun)
 
         rx = TDEM.Rx.PointMagneticFluxTimeDerivative(
             rxloc, np.logspace(-4, -2.5, 11) + t0, "z"
@@ -159,8 +148,8 @@ is zero, but have some on- and off-time.
         data = prb.make_synthetic_data(mtrue, relative_error=0.02, noise_floor=1e-11)
 
         dmisfit = data_misfit.L2DataMisfit(simulation=prb, data=data)
-        regMesh = discretize.TensorMesh([mesh.hz[mapping.maps[-1].indActive]])
-        reg = regularization.Simple(regMesh)
+        regMesh = discretize.TensorMesh([mesh.h[2][mapping.maps[-1].indActive]])
+        reg = regularization.WeightedLeastSquares(regMesh)
         opt = optimization.InexactGaussNewton(maxIter=5, LSshorten=0.5)
         invProb = inverse_problem.BaseInvProblem(dmisfit, reg, opt)
         target = directives.TargetMisfit()
@@ -187,8 +176,8 @@ is zero, but have some on- and off-time.
             ax[0].set_xlabel("Time (s)", fontsize=14)
             ax[0].grid(color="k", alpha=0.5, linestyle="dashed", linewidth=0.5)
 
-            plt.semilogx(sigma[active], mesh.vectorCCz[active])
-            plt.semilogx(np.exp(mopt), mesh.vectorCCz[active])
+            plt.semilogx(sigma[active], mesh.cell_centers_z[active])
+            plt.semilogx(np.exp(mopt), mesh.cell_centers_z[active])
             ax[1].set_ylim(-600, 0)
             ax[1].set_xlim(1e-4, 1e-1)
             ax[1].set_xlabel("Conductivity (S/m)", fontsize=14)
@@ -204,30 +193,25 @@ is zero, but have some on- and off-time.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  30.647 seconds)
+   **Total running time of the script:** ( 0 minutes  39.055 seconds)
 
-**Estimated memory usage:**  9 MB
+**Estimated memory usage:**  18 MB
 
 
 .. _sphx_glr_download_content_examples_06-tdem_plot_inv_tdem_1D_raw_waveform.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_inv_tdem_1D_raw_waveform.py <plot_inv_tdem_1D_raw_waveform.py>`
 
-     :download:`Download Python source code: plot_inv_tdem_1D_raw_waveform.py <plot_inv_tdem_1D_raw_waveform.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_inv_tdem_1D_raw_waveform.ipynb <plot_inv_tdem_1D_raw_waveform.ipynb>`
+      :download:`Download Jupyter notebook: plot_inv_tdem_1D_raw_waveform.ipynb <plot_inv_tdem_1D_raw_waveform.ipynb>`
 
 
 .. only:: html

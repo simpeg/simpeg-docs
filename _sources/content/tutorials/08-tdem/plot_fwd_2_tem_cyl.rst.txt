@@ -18,13 +18,12 @@
 .. _sphx_glr_content_tutorials_08-tdem_plot_fwd_2_tem_cyl.py:
 
 
-Forward Simulation for Transient Response on a Cylindrical Mesh
-===============================================================
+3D Forward Simulation for Transient Response on a Cylindrical Mesh
+==================================================================
 
 Here we use the module *SimPEG.electromagnetics.time_domain* to simulate the
-transient response for an airborne survey using a cylindrical mesh and a conductivity
-model. We simulate a single line of airborne data at many time channels for a vertical
-coplanar survey geometry. For this tutorial, we focus on the following:
+transient response for borehole survey using a cylindrical mesh and a 
+radially symmetric conductivity. For this tutorial, we focus on the following:
 
     - How to define the transmitters and receivers
     - How to define the transmitter waveform for a step-off
@@ -38,18 +37,18 @@ Please note that we have used a coarse mesh larger time-stepping to shorten the
 time of the simulation. Proper discretization in space and time is required to
 simulate the fields at each time channel with sufficient accuracy.
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-29
+.. GENERATED FROM PYTHON SOURCE LINES 25-28
 
 Import Modules
 --------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 29-50
+.. GENERATED FROM PYTHON SOURCE LINES 28-49
 
 .. code-block:: default
 
 
-    from discretize import CylMesh
+    from discretize import CylindricalMesh
     from discretize.utils import mkvc
 
     from SimPEG import maps
@@ -76,7 +75,7 @@ Import Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 51-59
+.. GENERATED FROM PYTHON SOURCE LINES 50-58
 
 Defining the Waveform
 ---------------------
@@ -87,12 +86,12 @@ Here we simulate the response due to a step off waveform where the off-time
 begins at t=0. Other waveforms are discuss in the OcTree simulation example.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 59-63
+.. GENERATED FROM PYTHON SOURCE LINES 58-62
 
 .. code-block:: default
 
 
-    waveform = tdem.sources.StepOffWaveform(offTime=0.0)
+    waveform = tdem.sources.StepOffWaveform(off_time=0.0)
 
 
 
@@ -102,7 +101,7 @@ begins at t=0. Other waveforms are discuss in the OcTree simulation example.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 64-73
+.. GENERATED FROM PYTHON SOURCE LINES 63-72
 
 Create Airborne Survey
 ----------------------
@@ -111,10 +110,10 @@ Here we define the survey used in our simulation. For time domain
 simulations, we must define the geometry of the source and its waveform. For
 the receivers, we define their geometry, the type of field they measure and the time
 channels at which they measure the field. For this example,
-the survey consists of a uniform grid of airborne measurements.
+the survey consists of a borehold survey with a coincident loop geometry.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 73-112
+.. GENERATED FROM PYTHON SOURCE LINES 72-110
 
 .. code-block:: default
 
@@ -123,12 +122,12 @@ the survey consists of a uniform grid of airborne measurements.
     time_channels = np.logspace(-4, -2, 11)
 
     # Defining transmitter locations
-    xtx, ytx, ztx = np.meshgrid(np.linspace(0, 200, 41), [0], [55])
+    xtx, ytx, ztx = np.meshgrid([0], [0], np.linspace(0, -500, 26) - 2.5)
     source_locations = np.c_[mkvc(xtx), mkvc(ytx), mkvc(ztx)]
     ntx = np.size(xtx)
 
     # Define receiver locations
-    xrx, yrx, zrx = np.meshgrid(np.linspace(0, 200, 41), [0], [50])
+    xrx, yrx, zrx = np.meshgrid([0], [0], np.linspace(0, -500, 26) - 2.5)
     receiver_locations = np.c_[mkvc(xrx), mkvc(yrx), mkvc(zrx)]
 
     source_list = []  # Create empty list to store sources
@@ -146,12 +145,11 @@ the survey consists of a uniform grid of airborne measurements.
 
         # Must define the transmitter properties and associated receivers
         source_list.append(
-            tdem.sources.MagDipole(
+            tdem.sources.CircularLoop(
                 receivers_list,
                 location=source_locations[ii],
                 waveform=waveform,
-                moment=1.0,
-                orientation="z",
+                radius=10.0,
             )
         )
 
@@ -164,7 +162,7 @@ the survey consists of a uniform grid of airborne measurements.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 113-125
+.. GENERATED FROM PYTHON SOURCE LINES 111-123
 
 Create Cylindrical Mesh
 -----------------------
@@ -179,35 +177,34 @@ When designing a mesh to solve practical time domain problems:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 125-131
+.. GENERATED FROM PYTHON SOURCE LINES 123-129
 
 .. code-block:: default
 
 
-    hr = [(10.0, 50), (10.0, 10, 1.5)]
-    hz = [(10.0, 10, -1.5), (10.0, 100), (10.0, 10, 1.5)]
+    hr = [(5.0, 40), (5.0, 15, 1.5)]
+    hz = [(5.0, 15, -1.5), (5.0, 300), (5.0, 15, 1.5)]
 
-    mesh = CylMesh([hr, 1, hz], x0="00C")
-
-
+    mesh = CylindricalMesh([hr, 1, hz], x0="00C")
 
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 132-140
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 130-137
 
 Create Conductivity/Resistivity Model and Mapping
 -------------------------------------------------
 
-Here, we create the model that will be used to predict time domain
+Here, we create the model that will be used to predict frequency domain
 data and the mapping from the model to the mesh. The model
-consists of a long vertical conductive pipe and a resistive
-surface layer. For this example, we will have only flat topography.
+consists of several layers. For this example, we will have only flat topography.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 140-192
+.. GENERATED FROM PYTHON SOURCE LINES 137-186
 
 .. code-block:: default
 
@@ -215,59 +212,56 @@ surface layer. For this example, we will have only flat topography.
     # Conductivity in S/m (or resistivity in Ohm m)
     air_conductivity = 1e-8
     background_conductivity = 1e-1
-    layer_conductivity = 1e-2
-    pipe_conductivity = 1e1
+    layer_conductivity_1 = 1e0
+    layer_conductivity_2 = 1e-2
 
     # Find cells that are active in the forward modeling (cells below surface)
-    ind_active = mesh.gridCC[:, 2] < 0
+    ind_active = mesh.cell_centers[:, 2] < 0
 
     # Define mapping from model to active cells
     model_map = maps.InjectActiveCells(mesh, ind_active, air_conductivity)
 
     # Define the model
     model = background_conductivity * np.ones(ind_active.sum())
-    ind_layer = (mesh.gridCC[ind_active, 2] > -200.0) & (mesh.gridCC[ind_active, 2] < -0)
-    model[ind_layer] = layer_conductivity
-    ind_pipe = (
-        (mesh.gridCC[ind_active, 0] < 50.0)
-        & (mesh.gridCC[ind_active, 2] > -10000.0)
-        & (mesh.gridCC[ind_active, 2] < 0.0)
+    ind = (mesh.cell_centers[ind_active, 2] > -200.0) & (
+        mesh.cell_centers[ind_active, 2] < -0
     )
-    model[ind_pipe] = pipe_conductivity
+    model[ind] = layer_conductivity_1
+    ind = (mesh.cell_centers[ind_active, 2] > -400.0) & (
+        mesh.cell_centers[ind_active, 2] < -200
+    )
+    model[ind] = layer_conductivity_2
 
-
-    # Plot Resistivity Model
-    mpl.rcParams.update({"font.size": 12})
-    fig = plt.figure(figsize=(4.5, 6))
+    # Plot Conductivity Model
+    mpl.rcParams.update({"font.size": 14})
+    fig = plt.figure(figsize=(5, 6))
 
     plotting_map = maps.InjectActiveCells(mesh, ind_active, np.nan)
-    log_model = np.log10(model)  # So scaling is log-scale
+    log_model = np.log10(model)
 
-    ax1 = fig.add_axes([0.14, 0.1, 0.6, 0.85])
-    mesh.plotImage(
+    ax1 = fig.add_axes([0.20, 0.1, 0.54, 0.85])
+    mesh.plot_image(
         plotting_map * log_model,
         ax=ax1,
         grid=False,
-        clim=(np.log10(layer_conductivity), np.log10(pipe_conductivity)),
+        clim=(np.log10(layer_conductivity_2), np.log10(layer_conductivity_1)),
     )
-    ax1.set_title("Conductivity Model (Survey in red)")
-
-    ax1.plot(receiver_locations[:, 0], receiver_locations[:, 2], "r.")
+    ax1.set_title("Conductivity Model")
 
     ax2 = fig.add_axes([0.76, 0.1, 0.05, 0.85])
     norm = mpl.colors.Normalize(
-        vmin=np.log10(layer_conductivity), vmax=np.log10(pipe_conductivity)
+        vmin=np.log10(layer_conductivity_2), vmax=np.log10(layer_conductivity_1)
     )
     cbar = mpl.colorbar.ColorbarBase(
         ax2, norm=norm, orientation="vertical", format="$10^{%.1f}$"
     )
-    cbar.set_label("Conductivity [$S/m$]", rotation=270, labelpad=15, size=12)
+    cbar.set_label("Conductivity [S/m]", rotation=270, labelpad=15, size=12)
 
 
 
 
 .. image-sg:: /content/tutorials/08-tdem/images/sphx_glr_plot_fwd_2_tem_cyl_001.png
-   :alt: Conductivity Model (Survey in red)
+   :alt: Conductivity Model
    :srcset: /content/tutorials/08-tdem/images/sphx_glr_plot_fwd_2_tem_cyl_001.png
    :class: sphx-glr-single-img
 
@@ -275,7 +269,7 @@ surface layer. For this example, we will have only flat topography.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 193-198
+.. GENERATED FROM PYTHON SOURCE LINES 187-192
 
 Define the Time-Stepping
 ------------------------
@@ -283,7 +277,7 @@ Define the Time-Stepping
 Stuff about time-stepping and some rule of thumb for step-off waveform
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 198-202
+.. GENERATED FROM PYTHON SOURCE LINES 192-196
 
 .. code-block:: default
 
@@ -298,7 +292,7 @@ Stuff about time-stepping and some rule of thumb for step-off waveform
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 203-212
+.. GENERATED FROM PYTHON SOURCE LINES 197-206
 
 Define the Simulation
 ---------------------
@@ -310,7 +304,7 @@ remember to define the mapping for the conductivity model. Use *rhoMap* instead
 of *sigmaMap* if you defined a resistivity model.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 212-220
+.. GENERATED FROM PYTHON SOURCE LINES 206-214
 
 .. code-block:: default
 
@@ -329,14 +323,14 @@ of *sigmaMap* if you defined a resistivity model.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 221-225
+.. GENERATED FROM PYTHON SOURCE LINES 215-219
 
 Predict Data and Plot
 ---------------------
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 225-255
+.. GENERATED FROM PYTHON SOURCE LINES 219-248
 
 .. code-block:: default
 
@@ -350,26 +344,25 @@ Predict Data and Plot
 
     # TDEM Profile
     fig = plt.figure(figsize=(5, 5))
-    ax1 = fig.add_subplot(111)
+    ax1 = fig.add_axes([0.15, 0.15, 0.8, 0.75])
     for ii in range(0, len(time_channels)):
-        ax1.plot(
-            receiver_locations[:, 0], -dpred[:, ii], "k", lw=2
+        ax1.semilogx(
+            -dpred[:, ii], receiver_locations[:, -1], "k", lw=2
         )  # -ve sign to plot -dBz/dt
-    ax1.set_xlim((0, np.max(xtx)))
-    ax1.set_xlabel("Easting [m]")
-    ax1.set_ylabel("-dBz/dt [T/s]")
+    ax1.set_xlabel("-dBz/dt [T/s]")
+    ax1.set_ylabel("Elevation [m]")
     ax1.set_title("Airborne TDEM Profile")
 
-    # Response over pipe for all time channels
+    # Response for all time channels
     fig = plt.figure(figsize=(5, 5))
-    ax1 = fig.add_subplot(111)
+    ax1 = fig.add_axes([0.15, 0.15, 0.8, 0.75])
     ax1.loglog(time_channels, -dpred[0, :], "b", lw=2)
     ax1.loglog(time_channels, -dpred[-1, :], "r", lw=2)
     ax1.set_xlim((np.min(time_channels), np.max(time_channels)))
     ax1.set_xlabel("time [s]")
     ax1.set_ylabel("-dBz/dt [T/s]")
     ax1.set_title("Decay Curve")
-    ax1.legend(["Over pipe", "Background"], loc="lower left")
+    ax1.legend(["First Sounding", "Last Sounding"], loc="upper right")
 
 
 
@@ -393,42 +386,35 @@ Predict Data and Plot
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f9e58ebfad0>
+    <matplotlib.legend.Legend object at 0x7fd3f9a66110>
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  24.261 seconds)
+   **Total running time of the script:** ( 1 minutes  23.411 seconds)
 
-**Estimated memory usage:**  9 MB
+**Estimated memory usage:**  18 MB
 
 
 .. _sphx_glr_download_content_tutorials_08-tdem_plot_fwd_2_tem_cyl.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_fwd_2_tem_cyl.py <plot_fwd_2_tem_cyl.py>`
 
-     :download:`Download Python source code: plot_fwd_2_tem_cyl.py <plot_fwd_2_tem_cyl.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_fwd_2_tem_cyl.ipynb <plot_fwd_2_tem_cyl.ipynb>`
+      :download:`Download Jupyter notebook: plot_fwd_2_tem_cyl.ipynb <plot_fwd_2_tem_cyl.ipynb>`
 
 
 .. only:: html

@@ -122,8 +122,6 @@ tar-file on our google cloud bucket:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     Downloading https://storage.googleapis.com/simpeg/doc-assets/cross_gradient_data.tar.gz
@@ -426,7 +424,7 @@ class.
 
 
     simulation_grav = gravity.simulation.Simulation3DIntegral(
-        survey=survey_grav, mesh=mesh, rhoMap=wires.density, actInd=ind_active
+        survey=survey_grav, mesh=mesh, rhoMap=wires.density, ind_active=ind_active
     )
 
     simulation_mag = magnetics.simulation.Simulation3DIntegral(
@@ -434,7 +432,7 @@ class.
         mesh=mesh,
         model_type="scalar",
         chiMap=wires.susceptibility,
-        actInd=ind_active,
+        ind_active=ind_active,
     )
 
 
@@ -458,7 +456,7 @@ The inverse problem is defined by 4 things:
     4) Optimization: the numerical approach used to solve the inverse problem
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 301-339
+.. GENERATED FROM PYTHON SOURCE LINES 301-341
 
 .. code-block:: default
 
@@ -471,8 +469,10 @@ The inverse problem is defined by 4 things:
     dmis_mag = data_misfit.L2DataMisfit(data=data_object_mag, simulation=simulation_mag)
 
     # Define the regularization (model objective function).
-    reg_grav = regularization.Simple(mesh, indActive=ind_active, mapping=wires.density)
-    reg_mag = regularization.Simple(
+    reg_grav = regularization.WeightedLeastSquares(
+        mesh, indActive=ind_active, mapping=wires.density
+    )
+    reg_mag = regularization.WeightedLeastSquares(
         mesh, indActive=ind_active, mapping=wires.susceptibility
     )
 
@@ -507,7 +507,7 @@ The inverse problem is defined by 4 things:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 340-347
+.. GENERATED FROM PYTHON SOURCE LINES 342-349
 
 Define Inversion Directives
 ---------------------------
@@ -517,7 +517,7 @@ includes the cooling schedule for the trade-off parameter (beta), stopping
 criteria for the inversion and saving inversion results at each iteration.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 347-381
+.. GENERATED FROM PYTHON SOURCE LINES 349-383
 
 .. code-block:: default
 
@@ -562,7 +562,7 @@ criteria for the inversion and saving inversion results at each iteration.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 382-388
+.. GENERATED FROM PYTHON SOURCE LINES 384-390
 
 Running the Inversion
 ---------------------
@@ -571,7 +571,7 @@ To define the inversion object, we need to define the inversion problem and
 the set of directives. We can then run the inversion.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 388-396
+.. GENERATED FROM PYTHON SOURCE LINES 390-398
 
 .. code-block:: default
 
@@ -589,32 +589,31 @@ the set of directives. We can then run the inversion.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    SimPEG.InvProblem will set Regularization.mref to m0.
-    SimPEG.InvProblem will set Regularization.mref to m0.
-    SimPEG.InvProblem will set Regularization.mref to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
+    SimPEG.InvProblem will set Regularization.reference_model to m0.
 
-            SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
-            ***Done using same Solver and solver_opts as the Simulation3DIntegral problem***
+                        SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
+                        ***Done using the default solver Pardiso and no solver_opts.***
+                    
     model has any nan: 0
     ============================================================ Projected GNCG ============================================================
       #            betas             lambda      f               phi_d                     phi_m            phi_sim    iterCG    Comment   
     ---------------------------------------------------------------------------------------------------------------------------------------
     x0 has any nan: 0
        0  ['7.74e+04', '3.27e+04']  2.00e+12  2.27e+05             []                        []             0.00e+00      0                
-       1  ['1.55e+04', '6.54e+03']  2.00e+12  1.15e+04  ['6.60e+03', '2.06e+02']  ['2.05e-01', '9.04e-02']  4.84e-10    100                
+       1  ['1.55e+04', '6.54e+03']  2.00e+12  1.15e+04  ['6.60e+03', '2.06e+02']  ['2.05e-01', '9.05e-02']  4.84e-10    100                
        2  ['3.10e+03', '8.72e+03']  2.00e+12  4.12e+03  ['1.17e+03', '5.55e+01']  ['3.56e-01', '9.88e-02']  4.66e-10    100     Skip BFGS  
-       3  ['6.19e+02', '1.16e+04']  2.00e+12  2.94e+03  ['4.73e+02', '4.23e+01']  ['4.16e-01', '9.66e-02']  5.24e-10    100                
-       4  ['1.24e+02', '1.55e+04']  2.00e+12  2.97e+03  ['3.12e+02', '7.09e+01']  ['4.45e-01', '9.39e-02']  5.40e-10    100                
-       5  ['2.48e+01', '2.07e+04']  2.00e+12  2.45e+03  ['2.00e+02', '7.29e+01']  ['4.70e-01', '9.20e-02']  1.31e-10    100                
-       6  ['3.30e+01', '2.53e+04']  2.00e+12  2.62e+03  ['4.76e+01', '1.18e+02']  ['5.55e-01', '8.77e-02']  1.08e-10    100                
-       7  ['4.40e+01', '2.65e+04']  2.00e+12  2.67e+03  ['4.13e+01', '1.38e+02']  ['5.56e-01', '8.70e-02']  8.26e-11    100                
-       8  ['5.87e+01', '2.75e+04']  2.00e+12  2.75e+03  ['3.71e+01', '1.39e+02']  ['5.61e-01', '8.66e-02']  7.87e-11    100                
-       9  ['7.83e+01', '2.63e+04']  2.00e+12  2.65e+03  ['3.39e+01', '1.51e+02']  ['5.69e-01', '8.60e-02']  7.73e-11    100                
-      10  ['1.04e+02', '2.79e+04']  2.00e+12  2.79e+03  ['3.08e+01', '1.36e+02']  ['5.71e-01', '8.64e-02']  7.53e-11    100                
+       3  ['6.19e+02', '1.16e+04']  2.00e+12  2.95e+03  ['4.75e+02', '4.24e+01']  ['4.16e-01', '9.66e-02']  5.24e-10    100                
+       4  ['1.24e+02', '1.55e+04']  2.00e+12  2.97e+03  ['3.14e+02', '7.07e+01']  ['4.45e-01', '9.40e-02']  5.38e-10    100                
+       5  ['2.48e+01', '2.07e+04']  2.00e+12  2.47e+03  ['2.14e+02', '7.23e+01']  ['4.66e-01', '9.22e-02']  1.33e-10    100                
+       6  ['3.30e+01', '2.54e+04']  2.00e+12  2.63e+03  ['4.88e+01', '1.18e+02']  ['5.54e-01', '8.77e-02']  1.11e-10    100                
+       7  ['4.40e+01', '2.63e+04']  2.00e+12  2.66e+03  ['4.18e+01', '1.39e+02']  ['5.56e-01', '8.70e-02']  8.41e-11    100                
+       8  ['5.87e+01', '2.72e+04']  2.00e+12  2.73e+03  ['3.69e+01', '1.39e+02']  ['5.61e-01', '8.66e-02']  8.07e-11    100                
+       9  ['7.83e+01', '2.63e+04']  2.00e+12  2.65e+03  ['3.37e+01', '1.50e+02']  ['5.69e-01', '8.60e-02']  7.86e-11    100                
+      10  ['1.04e+02', '2.78e+04']  2.00e+12  2.78e+03  ['3.03e+01', '1.37e+02']  ['5.72e-01', '8.64e-02']  7.70e-11    100                
     ------------------------- STOP! -------------------------
     1 : maxIter   =      10    <= iter          =     10
     ------------------------- DONE! -------------------------
@@ -622,13 +621,13 @@ the set of directives. We can then run the inversion.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 397-400
+.. GENERATED FROM PYTHON SOURCE LINES 399-402
 
 Plotting True Model and Recovered Model
 ---------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 400-458
+.. GENERATED FROM PYTHON SOURCE LINES 402-460
 
 .. code-block:: default
 
@@ -668,7 +667,7 @@ Plotting True Model and Recovered Model
 
     fig = plt.figure(figsize=(9, 8))
     ax1 = plt.subplot(211)
-    (im,) = mesh.plotSlice(
+    (im,) = mesh.plot_slice(
         plotting_map * m_dens_joint,
         normal="Y",
         ax=ax1,
@@ -679,7 +678,7 @@ Plotting True Model and Recovered Model
     cbar.set_label("g/cc", rotation=270, labelpad=15, size=12)
 
     ax2 = plt.subplot(212)
-    (im,) = mesh.plotSlice(
+    (im,) = mesh.plot_slice(
         plotting_map * m_susc_joint, normal="Y", ax=ax2, pcolor_opts={"cmap": "inferno"}
     )
     ax2.set_title("Susceptibility model slice at y = 0 m")
@@ -714,13 +713,13 @@ Plotting True Model and Recovered Model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 459-462
+.. GENERATED FROM PYTHON SOURCE LINES 461-464
 
 Comparing jointly and separatly recovered models
----------------------------------------
+------------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 462-522
+.. GENERATED FROM PYTHON SOURCE LINES 464-524
 
 .. code-block:: default
 
@@ -818,30 +817,25 @@ Comparing jointly and separatly recovered models
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 3 minutes  10.112 seconds)
+   **Total running time of the script:** ( 2 minutes  2.609 seconds)
 
-**Estimated memory usage:**  9 MB
+**Estimated memory usage:**  72 MB
 
 
 .. _sphx_glr_download_content_tutorials_13-joint_inversion_plot_inv_3_cross_gradient_pf.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_inv_3_cross_gradient_pf.py <plot_inv_3_cross_gradient_pf.py>`
 
-     :download:`Download Python source code: plot_inv_3_cross_gradient_pf.py <plot_inv_3_cross_gradient_pf.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_inv_3_cross_gradient_pf.ipynb <plot_inv_3_cross_gradient_pf.ipynb>`
+      :download:`Download Jupyter notebook: plot_inv_3_cross_gradient_pf.ipynb <plot_inv_3_cross_gradient_pf.ipynb>`
 
 
 .. only:: html

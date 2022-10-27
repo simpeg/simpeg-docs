@@ -286,11 +286,11 @@ you can carry through this work flow with a resistivity model if desired.
     log_mod = np.log10(conductivity_model)
 
     ax1 = fig.add_axes([0.15, 0.15, 0.67, 0.75])
-    mesh.plotSlice(
+    mesh.plot_slice(
         plotting_map * log_mod,
         ax=ax1,
         normal="Y",
-        ind=int(len(mesh.hy) / 2),
+        ind=int(len(mesh.h[1]) / 2),
         grid=True,
         clim=(np.log10(resistor_value), np.log10(conductor_value)),
         pcolor_opts={"cmap": mpl.cm.viridis},
@@ -456,10 +456,20 @@ one or more planes.
 
 
 
+.. rst-class:: sphx-glr-script-out
 
-.. raw:: html
-    :file: images/sphx_glr_plot_fwd_3_dcip3d_002.html
+.. code-block:: pytb
 
+    Traceback (most recent call last):
+      File "/home/vsts/work/1/s/tutorials/06-ip/plot_fwd_3_dcip3d.py", line 334, in <module>
+        plotly.io.show(fig)
+      File "/usr/share/miniconda/envs/test/lib/python3.7/site-packages/plotly/io/_renderers.py", line 403, in show
+        renderers._perform_external_rendering(fig_dict, renderers_string=renderer, **kwargs)
+      File "/usr/share/miniconda/envs/test/lib/python3.7/site-packages/plotly/io/_renderers.py", line 340, in _perform_external_rendering
+        renderer.render(fig_dict)
+      File "/usr/share/miniconda/envs/test/lib/python3.7/site-packages/plotly/io/_base_renderers.py", line 889, in render
+        "orca and psutil are required to use the `sphinx-gallery-orca` renderer. "
+    ImportError: orca and psutil are required to use the `sphinx-gallery-orca` renderer. See https://plotly.com/python/static-image-export/ for instructions on how to install orca. Alternatively, you can use the `sphinx-gallery` renderer (note that png thumbnails can only be generated with the `sphinx-gallery-orca` renderer).
 
 
 
@@ -498,12 +508,6 @@ terms of the apparent chargeability (V/V).
 
     # Drape to discretized topography as before
     ip_survey.drape_electrodes_on_topography(mesh, ind_active, option="top")
-
-
-
-
-
-
 
 
 
@@ -547,11 +551,11 @@ chargeability of the Earth (V/V).
     plotting_map = maps.InjectActiveCells(mesh, ind_active, np.nan)
 
     ax1 = fig.add_axes([0.15, 0.15, 0.67, 0.75])
-    mesh.plotSlice(
+    mesh.plot_slice(
         plotting_map * chargeability_model,
         ax=ax1,
         normal="Y",
-        ind=int(len(mesh.hy) / 2),
+        ind=int(len(mesh.h[1]) / 2),
         grid=True,
         clim=(background_value, chargeable_value),
         pcolor_opts={"cmap": mpl.cm.plasma},
@@ -568,17 +572,6 @@ chargeability of the Earth (V/V).
         ax2, cmap=mpl.cm.plasma, norm=norm, orientation="vertical", format="%.2f"
     )
     cbar.set_label("Intrinsic Chargeability [V/V]", rotation=270, labelpad=15, size=12)
-
-
-
-
-.. image-sg:: /content/tutorials/06-ip/images/sphx_glr_plot_fwd_3_dcip3d_003.png
-   :alt: Chargeability Model
-   :srcset: /content/tutorials/06-ip/images/sphx_glr_plot_fwd_3_dcip3d_003.png
-   :class: sphx-glr-single-img
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 427-434
@@ -609,12 +602,6 @@ model to predict IP data.
 
     # Run forward simulation and predicted IP data. The data are the voltage (V)
     dpred_ip = ip_simulation.dpred(chargeability_model)
-
-
-
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 450-460
@@ -661,15 +648,6 @@ we can plot the data directly.
 
     else:
         print("INSTALL 'PLOTLY' TO VISUALIZE 3D PSEUDOSECTIONS")
-
-
-
-
-
-.. raw:: html
-    :file: images/sphx_glr_plot_fwd_3_dcip3d_004.html
-
-
 
 
 
@@ -770,38 +748,27 @@ Optional: Write Outputs
         )
 
 
-
-
-
-
-
-
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  22.625 seconds)
+   **Total running time of the script:** ( 0 minutes  10.635 seconds)
 
-**Estimated memory usage:**  9 MB
+**Estimated memory usage:**  1746 MB
 
 
 .. _sphx_glr_download_content_tutorials_06-ip_plot_fwd_3_dcip3d.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_fwd_3_dcip3d.py <plot_fwd_3_dcip3d.py>`
 
-     :download:`Download Python source code: plot_fwd_3_dcip3d.py <plot_fwd_3_dcip3d.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_fwd_3_dcip3d.ipynb <plot_fwd_3_dcip3d.ipynb>`
+      :download:`Download Jupyter notebook: plot_fwd_3_dcip3d.ipynb <plot_fwd_3_dcip3d.ipynb>`
 
 
 .. only:: html
