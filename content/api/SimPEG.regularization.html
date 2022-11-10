@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Regularization (SimPEG.regularization) &#8212; SimPEG 0.18.0 documentation</title>
+    <title>Regularization (SimPEG.regularization) &#8212; SimPEG 0.18.1 documentation</title>
   <script>
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
@@ -2393,38 +2393,31 @@ combination of these.</p>
 <p>Here we will define regularization of a model, m, in general however, this
 should be thought of as (m-m_ref) but otherwise it is exactly the same:</p>
 <div class="math notranslate nohighlight">
-\[R(m) = \int_\Omega \]</div>
-<p>rac{lpha_x}{2}left(
-rac{partial m}{partial x}
-ight)^2 + 
-rac{lpha_y}{2}left(
-rac{partial m}{partial y}
-ight)^2 partial v</p>
+\[R(m) =
+    \int_\Omega
+    \frac{\alpha_x}{2}
+        \left( \frac{\partial m}{\partial x} \right)^2
+    + \frac{\alpha_y}{2}
+        \left( \frac{\partial m}{\partial y} \right)^2
+    \partial v\]</div>
 <p>Our discrete gradient operator works on cell centers and gives the derivative
 on the cell faces, which is not where we want to be evaluating this integral.
 We need to average the values back to the cell-centers before we integrate. To
 avoid null spaces, we square first and then average. In 2D with ij notation it
 looks like this:</p>
 <div class="math notranslate nohighlight">
-\[R(m) pprox \sum_{ij} \left[\]</div>
-<p>rac{lpha_x}{2}left[left(
-rac{m_{i+1,j} - m_{i,j}}{h}
-ight)^2 + left(
-rac{m_{i,j} - m_{i-1,j}}{h}
-ight)^2
-ight] </p>
-<blockquote>
-<div><ul class="simple">
-<li></li>
-</ul>
-</div></blockquote>
-<p>rac{lpha_y}{2}left[left(
-rac{m_{i,j+1} - m_{i,j}}{h}
-ight)^2 + left(
-rac{m_{i,j} - m_{i,j-1}}{h}
-ight)^2
-ight]</p>
-<p>ight]h^2</p>
+\[\begin{split}R(m) \approx
+    \sum_{ij}
+    \left[
+        \frac{\alpha_x}{2} \left[
+            \left( \frac{m_{i+1,j} - m_{i,j}}{h} \right)^2
+            + \left( \frac{m_{i,j} - m_{i-1,j}}{h} \right)^2
+        \right] \\
+        + \frac{\alpha_y}{2} \left[
+            \left( \frac{m_{i,j+1} - m_{i,j}}{h} \right)^2
+            + \left( \frac{m_{i,j} - m_{i,j-1}}{h} \right)^2
+        \right]
+    \right] h^2\end{split}\]</div>
 <p>If we let D_1 be the derivative matrix in the x direction</p>
 <div class="math notranslate nohighlight">
 \[\mathbf{D}_1 = \mathbf{I}_2\otimes\mathbf{d}_1\]</div>
@@ -2432,49 +2425,51 @@ ight]</p>
 \[\mathbf{D}_2 = \mathbf{d}_2\otimes\mathbf{I}_1\]</div>
 <p>Where d_1 is the one dimensional derivative:</p>
 <div class="math notranslate nohighlight">
-\[\mathbf{d}_1 = \]</div>
-<dl class="simple">
-<dt>rac{1}{h} left[ egin{array}{cccc}</dt><dd><dl class="simple">
-<dt>-1 &amp; 1 &amp; &amp; </dt><dd><p>&amp; ddots &amp; ddots&amp;&amp;  &amp; -1 &amp; 1end{array}</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p>ight]</p>
+\[\begin{split}\mathbf{d}_1 = \frac{1}{h} \left[ \begin{array}{cccc}
+-1 &amp; 1 &amp; &amp; \\
+ &amp; \ddots &amp; \ddots&amp;\\
+ &amp;  &amp; -1 &amp; 1\end{array} \right]\end{split}\]</div>
 <div class="math notranslate nohighlight">
-\[R(m) pprox \mathbf{v}^     op \left[\]</div>
-<p>rac{lpha_x}{2}mathbf{A}_1 (mathbf{D}_1 m) odot (mathbf{D}_1 m) + 
-rac{lpha_y}{2}mathbf{A}_2 (mathbf{D}_2 m) odot (mathbf{D}_2 m) 
-ight]</p>
+\[R(m) \approx
+    \mathbf{v}^\top \left[
+        \frac{\alpha_x}{2} \mathbf{A}_1 (\mathbf{D}_1 m) \odot (\mathbf{D}_1 m)
+        + \frac{\alpha_y}{2} \mathbf{A}_2 (\mathbf{D}_2 m) \odot (\mathbf{D}_2 m)
+    \right]\]</div>
 <p>Recall that this is really a just point wise multiplication, or a diagonal
 matrix times a vector. When we multiply by something in a diagonal we can
 interchange and it gives the same results (i.e. it is point wise)</p>
 <div class="math notranslate nohighlight">
-\[\mathbf{a\odot b} =         ext{diag}(\mathbf{a})\mathbf{b} =       ext{diag}(\mathbf{b})\mathbf{a} = \mathbf{b\odot a}\]</div>
+\[\mathbf{a\odot b}
+    = \text{diag}(\mathbf{a})\mathbf{b}
+    = \text{diag}(\mathbf{b})\mathbf{a}
+    = \mathbf{b\odot a}\]</div>
 <p>and the transpose also is true (but the sizes have to make sense…):</p>
 <div class="math notranslate nohighlight">
-\[\mathbf{a}^ op      ext{diag}(\mathbf{b}) = \mathbf{b}^     op      ext{diag}(\mathbf{a})\]</div>
+\[\mathbf{a}^\top\text{diag}(\mathbf{b}) = \mathbf{b}^\top\text{diag}(\mathbf{a})\]</div>
 <p>So R(m) can simplify to:</p>
 <div class="math notranslate nohighlight">
-\[R(m) pprox  \mathbf{m}^    op \left[\]</div>
-<p>rac{lpha_x}{2}mathbf{D}_1^  op      ext{diag}(mathbf{A}_1^ opmathbf{v}) mathbf{D}_1 +  
-rac{lpha_y}{2}mathbf{D}_2^     op      ext{diag}(mathbf{A}_2^ op mathbf{v}) mathbf{D}_2 
-ight] mathbf{m}</p>
+\[R(m) \approx
+    \mathbf{m}^\top \left[
+        \frac{\alpha_x}{2} \mathbf{D}_1^\top
+        \text{diag} (\mathbf{A}_1^\top \mathbf{v}) \mathbf{D}_1
+        + \frac{\alpha_y}{2} \mathbf{D}_2^\top
+        \text{diag} (\mathbf{A}_2^\top \mathbf{v}) \mathbf{D}_2
+    \right]
+    \mathbf{m}\]</div>
 <p>We will define W_x as:</p>
 <div class="math notranslate nohighlight">
-\[\mathbf{W}_x = \sqrt{lpha_x}       ext{diag}\left(\sqrt{\mathbf{A}_1^      op\mathbf{v}}\]</div>
-<p>ight) mathbf{D}_1</p>
+\[\mathbf{W}_x =
+    \sqrt{\alpha_x}
+    \text{diag} \left(\sqrt{\mathbf{A}_1^\top\mathbf{v}}\right) \mathbf{D}_1\]</div>
 <p>And then W as a tall matrix of all of the different regularization terms:</p>
 <div class="math notranslate nohighlight">
-\[\mathbf{W} = \left[ egin{array}{c}
-\mathbf{W}_s\
-\mathbf{W}_x\
-\mathbf{W}_y\end{array} \]</div>
-<p>ight]</p>
+\[\begin{split}\mathbf{W} = \left[ \begin{array}{c}
+\mathbf{W}_s\\
+\mathbf{W}_x\\
+\mathbf{W}_y\end{array} \right]\end{split}\]</div>
 <p>Then we can write</p>
 <div class="math notranslate nohighlight">
-\[R(m) pprox \]</div>
-<p>rac{1}{2}mathbf{m^    op W^   op W m}</p>
+\[R(m) \approx \frac{1}{2}\mathbf{m^\top W^\top W m}\]</div>
 </section>
 <section id="the-api">
 <h2>The API<a class="headerlink" href="#the-api" title="Permalink to this headline">#</a></h2>
@@ -2538,7 +2533,7 @@ ight] mathbf{m}</p>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/SimPEG.regularization.JointTotalVariation.html#SimPEG.regularization.JointTotalVariation" title="SimPEG.regularization.JointTotalVariation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">JointTotalVariation</span></code></a>(mesh, wire_map, **kwargs)</p></td>
 <td><p>The joint total variation constraint for joint inversions.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/SimPEG.regularization.PGI.html#SimPEG.regularization.PGI" title="SimPEG.regularization.PGI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PGI</span></code></a>(mesh, gmmref[, alpha_s, alpha_x, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/SimPEG.regularization.PGI.html#SimPEG.regularization.PGI" title="SimPEG.regularization.PGI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PGI</span></code></a>(mesh, gmmref[, alpha_x, alpha_y, ...])</p></td>
 <td><p>class similar to regularization.tikhonov.Simple, with a PGIsmallness.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/SimPEG.regularization.PGIsmallness.html#SimPEG.regularization.PGIsmallness" title="SimPEG.regularization.PGIsmallness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PGIsmallness</span></code></a>(gmmref[, gmm, wiresmap, ...])</p></td>
