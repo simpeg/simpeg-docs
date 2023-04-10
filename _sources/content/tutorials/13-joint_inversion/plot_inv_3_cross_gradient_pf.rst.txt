@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_content_tutorials_13-joint_inversion_plot_inv_3_cross_gradient_pf.py>`
+        :ref:`Go to the end <sphx_glr_download_content_tutorials_13-joint_inversion_plot_inv_3_cross_gradient_pf.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -55,8 +55,8 @@ Import modules
     import tarfile
 
     from discretize import TensorMesh
-
-    from SimPEG.utils import plot2Ddata, surface2ind_topo
+    from discretize.utils import active_from_xyz
+    from SimPEG.utils import plot2Ddata
     from SimPEG.potential_fields import gravity, magnetics
     from SimPEG import (
         maps,
@@ -388,7 +388,7 @@ be different for density and susceptibility models.
     background_dens, background_susc = 1e-6, 1e-6
 
     # Find the indicies of the active cells in forward model (ones below surface)
-    ind_active = surface2ind_topo(mesh, xyz_topo)
+    ind_active = active_from_xyz(mesh, xyz_topo)
 
     # Define mapping from model to active cells
     nC = int(ind_active.sum())
@@ -559,6 +559,15 @@ criteria for the inversion and saving inversion results at each iteration.
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    /home/vsts/work/1/s/SimPEG/directives/directives.py:2519: UserWarning:
+
+    'everyIter' property is deprecated and will be removed in SimPEG 0.20.0.Please use 'every_iteration'.
+
+
 
 
 
@@ -603,17 +612,17 @@ the set of directives. We can then run the inversion.
       #            betas             lambda      f               phi_d                     phi_m            phi_sim    iterCG    Comment   
     ---------------------------------------------------------------------------------------------------------------------------------------
     x0 has any nan: 0
-       0  ['7.74e+04', '3.27e+04']  2.00e+12  2.27e+05             []                        []             0.00e+00      0                
-       1  ['1.55e+04', '6.54e+03']  2.00e+12  1.15e+04  ['6.60e+03', '2.06e+02']  ['2.05e-01', '9.05e-02']  4.84e-10    100                
-       2  ['3.10e+03', '8.72e+03']  2.00e+12  4.12e+03  ['1.17e+03', '5.55e+01']  ['3.56e-01', '9.88e-02']  4.66e-10    100     Skip BFGS  
-       3  ['6.19e+02', '1.16e+04']  2.00e+12  2.95e+03  ['4.75e+02', '4.24e+01']  ['4.16e-01', '9.66e-02']  5.24e-10    100                
-       4  ['1.24e+02', '1.55e+04']  2.00e+12  2.97e+03  ['3.14e+02', '7.07e+01']  ['4.45e-01', '9.40e-02']  5.38e-10    100                
-       5  ['2.48e+01', '2.07e+04']  2.00e+12  2.47e+03  ['2.14e+02', '7.23e+01']  ['4.66e-01', '9.22e-02']  1.33e-10    100                
-       6  ['3.30e+01', '2.54e+04']  2.00e+12  2.63e+03  ['4.88e+01', '1.18e+02']  ['5.54e-01', '8.77e-02']  1.11e-10    100                
-       7  ['4.40e+01', '2.63e+04']  2.00e+12  2.66e+03  ['4.18e+01', '1.39e+02']  ['5.56e-01', '8.70e-02']  8.41e-11    100                
-       8  ['5.87e+01', '2.72e+04']  2.00e+12  2.73e+03  ['3.69e+01', '1.39e+02']  ['5.61e-01', '8.66e-02']  8.07e-11    100                
-       9  ['7.83e+01', '2.63e+04']  2.00e+12  2.65e+03  ['3.37e+01', '1.50e+02']  ['5.69e-01', '8.60e-02']  7.86e-11    100                
-      10  ['1.04e+02', '2.78e+04']  2.00e+12  2.78e+03  ['3.03e+01', '1.37e+02']  ['5.72e-01', '8.64e-02']  7.70e-11    100                
+       0  ['8.50e+04', '3.29e+04']  2.00e+12  2.27e+05             []                        []             0.00e+00      0                
+       1  ['1.70e+04', '6.58e+03']  2.00e+12  1.15e+04  ['6.53e+03', '1.84e+02']  ['1.87e-01', '8.41e-02']  5.30e-10    100                
+       2  ['3.40e+03', '8.77e+03']  2.00e+12  4.20e+03  ['1.18e+03', '5.57e+01']  ['3.23e-01', '9.13e-02']  5.34e-10    100     Skip BFGS  
+       3  ['6.80e+02', '1.17e+04']  2.00e+12  2.96e+03  ['5.45e+02', '4.31e+01']  ['3.72e-01', '8.91e-02']  5.40e-10    100                
+       4  ['1.36e+02', '1.56e+04']  2.00e+12  2.93e+03  ['3.62e+02', '6.76e+01']  ['3.97e-01', '8.68e-02']  5.49e-10    100                
+       5  ['2.72e+01', '2.08e+04']  2.00e+12  2.39e+03  ['2.54e+02', '6.71e+01']  ['4.16e-01', '8.51e-02']  1.44e-10    100                
+       6  ['3.62e+01', '2.77e+04']  2.00e+12  2.67e+03  ['6.36e+01', '1.02e+02']  ['4.97e-01', '8.10e-02']  1.18e-10    100                
+       7  ['4.83e+01', '2.80e+04']  2.00e+12  2.63e+03  ['5.34e+01', '1.43e+02']  ['5.00e-01', '7.95e-02']  9.00e-11    100                
+       8  ['6.44e+01', '3.01e+04']  2.00e+12  2.78e+03  ['4.51e+01', '1.34e+02']  ['5.06e-01', '7.94e-02']  8.72e-11    100                
+       9  ['8.59e+01', '2.84e+04']  2.00e+12  2.64e+03  ['4.06e+01', '1.53e+02']  ['5.14e-01', '7.84e-02']  8.53e-11    100                
+      10  ['1.15e+02', '3.05e+04']  2.00e+12  2.81e+03  ['3.56e+01', '1.34e+02']  ['5.17e-01', '7.89e-02']  8.35e-11    100                
     ------------------------- STOP! -------------------------
     1 : maxIter   =      10    <= iter          =     10
     ------------------------- DONE! -------------------------
@@ -817,9 +826,9 @@ Comparing jointly and separatly recovered models
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  44.029 seconds)
+   **Total running time of the script:** ( 1 minutes  57.983 seconds)
 
-**Estimated memory usage:**  74 MB
+**Estimated memory usage:**  123 MB
 
 
 .. _sphx_glr_download_content_tutorials_13-joint_inversion_plot_inv_3_cross_gradient_pf.py:
@@ -827,6 +836,8 @@ Comparing jointly and separatly recovered models
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

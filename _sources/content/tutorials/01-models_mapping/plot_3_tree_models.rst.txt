@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_content_tutorials_01-models_mapping_plot_3_tree_models.py>`
+        :ref:`Go to the end <sphx_glr_download_content_tutorials_01-models_mapping_plot_3_tree_models.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -42,8 +42,8 @@ Import modules
 
 
     from discretize import TreeMesh
-    from discretize.utils import refine_tree_xyz
-    from SimPEG.utils import mkvc, model_builder, surface2ind_topo
+    from discretize.utils import refine_tree_xyz, active_from_xyz
+    from SimPEG.utils import mkvc, model_builder
     from SimPEG import maps
     import numpy as np
     import matplotlib.pyplot as plt
@@ -65,14 +65,13 @@ Defining the mesh
 Here, we create the OcTree mesh that will be used for all examples.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 37-79
+.. GENERATED FROM PYTHON SOURCE LINES 37-76
 
 .. code-block:: default
 
 
 
     def make_example_mesh():
-
         # Base mesh parameters
         dh = 5.0  # base cell size
         nbc = 32  # total width of mesh in terms of number of base mesh cells
@@ -87,10 +86,9 @@ Here, we create the OcTree mesh that will be used for all examples.
 
 
     def refine_topography(mesh):
-
         # Define topography and refine
         [xx, yy] = np.meshgrid(mesh.nodes_x, mesh.nodes_y)
-        zz = -3 * np.exp((xx ** 2 + yy ** 2) / 60 ** 2) + 45.0
+        zz = -3 * np.exp((xx**2 + yy**2) / 60**2) + 45.0
         topo = np.c_[mkvc(xx), mkvc(yy), mkvc(zz)]
 
         mesh = refine_tree_xyz(
@@ -101,7 +99,6 @@ Here, we create the OcTree mesh that will be used for all examples.
 
 
     def refine_box(mesh):
-
         # Refine for sphere
         xp, yp, zp = np.meshgrid([-55.0, 50.0], [-50.0, 50.0], [-40.0, 20.0])
         xyz = np.c_[mkvc(xp), mkvc(yp), mkvc(zp)]
@@ -118,18 +115,18 @@ Here, we create the OcTree mesh that will be used for all examples.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 80-88
+.. GENERATED FROM PYTHON SOURCE LINES 77-85
 
 Topography, a block and a vertical dyke
 ---------------------------------------
 
 In this example we create a model containing a block and a vertical dyke
-that strikes along the y direction. The utility *surface2ind_topo* is used
+that strikes along the y direction. The utility *active_from_xyz* is used
 to find the cells which lie below a set of xyz points defining a surface.
 The model consists of all cells which lie below the surface.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 88-134
+.. GENERATED FROM PYTHON SOURCE LINES 85-131
 
 .. code-block:: default
 
@@ -146,12 +143,12 @@ The model consists of all cells which lie below the surface.
     # Define surface topography as an (N, 3) np.array. You could also load a file
     # containing the xyz points
     [xx, yy] = np.meshgrid(mesh.nodes_x, mesh.nodes_y)
-    zz = -3 * np.exp((xx ** 2 + yy ** 2) / 60 ** 2) + 45.0
+    zz = -3 * np.exp((xx**2 + yy**2) / 60**2) + 45.0
     topo = np.c_[mkvc(xx), mkvc(yy), mkvc(zz)]
 
     # Find cells below topography and define mapping
     air_value = 0.0
-    ind_active = surface2ind_topo(mesh, topo)
+    ind_active = active_from_xyz(mesh, topo)
     model_map = maps.InjectActiveCells(mesh, ind_active, air_value)
 
     # Define the model on subsurface cells
@@ -191,7 +188,7 @@ The model consists of all cells which lie below the surface.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 135-144
+.. GENERATED FROM PYTHON SOURCE LINES 132-141
 
 Combo Maps
 ----------
@@ -203,7 +200,7 @@ this we must take the exponent of our model values, then take the reciprocal,
 then map from below surface cell to the mesh.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 144-194
+.. GENERATED FROM PYTHON SOURCE LINES 141-191
 
 .. code-block:: default
 
@@ -219,12 +216,12 @@ then map from below surface cell to the mesh.
 
     # Define surface topography
     [xx, yy] = np.meshgrid(mesh.nodes_x, mesh.nodes_y)
-    zz = -3 * np.exp((xx ** 2 + yy ** 2) / 60 ** 2) + 45.0
+    zz = -3 * np.exp((xx**2 + yy**2) / 60**2) + 45.0
     topo = np.c_[mkvc(xx), mkvc(yy), mkvc(zz)]
 
     # Find cells below topography
     air_value = 0.0
-    ind_active = surface2ind_topo(mesh, topo)
+    ind_active = active_from_xyz(mesh, topo)
     active_map = maps.InjectActiveCells(mesh, ind_active, air_value)
 
     # Define the model on subsurface cells
@@ -269,7 +266,7 @@ then map from below surface cell to the mesh.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 195-203
+.. GENERATED FROM PYTHON SOURCE LINES 192-200
 
 Models with arbitrary shapes
 ----------------------------
@@ -280,7 +277,7 @@ find the indicies for mesh cells that lie within the new unit, 2) we
 replace the prexisting physical property value for those cells.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 203-251
+.. GENERATED FROM PYTHON SOURCE LINES 200-248
 
 .. code-block:: default
 
@@ -296,12 +293,12 @@ replace the prexisting physical property value for those cells.
 
     # Define surface topography
     [xx, yy] = np.meshgrid(mesh.nodes_x, mesh.nodes_y)
-    zz = -3 * np.exp((xx ** 2 + yy ** 2) / 60 ** 2) + 45.0
+    zz = -3 * np.exp((xx**2 + yy**2) / 60**2) + 45.0
     topo = np.c_[mkvc(xx), mkvc(yy), mkvc(zz)]
 
     # Set active cells and define unit values
     air_value = 0.0
-    ind_active = surface2ind_topo(mesh, topo)
+    ind_active = active_from_xyz(mesh, topo)
     model_map = maps.InjectActiveCells(mesh, ind_active, air_value)
 
     # Define model for cells under the surface topography
@@ -344,7 +341,7 @@ replace the prexisting physical property value for those cells.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 252-260
+.. GENERATED FROM PYTHON SOURCE LINES 249-257
 
 Parameterized block model
 -------------------------
@@ -355,7 +352,7 @@ model as a block in a half-space. We then create a mapping which projects
 this model onto the mesh.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 260-299
+.. GENERATED FROM PYTHON SOURCE LINES 257-296
 
 .. code-block:: default
 
@@ -372,12 +369,12 @@ this model onto the mesh.
 
     # Define surface topography
     [xx, yy] = np.meshgrid(mesh.nodes_x, mesh.nodes_y)
-    zz = -3 * np.exp((xx ** 2 + yy ** 2) / 60 ** 2) + 45.0
+    zz = -3 * np.exp((xx**2 + yy**2) / 60**2) + 45.0
     topo = np.c_[mkvc(xx), mkvc(yy), mkvc(zz)]
 
     # Set active cells and define unit values
     air_value = 0.0
-    ind_active = surface2ind_topo(mesh, topo)
+    ind_active = active_from_xyz(mesh, topo)
     active_map = maps.InjectActiveCells(mesh, ind_active, air_value)
 
     # Define the model on subsurface cells
@@ -410,7 +407,7 @@ this model onto the mesh.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 300-313
+.. GENERATED FROM PYTHON SOURCE LINES 297-310
 
 Using Wire Maps
 ---------------
@@ -426,7 +423,7 @@ permeability on the mesh. Wires are used to keep track of the mapping
 between the model vector and a particular physical property type.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 313-370
+.. GENERATED FROM PYTHON SOURCE LINES 310-367
 
 .. code-block:: default
 
@@ -444,12 +441,12 @@ between the model vector and a particular physical property type.
 
     # Define surface topography
     [xx, yy] = np.meshgrid(mesh.nodes_x, mesh.nodes_y)
-    zz = -3 * np.exp((xx ** 2 + yy ** 2) / 60 ** 2) + 45.0
+    zz = -3 * np.exp((xx**2 + yy**2) / 60**2) + 45.0
     topo = np.c_[mkvc(xx), mkvc(yy), mkvc(zz)]
 
     # Set active cells
     air_value = 0.0
-    ind_active = surface2ind_topo(mesh, topo)
+    ind_active = active_from_xyz(mesh, topo)
     active_map = maps.InjectActiveCells(mesh, ind_active, air_value)
 
     # Define model for cells under the surface topography
@@ -502,9 +499,9 @@ between the model vector and a particular physical property type.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  4.859 seconds)
+   **Total running time of the script:** ( 0 minutes  6.000 seconds)
 
-**Estimated memory usage:**  18 MB
+**Estimated memory usage:**  17 MB
 
 
 .. _sphx_glr_download_content_tutorials_01-models_mapping_plot_3_tree_models.py:
@@ -512,6 +509,8 @@ between the model vector and a particular physical property type.
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_content_tutorials_05-dcr_plot_inv_1_dcr_sounding_irls.py>`
+        :ref:`Go to the end <sphx_glr_download_content_tutorials_05-dcr_plot_inv_1_dcr_sounding_irls.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -135,7 +135,7 @@ Here we load the observed data, define the DC survey geometry and plot the
 data values.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 86-133
+.. GENERATED FROM PYTHON SOURCE LINES 86-138
 
 .. code-block:: default
 
@@ -158,11 +158,16 @@ data values.
 
     source_list = []
     for ii in range(0, n_sources):
-
         # MN electrode locations for receivers. Each is an (N, 3) numpy array
         M_locations = M_electrodes[k[ii] : k[ii + 1], :]
         N_locations = N_electrodes[k[ii] : k[ii + 1], :]
-        receiver_list = [dc.receivers.Dipole(M_locations, N_locations)]
+        receiver_list = [
+            dc.receivers.Dipole(
+                M_locations,
+                N_locations,
+                data_type="apparent_resistivity",
+            )
+        ]
 
         # AB electrode locations for source. Each is a (1, 3) numpy array
         A_location = A_electrodes[k[ii], :]
@@ -183,7 +188,7 @@ data values.
     ax1 = fig.add_axes([0.15, 0.1, 0.7, 0.85])
     ax1.semilogy(electrode_separations, dobs, "b")
     ax1.set_xlabel("AB/2 (m)")
-    ax1.set_ylabel("Apparent Resistivity ($\Omega m$)")
+    ax1.set_ylabel(r"Apparent Resistivity ($\Omega m$)")
     plt.show()
 
 
@@ -198,7 +203,7 @@ data values.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 134-141
+.. GENERATED FROM PYTHON SOURCE LINES 139-146
 
 Assign Uncertainties
 --------------------
@@ -208,7 +213,7 @@ This represents our estimate of the noise in our data. For DC sounding data,
 a relative error is applied to each datum. For this tutorial, the relative
 error on each datum will be 2%.
 
-.. GENERATED FROM PYTHON SOURCE LINES 141-145
+.. GENERATED FROM PYTHON SOURCE LINES 146-150
 
 .. code-block:: default
 
@@ -223,7 +228,7 @@ error on each datum will be 2%.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 146-152
+.. GENERATED FROM PYTHON SOURCE LINES 151-157
 
 Define Data
 --------------------
@@ -232,7 +237,7 @@ Here is where we define the data that are inverted. The data are defined by
 the survey, the observation values and the standard deviation.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 152-156
+.. GENERATED FROM PYTHON SOURCE LINES 157-161
 
 .. code-block:: default
 
@@ -247,7 +252,7 @@ the survey, the observation values and the standard deviation.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 157-163
+.. GENERATED FROM PYTHON SOURCE LINES 162-168
 
 Defining a 1D Layered Earth (1D Tensor Mesh)
 --------------------------------------------
@@ -256,7 +261,7 @@ Here, we define the layer thicknesses for our 1D simulation. To do this, we use
 the TensorMesh class.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 163-172
+.. GENERATED FROM PYTHON SOURCE LINES 168-177
 
 .. code-block:: default
 
@@ -290,7 +295,7 @@ the TensorMesh class.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 173-185
+.. GENERATED FROM PYTHON SOURCE LINES 178-190
 
 Define a Starting and Reference Model
 -------------------------------------
@@ -305,7 +310,7 @@ log-resistivity. Don't make the values 0!
 Otherwise the gradient for the 1st iteration is zero and the inversion will
 not converge.
 
-.. GENERATED FROM PYTHON SOURCE LINES 185-192
+.. GENERATED FROM PYTHON SOURCE LINES 190-197
 
 .. code-block:: default
 
@@ -323,7 +328,7 @@ not converge.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 193-198
+.. GENERATED FROM PYTHON SOURCE LINES 198-203
 
 Define the Physics
 ------------------
@@ -331,7 +336,7 @@ Define the Physics
 Here we define the physics of the problem using the Simulation1DLayers class.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 198-207
+.. GENERATED FROM PYTHON SOURCE LINES 203-211
 
 .. code-block:: default
 
@@ -340,7 +345,6 @@ Here we define the physics of the problem using the Simulation1DLayers class.
         survey=survey,
         rhoMap=model_map,
         thicknesses=layer_thicknesses,
-        data_type="apparent_resistivity",
     )
 
 
@@ -351,7 +355,7 @@ Here we define the physics of the problem using the Simulation1DLayers class.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 208-218
+.. GENERATED FROM PYTHON SOURCE LINES 212-222
 
 Define Inverse Problem
 ----------------------
@@ -364,7 +368,7 @@ The inverse problem is defined by 3 things:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 218-241
+.. GENERATED FROM PYTHON SOURCE LINES 222-245
 
 .. code-block:: default
 
@@ -398,7 +402,7 @@ The inverse problem is defined by 3 things:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 242-249
+.. GENERATED FROM PYTHON SOURCE LINES 246-253
 
 Define Inversion Directives
 ---------------------------
@@ -408,7 +412,7 @@ includes the cooling schedule for the trade-off parameter (beta), stopping
 criteria for the inversion and saving inversion results at each iteration.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 249-275
+.. GENERATED FROM PYTHON SOURCE LINES 253-279
 
 .. code-block:: default
 
@@ -445,7 +449,7 @@ criteria for the inversion and saving inversion results at each iteration.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 276-282
+.. GENERATED FROM PYTHON SOURCE LINES 280-286
 
 Running the Inversion
 ---------------------
@@ -454,7 +458,7 @@ To define the inversion object, we need to define the inversion problem and
 the set of directives. We can then run the inversion.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 282-289
+.. GENERATED FROM PYTHON SOURCE LINES 286-293
 
 .. code-block:: default
 
@@ -482,72 +486,80 @@ the set of directives. We can then run the inversion.
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  1.38e-03  2.16e+04  3.16e+02  2.16e+04    1.78e+03      0              
-       1  6.88e-04  5.48e+03  6.46e+04  5.53e+03    3.09e+03      2              
-       2  3.44e-04  1.34e+03  2.09e+05  1.41e+03    3.09e+03      0              
-       3  1.72e-04  3.87e+01  1.88e+05  7.10e+01    2.25e+02      0              
-       4  8.60e-05  1.62e+01  2.39e+05  3.68e+01    8.79e+01      0   Skip BFGS  
+       0  1.41e-03  2.16e+04  3.23e+02  2.16e+04    1.79e+03      0              
+       1  7.04e-04  5.49e+03  6.39e+04  5.54e+03    3.09e+03      2              
+       2  3.52e-04  1.30e+03  2.07e+05  1.37e+03    3.03e+03      0              
+       3  1.76e-04  3.96e+01  1.90e+05  7.31e+01    2.13e+02      0              
+       4  8.81e-05  1.59e+01  2.46e+05  3.76e+01    6.55e+01      0   Skip BFGS  
     Reached starting chifact with l2-norm regularization: Start IRLS steps...
-    irls_threshold 9.667071318993123
-       5  4.30e-05  1.25e+01  3.30e+04  1.39e+01    8.40e+01      1   Skip BFGS  
-       6  1.04e-04  4.37e+00  8.53e+04  1.33e+01    1.05e+02      0   Skip BFGS  
-       7  2.46e-04  4.62e+00  9.32e+04  2.75e+01    1.20e+02      3   Skip BFGS  
-       8  4.92e-04  6.22e+00  9.24e+04  5.17e+01    1.59e+02      2   Skip BFGS  
-       9  8.45e-04  8.71e+00  5.49e+04  5.51e+01    7.10e+01      0   Skip BFGS  
-      10  1.40e-03  9.53e+00  5.71e+04  8.95e+01    3.91e+01      0   Skip BFGS  
-      11  1.14e-03  1.43e+01  5.27e+04  7.42e+01    9.43e+00      0              
-      12  1.14e-03  1.29e+01  6.34e+04  8.49e+01    1.40e+01      0              
-      13  9.08e-04  1.47e+01  6.79e+04  7.64e+01    6.66e+00      0              
-      14  7.46e-04  1.40e+01  8.11e+04  7.45e+01    9.30e-01      0              
-      15  6.11e-04  1.41e+01  9.46e+04  7.19e+01    1.94e+00      0              
-      16  5.03e-04  1.39e+01  1.12e+05  7.02e+01    1.40e+00      0              
-      17  4.16e-04  1.39e+01  1.32e+05  6.88e+01    1.59e+00      0   Skip BFGS  
-      18  4.16e-04  1.37e+01  1.57e+05  7.88e+01    1.11e+01      0              
-      19  3.27e-04  1.52e+01  1.74e+05  7.21e+01    7.33e+00      0              
-      20  2.67e-04  1.42e+01  2.11e+05  7.05e+01    4.10e+00      0              
-      21  2.20e-04  1.39e+01  2.50e+05  6.88e+01    5.44e+00      0   Skip BFGS  
-      22  2.20e-04  1.35e+01  2.94e+05  7.82e+01    1.19e+01      0              
-      23  1.78e-04  1.44e+01  3.27e+05  7.26e+01    1.09e+01      0              
-      24  1.78e-04  1.35e+01  3.82e+05  8.14e+01    1.78e+01      0              
-      25  1.46e-04  1.40e+01  4.23e+05  7.58e+01    1.92e+01      0              
-      26  1.46e-04  1.30e+01  4.82e+05  8.35e+01    2.98e+01      0              
-      27  1.46e-04  1.30e+01  5.24e+05  8.96e+01    3.77e+01      0              
-      28  1.46e-04  1.30e+01  5.51e+05  9.36e+01    4.34e+01      0              
-      29  1.46e-04  1.31e+01  5.53e+05  9.39e+01    4.26e+01      0              
-      30  1.46e-04  1.33e+01  5.22e+05  8.97e+01    3.80e+01      0              
-      31  1.46e-04  1.37e+01  4.65e+05  8.17e+01    3.62e+01      0              
-      32  1.19e-04  1.42e+01  3.92e+05  6.09e+01    2.96e+01      0              
-      33  1.19e-04  1.37e+01  3.30e+05  5.30e+01    3.07e+01      0   Skip BFGS  
-      34  1.19e-04  1.35e+01  2.65e+05  4.50e+01    3.11e+01      0   Skip BFGS  
-      35  1.19e-04  1.28e+01  2.12e+05  3.80e+01    3.00e+01      0   Skip BFGS  
-      36  1.19e-04  1.18e+01  1.71e+05  3.22e+01    2.74e+01      0   Skip BFGS  
-      37  1.89e-04  1.06e+01  1.40e+05  3.71e+01    4.72e+01      0   Skip BFGS  
-      38  3.04e-04  1.02e+01  1.12e+05  4.43e+01    4.41e+01      0   Skip BFGS  
-      39  4.92e-04  1.01e+01  9.08e+04  5.48e+01    4.28e+01      0   Skip BFGS  
-      40  7.90e-04  1.03e+01  7.43e+04  6.91e+01    4.65e+01      0   Skip BFGS  
-      41  1.25e-03  1.07e+01  6.10e+04  8.70e+01    5.04e+01      0              
-      42  1.25e-03  1.14e+01  5.01e+04  7.41e+01    3.55e+01      0              
-      43  1.25e-03  1.14e+01  4.18e+04  6.37e+01    3.07e+01      0              
-      44  1.95e-03  1.12e+01  3.50e+04  7.94e+01    4.73e+01      0   Skip BFGS  
+    irls_threshold 9.907075239904973
+       5  4.40e-05  1.06e+01  3.65e+04  1.22e+01    9.70e+01      0   Skip BFGS  
+       6  1.24e-04  3.44e+00  8.41e+04  1.39e+01    8.85e+01      0   Skip BFGS  
+       7  3.26e-04  3.83e+00  8.77e+04  3.24e+01    1.09e+02      2   Skip BFGS  
+       8  6.25e-04  6.84e+00  5.89e+04  4.36e+01    9.88e+01      0   Skip BFGS  
+    /home/vsts/work/1/s/SimPEG/maps.py:1881: RuntimeWarning:
+
+    overflow encountered in exp
+
+    /home/vsts/work/1/s/SimPEG/electromagnetics/static/resistivity/simulation_1d.py:49: RuntimeWarning:
+
+    invalid value encountered in divide
+
+       9  1.20e-03  6.84e+00  6.69e+04  8.68e+01    1.38e+02     18              
+      10  2.29e-03  6.84e+00  7.64e+04  1.82e+02    2.40e+02     19              
+      11  4.38e-03  6.84e+00  8.79e+04  3.92e+02    4.86e+02     18              
+      12  8.37e-03  6.86e+00  1.02e+05  8.59e+02    1.06e+03     15              
+      13  6.34e-03  1.63e+01  1.16e+05  7.55e+02    1.03e+03      9              
+      14  3.49e-03  3.57e+01  1.07e+05  4.08e+02    6.60e+02      3   Skip BFGS  
+      15  1.62e-03  6.90e+01  5.87e+04  1.64e+02    2.93e+02      1   Skip BFGS  
+      16  8.44e-04  4.32e+01  6.69e+04  9.97e+01    4.04e+01      0   Skip BFGS  
+      17  5.15e-04  2.65e+01  1.04e+05  8.02e+01    2.63e+01      0   Skip BFGS  
+      18  3.49e-04  2.06e+01  1.40e+05  6.96e+01    1.16e+01      0   Skip BFGS  
+      19  2.58e-04  1.72e+01  1.81e+05  6.38e+01    6.89e+00      0   Skip BFGS  
+      20  2.01e-04  1.54e+01  2.24e+05  6.05e+01    4.87e+00      0   Skip BFGS  
+      21  1.63e-04  1.44e+01  2.71e+05  5.85e+01    5.46e+00      0   Skip BFGS  
+      22  1.35e-04  1.38e+01  3.22e+05  5.72e+01    7.06e+00      0              
+      23  1.35e-04  1.33e+01  3.76e+05  6.41e+01    1.29e+01      0              
+      24  1.04e-04  1.57e+01  4.08e+05  5.82e+01    1.49e+01      0              
+      25  1.04e-04  1.37e+01  4.85e+05  6.43e+01    2.15e+01      0              
+      26  8.09e-05  1.56e+01  5.23e+05  5.79e+01    2.13e+01      0              
+      27  8.09e-05  1.36e+01  6.02e+05  6.22e+01    2.88e+01      0              
+      28  6.45e-05  1.48e+01  6.25e+05  5.51e+01    2.17e+01      0              
+      29  6.45e-05  1.28e+01  6.55e+05  5.50e+01    2.24e+01      0              
+      30  6.45e-05  1.26e+01  6.17e+05  5.24e+01    1.88e+01      0              
+      31  6.45e-05  1.19e+01  5.47e+05  4.71e+01    2.03e+01      0              
+      32  1.03e-04  1.04e+01  4.56e+05  5.74e+01    4.92e+01      0              
+      33  1.03e-04  1.24e+01  3.40e+05  4.75e+01    3.48e+01      0              
+      34  1.64e-04  1.05e+01  2.67e+05  5.44e+01    6.08e+01      0              
+      35  1.64e-04  1.19e+01  1.99e+05  4.47e+01    3.39e+01      0              
+      36  2.65e-04  1.02e+01  1.61e+05  5.30e+01    4.98e+01      0   Skip BFGS  
+      37  2.65e-04  1.18e+01  1.27e+05  4.55e+01    2.17e+01      0              
+      38  4.23e-04  1.05e+01  1.06e+05  5.54e+01    3.97e+01      0              
+      39  4.23e-04  1.24e+01  8.53e+04  4.86e+01    1.83e+01      0              
+      40  6.59e-04  1.12e+01  7.22e+04  5.88e+01    3.84e+01      0              
+      41  6.59e-04  1.34e+01  5.86e+04  5.20e+01    2.20e+01      0              
+      42  6.59e-04  1.21e+01  4.98e+04  4.49e+01    2.29e+01      0              
+      43  1.04e-03  1.08e+01  4.20e+04  5.46e+01    4.26e+01      0              
+      44  1.04e-03  1.24e+01  3.43e+04  4.81e+01    2.24e+01      0              
     Reach maximum number of IRLS cycles: 40
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 2.1608e+03
-    1 : |xc-x_last| = 6.2562e-02 <= tolX*(1+|x0|) = 2.8016e+00
-    0 : |proj(x-g)-x|    = 4.7344e+01 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 4.7344e+01 <= 1e3*eps       = 1.0000e-02
+    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 2.1598e+03
+    1 : |xc-x_last| = 1.3731e-01 <= tolX*(1+|x0|) = 2.8016e+00
+    0 : |proj(x-g)-x|    = 2.2397e+01 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 2.2397e+01 <= 1e3*eps       = 1.0000e-02
     0 : maxIter   =     100    <= iter          =     45
     ------------------------- DONE! -------------------------
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 290-293
+.. GENERATED FROM PYTHON SOURCE LINES 294-297
 
 Examining the Results
 ---------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 293-324
+.. GENERATED FROM PYTHON SOURCE LINES 297-328
 
 .. code-block:: default
 
@@ -603,28 +615,13 @@ Examining the Results
          :class: sphx-glr-multi-img
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    /home/vsts/work/1/s/SimPEG/utils/plot_utils.py:345: UserWarning:
-
-    Attempted to set non-positive left xlim on a log-scaled axis.
-    Invalid limit will be ignored.
-
-    /home/vsts/work/1/s/tutorials/05-dcr/plot_inv_1_dcr_sounding_irls.py:311: UserWarning:
-
-    Attempted to set non-positive left xlim on a log-scaled axis.
-    Invalid limit will be ignored.
-
-
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 13 minutes  24.448 seconds)
+   **Total running time of the script:** ( 1 minutes  7.764 seconds)
 
 **Estimated memory usage:**  18 MB
 
@@ -634,6 +631,8 @@ Examining the Results
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

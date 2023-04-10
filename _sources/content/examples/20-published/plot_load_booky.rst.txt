@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_content_examples_20-published_plot_load_booky.py>`
+        :ref:`Go to the end <sphx_glr_download_content_examples_20-published_plot_load_booky.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -37,7 +37,7 @@ https://doi.org/10.6084/m9.figshare.5107711
 
 This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capriotti
 
-.. GENERATED FROM PYTHON SOURCE LINES 21-260
+.. GENERATED FROM PYTHON SOURCE LINES 21-257
 
 
 
@@ -102,7 +102,7 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
         """
         f = h5py.File(fname, "w")
         for key in dictionary.keys():
-            dset = f.create_dataset(key, data=dictionary[key])
+            f.create_dataset(key, data=dictionary[key])
         f.close()
 
 
@@ -138,7 +138,6 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
 
         xyz_resolve = resolve[:, 8:11]
         data_resolve = resolve[:, 16:-1]
-        line_resolve = np.unique(resolve[:, -1])
 
         # Load SkyTEM (2006)
         fid = open(
@@ -152,7 +151,7 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
         header_skytem = lines[0].split()
         info_skytem = []
         data_skytem = []
-        for i, line in enumerate(lines[1:]):
+        for line in lines[1:]:
             if len(line.split()) != 65:
                 info_skytem.append(np.array(line.split()[:16], dtype="O"))
                 data_skytem.append(np.array(line.split()[16 : 16 + 24], dtype="float"))
@@ -162,13 +161,11 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
         info_skytem = np.vstack(info_skytem)
         data_skytem = np.vstack(data_skytem)
         lines_skytem = info_skytem[:, 1].astype(float)
-        line_skytem = np.unique(lines_skytem)
         inds = lines_skytem < 2026
         info_skytem = info_skytem[inds, :]
         data_skytem = data_skytem[inds, :].astype(float)
         xyz_skytem = info_skytem[:, [13, 12]].astype(float)
         lines_skytem = info_skytem[:, 1].astype(float)
-        line_skytem = np.unique(lines_skytem)
 
         # Load path of Murray River
         river_path = np.loadtxt(os.path.sep.join([directory, "MurrayRiver.txt"]))
@@ -176,7 +173,7 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
         # Plot the data
         nskip = 40
         fig = plt.figure(figsize=(12 * 0.8, 6 * 0.8))
-        title = ["Resolve In-phase 400 Hz", "SkyTEM High moment 156 $\mu$s"]
+        title = ["Resolve In-phase 400 Hz", r"SkyTEM High moment 156 $\mu$s"]
         ax1 = plt.subplot(121)
         ax2 = plt.subplot(122)
         axs = [ax1, ax2]
@@ -237,7 +234,7 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
         if saveFig:
             fig.savefig("bookpurnong_data.png")
 
-        cs, ncx, ncz, npad = 1.0, 10.0, 10.0, 20
+        cs, ncx, npad = 1.0, 10.0, 20
         hx = [(cs, ncx), (cs, npad, 1.3)]
         npad = 12
         temp = np.logspace(np.log10(1.0), np.log10(12.0), 19)
@@ -307,9 +304,9 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.871 seconds)
+   **Total running time of the script:** ( 0 minutes  1.610 seconds)
 
-**Estimated memory usage:**  18 MB
+**Estimated memory usage:**  17 MB
 
 
 .. _sphx_glr_download_content_examples_20-published_plot_load_booky.py:
@@ -317,6 +314,8 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

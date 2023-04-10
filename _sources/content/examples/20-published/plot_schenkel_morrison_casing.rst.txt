@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_content_examples_20-published_plot_schenkel_morrison_casing.py>`
+        :ref:`Go to the end <sphx_glr_download_content_examples_20-published_plot_schenkel_morrison_casing.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -62,7 +62,7 @@ https://dx.doi.org/10.6084/m9.figshare.3126961.v1
 If you would use this example for a code comparison, or build upon it,
 a citation would be much appreciated!
 
-.. GENERATED FROM PYTHON SOURCE LINES 47-291
+.. GENERATED FROM PYTHON SOURCE LINES 47-288
 
 
 
@@ -96,14 +96,14 @@ a citation would be much appreciated!
  .. code-block:: none
 
     Skin Depth:  [5000000.0]
-    /home/vsts/work/1/s/examples/20-published/plot_schenkel_morrison_casing.py:111: DeprecationWarning:
+    /home/vsts/work/1/s/examples/20-published/plot_schenkel_morrison_casing.py:108: DeprecationWarning:
 
     `np.int` is a deprecated alias for the builtin `int`. To silence this warning, use `int` by itself. Doing this will not modify any behavior and is safe. When replacing `np.int`, you may wish to use e.g. `np.int64` or `np.int32` to specify the precision. If you wish to review your current use, check the release note link for additional information.
     Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
 
     Mesh Extent xmax: 30844847.844048,: zmin: -10732642.852316, zmax: 10732343.352316
     Number of cells 878878
-    Time to solve 2 sources 9.672723531723022
+    Time to solve 2 sources 13.834031343460083
 
 
 
@@ -128,12 +128,10 @@ a citation would be much appreciated!
 
 
     def run(plotIt=True):
-
         # ------------------ MODEL ------------------
         sigmaair = 1e-8  # air
         sigmaback = 1e-2  # background
         sigmacasing = 1e6  # casing
-        sigmainside = sigmaback  # inside the casing
 
         casing_t = 0.006  # 1cm thickness
         casing_l = 300  # length of the casing
@@ -146,7 +144,6 @@ a citation would be much appreciated!
         # ------------------ SURVEY PARAMETERS ------------------
         freqs = np.r_[1e-6]  # [1e-1, 1, 5] # frequencies
         dsz = -300  # down-hole z source location
-        src_loc = np.r_[0.0, 0.0, dsz]
         inf_loc = np.r_[0.0, 0.0, 1e4]
 
         print("Skin Depth: ", [(500.0 / np.sqrt(sigmaback * _)) for _ in freqs])
@@ -197,7 +194,7 @@ a citation would be much appreciated!
         print("Number of cells", mesh.nC)
 
         if plotIt is True:
-            fig, ax = plt.subplots(1, 1, figsize=(6, 4))
+            _, ax = plt.subplots(1, 1, figsize=(6, 4))
             ax.set_title("Simulation Mesh")
             mesh.plot_grid(ax=ax)
 
@@ -316,8 +313,8 @@ a citation would be much appreciated!
         jn1 = fieldsCasing[sg_p, "j"]
 
         # current
-        in0 = [mesh.face_areas * fieldsCasing[dg_p, "j"][:, i] for i in range(len(freqs))]
-        in1 = [mesh.face_areas * fieldsCasing[sg_p, "j"][:, i] for i in range(len(freqs))]
+        in0 = [mesh.face_areas * jn0[:, i] for i in range(len(freqs))]
+        in1 = [mesh.face_areas * jn1[:, i] for i in range(len(freqs))]
 
         in0 = np.vstack(in0).T
         in1 = np.vstack(in1).T
@@ -362,9 +359,9 @@ a citation would be much appreciated!
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  11.790 seconds)
+   **Total running time of the script:** ( 0 minutes  16.558 seconds)
 
-**Estimated memory usage:**  1880 MB
+**Estimated memory usage:**  1604 MB
 
 
 .. _sphx_glr_download_content_examples_20-published_plot_schenkel_morrison_casing.py:
@@ -372,6 +369,8 @@ a citation would be much appreciated!
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

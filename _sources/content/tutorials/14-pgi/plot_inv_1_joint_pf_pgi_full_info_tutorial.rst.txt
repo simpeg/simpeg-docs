@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_content_tutorials_14-pgi_plot_inv_1_joint_pf_pgi_full_info_tutorial.py>`
+        :ref:`Go to the end <sphx_glr_download_content_tutorials_14-pgi_plot_inv_1_joint_pf_pgi_full_info_tutorial.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -46,12 +46,13 @@ Import modules
 --------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 29-49
+.. GENERATED FROM PYTHON SOURCE LINES 29-50
 
 .. code-block:: default
 
 
-    import discretize as ds
+    from discretize import TreeMesh
+    from discretize.utils import active_from_xyz
     import matplotlib.pyplot as plt
     import numpy as np
     import SimPEG.potential_fields as pf
@@ -77,13 +78,13 @@ Import modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 50-53
+.. GENERATED FROM PYTHON SOURCE LINES 51-54
 
 Setup
 -----
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 53-246
+.. GENERATED FROM PYTHON SOURCE LINES 54-247
 
 .. code-block:: default
 
@@ -92,7 +93,7 @@ Setup
     mesh_file = io_utils.download(
         "https://storage.googleapis.com/simpeg/pgi_tutorial_assets/mesh_tutorial.ubc"
     )
-    mesh = ds.TreeMesh.read_UBC(mesh_file)
+    mesh = TreeMesh.read_UBC(mesh_file)
 
     # Load True geological model for comparison with inversion result
     true_geology_file = io_utils.download(
@@ -251,7 +252,7 @@ Setup
     )
     topo = np.genfromtxt(topo_file, skip_header=1)
     # find the active cells
-    actv = utils.surface2ind_topo(mesh, topo, gridLoc="CC")
+    actv = active_from_xyz(mesh, topo, "CC")
     # Create active map to go from reduce set to full
     ndv = np.nan
     actvMap = maps.InjectActiveCells(mesh, actv, ndv)
@@ -324,12 +325,12 @@ Setup
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 247-249
+.. GENERATED FROM PYTHON SOURCE LINES 248-250
 
 Create a joint Data Misfit
 --------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 249-256
+.. GENERATED FROM PYTHON SOURCE LINES 250-257
 
 .. code-block:: default
 
@@ -347,13 +348,13 @@ Create a joint Data Misfit
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 257-260
+.. GENERATED FROM PYTHON SOURCE LINES 258-261
 
 Inversion with full petrophysical information
 ---------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 262-275
+.. GENERATED FROM PYTHON SOURCE LINES 263-276
 
 Create and plot a petrophysical GMM with full information
 ---------------------------------------------------------
@@ -369,7 +370,7 @@ for both unit. Finally the background unit is set at null contrasts (0 g/cc
 0 SI) with a petrophysical noise level of half of the above.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 275-309
+.. GENERATED FROM PYTHON SOURCE LINES 276-310
 
 .. code-block:: default
 
@@ -419,22 +420,22 @@ for both unit. Finally the background unit is set at null contrasts (0 g/cc
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 310-313
+.. GENERATED FROM PYTHON SOURCE LINES 311-314
 
 Create PGI regularization
 -------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 313-343
+.. GENERATED FROM PYTHON SOURCE LINES 314-344
 
 .. code-block:: default
 
 
     # Sensitivity weighting
-    wr_grav = np.sum(simulation_grav.G ** 2.0, axis=0) ** 0.5 / (mesh.cell_volumes[actv])
+    wr_grav = np.sum(simulation_grav.G**2.0, axis=0) ** 0.5 / (mesh.cell_volumes[actv])
     wr_grav = wr_grav / np.max(wr_grav)
 
-    wr_mag = np.sum(simulation_mag.G ** 2.0, axis=0) ** 0.5 / (mesh.cell_volumes[actv])
+    wr_mag = np.sum(simulation_mag.G**2.0, axis=0) ** 0.5 / (mesh.cell_volumes[actv])
     wr_mag = wr_mag / np.max(wr_mag)
 
     # create joint PGI regularization with smoothness
@@ -466,13 +467,13 @@ Create PGI regularization
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 344-347
+.. GENERATED FROM PYTHON SOURCE LINES 345-348
 
 Inverse problem with full petrophysical information
 ---------------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 347-641
+.. GENERATED FROM PYTHON SOURCE LINES 348-642
 
 .. code-block:: default
 
@@ -799,71 +800,83 @@ Inverse problem with full petrophysical information
                         SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
                         ***Done using the default solver Pardiso and no solver_opts.***
                     
-    Alpha scales: [98724.3328354358, 0.0, 60429.19685690043, 0.0, 134904.44438680162, 0.0, 7634775.016981822, 0.0, 5346777.274294973, 0.0, 16584861.835583627, 0.0]
+    Alpha scales: [106358.44737743516, 0.0, 82029.43678361284, 0.0, 138434.273798852, 0.0, 8600515.8629828, 0.0, 6672369.101300665, 0.0, 17228736.299286183, 0.0]
     <class 'SimPEG.regularization.pgi.PGIsmallness'>
-    Initial data misfit scales:  [0.97054767 0.02945233]
+    Initial data misfit scales:  [0.97033672 0.02966328]
     model has any nan: 0
     =============================== Projected GNCG ===============================
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  3.88e-06  2.12e+06  6.44e+04  2.12e+06    2.17e+02      0              
-    geophys. misfits: 123308.1 (target 288.0 [False]); 25256.9 (target 288.0 [False]) | smallness misfit: 165675.4 (target: 11727.0 [False])
-    Beta cooling evaluation: progress: [123308.1  25256.9] ; minimum progress targets: [1735115.6  286362. ]
-    mref changed in  913  places
-       1  3.88e-06  1.20e+05  1.54e+08  1.21e+05    1.39e+01      0              
-    geophys. misfits: 4486.1 (target 288.0 [False]); 1279.2 (target 288.0 [False]) | smallness misfit: 26603.1 (target: 11727.0 [False])
-    Beta cooling evaluation: progress: [4486.1 1279.2] ; minimum progress targets: [98646.4 20205.5]
-    mref changed in  33  places
-       2  3.88e-06  4.39e+03  7.76e+07  4.69e+03    2.05e+01      0              
-    geophys. misfits: 2454.6 (target 288.0 [False]); 242.8 (target 288.0 [True]) | smallness misfit: 23594.0 (target: 11727.0 [False])
-    Updating scaling for data misfits by  1.1859241001103598
-    New scales: [0.97504987 0.02495013]
-    Beta cooling evaluation: progress: [2454.6  242.8] ; minimum progress targets: [3588.9 1023.3]
+       0  4.04e-06  2.12e+06  6.40e+04  2.12e+06    2.17e+02      0              
+    geophys. misfits: 123312.3 (target 288.0 [False]); 25156.8 (target 288.0 [False]) | smallness misfit: 165242.0 (target: 11719.0 [False])
+    Beta cooling evaluation: progress: [123312.3  25156.8] ; minimum progress targets: [1735115.7  286348.7]
+    mref changed in  904  places
+       1  4.04e-06  1.20e+05  1.55e+08  1.21e+05    1.39e+01      0              
+    geophys. misfits: 4266.8 (target 288.0 [False]); 1151.9 (target 288.0 [False]) | smallness misfit: 26939.0 (target: 11719.0 [False])
+    Beta cooling evaluation: progress: [4266.8 1151.9] ; minimum progress targets: [98649.8 20125.4]
+    mref changed in  32  places
+       2  4.04e-06  4.17e+03  7.91e+07  4.49e+03    2.04e+01      0              
+    geophys. misfits: 2408.7 (target 288.0 [False]); 188.5 (target 288.0 [True]) | smallness misfit: 24043.7 (target: 11719.0 [False])
+    Updating scaling for data misfits by  1.5275497575033854
+    New scales: [0.98038014 0.01961986]
+    Beta cooling evaluation: progress: [2408.7  188.5] ; minimum progress targets: [3413.4  921.5]
     mref changed in  2  places
-       3  3.88e-06  2.40e+03  7.12e+07  2.68e+03    2.08e+01      0   Skip BFGS  
-    geophys. misfits: 360.6 (target 288.0 [False]); 96.0 (target 288.0 [True]) | smallness misfit: 22594.0 (target: 11727.0 [False])
-    Updating scaling for data misfits by  2.9994389686039455
-    New scales: [0.99154105 0.00845895]
-    Beta cooling evaluation: progress: [360.6  96. ] ; minimum progress targets: [1963.7  345.6]
+       3  4.04e-06  2.37e+03  7.29e+07  2.66e+03    2.07e+01      0   Skip BFGS  
+    geophys. misfits: 361.0 (target 288.0 [False]); 89.1 (target 288.0 [True]) | smallness misfit: 22889.4 (target: 11719.0 [False])
+    Updating scaling for data misfits by  3.232098126841941
+    New scales: [0.9938463 0.0061537]
+    Beta cooling evaluation: progress: [361.   89.1] ; minimum progress targets: [1926.9  345.6]
     mref changed in  0  places
-       4  3.88e-06  3.58e+02  7.21e+07  6.38e+02    2.10e+01      0   Skip BFGS  
-    geophys. misfits: 199.2 (target 288.0 [True]); 107.4 (target 288.0 [True]) | smallness misfit: 22023.5 (target: 11727.0 [False])
-    Beta cooling evaluation: progress: [199.2 107.4] ; minimum progress targets: [345.6 345.6]
-    Warming alpha_pgi to favor clustering:  2.0636985266576433
-    mref changed in  1  places
-       5  3.88e-06  1.98e+02  1.20e+08  6.64e+02    3.09e+01      0   Skip BFGS  
-    geophys. misfits: 234.2 (target 288.0 [True]); 365.6 (target 288.0 [False]) | smallness misfit: 16077.5 (target: 11727.0 [False])
-    Updating scaling for data misfits by  1.2298967407378196
-    New scales: [0.98961655 0.01038345]
-    Beta cooling evaluation: progress: [234.2 365.6] ; minimum progress targets: [345.6 345.6]
-    Decreasing beta to counter data misfit increase.
-    mref changed in  0  places
-       6  1.94e-06  2.36e+02  1.04e+08  4.37e+02    3.95e+01      0              
-    geophys. misfits: 173.0 (target 288.0 [True]); 129.2 (target 288.0 [True]) | smallness misfit: 15854.6 (target: 11727.0 [False])
-    Beta cooling evaluation: progress: [173.  129.2] ; minimum progress targets: [345.6 345.6]
-    Warming alpha_pgi to favor clustering:  4.017149628951586
+       4  4.04e-06  3.59e+02  7.37e+07  6.57e+02    2.11e+01      0   Skip BFGS  
+    geophys. misfits: 205.7 (target 288.0 [True]); 136.5 (target 288.0 [True]) | smallness misfit: 22475.5 (target: 11719.0 [False])
+    Beta cooling evaluation: progress: [205.7 136.5] ; minimum progress targets: [345.6 345.6]
+    Warming alpha_pgi to favor clustering:  1.7551754838743543
     mref changed in  0  places
     Add mref to Smoothness. Changes in mref happened in 0.0 % of the cells
-       7  1.94e-06  1.73e+02  1.90e+08  5.41e+02    2.19e+01      0              
-    geophys. misfits: 194.6 (target 288.0 [True]); 146.3 (target 288.0 [True]) | smallness misfit: 12292.0 (target: 11727.0 [False])
-    Beta cooling evaluation: progress: [194.6 146.3] ; minimum progress targets: [345.6 345.6]
-    Warming alpha_pgi to favor clustering:  6.926564991954144
+       5  4.04e-06  2.05e+02  1.08e+08  6.40e+02    3.35e+01      0   Skip BFGS  
+    geophys. misfits: 227.2 (target 288.0 [True]); 317.0 (target 288.0 [False]) | smallness misfit: 17610.9 (target: 11719.0 [False])
+    Updating scaling for data misfits by  1.267557566514203
+    New scales: [0.99221266 0.00778734]
+    Beta cooling evaluation: progress: [227.2 317. ] ; minimum progress targets: [345.6 345.6]
+    mref changed in  0  places
+       6  4.04e-06  2.28e+02  9.82e+07  6.25e+02    4.03e+01      0              
+    geophys. misfits: 196.2 (target 288.0 [True]); 188.6 (target 288.0 [True]) | smallness misfit: 15827.8 (target: 11719.0 [False])
+    Beta cooling evaluation: progress: [196.2 188.6] ; minimum progress targets: [345.6 345.6]
+    Warming alpha_pgi to favor clustering:  2.6285739976201548
     mref changed in  0  places
     Add mref to Smoothness. Changes in mref happened in 0.0 % of the cells
-       8  1.94e-06  1.94e+02  2.50e+08  6.78e+02    2.45e+01      0              
-    geophys. misfits: 231.8 (target 288.0 [True]); 232.3 (target 288.0 [True]) | smallness misfit: 10970.6 (target: 11727.0 [True])
+       7  4.04e-06  1.96e+02  1.28e+08  7.12e+02    2.20e+01      0              
+    geophys. misfits: 216.9 (target 288.0 [True]); 244.1 (target 288.0 [True]) | smallness misfit: 12796.2 (target: 11719.0 [False])
+    Beta cooling evaluation: progress: [216.9 244.1] ; minimum progress targets: [345.6 345.6]
+    Warming alpha_pgi to favor clustering:  3.2960196759467593
+    mref changed in  0  places
+    Add mref to Smoothness. Changes in mref happened in 0.0 % of the cells
+       8  4.04e-06  2.17e+02  1.37e+08  7.70e+02    2.30e+01      0              
+    geophys. misfits: 230.8 (target 288.0 [True]); 291.8 (target 288.0 [False]) | smallness misfit: 11886.2 (target: 11719.0 [False])
+    Updating scaling for data misfits by  1.2476720510665602
+    New scales: [0.99030265 0.00969735]
+    Beta cooling evaluation: progress: [230.8 291.8] ; minimum progress targets: [345.6 345.6]
+    mref changed in  0  places
+       9  4.04e-06  2.31e+02  1.32e+08  7.65e+02    2.23e+01      0   Skip BFGS  
+    geophys. misfits: 230.5 (target 288.0 [True]); 284.6 (target 288.0 [True]) | smallness misfit: 11914.1 (target: 11719.0 [False])
+    Beta cooling evaluation: progress: [230.5 284.6] ; minimum progress targets: [345.6 345.6]
+    Warming alpha_pgi to favor clustering:  3.7270785946518936
+    mref changed in  0  places
+    Add mref to Smoothness. Changes in mref happened in 0.0 % of the cells
+      10  4.04e-06  2.31e+02  1.44e+08  8.12e+02    2.18e+01      1   Skip BFGS  
+    geophys. misfits: 243.3 (target 288.0 [True]); 256.4 (target 288.0 [True]) | smallness misfit: 10965.2 (target: 11719.0 [True])
     All targets have been reached
-    Beta cooling evaluation: progress: [231.8 232.3] ; minimum progress targets: [345.6 345.6]
-    Warming alpha_pgi to favor clustering:  8.596887192227616
+    Beta cooling evaluation: progress: [243.3 256.4] ; minimum progress targets: [345.6 345.6]
+    Warming alpha_pgi to favor clustering:  4.299131074983458
     mref changed in  0  places
     Add mref to Smoothness. Changes in mref happened in 0.0 % of the cells
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 2.1156e+05
-    0 : |xc-x_last| = 8.5569e-01 <= tolX*(1+|x0|) = 1.0153e-01
-    0 : |proj(x-g)-x|    = 2.4666e+01 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 2.4666e+01 <= 1e3*eps       = 1.0000e-02
-    0 : maxIter   =      30    <= iter          =      9
+    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 2.1152e+05
+    0 : |xc-x_last| = 4.9200e-01 <= tolX*(1+|x0|) = 1.0153e-01
+    0 : |proj(x-g)-x|    = 2.1726e+01 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 2.1726e+01 <= 1e3*eps       = 1.0000e-02
+    0 : maxIter   =      30    <= iter          =     11
     ------------------------- DONE! -------------------------
 
 
@@ -872,9 +885,9 @@ Inverse problem with full petrophysical information
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  24.679 seconds)
+   **Total running time of the script:** ( 2 minutes  24.680 seconds)
 
-**Estimated memory usage:**  102 MB
+**Estimated memory usage:**  100 MB
 
 
 .. _sphx_glr_download_content_tutorials_14-pgi_plot_inv_1_joint_pf_pgi_full_info_tutorial.py:
@@ -882,6 +895,8 @@ Inverse problem with full petrophysical information
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_content_tutorials_05-dcr_plot_inv_1_dcr_sounding_parametric.py>`
+        :ref:`Go to the end <sphx_glr_download_content_tutorials_05-dcr_plot_inv_1_dcr_sounding_parametric.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -136,7 +136,7 @@ Here we load the observed data, define the DC survey geometry and plot the
 data values.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 88-134
+.. GENERATED FROM PYTHON SOURCE LINES 88-139
 
 .. code-block:: default
 
@@ -158,11 +158,16 @@ data values.
 
     source_list = []
     for ii in range(0, n_sources):
-
         # MN electrode locations for receivers. Each is an (N, 3) numpy array
         M_locations = M_electrodes[k[ii] : k[ii + 1], :]
         N_locations = N_electrodes[k[ii] : k[ii + 1], :]
-        receiver_list = [dc.receivers.Dipole(M_locations, N_locations)]
+        receiver_list = [
+            dc.receivers.Dipole(
+                M_locations,
+                N_locations,
+                data_type="apparent_resistivity",
+            )
+        ]
 
         # AB electrode locations for source. Each is a (1, 3) numpy array
         A_location = A_electrodes[k[ii], :]
@@ -183,7 +188,7 @@ data values.
     ax1 = fig.add_axes([0.15, 0.1, 0.7, 0.85])
     ax1.semilogy(electrode_separations, dobs, "b")
     ax1.set_xlabel("AB/2 (m)")
-    ax1.set_ylabel("Apparent Resistivity ($\Omega m$)")
+    ax1.set_ylabel(r"Apparent Resistivity ($\Omega m$)")
     plt.show()
 
 
@@ -198,7 +203,7 @@ data values.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 135-143
+.. GENERATED FROM PYTHON SOURCE LINES 140-148
 
 Assign Uncertainties
 --------------------
@@ -209,7 +214,7 @@ a relative error is applied to each datum. For this tutorial, the relative
 error on each datum will be 2.5%.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 143-147
+.. GENERATED FROM PYTHON SOURCE LINES 148-152
 
 .. code-block:: default
 
@@ -224,7 +229,7 @@ error on each datum will be 2.5%.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 148-154
+.. GENERATED FROM PYTHON SOURCE LINES 153-159
 
 Define Data
 --------------------
@@ -233,7 +238,7 @@ Here is where we define the data that are inverted. The data are defined by
 the survey, the observation values and the standard deviation.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 154-157
+.. GENERATED FROM PYTHON SOURCE LINES 159-162
 
 .. code-block:: default
 
@@ -247,7 +252,7 @@ the survey, the observation values and the standard deviation.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 158-165
+.. GENERATED FROM PYTHON SOURCE LINES 163-170
 
 Defining the Starting Model and Mapping
 ---------------------------------------
@@ -257,7 +262,7 @@ resistivities and thickness for a set of horizontal layer. Here, we choose to
 define a model consisting of 3 layers.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 165-188
+.. GENERATED FROM PYTHON SOURCE LINES 170-193
 
 .. code-block:: default
 
@@ -305,7 +310,7 @@ define a model consisting of 3 layers.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 189-195
+.. GENERATED FROM PYTHON SOURCE LINES 194-200
 
 Define the Physics
 ------------------
@@ -314,7 +319,7 @@ Here we define the physics of the problem. The data consists of apparent
 resistivity values. This is defined here.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 195-203
+.. GENERATED FROM PYTHON SOURCE LINES 200-207
 
 .. code-block:: default
 
@@ -323,7 +328,6 @@ resistivity values. This is defined here.
         survey=survey,
         rhoMap=resistivity_map,
         thicknessesMap=layer_map,
-        data_type="apparent_resistivity",
     )
 
 
@@ -333,7 +337,7 @@ resistivity values. This is defined here.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 204-214
+.. GENERATED FROM PYTHON SOURCE LINES 208-218
 
 Define Inverse Problem
 ----------------------
@@ -346,7 +350,7 @@ The inverse problem is defined by 3 things:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 214-243
+.. GENERATED FROM PYTHON SOURCE LINES 218-247
 
 .. code-block:: default
 
@@ -386,7 +390,7 @@ The inverse problem is defined by 3 things:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 244-251
+.. GENERATED FROM PYTHON SOURCE LINES 248-255
 
 Define Inversion Directives
 ---------------------------
@@ -396,13 +400,10 @@ includes the cooling schedule for the trade-off parameter (beta), stopping
 criteria for the inversion and saving inversion results at each iteration.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 251-278
+.. GENERATED FROM PYTHON SOURCE LINES 255-278
 
 .. code-block:: default
 
-
-    # Apply and update sensitivity weighting as the model updates
-    update_sensitivity_weights = directives.UpdateSensitivityWeights()
 
     # Defining a starting value for the trade-off parameter (beta) between the data
     # misfit and the regularization.
@@ -421,7 +422,6 @@ criteria for the inversion and saving inversion results at each iteration.
 
     # The directives are defined in a list
     directives_list = [
-        update_sensitivity_weights,
         starting_beta,
         beta_schedule,
         target_misfit,
@@ -473,35 +473,39 @@ the set of directives. We can then run the inversion.
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  2.49e+04  7.45e+02  0.00e+00  7.45e+02    2.99e+03      0              
-       1  2.49e+04  3.57e+02  1.20e-04  3.60e+02    3.16e+02      0              
-       2  2.49e+04  3.54e+02  1.21e-04  3.57e+02    6.91e+00      0              
-       3  4.98e+03  3.54e+02  1.08e-04  3.55e+02    3.67e+02      4              
-       4  4.98e+03  3.45e+02  9.77e-04  3.50e+02    8.98e+01      0              
-       5  4.98e+03  3.44e+02  8.44e-04  3.48e+02    2.48e+02      2   Skip BFGS  
-       6  9.96e+02  3.44e+02  9.74e-04  3.45e+02    2.72e+02      3              
-       7  9.96e+02  3.42e+02  1.23e-03  3.43e+02    2.88e+02      3              
-       8  9.96e+02  3.39e+02  2.73e-03  3.42e+02    2.41e+02      2              
-       9  1.99e+02  3.37e+02  2.79e-03  3.37e+02    2.42e+02      3              
-      10  1.99e+02  3.17e+02  2.11e-02  3.21e+02    5.34e+02      2              
-      11  1.99e+02  2.82e+02  1.02e-01  3.02e+02    6.93e+02      2              
-      12  3.98e+01  2.28e+02  1.83e-01  2.36e+02    4.59e+02      1              
-      13  3.98e+01  2.14e+02  4.29e-01  2.31e+02    8.14e+02      2              
-      14  3.98e+01  1.09e+02  9.77e-01  1.48e+02    3.49e+02      1              
-      15  7.97e+00  8.83e+01  1.19e+00  9.78e+01    4.22e+02      1              
-      16  7.97e+00  4.99e+01  3.11e+00  7.46e+01    8.69e+02      0              
-      17  7.97e+00  1.18e+01  3.87e+00  4.26e+01    1.74e+02      0              
-      18  1.59e+00  1.25e+01  3.23e+00  1.76e+01    1.57e+02      1              
-      19  1.59e+00  8.16e+00  4.19e+00  1.48e+01    2.34e+02      1              
-      20  1.59e+00  2.66e+00  5.54e+00  1.15e+01    6.32e+01      0   Skip BFGS  
-      21  3.19e-01  2.66e+00  5.44e+00  4.40e+00    8.16e+00      0              
-      22  3.19e-01  2.12e+00  5.93e+00  4.01e+00    1.32e+02      1              
+       0  1.44e+04  7.40e+02  0.00e+00  7.40e+02    2.97e+03      0              
+       1  1.44e+04  3.57e+02  1.82e-04  3.60e+02    3.29e+02      0              
+       2  1.44e+04  3.55e+02  1.83e-04  3.57e+02    7.17e+00      0              
+       3  2.88e+03  3.55e+02  1.81e-04  3.55e+02    3.85e+02      0   Skip BFGS  
+       4  2.88e+03  3.48e+02  1.63e-03  3.52e+02    4.79e+01      0              
+       5  2.88e+03  3.48e+02  1.61e-03  3.52e+02    5.47e+01      0              
+       6  5.76e+02  3.47e+02  1.64e-03  3.48e+02    3.76e+02      1              
+       7  5.76e+02  3.16e+02  3.21e-02  3.35e+02    1.60e+02      0              
+       8  5.76e+02  3.13e+02  3.54e-02  3.33e+02    2.31e+02      1              
+       9  1.15e+02  3.12e+02  3.61e-02  3.16e+02    3.99e+02      2              
+      10  1.15e+02  2.98e+02  6.99e-02  3.06e+02    4.61e+02      3              
+      11  1.15e+02  2.83e+02  1.32e-01  2.98e+02    2.83e+02      2              
+      12  2.30e+01  2.62e+02  1.60e-01  2.66e+02    5.07e+02      3              
+      13  2.30e+01  2.20e+02  5.72e-01  2.33e+02    6.69e+02      2              
+      14  2.30e+01  1.31e+02  1.20e+00  1.59e+02    3.27e+02      1              
+      15  4.60e+00  9.73e+01  1.48e+00  1.04e+02    3.42e+02      2              
+      16  4.60e+00  7.14e+01  2.16e+00  8.14e+01    4.62e+02      2              
+      17  4.60e+00  5.50e+01  3.71e+00  7.21e+01    8.70e+02      1   Skip BFGS  
+      18  9.21e-01  2.77e+01  4.06e+00  3.14e+01    1.55e+02      0              
+      19  9.21e-01  2.09e+01  4.19e+00  2.47e+01    2.09e+02      2              
+      20  9.21e-01  1.63e+01  4.88e+00  2.08e+01    2.92e+02      2   Skip BFGS  
+      21  1.84e-01  1.40e+01  6.12e+00  1.51e+01    2.75e+02      1              
+      22  1.84e-01  1.40e+01  5.70e+00  1.51e+01    2.83e+02      2              
+      23  1.84e-01  1.08e+01  7.72e+00  1.22e+01    4.13e+02      1   Skip BFGS  
+      24  3.68e-02  3.65e+00  7.32e+00  3.92e+00    3.36e+01      0              
+      25  3.68e-02  2.34e+00  9.14e+00  2.67e+00    1.46e+02      1              
+      26  3.68e-02  1.50e+00  1.07e+01  1.89e+00    6.52e+01      1   Skip BFGS  
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 7.4614e+01
-    1 : |xc-x_last| = 2.1393e-01 <= tolX*(1+|x0|) = 1.4182e+00
-    0 : |proj(x-g)-x|    = 1.3215e+02 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 1.3215e+02 <= 1e3*eps       = 1.0000e-02
-    0 : maxIter   =      50    <= iter          =     23
+    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 7.4066e+01
+    1 : |xc-x_last| = 2.3783e-01 <= tolX*(1+|x0|) = 1.4182e+00
+    0 : |proj(x-g)-x|    = 6.5229e+01 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 6.5229e+01 <= 1e3*eps       = 1.0000e-02
+    0 : maxIter   =      50    <= iter          =     27
     ------------------------- DONE! -------------------------
 
 
@@ -577,9 +581,9 @@ Examining the Results
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  22.871 seconds)
+   **Total running time of the script:** ( 0 minutes  33.962 seconds)
 
-**Estimated memory usage:**  18 MB
+**Estimated memory usage:**  17 MB
 
 
 .. _sphx_glr_download_content_tutorials_05-dcr_plot_inv_1_dcr_sounding_parametric.py:
@@ -587,6 +591,8 @@ Examining the Results
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

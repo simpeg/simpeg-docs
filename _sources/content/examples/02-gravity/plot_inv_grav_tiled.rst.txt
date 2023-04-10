@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_content_examples_02-gravity_plot_inv_grav_tiled.py>`
+        :ref:`Go to the end <sphx_glr_download_content_examples_02-gravity_plot_inv_grav_tiled.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -23,14 +23,14 @@ PF: Gravity: Tiled Inversion Linear
 
 Invert data in tiles.
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-34
+.. GENERATED FROM PYTHON SOURCE LINES 8-27
 
 .. code-block:: default
 
+    import os
     import numpy as np
     import matplotlib.pyplot as plt
 
-    from discretize import TensorMesh
     from SimPEG.potential_fields import gravity
     from SimPEG import (
         maps,
@@ -42,16 +42,9 @@ Invert data in tiles.
         directives,
         inversion,
     )
-    from discretize.utils import mesh_builder_xyz, refine_tree_xyz
+    from discretize.utils import mesh_builder_xyz, refine_tree_xyz, active_from_xyz
 
-    try:
-        from SimPEG import utils
-        from SimPEG.utils import plot2Ddata
-    except:
-        from SimPEG import Utils as utils
-        from SimPEG.Utils.Plotutils import plot2Ddata
-
-    import shutil
+    from SimPEG import utils
 
 
 
@@ -60,7 +53,7 @@ Invert data in tiles.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 35-43
+.. GENERATED FROM PYTHON SOURCE LINES 28-36
 
 Setup
 -----
@@ -71,7 +64,7 @@ Create a global survey and mesh and simulate some data
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 43-59
+.. GENERATED FROM PYTHON SOURCE LINES 36-52
 
 .. code-block:: default
 
@@ -83,7 +76,7 @@ Create a global survey and mesh and simulate some data
     X, Y = np.meshgrid(xr, yr)
 
     # Move the observation points 5m above the topo
-    Z = -np.exp((X ** 2 + Y ** 2) / 75 ** 2)
+    Z = -np.exp((X**2 + Y**2) / 75**2)
 
     # Create a topo array
     topo = np.c_[utils.mkvc(X.T), utils.mkvc(Y.T), utils.mkvc(Z.T)]
@@ -98,7 +91,7 @@ Create a global survey and mesh and simulate some data
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-66
+.. GENERATED FROM PYTHON SOURCE LINES 53-59
 
 Divided and Conquer
 -------------------
@@ -107,7 +100,7 @@ Split the data set in two and create sub-problems
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 66-97
+.. GENERATED FROM PYTHON SOURCE LINES 59-89
 
 .. code-block:: default
 
@@ -122,7 +115,6 @@ Split the data set in two and create sub-problems
     local_surveys = []
     local_meshes = []
     for local_index in local_indices:
-
         receivers = gravity.receivers.Point(rxLoc[local_index, :])
         srcField = gravity.sources.SourceField([receivers])
         local_survey = gravity.survey.Survey(srcField)
@@ -149,7 +141,7 @@ Split the data set in two and create sub-problems
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 98-104
+.. GENERATED FROM PYTHON SOURCE LINES 90-96
 
 Global Mesh
 ------------
@@ -158,7 +150,7 @@ Create a global mesh survey for simulation
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 104-159
+.. GENERATED FROM PYTHON SOURCE LINES 96-151
 
 .. code-block:: default
 
@@ -177,7 +169,7 @@ Create a global mesh survey for simulation
     mesh.finalize()
 
     # Define an active cells from topo
-    activeCells = utils.surface2ind_topo(mesh, topo)
+    activeCells = active_from_xyz(mesh, topo)
     nC = int(activeCells.sum())
 
     # We can now create a density model and generate data
@@ -224,7 +216,7 @@ Create a global mesh survey for simulation
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 160-165
+.. GENERATED FROM PYTHON SOURCE LINES 152-157
 
 Tiled misfits
 
@@ -232,13 +224,12 @@ Tiled misfits
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 165-222
+.. GENERATED FROM PYTHON SOURCE LINES 157-212
 
 .. code-block:: default
 
     local_misfits = []
     for ii, local_survey in enumerate(local_surveys):
-
         tile_map = maps.TileMap(mesh, activeCells, local_meshes[ii])
 
         local_actives = tile_map.local_active
@@ -249,7 +240,7 @@ Tiled misfits
             mesh=local_meshes[ii],
             rhoMap=tile_map,
             ind_active=local_actives,
-            sensitivity_path=f"Inversion\Tile{ii}.zarr",
+            sensitivity_path=os.path.join("Inversion", f"Tile{ii}.zarr"),
         )
 
         data_object = data.Data(
@@ -269,7 +260,6 @@ Tiled misfits
     # Plot the model on different meshes
     fig = plt.figure(figsize=(12, 6))
     for ii, local_misfit in enumerate(local_misfits):
-
         local_mesh = local_misfit.simulation.mesh
         local_map = local_misfit.simulation.rhoMap
 
@@ -305,7 +295,7 @@ Tiled misfits
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 223-229
+.. GENERATED FROM PYTHON SOURCE LINES 213-219
 
 Invert on the global mesh
 
@@ -314,7 +304,7 @@ Invert on the global mesh
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 229-277
+.. GENERATED FROM PYTHON SOURCE LINES 219-267
 
 .. code-block:: default
 
@@ -379,6 +369,10 @@ Invert on the global mesh
 
  .. code-block:: none
 
+    /home/vsts/work/1/s/SimPEG/directives/directives.py:2519: UserWarning:
+
+    'everyIter' property is deprecated and will be removed in SimPEG 0.20.0.Please use 'every_iteration'.
+
     SimPEG.InvProblem will set Regularization.reference_model to m0.
     SimPEG.InvProblem will set Regularization.reference_model to m0.
     SimPEG.InvProblem will set Regularization.reference_model to m0.
@@ -400,7 +394,7 @@ Invert on the global mesh
        5  6.69e+01  3.32e+02  8.84e+00  9.23e+02    4.63e+01      0   Skip BFGS  
        6  3.34e+01  2.09e+02  1.01e+01  5.47e+02    4.51e+01      0   Skip BFGS  
     Reached starting chifact with l2-norm regularization: Start IRLS steps...
-    irls_threshold 0.07444388869753105
+    irls_threshold 0.07444388873807169
     Reach maximum number of IRLS cycles: 0
     ------------------------- STOP! -------------------------
     1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 4.2557e+03
@@ -416,9 +410,9 @@ Invert on the global mesh
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  4.025 seconds)
+   **Total running time of the script:** ( 0 minutes  5.048 seconds)
 
-**Estimated memory usage:**  34 MB
+**Estimated memory usage:**  28 MB
 
 
 .. _sphx_glr_download_content_examples_02-gravity_plot_inv_grav_tiled.py:
@@ -426,6 +420,8 @@ Invert on the global mesh
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

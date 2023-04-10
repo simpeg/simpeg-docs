@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_content_tutorials_06-ip_plot_fwd_2_dcip2d.py>`
+        :ref:`Go to the end <sphx_glr_download_content_tutorials_06-ip_plot_fwd_2_dcip2d.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -51,9 +51,9 @@ Import modules
 
 
     from discretize import TreeMesh
-    from discretize.utils import mkvc, refine_tree_xyz
+    from discretize.utils import mkvc, refine_tree_xyz, active_from_xyz
 
-    from SimPEG.utils import model_builder, surface2ind_topo
+    from SimPEG.utils import model_builder
     from SimPEG.utils.io_utils.io_utils_electromagnetics import write_dcip2d_ubc
     from SimPEG import maps, data
     from SimPEG.electromagnetics.static import resistivity as dc
@@ -237,9 +237,9 @@ resistivity and IP data.
 
  .. code-block:: none
 
-    /usr/share/miniconda/envs/simpeg-test/lib/python3.7/site-packages/scipy/interpolate/interpolate.py:630: RuntimeWarning:
+    /home/vsts/conda/envs/simpeg-test/lib/python3.8/site-packages/scipy/interpolate/_interpolate.py:698: RuntimeWarning:
 
-    invalid value encountered in true_divide
+    invalid value encountered in divide
 
 
 
@@ -268,7 +268,7 @@ you can carry through this work flow with a resistivity model if desired.
     resistor_conductivity = 1e-3
 
     # Find active cells in forward modeling (cell below surface)
-    ind_active = surface2ind_topo(mesh, topo_xyz[:, [0, 2]])
+    ind_active = active_from_xyz(mesh, topo_xyz[:, [0, 2]])
 
     # Define mapping from model to active cells
     nC = int(ind_active.sum())
@@ -513,7 +513,7 @@ sphere is not. Here, the chargeability is defined as mV/V.
     sphere_chargeability = 1e-1
 
     # Find active cells in forward modeling (cells below surface)
-    ind_active = surface2ind_topo(mesh, topo_xyz[:, [0, 2]])
+    ind_active = active_from_xyz(mesh, topo_xyz[:, [0, 2]])
 
     # Define mapping from model to active cells
     nC = int(ind_active.sum())
@@ -671,13 +671,12 @@ Write Outputs (Optional)
 ------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 460-522
+.. GENERATED FROM PYTHON SOURCE LINES 460-521
 
 .. code-block:: default
 
 
     if write_output:
-
         dir_path = os.path.dirname(__file__).split(os.path.sep)
         dir_path.extend(["outputs"])
         dir_path = os.path.sep.join(dir_path) + os.path.sep
@@ -747,7 +746,7 @@ Write Outputs (Optional)
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  10.989 seconds)
+   **Total running time of the script:** ( 0 minutes  13.009 seconds)
 
 **Estimated memory usage:**  18 MB
 
@@ -757,6 +756,8 @@ Write Outputs (Optional)
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

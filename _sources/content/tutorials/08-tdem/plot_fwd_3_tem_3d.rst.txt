@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_content_tutorials_08-tdem_plot_fwd_3_tem_3d.py>`
+        :ref:`Go to the end <sphx_glr_download_content_tutorials_08-tdem_plot_fwd_3_tem_3d.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -51,9 +51,9 @@ Import Modules
 
 
     from discretize import TreeMesh
-    from discretize.utils import mkvc, refine_tree_xyz
+    from discretize.utils import mkvc, refine_tree_xyz, active_from_xyz
 
-    from SimPEG.utils import plot2Ddata, surface2ind_topo
+    from SimPEG.utils import plot2Ddata
     from SimPEG import maps
     import SimPEG.electromagnetics.time_domain as tdem
 
@@ -189,7 +189,7 @@ the time channels at which they measure the field. For this example,
 the survey consists of a uniform grid of airborne measurements.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 124-169
+.. GENERATED FROM PYTHON SOURCE LINES 124-168
 
 .. code-block:: default
 
@@ -216,7 +216,6 @@ the survey consists of a uniform grid of airborne measurements.
 
     # Each unique location defines a new transmitter
     for ii in range(ntx):
-
         # Here we define receivers that measure the h-field in A/m
         dbzdt_receiver = tdem.receivers.PointMagneticFluxTimeDerivative(
             receiver_locations[ii, :], time_channels, "z"
@@ -245,7 +244,7 @@ the survey consists of a uniform grid of airborne measurements.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 170-182
+.. GENERATED FROM PYTHON SOURCE LINES 169-181
 
 Create OcTree Mesh
 ------------------
@@ -260,7 +259,7 @@ When designing a mesh to solve practical time domain problems:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 182-208
+.. GENERATED FROM PYTHON SOURCE LINES 181-207
 
 .. code-block:: default
 
@@ -297,7 +296,7 @@ When designing a mesh to solve practical time domain problems:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 209-216
+.. GENERATED FROM PYTHON SOURCE LINES 208-215
 
 Create Conductivity Model and Mapping for OcTree Mesh
 -----------------------------------------------------
@@ -307,7 +306,7 @@ model. The model consists of a conductive block within a more
 resistive background.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 216-265
+.. GENERATED FROM PYTHON SOURCE LINES 215-264
 
 .. code-block:: default
 
@@ -318,7 +317,7 @@ resistive background.
     block_conductivity = 2e0
 
     # Active cells are cells below the surface.
-    ind_active = surface2ind_topo(mesh, topo_xyz)
+    ind_active = active_from_xyz(mesh, topo_xyz)
     model_map = maps.InjectActiveCells(mesh, ind_active, air_conductivity)
 
     # Define the model
@@ -372,7 +371,7 @@ resistive background.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 266-271
+.. GENERATED FROM PYTHON SOURCE LINES 265-270
 
 Define the Time-Stepping
 ------------------------
@@ -380,7 +379,7 @@ Define the Time-Stepping
 Stuff about time-stepping and some rule of thumb
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 271-275
+.. GENERATED FROM PYTHON SOURCE LINES 270-274
 
 .. code-block:: default
 
@@ -395,7 +394,7 @@ Stuff about time-stepping and some rule of thumb
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 276-286
+.. GENERATED FROM PYTHON SOURCE LINES 275-285
 
 Simulation: Time-Domain Response
 --------------------------------
@@ -408,7 +407,7 @@ We defined a waveform 'on-time' is from -0.002 s to 0 s. As a result, we need
 to set the start time for the simulation to be at -0.002 s.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 286-294
+.. GENERATED FROM PYTHON SOURCE LINES 285-293
 
 .. code-block:: default
 
@@ -427,13 +426,13 @@ to set the start time for the simulation to be at -0.002 s.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 295-298
+.. GENERATED FROM PYTHON SOURCE LINES 294-297
 
 Predict Data and Plot
 ---------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 298-351
+.. GENERATED FROM PYTHON SOURCE LINES 297-350
 
 .. code-block:: default
 
@@ -442,7 +441,7 @@ Predict Data and Plot
     dpred = simulation.dpred(model)
 
     # Data were organized by location, then by time channel
-    dpred_plotting = np.reshape(dpred, (n_tx ** 2, n_times))
+    dpred_plotting = np.reshape(dpred, (n_tx**2, n_times))
 
     # Plot
     fig = plt.figure(figsize=(10, 4))
@@ -502,7 +501,7 @@ Predict Data and Plot
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 352-357
+.. GENERATED FROM PYTHON SOURCE LINES 351-356
 
 Optional: Export Data
 ---------------------
@@ -510,13 +509,12 @@ Optional: Export Data
 Write the true model, data and topography
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 357-381
+.. GENERATED FROM PYTHON SOURCE LINES 356-379
 
 .. code-block:: default
 
 
     if save_file:
-
         dir_path = os.path.dirname(tdem.__file__).split(os.path.sep)[:-3]
         dir_path.extend(["tutorials", "assets", "tdem"])
         dir_path = os.path.sep.join(dir_path) + os.path.sep
@@ -548,7 +546,7 @@ Write the true model, data and topography
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  6.928 seconds)
+   **Total running time of the script:** ( 1 minutes  42.267 seconds)
 
 **Estimated memory usage:**  760 MB
 
@@ -558,6 +556,8 @@ Write the true model, data and topography
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

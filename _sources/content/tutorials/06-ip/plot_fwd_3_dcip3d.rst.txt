@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_content_tutorials_06-ip_plot_fwd_3_dcip3d.py>`
+        :ref:`Go to the end <sphx_glr_download_content_tutorials_06-ip_plot_fwd_3_dcip3d.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -56,10 +56,10 @@ Import modules
     import matplotlib.pyplot as plt
 
     from discretize import TreeMesh
-    from discretize.utils import mkvc, refine_tree_xyz
+    from discretize.utils import mkvc, refine_tree_xyz, active_from_xyz
 
     from SimPEG import maps, data
-    from SimPEG.utils import model_builder, surface2ind_topo
+    from SimPEG.utils import model_builder
     from SimPEG.utils.io_utils.io_utils_electromagnetics import write_dcip_xyz
     from SimPEG.electromagnetics.static import resistivity as dc
     from SimPEG.electromagnetics.static import induced_polarization as ip
@@ -74,7 +74,7 @@ Import modules
         from SimPEG.electromagnetics.static.utils.static_utils import plot_3d_pseudosection
 
         has_plotly = True
-    except:
+    except ImportError:
         has_plotly = False
         pass
 
@@ -113,7 +113,7 @@ depression.
     x_topo, y_topo = np.meshgrid(
         np.linspace(-2100, 2100, 141), np.linspace(-2000, 2000, 141)
     )
-    s = np.sqrt(x_topo ** 2 + y_topo ** 2)
+    s = np.sqrt(x_topo**2 + y_topo**2)
     z_topo = (1 / np.pi) * 140 * (-np.pi / 2 + np.arctan((s - 600.0) / 80.0))
     x_topo, y_topo, z_topo = mkvc(x_topo), mkvc(y_topo), mkvc(z_topo)
     topo_xyz = np.c_[x_topo, y_topo, z_topo]
@@ -260,7 +260,7 @@ you can carry through this work flow with a resistivity model if desired.
     resistor_value = 1e-3
 
     # Find active cells in forward modeling (cell below surface)
-    ind_active = surface2ind_topo(mesh, topo_xyz)
+    ind_active = active_from_xyz(mesh, topo_xyz)
 
     # Define mapping from model to active cells
     nC = int(ind_active.sum())
@@ -395,7 +395,7 @@ points, or plot the pseudosection plots that lie within some distance of
 one or more planes.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 285-340
+.. GENERATED FROM PYTHON SOURCE LINES 285-339
 
 .. code-block:: default
 
@@ -429,7 +429,6 @@ one or more planes.
     plane_points.append([p1, p2, p3])
 
     if has_plotly:
-
         fig = plot_3d_pseudosection(
             dc_survey,
             apparent_conductivity,
@@ -464,7 +463,7 @@ one or more planes.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 341-348
+.. GENERATED FROM PYTHON SOURCE LINES 340-347
 
 Define IP Survey
 ----------------
@@ -474,7 +473,7 @@ to generate an IP survey whose receivers define the data in
 terms of the apparent chargeability (V/V).
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 348-370
+.. GENERATED FROM PYTHON SOURCE LINES 347-369
 
 .. code-block:: default
 
@@ -507,7 +506,7 @@ terms of the apparent chargeability (V/V).
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 371-380
+.. GENERATED FROM PYTHON SOURCE LINES 370-379
 
 Create Chargeability Model and Mapping for OcTree Mesh
 ------------------------------------------------------
@@ -519,7 +518,7 @@ chargeability of the Earth (V/V).
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 380-426
+.. GENERATED FROM PYTHON SOURCE LINES 379-425
 
 .. code-block:: default
 
@@ -581,7 +580,7 @@ chargeability of the Earth (V/V).
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 427-434
+.. GENERATED FROM PYTHON SOURCE LINES 426-433
 
 Predict IP Data
 ---------------
@@ -591,7 +590,7 @@ model to predict IP data.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 434-449
+.. GENERATED FROM PYTHON SOURCE LINES 433-448
 
 .. code-block:: default
 
@@ -617,7 +616,7 @@ model to predict IP data.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 450-460
+.. GENERATED FROM PYTHON SOURCE LINES 449-459
 
 Plot IP Data in 3D Pseudosection
 --------------------------------
@@ -630,13 +629,12 @@ we can plot the data directly.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 460-489
+.. GENERATED FROM PYTHON SOURCE LINES 459-487
 
 .. code-block:: default
 
 
     if has_plotly:
-
         fig = plot_3d_pseudosection(
             ip_survey,
             dpred_ip,
@@ -673,20 +671,19 @@ we can plot the data directly.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 490-493
+.. GENERATED FROM PYTHON SOURCE LINES 488-491
 
 Optional: Write Outputs
 -----------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 493-578
+.. GENERATED FROM PYTHON SOURCE LINES 491-575
 
 .. code-block:: default
 
 
 
     if write_output:
-
         dir_path = os.path.dirname(__file__).split(os.path.sep)
         dir_path.extend(["outputs"])
         dir_path = os.path.sep.join(dir_path) + os.path.sep
@@ -778,9 +775,9 @@ Optional: Write Outputs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  23.064 seconds)
+   **Total running time of the script:** ( 0 minutes  27.302 seconds)
 
-**Estimated memory usage:**  18 MB
+**Estimated memory usage:**  17 MB
 
 
 .. _sphx_glr_download_content_tutorials_06-ip_plot_fwd_3_dcip3d.py:
@@ -788,6 +785,8 @@ Optional: Write Outputs
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

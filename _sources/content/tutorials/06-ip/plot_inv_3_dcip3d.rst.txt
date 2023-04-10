@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_content_tutorials_06-ip_plot_inv_3_dcip3d.py>`
+        :ref:`Go to the end <sphx_glr_download_content_tutorials_06-ip_plot_inv_3_dcip3d.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -41,7 +41,7 @@ Import Modules
 --------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 27-76
+.. GENERATED FROM PYTHON SOURCE LINES 27-75
 
 .. code-block:: default
 
@@ -54,13 +54,12 @@ Import Modules
     import tarfile
 
     from discretize import TreeMesh
-    from discretize.utils import mkvc, refine_tree_xyz
+    from discretize.utils import refine_tree_xyz, active_from_xyz
 
-    from SimPEG.utils import surface2ind_topo, model_builder
+    from SimPEG.utils import model_builder
     from SimPEG.utils.io_utils.io_utils_electromagnetics import read_dcip_xyz
     from SimPEG import (
         maps,
-        data,
         data_misfit,
         regularization,
         optimization,
@@ -81,7 +80,7 @@ Import Modules
         from SimPEG.electromagnetics.static.utils.static_utils import plot_3d_pseudosection
 
         has_plotly = True
-    except:
+    except ImportError:
         has_plotly = False
         pass
 
@@ -101,7 +100,7 @@ Import Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 77-88
+.. GENERATED FROM PYTHON SOURCE LINES 76-87
 
 Define File Names
 -----------------
@@ -115,7 +114,7 @@ tar-file on our google cloud bucket:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 88-108
+.. GENERATED FROM PYTHON SOURCE LINES 87-107
 
 .. code-block:: default
 
@@ -154,7 +153,7 @@ tar-file on our google cloud bucket:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 109-115
+.. GENERATED FROM PYTHON SOURCE LINES 108-114
 
 Load Data and Topography
 ------------------------
@@ -163,7 +162,7 @@ Here we load the observed data and topography.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 115-134
+.. GENERATED FROM PYTHON SOURCE LINES 114-133
 
 .. code-block:: default
 
@@ -193,7 +192,7 @@ Here we load the observed data and topography.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 135-142
+.. GENERATED FROM PYTHON SOURCE LINES 134-141
 
 Plot Observed DC Data in Pseudosection
 --------------------------------------
@@ -203,7 +202,7 @@ To use this utility, you must have Python's *plotly* package.
 Here, we represent the DC data as apparent conductivities.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 142-173
+.. GENERATED FROM PYTHON SOURCE LINES 141-171
 
 .. code-block:: default
 
@@ -215,7 +214,6 @@ Here, we represent the DC data as apparent conductivities.
     )
 
     if has_plotly:
-
         # Plot DC Data
         fig = plot_3d_pseudosection(
             dc_data.survey, apparent_conductivity, scale="log", units="S/m"
@@ -248,7 +246,7 @@ Here, we represent the DC data as apparent conductivities.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 174-181
+.. GENERATED FROM PYTHON SOURCE LINES 172-179
 
 Plot Observed IP Data in Pseudosection
 --------------------------------------
@@ -258,13 +256,12 @@ To use this utility, you must have Python's *plotly* package.
 Here, we represent the IP data as apparent chargeabilities.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 181-211
+.. GENERATED FROM PYTHON SOURCE LINES 179-208
 
 .. code-block:: default
 
 
     if has_plotly:
-
         # Plot IP Data
         fig = plot_3d_pseudosection(
             ip_data.survey,
@@ -302,7 +299,7 @@ Here, we represent the IP data as apparent chargeabilities.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 212-221
+.. GENERATED FROM PYTHON SOURCE LINES 209-218
 
 Assign Uncertainties
 --------------------
@@ -314,7 +311,7 @@ For IP data, the uncertainties are 5e-3 V/V.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 221-226
+.. GENERATED FROM PYTHON SOURCE LINES 218-223
 
 .. code-block:: default
 
@@ -330,7 +327,7 @@ For IP data, the uncertainties are 5e-3 V/V.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 227-233
+.. GENERATED FROM PYTHON SOURCE LINES 224-230
 
 Create Tree Mesh
 ----------------
@@ -339,7 +336,7 @@ Here, we create the Tree mesh that will be used to invert both DC
 resistivity and IP data.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 233-270
+.. GENERATED FROM PYTHON SOURCE LINES 230-267
 
 .. code-block:: default
 
@@ -387,7 +384,7 @@ resistivity and IP data.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 271-279
+.. GENERATED FROM PYTHON SOURCE LINES 268-276
 
 Project Electrodes to Discretized Topography
 --------------------------------------------
@@ -398,13 +395,13 @@ the discretized topography. This step is carried out to ensure all electrodes
 lie on the discretized surface.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 279-295
+.. GENERATED FROM PYTHON SOURCE LINES 276-292
 
 .. code-block:: default
 
 
     # Find cells that lie below surface topography
-    ind_active = surface2ind_topo(mesh, topo_xyz)
+    ind_active = active_from_xyz(mesh, topo_xyz)
 
     # Extract survey from data object
     dc_survey = dc_data.survey
@@ -425,7 +422,7 @@ lie on the discretized surface.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 296-305
+.. GENERATED FROM PYTHON SOURCE LINES 293-302
 
 Starting/Reference Model and Mapping on OcTree Mesh
 ---------------------------------------------------
@@ -437,7 +434,7 @@ structures. Here, the starting model is the natural log of 0.01 S/m.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 305-320
+.. GENERATED FROM PYTHON SOURCE LINES 302-317
 
 .. code-block:: default
 
@@ -463,7 +460,7 @@ structures. Here, the starting model is the natural log of 0.01 S/m.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 321-327
+.. GENERATED FROM PYTHON SOURCE LINES 318-324
 
 Define the Physics of the DC Simulation
 ---------------------------------------
@@ -472,7 +469,7 @@ Here, we define the physics of the DC resistivity simulation.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 327-332
+.. GENERATED FROM PYTHON SOURCE LINES 324-329
 
 .. code-block:: default
 
@@ -488,7 +485,7 @@ Here, we define the physics of the DC resistivity simulation.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 333-343
+.. GENERATED FROM PYTHON SOURCE LINES 330-340
 
 Define DC Inverse Problem
 -------------------------
@@ -501,7 +498,7 @@ The inverse problem is defined by 3 things:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 343-370
+.. GENERATED FROM PYTHON SOURCE LINES 340-367
 
 .. code-block:: default
 
@@ -539,7 +536,7 @@ The inverse problem is defined by 3 things:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 371-379
+.. GENERATED FROM PYTHON SOURCE LINES 368-376
 
 Define DC Inversion Directives
 ------------------------------
@@ -550,7 +547,7 @@ criteria for the inversion and saving inversion results at each iteration.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 379-410
+.. GENERATED FROM PYTHON SOURCE LINES 376-407
 
 .. code-block:: default
 
@@ -592,7 +589,7 @@ criteria for the inversion and saving inversion results at each iteration.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 411-417
+.. GENERATED FROM PYTHON SOURCE LINES 408-414
 
 Running the DC Inversion
 ------------------------
@@ -601,7 +598,7 @@ To define the inversion object, we need to define the inversion problem and
 the set of directives. We can then run the inversion.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 417-426
+.. GENERATED FROM PYTHON SOURCE LINES 414-423
 
 .. code-block:: default
 
@@ -631,35 +628,33 @@ the set of directives. We can then run the inversion.
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  3.32e-02  1.86e+04  0.00e+00  1.86e+04    2.02e+03      0              
-       1  3.32e-02  5.00e+03  1.36e+05  9.50e+03    1.85e+02      0              
-       2  1.33e-02  6.00e+03  9.87e+04  7.31e+03    4.90e+02      0              
-       3  1.33e-02  2.93e+03  2.79e+05  6.63e+03    1.03e+02      0              
-       4  5.31e-03  3.57e+03  2.20e+05  4.74e+03    3.19e+02      0              
-       5  5.31e-03  1.56e+03  5.34e+05  4.40e+03    6.92e+01      0              
-       6  2.12e-03  1.98e+03  4.31e+05  2.89e+03    2.01e+02      0              
-       7  2.12e-03  7.80e+02  9.29e+05  2.75e+03    4.26e+01      0              
-       8  8.50e-04  1.01e+03  7.75e+05  1.66e+03    1.20e+02      0              
-       9  8.50e-04  3.77e+02  1.38e+06  1.55e+03    1.68e+01      0              
-      10  3.40e-04  4.48e+02  1.27e+06  8.78e+02    6.27e+01      0              
+       0  2.55e-02  2.15e+04  0.00e+00  2.15e+04    2.41e+03      0              
+       1  2.55e-02  4.81e+03  1.55e+05  8.77e+03    1.12e+02      0              
+       2  1.02e-02  4.92e+03  1.48e+05  6.43e+03    4.30e+02      0              
+       3  1.02e-02  2.30e+03  3.17e+05  5.54e+03    6.13e+01      0              
+       4  4.08e-03  2.56e+03  2.89e+05  3.74e+03    2.64e+02      0              
+       5  4.08e-03  1.04e+03  5.26e+05  3.18e+03    3.22e+01      0              
+       6  1.63e-03  1.14e+03  4.98e+05  1.95e+03    1.47e+02      0              
+       7  1.63e-03  4.19e+02  7.70e+05  1.68e+03    1.57e+01      0              
+       8  6.53e-04  4.51e+02  7.46e+05  9.38e+02    7.73e+01      0              
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 1.8637e+03
-    1 : |xc-x_last| = 1.6892e+01 <= tolX*(1+|x0|) = 8.6927e+01
-    0 : |proj(x-g)-x|    = 6.2749e+01 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 6.2749e+01 <= 1e3*eps       = 1.0000e-02
-    0 : maxIter   =      15    <= iter          =     11
+    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 2.1469e+03
+    1 : |xc-x_last| = 1.9103e+01 <= tolX*(1+|x0|) = 8.6952e+01
+    0 : |proj(x-g)-x|    = 7.7339e+01 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 7.7339e+01 <= 1e3*eps       = 1.0000e-02
+    0 : maxIter   =      15    <= iter          =      9
     ------------------------- DONE! -------------------------
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 427-430
+.. GENERATED FROM PYTHON SOURCE LINES 424-427
 
 Recreate True Conductivity Model
 --------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 430-447
+.. GENERATED FROM PYTHON SOURCE LINES 427-444
 
 .. code-block:: default
 
@@ -687,13 +682,13 @@ Recreate True Conductivity Model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 448-451
+.. GENERATED FROM PYTHON SOURCE LINES 445-448
 
 Plotting True and Recovered Conductivity Model
 ----------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 451-513
+.. GENERATED FROM PYTHON SOURCE LINES 448-510
 
 .. code-block:: default
 
@@ -783,7 +778,7 @@ Plotting True and Recovered Conductivity Model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 514-521
+.. GENERATED FROM PYTHON SOURCE LINES 511-518
 
 Plotting Normalized Data Misfit or Predicted DC Data
 ----------------------------------------------------
@@ -793,7 +788,7 @@ it is a good idea to compare the predicted and observed data.
 Here, we accomplish this by plotting the normalized misfit.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 521-557
+.. GENERATED FROM PYTHON SOURCE LINES 518-553
 
 .. code-block:: default
 
@@ -805,7 +800,6 @@ Here, we accomplish this by plotting the normalized misfit.
     dc_normalized_misfit = (dc_data.dobs - dpred_dc) / dc_data.standard_deviation
 
     if has_plotly:
-
         # Plot IP Data
         fig = plot_3d_pseudosection(
             dc_data.survey,
@@ -843,7 +837,7 @@ Here, we accomplish this by plotting the normalized misfit.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 558-567
+.. GENERATED FROM PYTHON SOURCE LINES 554-563
 
 Starting/Reference Model for IP Inversion
 -----------------------------------------
@@ -855,7 +849,7 @@ structures. Here, the starting model is the 1e-6 V/V.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 567-582
+.. GENERATED FROM PYTHON SOURCE LINES 563-578
 
 .. code-block:: default
 
@@ -881,7 +875,7 @@ structures. Here, the starting model is the 1e-6 V/V.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 583-592
+.. GENERATED FROM PYTHON SOURCE LINES 579-588
 
 Define the Physics of the IP Simulation
 ---------------------------------------
@@ -893,7 +887,7 @@ entire mesh.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 592-602
+.. GENERATED FROM PYTHON SOURCE LINES 588-598
 
 .. code-block:: default
 
@@ -914,7 +908,7 @@ entire mesh.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 603-608
+.. GENERATED FROM PYTHON SOURCE LINES 599-604
 
 Define IP Inverse Problem
 -------------------------
@@ -922,7 +916,7 @@ Define IP Inverse Problem
 Here we define the inverse problem in the same manner as the DC inverse problem.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 608-633
+.. GENERATED FROM PYTHON SOURCE LINES 604-629
 
 .. code-block:: default
 
@@ -958,7 +952,7 @@ Here we define the inverse problem in the same manner as the DC inverse problem.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 634-639
+.. GENERATED FROM PYTHON SOURCE LINES 630-635
 
 Define IP Inversion Directives
 ------------------------------
@@ -966,7 +960,7 @@ Define IP Inversion Directives
 Here we define the directives in the same manner as the DC inverse problem.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 639-657
+.. GENERATED FROM PYTHON SOURCE LINES 635-653
 
 .. code-block:: default
 
@@ -992,16 +986,25 @@ Here we define the directives in the same manner as the DC inverse problem.
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    /home/vsts/work/1/s/SimPEG/directives/directives.py:2526: UserWarning:
+
+    'threshold' property is deprecated and will be removed in SimPEG 0.20.0.Please use 'threshold_value'.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 658-661
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 654-657
 
 Running the IP Inversion
 ------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 661-670
+.. GENERATED FROM PYTHON SOURCE LINES 657-666
 
 .. code-block:: default
 
@@ -1038,25 +1041,25 @@ Running the IP Inversion
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  6.78e-01  3.73e+03  0.00e+00  3.73e+03    7.91e+02      0              
+       0  2.15e+01  3.73e+03  0.00e+00  3.73e+03    7.88e+02      0              
     ------------------------- STOP! -------------------------
     1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 3.7352e+02
-    0 : |xc-x_last| = 1.7512e+00 <= tolX*(1+|x0|) = 1.0002e-01
-    0 : |proj(x-g)-x|    = 7.9055e+02 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 7.9055e+02 <= 1e3*eps       = 1.0000e-02
+    0 : |xc-x_last| = 1.4643e+00 <= tolX*(1+|x0|) = 1.0002e-01
+    0 : |proj(x-g)-x|    = 7.8764e+02 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 7.8764e+02 <= 1e3*eps       = 1.0000e-02
     0 : maxIter   =      15    <= iter          =      1
     ------------------------- DONE! -------------------------
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 671-674
+.. GENERATED FROM PYTHON SOURCE LINES 667-670
 
 Recreate True Chargeability Model
 ---------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 674-685
+.. GENERATED FROM PYTHON SOURCE LINES 670-681
 
 .. code-block:: default
 
@@ -1078,13 +1081,13 @@ Recreate True Chargeability Model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 686-689
+.. GENERATED FROM PYTHON SOURCE LINES 682-685
 
 Plot True and Recovered Chargeability Model
 --------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 689-749
+.. GENERATED FROM PYTHON SOURCE LINES 685-745
 
 .. code-block:: default
 
@@ -1172,13 +1175,13 @@ Plot True and Recovered Chargeability Model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 750-753
+.. GENERATED FROM PYTHON SOURCE LINES 746-749
 
 Plotting Normalized Data Misfit or Predicted IP Data
 ----------------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 753-787
+.. GENERATED FROM PYTHON SOURCE LINES 749-782
 
 .. code-block:: default
 
@@ -1190,7 +1193,6 @@ Plotting Normalized Data Misfit or Predicted IP Data
     ip_normalized_misfit = (ip_data.dobs - dpred_ip) / ip_data.standard_deviation
 
     if has_plotly:
-
         fig = plot_3d_pseudosection(
             ip_data.survey,
             ip_normalized_misfit,
@@ -1229,9 +1231,9 @@ Plotting Normalized Data Misfit or Predicted IP Data
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 5 minutes  15.260 seconds)
+   **Total running time of the script:** ( 4 minutes  27.658 seconds)
 
-**Estimated memory usage:**  18 MB
+**Estimated memory usage:**  321 MB
 
 
 .. _sphx_glr_download_content_tutorials_06-ip_plot_inv_3_dcip3d.py:
@@ -1239,6 +1241,8 @@ Plotting Normalized Data Misfit or Predicted IP Data
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

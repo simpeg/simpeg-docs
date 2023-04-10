@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_content_tutorials_05-dcr_plot_fwd_1_dcr_sounding.py>`
+        :ref:`Go to the end <sphx_glr_download_content_tutorials_05-dcr_plot_fwd_1_dcr_sounding.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -78,7 +78,7 @@ respectively. For the pole and dipole receivers, we must define the M or
 MN electrode locations, respectively.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 51-85
+.. GENERATED FROM PYTHON SOURCE LINES 51-86
 
 .. code-block:: default
 
@@ -93,7 +93,6 @@ MN electrode locations, respectively.
     source_list = []  # create empty array for sources to live
 
     for ii in range(0, len(electrode_separations)):
-
         # Extract separation parameter for sources and receivers
         a = electrode_separations[ii]
 
@@ -106,7 +105,9 @@ MN electrode locations, respectively.
         N_location = np.r_[0.5 * a, 0.0, 0.0]
 
         # Create receivers list. Define as pole or dipole.
-        receiver_list = dc.receivers.Dipole(M_location, N_location)
+        receiver_list = dc.receivers.Dipole(
+            M_location, N_location, data_type="apparent_resistivity"
+        )
         receiver_list = [receiver_list]
 
         # Define the source properties and associated receivers
@@ -123,7 +124,7 @@ MN electrode locations, respectively.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 86-95
+.. GENERATED FROM PYTHON SOURCE LINES 87-96
 
 Defining a 1D Layered Earth Model
 ---------------------------------
@@ -135,7 +136,7 @@ infinity. In the case of a halfspace, the layer thicknesses would be
 an empty array.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 95-105
+.. GENERATED FROM PYTHON SOURCE LINES 96-106
 
 .. code-block:: default
 
@@ -156,7 +157,7 @@ an empty array.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 106-111
+.. GENERATED FROM PYTHON SOURCE LINES 107-112
 
 Plot Resistivity Model
 ----------------------
@@ -164,7 +165,7 @@ Plot Resistivity Model
 Here we plot the 1D resistivity model.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 111-116
+.. GENERATED FROM PYTHON SOURCE LINES 112-117
 
 .. code-block:: default
 
@@ -191,7 +192,7 @@ Here we plot the 1D resistivity model.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 117-124
+.. GENERATED FROM PYTHON SOURCE LINES 118-125
 
 Define the Forward Simulation and Predict DC Resistivity Data
 -------------------------------------------------------------
@@ -201,7 +202,7 @@ defined, the simulation will expect a resistivity model. If the keyword
 argument *sigmaMap* is defined, the simulation will expect a conductivity model.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 124-144
+.. GENERATED FROM PYTHON SOURCE LINES 125-144
 
 .. code-block:: default
 
@@ -210,7 +211,6 @@ argument *sigmaMap* is defined, the simulation will expect a conductivity model.
         survey=survey,
         rhoMap=model_map,
         thicknesses=layer_thicknesses,
-        data_type="apparent_resistivity",
     )
 
     # Predict data for a given model
@@ -245,13 +245,12 @@ Optional: Export Data
 Export data and true model
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 150-173
+.. GENERATED FROM PYTHON SOURCE LINES 150-172
 
 .. code-block:: default
 
 
     if write_output:
-
         dir_path = os.path.dirname(__file__).split(os.path.sep)
         dir_path.extend(["outputs"])
         dir_path = os.path.sep.join(dir_path) + os.path.sep
@@ -282,9 +281,9 @@ Export data and true model
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.229 seconds)
+   **Total running time of the script:** ( 0 minutes  3.470 seconds)
 
-**Estimated memory usage:**  18 MB
+**Estimated memory usage:**  17 MB
 
 
 .. _sphx_glr_download_content_tutorials_05-dcr_plot_fwd_1_dcr_sounding.py:
@@ -292,6 +291,8 @@ Export data and true model
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_content_tutorials_03-gravity_plot_1b_gravity_gradiometry.py>`
+        :ref:`Go to the end <sphx_glr_download_content_tutorials_03-gravity_plot_1b_gravity_gradiometry.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -47,8 +47,8 @@ Import Modules
     import matplotlib.pyplot as plt
 
     from discretize import TreeMesh
-    from discretize.utils import mkvc, refine_tree_xyz
-    from SimPEG.utils import plot2Ddata, model_builder, surface2ind_topo
+    from discretize.utils import mkvc, refine_tree_xyz, active_from_xyz
+    from SimPEG.utils import plot2Ddata, model_builder
     from SimPEG import maps
     from SimPEG.potential_fields import gravity
 
@@ -76,7 +76,7 @@ the topography could also be loaded from a file.
 
 
     [x_topo, y_topo] = np.meshgrid(np.linspace(-200, 200, 41), np.linspace(-200, 200, 41))
-    z_topo = -15 * np.exp(-(x_topo ** 2 + y_topo ** 2) / 80 ** 2)
+    z_topo = -15 * np.exp(-(x_topo**2 + y_topo**2) / 80**2)
     x_topo, y_topo, z_topo = mkvc(x_topo), mkvc(y_topo), mkvc(z_topo)
     xyz_topo = np.c_[x_topo, y_topo, z_topo]
 
@@ -211,7 +211,7 @@ consists of a less dense block and a more dense sphere.
     sphere_density = 0.1
 
     # Find the indecies for the active mesh cells (e.g. cells below surface)
-    ind_active = surface2ind_topo(mesh, xyz_topo)
+    ind_active = active_from_xyz(mesh, xyz_topo)
 
     # Define mapping from model to active cells. The model consists of a value for
     # each cell below the Earth's surface.
@@ -320,7 +320,7 @@ formulation.
         contourOpts={"cmap": "bwr"},
     )
     cplot1[0].set_clim((-v_max, v_max))
-    ax1.set_title("$\partial g /\partial x$")
+    ax1.set_title(r"$\partial g /\partial x$")
     ax1.set_xlabel("x (m)")
     ax1.set_ylabel("y (m)")
 
@@ -334,7 +334,7 @@ formulation.
         contourOpts={"cmap": "bwr"},
     )
     cplot2[0].set_clim((-v_max, v_max))
-    ax2.set_title("$\partial g /\partial y$")
+    ax2.set_title(r"$\partial g /\partial y$")
     ax2.set_xlabel("x (m)")
     ax2.set_yticks([])
 
@@ -348,7 +348,7 @@ formulation.
         contourOpts={"cmap": "bwr"},
     )
     cplot3[0].set_clim((-v_max, v_max))
-    ax3.set_title("$\partial g /\partial z$")
+    ax3.set_title(r"$\partial g /\partial z$")
     ax3.set_xlabel("x (m)")
     ax3.set_yticks([])
 
@@ -375,9 +375,9 @@ formulation.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  7.407 seconds)
+   **Total running time of the script:** ( 0 minutes  6.459 seconds)
 
-**Estimated memory usage:**  18 MB
+**Estimated memory usage:**  17 MB
 
 
 .. _sphx_glr_download_content_tutorials_03-gravity_plot_1b_gravity_gradiometry.py:
@@ -385,6 +385,8 @@ formulation.
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

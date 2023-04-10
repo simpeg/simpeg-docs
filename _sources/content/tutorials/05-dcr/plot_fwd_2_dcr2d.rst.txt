@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_content_tutorials_05-dcr_plot_fwd_2_dcr2d.py>`
+        :ref:`Go to the end <sphx_glr_download_content_tutorials_05-dcr_plot_fwd_2_dcr2d.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -43,9 +43,9 @@ Import modules
 
 
     from discretize import TreeMesh
-    from discretize.utils import mkvc, refine_tree_xyz
+    from discretize.utils import mkvc, refine_tree_xyz, active_from_xyz
 
-    from SimPEG.utils import model_builder, surface2ind_topo
+    from SimPEG.utils import model_builder
     from SimPEG.utils.io_utils.io_utils_electromagnetics import write_dcip2d_ubc
     from SimPEG import maps, data
     from SimPEG.electromagnetics.static import resistivity as dc
@@ -225,9 +225,9 @@ Here, we create the Tree mesh that will be used to predict DC data.
 
  .. code-block:: none
 
-    /usr/share/miniconda/envs/simpeg-test/lib/python3.7/site-packages/scipy/interpolate/interpolate.py:630: RuntimeWarning:
+    /home/vsts/conda/envs/simpeg-test/lib/python3.8/site-packages/scipy/interpolate/_interpolate.py:698: RuntimeWarning:
 
-    invalid value encountered in true_divide
+    invalid value encountered in divide
 
 
 
@@ -256,7 +256,7 @@ lie on the discretized surface.
     resistor_conductivity = 1e-3
 
     # Find active cells in forward modeling (cell below surface)
-    ind_active = surface2ind_topo(mesh, topo_xyz[:, [0, 2]])
+    ind_active = active_from_xyz(mesh, topo_xyz[:, [0, 2]])
 
     # Define mapping from model to active cells
     nC = int(ind_active.sum())
@@ -447,13 +447,12 @@ Optional: Write out dpred
 Write DC resistivity data, topography and true model
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 298-335
+.. GENERATED FROM PYTHON SOURCE LINES 298-334
 
 .. code-block:: default
 
 
     if write_output:
-
         dir_path = os.path.dirname(__file__).split(os.path.sep)
         dir_path.extend(["outputs"])
         dir_path = os.path.sep.join(dir_path) + os.path.sep
@@ -498,9 +497,9 @@ Write DC resistivity data, topography and true model
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  6.674 seconds)
+   **Total running time of the script:** ( 0 minutes  8.376 seconds)
 
-**Estimated memory usage:**  18 MB
+**Estimated memory usage:**  17 MB
 
 
 .. _sphx_glr_download_content_tutorials_05-dcr_plot_fwd_2_dcr2d.py:
@@ -508,6 +507,8 @@ Write DC resistivity data, topography and true model
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

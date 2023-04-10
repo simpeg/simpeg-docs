@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_content_tutorials_07-fdem_plot_fwd_3_fem_3d.py>`
+        :ref:`Go to the end <sphx_glr_download_content_tutorials_07-fdem_plot_fwd_3_fem_3d.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -51,9 +51,9 @@ Import modules
 
 
     from discretize import TreeMesh
-    from discretize.utils import mkvc, refine_tree_xyz
+    from discretize.utils import mkvc, refine_tree_xyz, active_from_xyz
 
-    from SimPEG.utils import plot2Ddata, surface2ind_topo
+    from SimPEG.utils import plot2Ddata
     from SimPEG import maps
     import SimPEG.electromagnetics.frequency_domain as fdem
 
@@ -115,7 +115,7 @@ measurements. To save time, we will only compute the response for a single
 frequency.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 74-116
+.. GENERATED FROM PYTHON SOURCE LINES 74-115
 
 .. code-block:: default
 
@@ -138,7 +138,6 @@ frequency.
     # Each unique location and frequency defines a new transmitter
     for ii in range(len(frequencies)):
         for jj in range(ntx):
-
             # Define receivers of different type at each location
             bzr_receiver = fdem.receivers.PointMagneticFluxDensitySecondary(
                 receiver_locations[jj, :], "z", "real"
@@ -168,7 +167,7 @@ frequency.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 117-129
+.. GENERATED FROM PYTHON SOURCE LINES 116-128
 
 Create OcTree Mesh
 ------------------
@@ -183,7 +182,7 @@ When designing a mesh to solve practical frequency domain problems:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 129-155
+.. GENERATED FROM PYTHON SOURCE LINES 128-154
 
 .. code-block:: default
 
@@ -220,7 +219,7 @@ When designing a mesh to solve practical frequency domain problems:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 156-164
+.. GENERATED FROM PYTHON SOURCE LINES 155-163
 
 Defining the Conductivity/Resistivity Model and Mapping
 -------------------------------------------------------
@@ -231,7 +230,7 @@ the model consists of a conductive block within a more resistive
 background.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 164-216
+.. GENERATED FROM PYTHON SOURCE LINES 163-215
 
 .. code-block:: default
 
@@ -242,7 +241,7 @@ background.
     block_conductivity = 1e1
 
     # Find cells that are active in the forward modeling (cells below surface)
-    ind_active = surface2ind_topo(mesh, topo_xyz)
+    ind_active = active_from_xyz(mesh, topo_xyz)
 
     # Define mapping from model to active cells
     model_map = maps.InjectActiveCells(mesh, ind_active, air_conductivity)
@@ -299,7 +298,7 @@ background.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 217-226
+.. GENERATED FROM PYTHON SOURCE LINES 216-225
 
 Simulation: Predicting FDEM Data
 --------------------------------
@@ -311,7 +310,7 @@ the mapping for the conductivity model. If you defined a resistivity model,
 use the kwarg *rhoMap* instead of *sigmaMap*
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 226-231
+.. GENERATED FROM PYTHON SOURCE LINES 225-230
 
 .. code-block:: default
 
@@ -327,7 +326,7 @@ use the kwarg *rhoMap* instead of *sigmaMap*
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 232-237
+.. GENERATED FROM PYTHON SOURCE LINES 231-236
 
 Predict and Plot Data
 ---------------------
@@ -335,7 +334,7 @@ Predict and Plot Data
 Here we show how the simulation is used to predict data.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 237-297
+.. GENERATED FROM PYTHON SOURCE LINES 236-296
 
 .. code-block:: default
 
@@ -411,7 +410,7 @@ Here we show how the simulation is used to predict data.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 298-303
+.. GENERATED FROM PYTHON SOURCE LINES 297-302
 
 Optional: Export Data
 ---------------------
@@ -419,14 +418,13 @@ Optional: Export Data
 Write the true model, data and topography
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 303-330
+.. GENERATED FROM PYTHON SOURCE LINES 302-328
 
 .. code-block:: default
 
 
 
     if save_file:
-
         dir_path = os.path.dirname(fdem.__file__).split(os.path.sep)[:-3]
         dir_path.extend(["tutorials", "assets", "fdem"])
         dir_path = os.path.sep.join(dir_path) + os.path.sep
@@ -460,9 +458,9 @@ Write the true model, data and topography
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  13.211 seconds)
+   **Total running time of the script:** ( 0 minutes  19.215 seconds)
 
-**Estimated memory usage:**  334 MB
+**Estimated memory usage:**  651 MB
 
 
 .. _sphx_glr_download_content_tutorials_07-fdem_plot_fwd_3_fem_3d.py:
@@ -470,6 +468,8 @@ Write the true model, data and topography
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python
