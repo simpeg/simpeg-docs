@@ -43,7 +43,7 @@ Import modules
 
 .. GENERATED FROM PYTHON SOURCE LINES 26-51
 
-.. code-block:: default
+.. code-block:: Python
 
 
     import os
@@ -91,7 +91,7 @@ tar-file on our google cloud bucket:
 
 .. GENERATED FROM PYTHON SOURCE LINES 61-81
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # storage bucket where we have the data
@@ -140,7 +140,7 @@ x, y, z and data.
 
 .. GENERATED FROM PYTHON SOURCE LINES 89-119
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Load topography
@@ -198,7 +198,7 @@ gravity anomaly value.
 
 .. GENERATED FROM PYTHON SOURCE LINES 129-134
 
-.. code-block:: default
+.. code-block:: Python
 
 
     maximum_anomaly = np.max(np.abs(dobs))
@@ -225,7 +225,7 @@ define the receivers and the source field.
 
 .. GENERATED FROM PYTHON SOURCE LINES 143-156
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define the receivers. The data consists of vertical gravity anomaly measurements.
@@ -258,7 +258,7 @@ the survey, the observation values and the standard deviation.
 
 .. GENERATED FROM PYTHON SOURCE LINES 163-167
 
-.. code-block:: default
+.. code-block:: Python
 
 
     data_object = data.Data(survey, dobs=dobs, standard_deviation=uncertainties)
@@ -282,7 +282,7 @@ data. If desired, we could define an OcTree mesh.
 
 .. GENERATED FROM PYTHON SOURCE LINES 174-181
 
-.. code-block:: default
+.. code-block:: Python
 
 
     dh = 5.0
@@ -311,7 +311,7 @@ structures.
 
 .. GENERATED FROM PYTHON SOURCE LINES 190-202
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Find the indices of the active cells in forward model (ones below surface)
@@ -332,7 +332,7 @@ structures.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 203-209
+.. GENERATED FROM PYTHON SOURCE LINES 203-216
 
 Define the Physics
 ------------------
@@ -340,14 +340,25 @@ Define the Physics
 Here, we define the physics of the gravity problem by using the simulation
 class.
 
+.. tip::
 
-.. GENERATED FROM PYTHON SOURCE LINES 209-215
+   Since SimPEG v0.21.0 we can use `Choclo
+   <https://www.fatiando.org/choclo>`_ as the engine for running the gravity
+   simulations, which results in faster and more memory efficient runs. Just
+   pass ``engine="choclo"`` when constructing the simulation.
 
-.. code-block:: default
+
+.. GENERATED FROM PYTHON SOURCE LINES 216-226
+
+.. code-block:: Python
 
 
     simulation = gravity.simulation.Simulation3DIntegral(
-        survey=survey, mesh=mesh, rhoMap=model_map, ind_active=ind_active
+        survey=survey,
+        mesh=mesh,
+        rhoMap=model_map,
+        ind_active=ind_active,
+        engine="choclo",
     )
 
 
@@ -358,7 +369,7 @@ class.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 216-225
+.. GENERATED FROM PYTHON SOURCE LINES 227-236
 
 Define the Inverse Problem
 --------------------------
@@ -370,9 +381,9 @@ The inverse problem is defined by 3 things:
     3) Optimization: the numerical approach used to solve the inverse problem
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 225-244
+.. GENERATED FROM PYTHON SOURCE LINES 236-257
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define the data misfit. Here the data misfit is the L2 norm of the weighted
@@ -382,7 +393,9 @@ The inverse problem is defined by 3 things:
     dmis = data_misfit.L2DataMisfit(data=data_object, simulation=simulation)
 
     # Define the regularization (model objective function).
-    reg = regularization.WeightedLeastSquares(mesh, indActive=ind_active, mapping=model_map)
+    reg = regularization.WeightedLeastSquares(
+        mesh, active_cells=ind_active, mapping=model_map
+    )
 
     # Define how the optimization problem is solved. Here we will use a projected
     # Gauss-Newton approach that employs the conjugate gradient solver.
@@ -397,19 +410,10 @@ The inverse problem is defined by 3 things:
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    /home/vsts/work/1/s/tutorials/03-gravity/plot_inv_1a_gravity_anomaly.py:233: DeprecationWarning:
-
-    The 'indActive' argument has been deprecated, please use 'active_cells'. It will be removed in future versions of SimPEG.
 
 
 
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 245-252
+.. GENERATED FROM PYTHON SOURCE LINES 258-265
 
 Define Inversion Directives
 ---------------------------
@@ -419,9 +423,9 @@ includes the cooling schedule for the trade-off parameter (beta), stopping
 criteria for the inversion and saving inversion results at each iteration.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 252-283
+.. GENERATED FROM PYTHON SOURCE LINES 265-296
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Defining a starting value for the trade-off parameter (beta) between the data
@@ -442,7 +446,7 @@ criteria for the inversion and saving inversion results at each iteration.
     target_misfit = directives.TargetMisfit(chifact=1)
 
     # Add sensitivity weights
-    sensitivity_weights = directives.UpdateSensitivityWeights(everyIter=False)
+    sensitivity_weights = directives.UpdateSensitivityWeights(every_iteration=False)
 
     # The directives are defined as a list.
     directives_list = [
@@ -458,19 +462,10 @@ criteria for the inversion and saving inversion results at each iteration.
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    /home/vsts/work/1/s/tutorials/03-gravity/plot_inv_1a_gravity_anomaly.py:271: UserWarning:
-
-    'everyIter' property is deprecated and will be removed in SimPEG 0.20.0.Please use 'every_iteration'.
 
 
 
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 284-290
+.. GENERATED FROM PYTHON SOURCE LINES 297-303
 
 Running the Inversion
 ---------------------
@@ -479,9 +474,9 @@ To define the inversion object, we need to define the inversion problem and
 the set of directives. We can then run the inversion.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 290-298
+.. GENERATED FROM PYTHON SOURCE LINES 303-311
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Here we combine the inverse problem and the set of directives
@@ -515,31 +510,31 @@ the set of directives. We can then run the inversion.
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  3.04e+04  1.33e+05  0.00e+00  1.33e+05    2.19e+02      0              
-       1  6.08e+03  5.65e+04  8.30e-01  6.15e+04    2.18e+02      0              
-       2  1.22e+03  1.82e+04  3.76e+00  2.28e+04    2.17e+02      0   Skip BFGS  
-       3  2.43e+02  2.87e+03  8.92e+00  5.04e+03    2.11e+02      0   Skip BFGS  
-       4  4.86e+01  3.14e+02  1.28e+01  9.39e+02    1.86e+02      0   Skip BFGS  
+       0  3.17e+04  2.66e+05  0.00e+00  2.66e+05    2.19e+02      0              
+       1  6.34e+03  1.15e+05  1.59e+00  1.25e+05    2.18e+02      0              
+       2  1.27e+03  3.78e+04  7.29e+00  4.71e+04    2.18e+02      0   Skip BFGS  
+       3  2.53e+02  6.05e+03  1.76e+01  1.05e+04    2.15e+02      0   Skip BFGS  
+       4  5.07e+01  6.64e+02  2.55e+01  1.96e+03    2.00e+02      0   Skip BFGS  
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 1.3311e+04
-    1 : |xc-x_last| = 8.0187e-02 <= tolX*(1+|x0|) = 1.0000e-01
-    0 : |proj(x-g)-x|    = 1.8560e+02 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 1.8560e+02 <= 1e3*eps       = 1.0000e-02
+    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 2.6622e+04
+    1 : |xc-x_last| = 8.0987e-02 <= tolX*(1+|x0|) = 1.0000e-01
+    0 : |proj(x-g)-x|    = 2.0046e+02 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 2.0046e+02 <= 1e3*eps       = 1.0000e-02
     0 : maxIter   =      10    <= iter          =      5
     ------------------------- DONE! -------------------------
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 299-302
+.. GENERATED FROM PYTHON SOURCE LINES 312-315
 
 Recreate True Model
 -------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 302-329
+.. GENERATED FROM PYTHON SOURCE LINES 315-344
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define density contrast values for each unit in g/cc
@@ -563,7 +558,9 @@ Recreate True Model
     true_model[ind_block] = block_density
 
     # You can also use SimPEG utilities to add structures to the model more concisely
-    ind_sphere = model_builder.getIndicesSphere(np.r_[35.0, 0.0, -40.0], 15.0, mesh.gridCC)
+    ind_sphere = model_builder.get_indices_sphere(
+        np.r_[35.0, 0.0, -40.0], 15.0, mesh.gridCC
+    )
     ind_sphere = ind_sphere[ind_active]
     true_model[ind_sphere] = sphere_density
 
@@ -575,15 +572,15 @@ Recreate True Model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 330-333
+.. GENERATED FROM PYTHON SOURCE LINES 345-348
 
 Plotting True Model and Recovered Model
 ---------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 333-385
+.. GENERATED FROM PYTHON SOURCE LINES 348-400
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Plot True Model
@@ -661,15 +658,15 @@ Plotting True Model and Recovered Model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 386-389
+.. GENERATED FROM PYTHON SOURCE LINES 401-404
 
 Plotting Predicted Data and Normalized Misfit
 ---------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 389-431
+.. GENERATED FROM PYTHON SOURCE LINES 404-446
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Predicted data with final recovered model
@@ -728,7 +725,7 @@ Plotting Predicted Data and Normalized Misfit
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 12.928 seconds)
+   **Total running time of the script:** (0 minutes 10.571 seconds)
 
 **Estimated memory usage:**  8 MB
 
@@ -739,16 +736,13 @@ Plotting Predicted Data and Normalized Misfit
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_inv_1a_gravity_anomaly.ipynb <plot_inv_1a_gravity_anomaly.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_inv_1a_gravity_anomaly.py <plot_inv_1a_gravity_anomaly.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_inv_1a_gravity_anomaly.ipynb <plot_inv_1a_gravity_anomaly.ipynb>`
 
 
 .. only:: html

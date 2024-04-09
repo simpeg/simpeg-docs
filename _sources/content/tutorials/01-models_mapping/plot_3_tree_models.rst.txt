@@ -37,7 +37,7 @@ Import modules
 
 .. GENERATED FROM PYTHON SOURCE LINES 20-31
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -67,7 +67,7 @@ Here, we create the OcTree mesh that will be used for all examples.
 
 .. GENERATED FROM PYTHON SOURCE LINES 37-76
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -128,7 +128,7 @@ The model consists of all cells which lie below the surface.
 
 .. GENERATED FROM PYTHON SOURCE LINES 85-131
 
-.. code-block:: default
+.. code-block:: Python
 
 
     mesh = make_example_mesh()
@@ -215,7 +215,7 @@ then map from below surface cell to the mesh.
 
 .. GENERATED FROM PYTHON SOURCE LINES 141-191
 
-.. code-block:: default
+.. code-block:: Python
 
 
     mesh = make_example_mesh()
@@ -290,9 +290,9 @@ find the indicies for mesh cells that lie within the new unit, 2) we
 replace the prexisting physical property value for those cells.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 200-248
+.. GENERATED FROM PYTHON SOURCE LINES 200-250
 
-.. code-block:: default
+.. code-block:: Python
 
 
     mesh = make_example_mesh()
@@ -318,7 +318,9 @@ replace the prexisting physical property value for those cells.
     model = background_value * np.ones(ind_active.sum())
 
     # Add a sphere
-    ind_sphere = model_builder.getIndicesSphere(np.r_[-25.0, 0.0, -15.0], 20.0, mesh.gridCC)
+    ind_sphere = model_builder.get_indices_sphere(
+        np.r_[-25.0, 0.0, -15.0], 20.0, mesh.gridCC
+    )
     ind_sphere = ind_sphere[ind_active]  # So same size and order as model
     model[ind_sphere] = sphere_value
 
@@ -354,7 +356,7 @@ replace the prexisting physical property value for those cells.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 249-257
+.. GENERATED FROM PYTHON SOURCE LINES 251-259
 
 Parameterized block model
 -------------------------
@@ -365,9 +367,9 @@ model as a block in a half-space. We then create a mapping which projects
 this model onto the mesh.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 257-296
+.. GENERATED FROM PYTHON SOURCE LINES 259-298
 
-.. code-block:: default
+.. code-block:: Python
 
 
     mesh = make_example_mesh()
@@ -420,7 +422,7 @@ this model onto the mesh.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 297-310
+.. GENERATED FROM PYTHON SOURCE LINES 299-312
 
 Using Wire Maps
 ---------------
@@ -436,9 +438,9 @@ permeability on the mesh. Wires are used to keep track of the mapping
 between the model vector and a particular physical property type.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 310-367
+.. GENERATED FROM PYTHON SOURCE LINES 312-371
 
-.. code-block:: default
+.. code-block:: Python
 
 
     mesh = make_example_mesh()
@@ -467,7 +469,9 @@ between the model vector and a particular physical property type.
     model = np.kron(np.ones((N, 1)), np.c_[background_sigma_value, background_mu_value])
 
     # Add a conductive and permeable sphere
-    ind_sphere = model_builder.getIndicesSphere(np.r_[-20.0, 0.0, -15.0], 20.0, mesh.gridCC)
+    ind_sphere = model_builder.get_indices_sphere(
+        np.r_[-20.0, 0.0, -15.0], 20.0, mesh.gridCC
+    )
     ind_sphere = ind_sphere[ind_active]  # So same size and order as model
     model[ind_sphere, :] = np.c_[sphere_sigma_value, sphere_mu_value]
 
@@ -512,7 +516,7 @@ between the model vector and a particular physical property type.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 5.164 seconds)
+   **Total running time of the script:** (0 minutes 4.474 seconds)
 
 **Estimated memory usage:**  8 MB
 
@@ -523,16 +527,13 @@ between the model vector and a particular physical property type.
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_3_tree_models.ipynb <plot_3_tree_models.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_3_tree_models.py <plot_3_tree_models.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_3_tree_models.ipynb <plot_3_tree_models.ipynb>`
 
 
 .. only:: html

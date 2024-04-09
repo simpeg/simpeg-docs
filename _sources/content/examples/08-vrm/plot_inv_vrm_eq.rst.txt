@@ -37,7 +37,7 @@ Import modules
 
 .. GENERATED FROM PYTHON SOURCE LINES 18-37
 
-.. code-block:: default
+.. code-block:: Python
 
 
     from SimPEG.electromagnetics import viscous_remanent_magnetization as VRM
@@ -73,7 +73,7 @@ Defining the mesh
 
 .. GENERATED FROM PYTHON SOURCE LINES 41-48
 
-.. code-block:: default
+.. code-block:: Python
 
 
     cs, ncx, ncy, ncz, npad = 2.0, 35, 35, 20, 5
@@ -101,7 +101,7 @@ model value.
 
 .. GENERATED FROM PYTHON SOURCE LINES 56-81
 
-.. code-block:: default
+.. code-block:: Python
 
 
     topoCells = mesh.gridCC[:, 2] < 0.0  # define topography
@@ -147,7 +147,7 @@ for the survey. Our example is similar to an EM-63 survey.
 
 .. GENERATED FROM PYTHON SOURCE LINES 89-113
 
-.. code-block:: default
+.. code-block:: Python
 
 
     waveform = VRM.waveforms.StepOff()
@@ -193,7 +193,7 @@ properties.
 
 .. GENERATED FROM PYTHON SOURCE LINES 122-164
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Defining the problem
@@ -261,9 +261,9 @@ recover the equivalent source model, only cells at the surface are set
 as active in the inversion.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 172-217
+.. GENERATED FROM PYTHON SOURCE LINES 172-220
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define problem
@@ -292,7 +292,10 @@ as active in the inversion.
     w = w / np.max(w)
     w = w
 
-    reg = regularization.Smallness(mesh=mesh, indActive=actCells, cell_weights=w)
+    reg = regularization.Smallness(
+        mesh=mesh, active_cells=actCells, weights={"cell_weights": w}
+    )
+
     opt = optimization.ProjectedGNCG(
         maxIter=20, lower=0.0, upper=1e-2, maxIterLS=20, tolCG=1e-4
     )
@@ -330,27 +333,27 @@ as active in the inversion.
     -----------------------------------------------------------------------------
     x0 has any nan: 0
     CREATING T MATRIX
-       0  1.00e+00  1.77e+05  0.00e+00  1.77e+05    1.01e-01      0              
+       0  1.00e+00  3.52e+05  0.00e+00  3.52e+05    1.01e-01      0              
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 1.7651e+04
-    1 : |xc-x_last| = 2.3591e-02 <= tolX*(1+|x0|) = 1.0450e-01
-    1 : |proj(x-g)-x|    = 9.3586e-02 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 9.3586e-02 <= 1e3*eps       = 1.0000e-02
+    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 3.5168e+04
+    1 : |xc-x_last| = 2.3552e-02 <= tolX*(1+|x0|) = 1.0450e-01
+    1 : |proj(x-g)-x|    = 9.3126e-02 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 9.3126e-02 <= 1e3*eps       = 1.0000e-02
     0 : maxIter   =      20    <= iter          =      1
     ------------------------- DONE! -------------------------
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 218-221
+.. GENERATED FROM PYTHON SOURCE LINES 221-224
 
 Plotting
 --------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 221-356
+.. GENERATED FROM PYTHON SOURCE LINES 224-359
 
-.. code-block:: default
+.. code-block:: Python
 
 
     fields_tot = np.reshape(fields_tot, (n_loc, n_times))
@@ -502,9 +505,9 @@ Plotting
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 14.612 seconds)
+   **Total running time of the script:** (0 minutes 12.910 seconds)
 
-**Estimated memory usage:**  110 MB
+**Estimated memory usage:**  111 MB
 
 
 .. _sphx_glr_download_content_examples_08-vrm_plot_inv_vrm_eq.py:
@@ -513,16 +516,13 @@ Plotting
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_inv_vrm_eq.ipynb <plot_inv_vrm_eq.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_inv_vrm_eq.py <plot_inv_vrm_eq.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_inv_vrm_eq.ipynb <plot_inv_vrm_eq.ipynb>`
 
 
 .. only:: html

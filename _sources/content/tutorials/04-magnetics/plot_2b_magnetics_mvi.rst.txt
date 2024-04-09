@@ -39,7 +39,7 @@ Import Modules
 
 .. GENERATED FROM PYTHON SOURCE LINES 22-37
 
-.. code-block:: default
+.. code-block:: Python
 
 
     import numpy as np
@@ -74,7 +74,7 @@ also be loaded from a file.
 
 .. GENERATED FROM PYTHON SOURCE LINES 44-50
 
-.. code-block:: default
+.. code-block:: Python
 
 
     [x_topo, y_topo] = np.meshgrid(np.linspace(-200, 200, 41), np.linspace(-200, 200, 41))
@@ -100,9 +100,9 @@ the xyz locations of the observation locations, the list of field components
 which are to be modeled and the properties of the Earth's field.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 59-94
+.. GENERATED FROM PYTHON SOURCE LINES 59-96
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define the observation locations as an (N, 3) numpy array or load them.
@@ -129,10 +129,12 @@ which are to be modeled and the properties of the Earth's field.
     field_inclination = 60
     field_declination = 30
     field_strength = 50000
-    inducing_field = (field_strength, field_inclination, field_declination)
 
-    source_field = magnetics.sources.SourceField(
-        receiver_list=receiver_list, parameters=inducing_field
+    source_field = magnetics.sources.UniformBackgroundField(
+        receiver_list=receiver_list,
+        amplitude=field_strength,
+        inclination=field_inclination,
+        declination=field_declination,
     )
 
     # Define the survey
@@ -146,7 +148,7 @@ which are to be modeled and the properties of the Earth's field.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 95-101
+.. GENERATED FROM PYTHON SOURCE LINES 97-103
 
 Defining an OcTree Mesh
 -----------------------
@@ -155,9 +157,9 @@ Here, we create the OcTree mesh that will be used to predict magnetic
 gradiometry data for the forward simuulation.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 101-134
+.. GENERATED FROM PYTHON SOURCE LINES 103-136
 
-.. code-block:: default
+.. code-block:: Python
 
 
     dx = 5  # minimum cell width (base mesh cell width) in x
@@ -200,11 +202,11 @@ gradiometry data for the forward simuulation.
 
  .. code-block:: none
 
-    /home/vsts/work/1/s/tutorials/04-magnetics/plot_2b_magnetics_mvi.py:122: DeprecationWarning:
+    /home/vsts/work/1/s/tutorials/04-magnetics/plot_2b_magnetics_mvi.py:124: DeprecationWarning:
 
     The surface option is deprecated as of `0.9.0` please update your code to use the `TreeMesh.refine_surface` functionality. It will be removed in a future version of discretize.
 
-    /home/vsts/work/1/s/tutorials/04-magnetics/plot_2b_magnetics_mvi.py:130: DeprecationWarning:
+    /home/vsts/work/1/s/tutorials/04-magnetics/plot_2b_magnetics_mvi.py:132: DeprecationWarning:
 
     The box option is deprecated as of `0.9.0` please update your code to use the `TreeMesh.refine_bounding_box` functionality. It will be removed in a future version of discretize.
 
@@ -212,7 +214,7 @@ gradiometry data for the forward simuulation.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 135-150
+.. GENERATED FROM PYTHON SOURCE LINES 137-152
 
 Create Magnetic Vector Intensity Model (MVI)
 --------------------------------------------
@@ -230,9 +232,9 @@ model, we must
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 150-218
+.. GENERATED FROM PYTHON SOURCE LINES 152-220
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define susceptibility values for each unit in SI
@@ -248,7 +250,7 @@ model, we must
 
     # Define susceptibility for each cell
     susceptibility_model = background_susceptibility * np.ones(ind_active.sum())
-    ind_sphere = model_builder.getIndicesSphere(np.r_[0.0, 0.0, -45.0], 15.0, mesh.gridCC)
+    ind_sphere = model_builder.get_indices_sphere(np.r_[0.0, 0.0, -45.0], 15.0, mesh.gridCC)
     ind_sphere = ind_sphere[ind_active]
     susceptibility_model[ind_sphere] = sphere_susceptibility
 
@@ -314,7 +316,7 @@ model, we must
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 219-225
+.. GENERATED FROM PYTHON SOURCE LINES 221-227
 
 Simulation: Gradiometry Data for an MVI Model
 ---------------------------------------------
@@ -323,9 +325,9 @@ Here we predict magnetic gradiometry data for an effective susceptibility model
 in the case of remanent magnetization.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 225-294
+.. GENERATED FROM PYTHON SOURCE LINES 227-296
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define the forward simulation. By setting the 'store_sensitivities' keyword
@@ -411,7 +413,7 @@ in the case of remanent magnetization.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 6.784 seconds)
+   **Total running time of the script:** (0 minutes 5.554 seconds)
 
 **Estimated memory usage:**  8 MB
 
@@ -422,16 +424,13 @@ in the case of remanent magnetization.
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_2b_magnetics_mvi.ipynb <plot_2b_magnetics_mvi.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_2b_magnetics_mvi.py <plot_2b_magnetics_mvi.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_2b_magnetics_mvi.ipynb <plot_2b_magnetics_mvi.ipynb>`
 
 
 .. only:: html

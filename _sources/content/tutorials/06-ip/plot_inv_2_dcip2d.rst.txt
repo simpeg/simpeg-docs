@@ -44,7 +44,7 @@ Import modules
 
 .. GENERATED FROM PYTHON SOURCE LINES 27-66
 
-.. code-block:: default
+.. code-block:: Python
 
 
     import os
@@ -106,7 +106,7 @@ tar-file on our google cloud bucket:
 
 .. GENERATED FROM PYTHON SOURCE LINES 76-97
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # storage bucket where we have the data
@@ -155,7 +155,7 @@ plot the data values using pseudo-sections.
 
 .. GENERATED FROM PYTHON SOURCE LINES 104-110
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Load data
@@ -178,7 +178,7 @@ Plot Observed Data in Pseudosection
 
 .. GENERATED FROM PYTHON SOURCE LINES 114-157
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Plot apparent conductivity using pseudo-section
@@ -261,7 +261,7 @@ For appanrent chargeability IP data, the uncertainties are 5e-3 V/V.
 
 .. GENERATED FROM PYTHON SOURCE LINES 167-171
 
-.. code-block:: default
+.. code-block:: Python
 
 
     dc_data.standard_deviation = 0.05 * np.abs(dc_data.dobs)
@@ -285,7 +285,7 @@ resistivity and IP data.
 
 .. GENERATED FROM PYTHON SOURCE LINES 178-226
 
-.. code-block:: default
+.. code-block:: Python
 
 
     dh = 4  # base cell width
@@ -376,7 +376,7 @@ lie on the discretized surface.
 
 .. GENERATED FROM PYTHON SOURCE LINES 235-258
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Create 2D topography. Since our 3D topography only changes in the x direction,
@@ -421,7 +421,7 @@ structures. Here, the starting model is the natural log of 0.01 S/m.
 
 .. GENERATED FROM PYTHON SOURCE LINES 267-280
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define conductivity model in S/m (or resistivity model in Ohm m)
@@ -453,7 +453,7 @@ Here, we define the physics of the DC resistivity problem.
 
 .. GENERATED FROM PYTHON SOURCE LINES 286-292
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define the problem. Define the cells below topography and the mapping
@@ -483,7 +483,7 @@ The inverse problem is defined by 3 things:
 
 .. GENERATED FROM PYTHON SOURCE LINES 303-329
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define the data misfit. Here the data misfit is the L2 norm of the weighted
@@ -495,7 +495,7 @@ The inverse problem is defined by 3 things:
     # Define the regularization (model objective function)
     dc_regularization = regularization.WeightedLeastSquares(
         mesh,
-        indActive=ind_active,
+        active_cells=ind_active,
         reference_model=starting_conductivity_model,
         alpha_s=0.01,
         alpha_x=1,
@@ -515,15 +515,6 @@ The inverse problem is defined by 3 things:
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    /home/vsts/work/1/s/tutorials/06-ip/plot_inv_2_dcip2d.py:311: DeprecationWarning:
-
-    The 'indActive' argument has been deprecated, please use 'active_cells'. It will be removed in future versions of SimPEG.
-
-
 
 
 
@@ -539,7 +530,7 @@ criteria for the inversion and saving inversion results at each iteration.
 
 .. GENERATED FROM PYTHON SOURCE LINES 337-368
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Apply and update sensitivity weighting as the model updates
@@ -590,7 +581,7 @@ the set of directives. We can then run the inversion.
 
 .. GENERATED FROM PYTHON SOURCE LINES 375-384
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Here we combine the inverse problem and the set of directives
@@ -618,18 +609,18 @@ the set of directives. We can then run the inversion.
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  1.65e+03  1.71e+04  0.00e+00  1.71e+04    3.26e+03      0              
-       1  1.65e+03  2.33e+03  1.55e+00  4.89e+03    2.46e+02      0              
-       2  5.49e+02  1.98e+03  1.68e+00  2.90e+03    4.19e+02      0   Skip BFGS  
-       3  5.49e+02  6.37e+02  3.08e+00  2.33e+03    4.32e+01      0              
-       4  1.83e+02  6.47e+02  3.04e+00  1.20e+03    1.98e+02      0              
-       5  1.83e+02  1.79e+02  4.43e+00  9.89e+02    2.14e+01      0              
-       6  6.10e+01  1.79e+02  4.40e+00  4.48e+02    8.26e+01      0              
+       0  1.55e+03  3.43e+04  0.00e+00  3.43e+04    6.52e+03      0              
+       1  1.55e+03  4.51e+03  3.20e+00  9.47e+03    4.86e+02      0              
+       2  5.17e+02  3.74e+03  3.50e+00  5.55e+03    8.05e+02      0   Skip BFGS  
+       3  5.17e+02  1.19e+03  6.31e+00  4.46e+03    8.38e+01      0              
+       4  1.72e+02  1.21e+03  6.24e+00  2.28e+03    3.78e+02      0              
+       5  1.72e+02  3.34e+02  8.99e+00  1.88e+03    4.19e+01      0              
+       6  5.74e+01  3.35e+02  8.93e+00  8.48e+02    1.57e+02      0              
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 1.7139e+03
-    1 : |xc-x_last| = 4.8197e+00 <= tolX*(1+|x0|) = 3.1119e+01
-    0 : |proj(x-g)-x|    = 8.2594e+01 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 8.2594e+01 <= 1e3*eps       = 1.0000e-02
+    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 3.4278e+03
+    1 : |xc-x_last| = 4.7595e+00 <= tolX*(1+|x0|) = 3.1119e+01
+    0 : |proj(x-g)-x|    = 1.5732e+02 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 1.5732e+02 <= 1e3*eps       = 1.0000e-02
     0 : maxIter   =      40    <= iter          =      7
     ------------------------- DONE! -------------------------
 
@@ -642,9 +633,9 @@ Plotting True and Recovered Conductivity Model
 ----------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 388-447
+.. GENERATED FROM PYTHON SOURCE LINES 388-449
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Recreate true conductivity model
@@ -654,10 +645,12 @@ Plotting True and Recovered Conductivity Model
 
     true_conductivity_model = true_background_conductivity * np.ones(len(mesh))
 
-    ind_conductor = model_builder.getIndicesSphere(np.r_[-120.0, -180.0], 60.0, mesh.gridCC)
+    ind_conductor = model_builder.get_indices_sphere(
+        np.r_[-120.0, -180.0], 60.0, mesh.gridCC
+    )
     true_conductivity_model[ind_conductor] = true_conductor_conductivity
 
-    ind_resistor = model_builder.getIndicesSphere(np.r_[120.0, -180.0], 60.0, mesh.gridCC)
+    ind_resistor = model_builder.get_indices_sphere(np.r_[120.0, -180.0], 60.0, mesh.gridCC)
     true_conductivity_model[ind_resistor] = true_resistor_conductivity
 
     true_conductivity_model[~ind_active] = np.NaN
@@ -729,15 +722,15 @@ Plotting True and Recovered Conductivity Model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 448-451
+.. GENERATED FROM PYTHON SOURCE LINES 450-453
 
 Plotting Predicted DC Data and Misfit
 -------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 451-488
+.. GENERATED FROM PYTHON SOURCE LINES 453-490
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Predicted data from recovered model
@@ -788,7 +781,7 @@ Plotting Predicted DC Data and Misfit
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 489-498
+.. GENERATED FROM PYTHON SOURCE LINES 491-500
 
 Starting/Reference Model for IP Inversion
 -----------------------------------------
@@ -800,9 +793,9 @@ structures. Here, the starting model is the 1e-6 V/V.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 498-511
+.. GENERATED FROM PYTHON SOURCE LINES 500-513
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define conductivity model in S/m (or resistivity model in Ohm m)
@@ -824,7 +817,7 @@ structures. Here, the starting model is the 1e-6 V/V.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 512-520
+.. GENERATED FROM PYTHON SOURCE LINES 514-522
 
 Define the Physics of the IP Simulation
 ---------------------------------------
@@ -835,9 +828,9 @@ conductivity/resistivity, we require the conductivity/resistivity on the
 entire mesh.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 520-530
+.. GENERATED FROM PYTHON SOURCE LINES 522-532
 
-.. code-block:: default
+.. code-block:: Python
 
 
     ip_simulation = ip.Simulation2DNodal(
@@ -856,7 +849,7 @@ entire mesh.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 531-536
+.. GENERATED FROM PYTHON SOURCE LINES 533-538
 
 Define IP Inverse Problem
 -------------------------
@@ -864,9 +857,9 @@ Define IP Inverse Problem
 Here we define the inverse problem in the same manner as the DC inverse problem.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 536-561
+.. GENERATED FROM PYTHON SOURCE LINES 538-563
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define the data misfit (Here we use weighted L2-norm)
@@ -875,7 +868,7 @@ Here we define the inverse problem in the same manner as the DC inverse problem.
     # Define the regularization (model objective function)
     ip_regularization = regularization.WeightedLeastSquares(
         mesh,
-        indActive=ind_active,
+        active_cells=ind_active,
         mapping=maps.IdentityMap(nP=nC),
         alpha_s=0.01,
         alpha_x=1,
@@ -897,19 +890,10 @@ Here we define the inverse problem in the same manner as the DC inverse problem.
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    /home/vsts/work/1/s/tutorials/06-ip/plot_inv_2_dcip2d.py:541: DeprecationWarning:
-
-    The 'indActive' argument has been deprecated, please use 'active_cells'. It will be removed in future versions of SimPEG.
 
 
 
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 562-567
+.. GENERATED FROM PYTHON SOURCE LINES 564-569
 
 Define IP Inversion Directives
 ------------------------------
@@ -917,12 +901,12 @@ Define IP Inversion Directives
 Here we define the directives in the same manner as the DC inverse problem.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 567-584
+.. GENERATED FROM PYTHON SOURCE LINES 569-586
 
-.. code-block:: default
+.. code-block:: Python
 
 
-    update_sensitivity_weighting = directives.UpdateSensitivityWeights(threshold=1e-3)
+    update_sensitivity_weighting = directives.UpdateSensitivityWeights(threshold_value=1e-3)
     starting_beta = directives.BetaEstimate_ByEig(beta0_ratio=1e1)
     beta_schedule = directives.BetaSchedule(coolingFactor=2, coolingRate=1)
     save_iteration = directives.SaveOutputEveryIteration(save_txt=False)
@@ -942,19 +926,10 @@ Here we define the directives in the same manner as the DC inverse problem.
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    /home/vsts/work/1/s/tutorials/06-ip/plot_inv_2_dcip2d.py:568: UserWarning:
-
-    'threshold' property is deprecated and will be removed in SimPEG 0.20.0.Please use 'threshold_value'.
 
 
 
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 585-590
+.. GENERATED FROM PYTHON SOURCE LINES 587-592
 
 Running the IP Inversion
 ------------------------
@@ -962,9 +937,9 @@ Running the IP Inversion
 Here we define the directives in the same manner as the DC inverse problem.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 590-600
+.. GENERATED FROM PYTHON SOURCE LINES 592-602
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Here we combine the inverse problem and the set of directives
@@ -998,28 +973,28 @@ Here we define the directives in the same manner as the DC inverse problem.
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  4.81e+04  1.73e+03  0.00e+00  1.73e+03    5.40e+03      0              
-       1  2.40e+04  1.11e+02  4.43e-03  2.17e+02    7.31e+02      0              
+       0  4.70e+04  3.46e+03  0.00e+00  3.46e+03    9.15e+03      0              
+       1  2.35e+04  2.16e+02  8.93e-03  4.25e+02    1.45e+03      0              
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 1.7288e+02
-    0 : |xc-x_last| = 1.3038e-01 <= tolX*(1+|x0|) = 1.0001e-01
-    0 : |proj(x-g)-x|    = 7.3067e+02 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 7.3067e+02 <= 1e3*eps       = 1.0000e-02
+    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 3.4567e+02
+    0 : |xc-x_last| = 1.2937e-01 <= tolX*(1+|x0|) = 1.0001e-01
+    0 : |proj(x-g)-x|    = 1.4490e+03 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 1.4490e+03 <= 1e3*eps       = 1.0000e-02
     0 : maxIter   =      15    <= iter          =      2
     ------------------------- DONE! -------------------------
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 601-604
+.. GENERATED FROM PYTHON SOURCE LINES 603-606
 
 Plotting True Model and Recovered Chargeability Model
 -----------------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 604-664
+.. GENERATED FROM PYTHON SOURCE LINES 606-666
 
-.. code-block:: default
+.. code-block:: Python
 
     sphere_chargeability = 1e-1
 
@@ -1105,15 +1080,15 @@ Plotting True Model and Recovered Chargeability Model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 665-668
+.. GENERATED FROM PYTHON SOURCE LINES 667-670
 
 Plotting Predicted Data and Misfit
 ----------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 668-705
+.. GENERATED FROM PYTHON SOURCE LINES 670-707
 
-.. code-block:: default
+.. code-block:: Python
 
 
     dpred_ip = ip_inverse_problem.dpred
@@ -1167,7 +1142,7 @@ Plotting Predicted Data and Misfit
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (1 minutes 2.889 seconds)
+   **Total running time of the script:** (0 minutes 51.136 seconds)
 
 **Estimated memory usage:**  8 MB
 
@@ -1178,16 +1153,13 @@ Plotting Predicted Data and Misfit
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_inv_2_dcip2d.ipynb <plot_inv_2_dcip2d.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_inv_2_dcip2d.py <plot_inv_2_dcip2d.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_inv_2_dcip2d.ipynb <plot_inv_2_dcip2d.ipynb>`
 
 
 .. only:: html

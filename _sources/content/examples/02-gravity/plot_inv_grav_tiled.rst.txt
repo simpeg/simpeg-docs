@@ -23,9 +23,10 @@ PF: Gravity: Tiled Inversion Linear
 
 Invert data in tiles.
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-27
+.. GENERATED FROM PYTHON SOURCE LINES 8-28
 
-.. code-block:: default
+.. code-block:: Python
+
 
     import os
     import numpy as np
@@ -53,7 +54,7 @@ Invert data in tiles.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 28-36
+.. GENERATED FROM PYTHON SOURCE LINES 29-37
 
 Setup
 -----
@@ -64,9 +65,9 @@ Create a global survey and mesh and simulate some data
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 36-52
+.. GENERATED FROM PYTHON SOURCE LINES 37-53
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -91,7 +92,7 @@ Create a global survey and mesh and simulate some data
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 53-59
+.. GENERATED FROM PYTHON SOURCE LINES 54-60
 
 Divided and Conquer
 -------------------
@@ -100,9 +101,9 @@ Split the data set in two and create sub-problems
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 59-89
+.. GENERATED FROM PYTHON SOURCE LINES 60-90
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Mesh parameters
@@ -142,7 +143,7 @@ Split the data set in two and create sub-problems
 
  .. code-block:: none
 
-    /home/vsts/work/1/s/examples/02-gravity/plot_inv_grav_tiled.py:78: DeprecationWarning:
+    /home/vsts/work/1/s/examples/02-gravity/plot_inv_grav_tiled.py:79: DeprecationWarning:
 
     The surface option is deprecated as of `0.9.0` please update your code to use the `TreeMesh.refine_surface` functionality. It will be removed in a future version of discretize.
 
@@ -150,7 +151,7 @@ Split the data set in two and create sub-problems
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 90-96
+.. GENERATED FROM PYTHON SOURCE LINES 91-97
 
 Global Mesh
 ------------
@@ -159,9 +160,9 @@ Create a global mesh survey for simulation
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 96-151
+.. GENERATED FROM PYTHON SOURCE LINES 97-152
 
-.. code-block:: default
+.. code-block:: Python
 
 
     mesh = mesh_builder_xyz(
@@ -185,7 +186,7 @@ Create a global mesh survey for simulation
     # Here a simple block in half-space
     # Get the indices of the magnetized block
     model = np.zeros(mesh.nC)
-    ind = utils.model_builder.getIndicesBlock(
+    ind = utils.model_builder.get_indices_block(
         np.r_[-10, -10, -30],
         np.r_[10, 10, -10],
         mesh.gridCC,
@@ -225,7 +226,7 @@ Create a global mesh survey for simulation
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 152-157
+.. GENERATED FROM PYTHON SOURCE LINES 153-158
 
 Tiled misfits
 
@@ -233,9 +234,9 @@ Tiled misfits
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 157-212
+.. GENERATED FROM PYTHON SOURCE LINES 158-213
 
-.. code-block:: default
+.. code-block:: Python
 
     local_misfits = []
     for ii, local_survey in enumerate(local_surveys):
@@ -304,7 +305,7 @@ Tiled misfits
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 213-219
+.. GENERATED FROM PYTHON SOURCE LINES 214-220
 
 Invert on the global mesh
 
@@ -313,9 +314,9 @@ Invert on the global mesh
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 219-267
+.. GENERATED FROM PYTHON SOURCE LINES 220-268
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Create reduced identity map
@@ -344,7 +345,7 @@ Invert on the global mesh
     )
     saveDict = directives.SaveOutputEveryIteration(save_txt=False)
     update_Jacobi = directives.UpdatePreconditioner()
-    sensitivity_weights = directives.UpdateSensitivityWeights(everyIter=False)
+    sensitivity_weights = directives.UpdateSensitivityWeights(every_iteration=False)
     inv = inversion.BaseInversion(
         invProb,
         directiveList=[update_IRLS, sensitivity_weights, betaest, update_Jacobi, saveDict],
@@ -378,10 +379,6 @@ Invert on the global mesh
 
  .. code-block:: none
 
-    /home/vsts/work/1/s/examples/02-gravity/plot_inv_grav_tiled.py:246: UserWarning:
-
-    'everyIter' property is deprecated and will be removed in SimPEG 0.20.0.Please use 'every_iteration'.
-
     SimPEG.InvProblem will set Regularization.reference_model to m0.
     SimPEG.InvProblem will set Regularization.reference_model to m0.
     SimPEG.InvProblem will set Regularization.reference_model to m0.
@@ -395,21 +392,21 @@ Invert on the global mesh
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  2.14e+03  4.26e+04  0.00e+00  4.26e+04    4.80e+01      0              
-       1  1.07e+03  5.20e+03  1.78e+00  7.10e+03    4.77e+01      0              
-       2  5.35e+02  2.91e+03  3.29e+00  4.67e+03    4.75e+01      0   Skip BFGS  
-       3  2.67e+02  1.41e+03  5.25e+00  2.81e+03    4.73e+01      0   Skip BFGS  
-       4  1.34e+02  6.54e+02  7.20e+00  1.62e+03    4.69e+01      0   Skip BFGS  
-       5  6.69e+01  3.32e+02  8.84e+00  9.23e+02    4.63e+01      0   Skip BFGS  
-       6  3.34e+01  2.09e+02  1.01e+01  5.47e+02    4.51e+01      0   Skip BFGS  
+       0  2.15e+03  8.48e+04  0.00e+00  8.48e+04    4.80e+01      0              
+       1  1.07e+03  1.03e+04  3.52e+00  1.41e+04    4.77e+01      0              
+       2  5.36e+02  5.76e+03  6.52e+00  9.26e+03    4.76e+01      0   Skip BFGS  
+       3  2.68e+02  2.80e+03  1.04e+01  5.58e+03    4.76e+01      0   Skip BFGS  
+       4  1.34e+02  1.30e+03  1.42e+01  3.21e+03    4.73e+01      0   Skip BFGS  
+       5  6.70e+01  6.74e+02  1.74e+01  1.84e+03    4.69e+01      0   Skip BFGS  
+       6  3.35e+01  4.33e+02  1.99e+01  1.10e+03    4.63e+01      0   Skip BFGS  
     Reached starting chifact with l2-norm regularization: Start IRLS steps...
-    irls_threshold 0.07444388852989561
+    irls_threshold 0.07266071858039272
     Reach maximum number of IRLS cycles: 0
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 4.2557e+03
-    1 : |xc-x_last| = 3.0825e-02 <= tolX*(1+|x0|) = 1.0048e-01
-    0 : |proj(x-g)-x|    = 4.5138e+01 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 4.5138e+01 <= 1e3*eps       = 1.0000e-02
+    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 8.4842e+03
+    1 : |xc-x_last| = 3.0084e-02 <= tolX*(1+|x0|) = 1.0048e-01
+    0 : |proj(x-g)-x|    = 4.6325e+01 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 4.6325e+01 <= 1e3*eps       = 1.0000e-02
     0 : maxIter   =     100    <= iter          =      7
     ------------------------- DONE! -------------------------
 
@@ -419,7 +416,7 @@ Invert on the global mesh
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 4.371 seconds)
+   **Total running time of the script:** (0 minutes 3.663 seconds)
 
 **Estimated memory usage:**  15 MB
 
@@ -430,16 +427,13 @@ Invert on the global mesh
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_inv_grav_tiled.ipynb <plot_inv_grav_tiled.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_inv_grav_tiled.py <plot_inv_grav_tiled.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_inv_grav_tiled.ipynb <plot_inv_grav_tiled.ipynb>`
 
 
 .. only:: html

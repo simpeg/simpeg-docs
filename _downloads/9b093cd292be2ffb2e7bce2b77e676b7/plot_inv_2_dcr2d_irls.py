@@ -302,10 +302,10 @@ regmap = maps.IdentityMap(nP=int(ind_active.sum()))
 
 reg = regularization.Sparse(
     mesh,
-    indActive=ind_active,
+    active_cells=ind_active,
     reference_model=starting_conductivity_model,
     mapping=regmap,
-    gradientType="total",
+    gradient_type="total",
     alpha_s=0.01,
     alpha_x=1,
     alpha_y=1,
@@ -385,10 +385,12 @@ true_resistor_conductivity = 1e-3
 
 true_conductivity_model = true_background_conductivity * np.ones(len(mesh))
 
-ind_conductor = model_builder.getIndicesSphere(np.r_[-120.0, -180.0], 60.0, mesh.gridCC)
+ind_conductor = model_builder.get_indices_sphere(
+    np.r_[-120.0, -180.0], 60.0, mesh.gridCC
+)
 true_conductivity_model[ind_conductor] = true_conductor_conductivity
 
-ind_resistor = model_builder.getIndicesSphere(np.r_[120.0, -180.0], 60.0, mesh.gridCC)
+ind_resistor = model_builder.get_indices_sphere(np.r_[120.0, -180.0], 60.0, mesh.gridCC)
 true_conductivity_model[ind_resistor] = true_resistor_conductivity
 
 true_conductivity_model[~ind_active] = np.NaN

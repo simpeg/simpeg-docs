@@ -36,7 +36,7 @@ assumption in order to improve the recovery of a compact prism.
 
 .. GENERATED FROM PYTHON SOURCE LINES 19-41
 
-.. code-block:: default
+.. code-block:: Python
 
 
     import scipy as sp
@@ -79,13 +79,13 @@ As a simple case, we pick a vertical inducing field of magnitude 50,000 nT.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 51-91
+.. GENERATED FROM PYTHON SOURCE LINES 51-96
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # We will assume a vertical inducing field
-    H0 = (50000.0, 90.0, 0.0)
+    h0_amplitude, h0_inclination, h0_declination = (50000.0, 90.0, 0.0)
 
     # The magnetization is set along a different direction (induced + remanence)
     M = np.array([45.0, 90.0])
@@ -110,7 +110,12 @@ As a simple case, we pick a vertical inducing field of magnitude 50,000 nT.
     # Create a MAGsurvey
     rxLoc = np.c_[mkvc(X.T), mkvc(Y.T), mkvc(Z.T)]
     receiver_list = magnetics.receivers.Point(rxLoc)
-    srcField = magnetics.sources.SourceField(receiver_list=[receiver_list], parameters=H0)
+    srcField = magnetics.sources.UniformBackgroundField(
+        receiver_list=[receiver_list],
+        amplitude=h0_amplitude,
+        inclination=h0_inclination,
+        declination=h0_declination,
+    )
     survey = magnetics.survey.Survey(srcField)
 
     # Here how the topography looks with a quick interpolation, just a Gaussian...
@@ -135,7 +140,7 @@ As a simple case, we pick a vertical inducing field of magnitude 50,000 nT.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 92-101
+.. GENERATED FROM PYTHON SOURCE LINES 97-106
 
 Inversion Mesh
 --------------
@@ -147,9 +152,9 @@ The second stage allows us to refine the mesh around points or surfaces
 (point assumed to follow an horiontal interface such as topo)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 101-117
+.. GENERATED FROM PYTHON SOURCE LINES 106-122
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Create a mesh
@@ -175,7 +180,7 @@ The second stage allows us to refine the mesh around points or surfaces
 
  .. code-block:: none
 
-    /home/vsts/work/1/s/examples/03-magnetics/plot_inv_mag_nonLinear_Amplitude.py:109: DeprecationWarning:
+    /home/vsts/work/1/s/examples/03-magnetics/plot_inv_mag_nonLinear_Amplitude.py:114: DeprecationWarning:
 
     The surface option is deprecated as of `0.9.0` please update your code to use the `TreeMesh.refine_surface` functionality. It will be removed in a future version of discretize.
 
@@ -183,7 +188,7 @@ The second stage allows us to refine the mesh around points or surfaces
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 118-123
+.. GENERATED FROM PYTHON SOURCE LINES 123-128
 
 Forward modeling data
 ---------------------
@@ -191,16 +196,16 @@ Forward modeling data
 We can now generate TMI data
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 123-201
+.. GENERATED FROM PYTHON SOURCE LINES 128-206
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Convert the inclination and declination to vector in Cartesian
     M_xyz = utils.mat_utils.dip_azimuth2cartesian(np.ones(nC) * M[0], np.ones(nC) * M[1])
 
     # Get the indicies of the magnetized block
-    ind = utils.model_builder.getIndicesBlock(
+    ind = utils.model_builder.get_indices_block(
         np.r_[-20, -20, -10],
         np.r_[20, 20, 25],
         mesh.gridCC,
@@ -285,7 +290,7 @@ We can now generate TMI data
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 202-209
+.. GENERATED FROM PYTHON SOURCE LINES 207-214
 
 Equivalent Source
 -----------------
@@ -295,9 +300,9 @@ an effective susceptibility layer, from which we can forward component
 data
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 209-261
+.. GENERATED FROM PYTHON SOURCE LINES 214-266
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Get the active cells for equivalent source is the topo only
@@ -321,9 +326,9 @@ data
 
     # Create a regularization function, in this case l2l2
     reg = regularization.Sparse(
-        mesh, indActive=surf, mapping=maps.IdentityMap(nP=nC), alpha_z=0
+        mesh, active_cells=surf, mapping=maps.IdentityMap(nP=nC), alpha_z=0
     )
-    reg.mref = np.zeros(nC)
+    reg.reference_model = np.zeros(nC)
 
     # Specify how the optimization will proceed, set susceptibility bounds to inf
     opt = optimization.ProjectedGNCG(
@@ -368,27 +373,27 @@ data
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  7.66e+01  2.29e+02  6.79e-01  2.81e+02    7.83e+04      0              
+       0  7.66e+01  4.58e+02  1.36e+00  5.62e+02    1.57e+05      0              
     Reached starting chifact with l2-norm regularization: Start IRLS steps...
-    irls_threshold 0.005972597257491165
-       1  3.83e+01  4.13e+01  5.79e-01  6.34e+01    4.32e+02      0              
-       2  1.66e+02  2.99e+01  1.01e+00  1.98e+02    4.51e+03      0   Skip BFGS  
-       3  3.62e+02  8.51e+01  1.54e-01  1.41e+02    1.69e+03      0              
-       4  7.06e+02  1.05e+02  7.14e-02  1.55e+02    2.21e+03      0   Skip BFGS  
-       5  1.27e+03  1.24e+02  3.27e-02  1.66e+02    2.57e+03      0              
+    irls_threshold 0.005925057308508937
+       1  3.83e+01  8.24e+01  1.33e+00  1.33e+02    6.32e+02      0              
+       2  1.52e+02  6.73e+01  2.24e+00  4.07e+02    9.68e+03      0   Skip BFGS  
+       3  3.22e+02  1.79e+02  3.28e-01  2.84e+02    3.35e+03      0              
+       4  6.21e+02  2.16e+02  1.46e-01  3.07e+02    3.81e+03      0   Skip BFGS  
+       5  1.12e+03  2.49e+02  7.09e-02  3.28e+02    4.68e+03      0              
     Reach maximum number of IRLS cycles: 5
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 2.8190e+01
-    1 : |xc-x_last| = 5.2874e-03 <= tolX*(1+|x0|) = 1.0195e-01
-    0 : |proj(x-g)-x|    = 2.5690e+03 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 2.5690e+03 <= 1e3*eps       = 1.0000e-02
+    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 5.6279e+01
+    1 : |xc-x_last| = 4.9682e-03 <= tolX*(1+|x0|) = 1.0195e-01
+    0 : |proj(x-g)-x|    = 4.6764e+03 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 4.6764e+03 <= 1e3*eps       = 1.0000e-02
     0 : maxIter   =      20    <= iter          =      6
     ------------------------- DONE! -------------------------
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 262-268
+.. GENERATED FROM PYTHON SOURCE LINES 267-273
 
 Forward Amplitude Data
 ----------------------
@@ -397,13 +402,18 @@ Now that we have an equialent source layer, we can forward model all three
 components of the field and add them up: :math:`|B| = \sqrt{( Bx^2 + Bx^2 + Bx^2 )}`
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 268-313
+.. GENERATED FROM PYTHON SOURCE LINES 273-323
 
-.. code-block:: default
+.. code-block:: Python
 
 
     receiver_list = magnetics.receivers.Point(rxLoc, components=["bx", "by", "bz"])
-    srcField = magnetics.sources.SourceField(receiver_list=[receiver_list], parameters=H0)
+    srcField = magnetics.sources.UniformBackgroundField(
+        receiver_list=[receiver_list],
+        amplitude=h0_amplitude,
+        inclination=h0_inclination,
+        declination=h0_declination,
+    )
     surveyAmp = magnetics.survey.Survey(srcField)
 
     simulation = magnetics.simulation.Simulation3DIntegral(
@@ -458,7 +468,7 @@ components of the field and add them up: :math:`|B| = \sqrt{( Bx^2 + Bx^2 + Bx^2
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 314-320
+.. GENERATED FROM PYTHON SOURCE LINES 324-330
 
 Amplitude Inversion
 -------------------
@@ -467,9 +477,9 @@ Now that we have amplitude data, we can invert for an effective
 susceptibility. This is a non-linear inversion.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 320-377
+.. GENERATED FROM PYTHON SOURCE LINES 330-387
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Create active map to go from reduce space to full
@@ -489,9 +499,9 @@ susceptibility. This is a non-linear inversion.
     data_obj = data.Data(survey, dobs=bAmp, noise_floor=wd)
 
     # Create a sparse regularization
-    reg = regularization.Sparse(mesh, indActive=actv, mapping=idenMap)
+    reg = regularization.Sparse(mesh, active_cells=actv, mapping=idenMap)
     reg.norms = [1, 0, 0, 0]
-    reg.mref = np.zeros(nC)
+    reg.reference_model = np.zeros(nC)
 
     # Data misfit function
     dmis = data_misfit.L2DataMisfit(simulation=simulation, data=data_obj)
@@ -545,29 +555,29 @@ susceptibility. This is a non-linear inversion.
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  2.11e+04  1.13e+01  1.85e-03  5.04e+01    1.01e+02      0              
+       0  2.11e+04  2.16e+01  3.71e-03  9.98e+01    1.19e+02      0              
     Reached starting chifact with l2-norm regularization: Start IRLS steps...
-    irls_threshold 6.053018718085754e-05
-       1  1.05e+04  3.74e+00  1.01e-04  4.80e+00    9.19e+01      0              
-       2  1.38e+06  2.32e+00  2.05e-04  2.84e+02    5.28e+01      0              
-       3  2.74e+07  1.59e+01  3.91e-07  2.66e+01    4.23e+01      0              
-       4  5.05e+08  1.72e+01  1.79e-09  1.81e+01    2.74e+01      0   Skip BFGS  
-       5  9.26e+09  1.73e+01  5.50e-12  1.73e+01    1.15e+01      0              
-       6  1.70e+11  1.73e+01  1.65e-14  1.73e+01    1.52e+01      0              
-       7  3.12e+12  1.73e+01  4.95e-17  1.73e+01    8.07e+00      0              
-       8  5.72e+13  1.73e+01  1.47e-19  1.73e+01    9.68e-11      0              
+    irls_threshold 6.308097691141456e-05
+       1  1.05e+04  8.13e+00  2.21e-04  1.05e+01    9.44e+01      0              
+       2  1.25e+06  5.09e+00  4.48e-04  5.68e+02    5.47e+01      0              
+       3  2.32e+07  3.43e+01  9.98e-07  5.75e+01    4.23e+01      0              
+       4  3.96e+08  3.73e+01  5.38e-09  3.95e+01    3.10e+01      0   Skip BFGS  
+       5  6.72e+09  3.76e+01  1.94e-11  3.77e+01    1.39e+01      0              
+       6  1.14e+11  3.76e+01  6.80e-14  3.76e+01    1.71e+01      0              
+       7  1.93e+12  3.76e+01  2.39e-16  3.76e+01    1.09e+01      0              
+       8  3.28e+13  3.76e+01  8.31e-19  3.76e+01    1.63e-10      0              
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 1.2999e-04 <= tolF*(1+|f0|) = 5.1444e+00
-    1 : |xc-x_last| = 1.6775e-09 <= tolX*(1+|x0|) = 1.0195e-01
-    1 : |proj(x-g)-x|    = 9.6791e-11 <= tolG          = 1.0000e-01
-    1 : |proj(x-g)-x|    = 9.6791e-11 <= 1e3*eps       = 1.0000e-02
+    1 : |fc-fOld| = 3.8370e-04 <= tolF*(1+|f0|) = 1.0082e+01
+    1 : |xc-x_last| = 2.5960e-09 <= tolX*(1+|x0|) = 1.0195e-01
+    1 : |proj(x-g)-x|    = 1.6277e-10 <= tolG          = 1.0000e-01
+    1 : |proj(x-g)-x|    = 1.6277e-10 <= 1e3*eps       = 1.0000e-02
     0 : maxIter   =      30    <= iter          =      8
     ------------------------- DONE! -------------------------
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 378-388
+.. GENERATED FROM PYTHON SOURCE LINES 388-398
 
 Final Plot
 ----------
@@ -580,9 +590,9 @@ is weakly sensitive to the magnetization direction, but can still have
 an impact.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 388-433
+.. GENERATED FROM PYTHON SOURCE LINES 398-443
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Plot the layer model and data
@@ -644,9 +654,9 @@ an impact.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 37.876 seconds)
+   **Total running time of the script:** (0 minutes 30.426 seconds)
 
-**Estimated memory usage:**  538 MB
+**Estimated memory usage:**  534 MB
 
 
 .. _sphx_glr_download_content_examples_03-magnetics_plot_inv_mag_nonLinear_Amplitude.py:
@@ -655,16 +665,13 @@ an impact.
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_inv_mag_nonLinear_Amplitude.ipynb <plot_inv_mag_nonLinear_Amplitude.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_inv_mag_nonLinear_Amplitude.py <plot_inv_mag_nonLinear_Amplitude.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_inv_mag_nonLinear_Amplitude.ipynb <plot_inv_mag_nonLinear_Amplitude.ipynb>`
 
 
 .. only:: html

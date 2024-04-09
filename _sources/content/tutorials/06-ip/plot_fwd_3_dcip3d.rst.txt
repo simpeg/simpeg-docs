@@ -47,7 +47,7 @@ Import modules
 
 .. GENERATED FROM PYTHON SOURCE LINES 31-70
 
-.. code-block:: default
+.. code-block:: Python
 
 
     import os
@@ -107,7 +107,7 @@ depression.
 
 .. GENERATED FROM PYTHON SOURCE LINES 78-87
 
-.. code-block:: default
+.. code-block:: Python
 
 
     x_topo, y_topo = np.meshgrid(
@@ -141,7 +141,7 @@ the sources for multiple lines to create the survey.
 
 .. GENERATED FROM PYTHON SOURCE LINES 99-129
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define the parameters for each survey line
@@ -191,7 +191,7 @@ Here, we create the OcTree mesh that will be used to predict DC data.
 
 .. GENERATED FROM PYTHON SOURCE LINES 136-173
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Defining domain side and minimum cell size
@@ -263,7 +263,7 @@ you can carry through this work flow with a resistivity model if desired.
 
 .. GENERATED FROM PYTHON SOURCE LINES 182-240
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define conductivity model in S/m (or resistivity model in Ohm m)
@@ -282,12 +282,12 @@ you can carry through this work flow with a resistivity model if desired.
     # Define model
     conductivity_model = background_value * np.ones(nC)
 
-    ind_conductor = model_builder.getIndicesSphere(
+    ind_conductor = model_builder.get_indices_sphere(
         np.r_[-350.0, 0.0, -300.0], 160.0, mesh.cell_centers[ind_active, :]
     )
     conductivity_model[ind_conductor] = conductor_value
 
-    ind_resistor = model_builder.getIndicesSphere(
+    ind_resistor = model_builder.get_indices_sphere(
         np.r_[350.0, 0.0, -300.0], 160.0, mesh.cell_centers[ind_active, :]
     )
     conductivity_model[ind_resistor] = resistor_value
@@ -349,7 +349,7 @@ lie on the discretized surface.
 
 .. GENERATED FROM PYTHON SOURCE LINES 250-253
 
-.. code-block:: default
+.. code-block:: Python
 
 
     dc_survey.drape_electrodes_on_topography(mesh, ind_active, option="top")
@@ -375,7 +375,7 @@ argument *rhoMap* is defined, the simulation will expect a resistivity model.
 
 .. GENERATED FROM PYTHON SOURCE LINES 263-273
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define the DC simulation
@@ -410,7 +410,7 @@ one or more planes.
 
 .. GENERATED FROM PYTHON SOURCE LINES 285-339
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Since the data are normalized voltage, we must convert predicted
@@ -488,7 +488,7 @@ terms of the apparent chargeability (V/V).
 
 .. GENERATED FROM PYTHON SOURCE LINES 347-369
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Generate source list for IP survey lines
@@ -533,7 +533,7 @@ chargeability of the Earth (V/V).
 
 .. GENERATED FROM PYTHON SOURCE LINES 379-425
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define intrinsic chargeability model (V/V)
@@ -547,7 +547,7 @@ chargeability of the Earth (V/V).
     # Define model
     chargeability_model = background_value * np.ones(nC)
 
-    ind_chargeable = model_builder.getIndicesSphere(
+    ind_chargeable = model_builder.get_indices_sphere(
         np.r_[-350.0, 0.0, -300.0], 160.0, mesh.cell_centers[ind_active, :]
     )
 
@@ -605,7 +605,7 @@ model to predict IP data.
 
 .. GENERATED FROM PYTHON SOURCE LINES 433-448
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # We use the keyword argument *sigma* to define the background conductivity on
@@ -644,7 +644,7 @@ we can plot the data directly.
 
 .. GENERATED FROM PYTHON SOURCE LINES 459-487
 
-.. code-block:: default
+.. code-block:: Python
 
 
     if has_plotly:
@@ -692,7 +692,7 @@ Optional: Write Outputs
 
 .. GENERATED FROM PYTHON SOURCE LINES 491-575
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -711,7 +711,7 @@ Optional: Write Outputs
         # Add 10% Gaussian noise to each datum
         np.random.seed(433)
         std = 0.1 * np.abs(dpred_dc)
-        noise = std * np.random.rand(len(dpred_dc))
+        noise = std * np.random.randn(len(dpred_dc))
         dobs = dpred_dc + noise
 
         # Create dictionary that stores line IDs
@@ -749,7 +749,7 @@ Optional: Write Outputs
         # Add Gaussian noise with a standard deviation of 5e-3 V/V
         np.random.seed(444)
         std = 5e-3 * np.ones_like(dpred_ip)
-        noise = std * np.random.rand(len(dpred_ip))
+        noise = std * np.random.randn(len(dpred_ip))
         dobs = dpred_ip + noise
 
         # Create a survey with the original electrode locations
@@ -788,7 +788,7 @@ Optional: Write Outputs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 24.516 seconds)
+   **Total running time of the script:** (0 minutes 21.322 seconds)
 
 **Estimated memory usage:**  8 MB
 
@@ -799,16 +799,13 @@ Optional: Write Outputs
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_fwd_3_dcip3d.ipynb <plot_fwd_3_dcip3d.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_fwd_3_dcip3d.py <plot_fwd_3_dcip3d.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_fwd_3_dcip3d.ipynb <plot_fwd_3_dcip3d.ipynb>`
 
 
 .. only:: html

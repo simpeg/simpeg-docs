@@ -88,14 +88,14 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  2.00e+00  1.24e+02  0.00e+00  1.24e+02    2.84e+01      0              
-       1  2.00e+00  1.83e+01  2.92e+00  2.42e+01    1.13e+01      0              
-       2  2.00e+00  6.08e+00  1.68e+00  9.44e+00    4.47e+00      0              
+       0  2.00e+00  2.48e+02  0.00e+00  2.48e+02    5.67e+01      0              
+       1  2.00e+00  3.66e+01  5.83e+00  4.83e+01    2.26e+01      0              
+       2  2.00e+00  1.22e+01  3.36e+00  1.89e+01    8.93e+00      0              
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 1.2510e+01
+    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 2.4920e+01
     0 : |xc-x_last| = 2.1957e+00 <= tolX*(1+|x0|) = 1.3820e+00
-    0 : |proj(x-g)-x|    = 4.4665e+00 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 4.4665e+00 <= 1e3*eps       = 1.0000e-02
+    0 : |proj(x-g)-x|    = 8.9330e+00 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 8.9330e+00 <= 1e3*eps       = 1.0000e-02
     0 : maxIter   =       5    <= iter          =      3
     ------------------------- DONE! -------------------------
 
@@ -109,22 +109,22 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
     x0 has any nan: 0
     /home/vsts/conda/envs/simpeg-test/lib/python3.8/site-packages/pymatsolver/direct.py:23: PardisoTypeConversionWarning:
 
-    Converting csc_matrix matrix to CSR format, will slow down.
+    Converting csc_matrix matrix to CSR format.
 
     /home/vsts/conda/envs/simpeg-test/lib/python3.8/site-packages/pymatsolver/direct.py:73: PardisoTypeConversionWarning:
 
-    Converting csc_matrix matrix to CSR format, will slow down.
+    Converting csc_matrix matrix to CSR format.
 
-       0  2.00e+01  2.28e+02  2.12e+01  6.53e+02    1.32e+02      0              
-       1  2.00e+01  4.79e+01  2.02e+00  8.83e+01    4.59e+01      0              
-       2  2.00e+01  1.88e+01  1.19e+00  4.27e+01    1.27e+01      0              
-       3  2.00e+01  1.13e+01  1.39e+00  3.90e+01    4.08e+00      0              
-       4  2.00e+01  1.06e+01  1.41e+00  3.87e+01    1.74e+00      0              
+       0  2.00e+01  4.57e+02  4.25e+01  1.31e+03    2.64e+02      0              
+       1  2.00e+01  9.57e+01  4.04e+00  1.77e+02    9.18e+01      0              
+       2  2.00e+01  3.77e+01  2.39e+00  8.54e+01    2.54e+01      0              
+       3  2.00e+01  2.26e+01  2.77e+00  7.80e+01    8.16e+00      0              
+       4  2.00e+01  2.11e+01  2.81e+00  7.74e+01    3.48e+00      0              
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 6.5401e+01
+    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 1.3070e+02
     1 : |xc-x_last| = 1.0883e-01 <= tolX*(1+|x0|) = 1.3820e+00
-    0 : |proj(x-g)-x|    = 1.7387e+00 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 1.7387e+00 <= 1e3*eps       = 1.0000e-02
+    0 : |proj(x-g)-x|    = 3.4773e+00 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 3.4773e+00 <= 1e3*eps       = 1.0000e-02
     1 : maxIter   =       5    <= iter          =      5
     ------------------------- DONE! -------------------------
     /home/vsts/work/1/s/examples/20-published/plot_booky_1D_time_freq_inv.py:478: UserWarning:
@@ -140,7 +140,7 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
 
 |
 
-.. code-block:: default
+.. code-block:: Python
 
 
     import numpy as np
@@ -379,7 +379,7 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
         inv = inversion.BaseInversion(invProb, directiveList=[target])
         reg.alpha_s = 1e-3
         reg.alpha_x = 1.0
-        reg.mref = m0.copy()
+        reg.reference_model = m0.copy()
         opt.LSshorten = 0.5
         opt.remember("xc")
         # run the inversion
@@ -497,7 +497,7 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
         reg.alpha_x = 1.0
         opt.LSshorten = 0.5
         opt.remember("xc")
-        reg.mref = mopt_re  # Use RESOLVE model as a reference model
+        reg.reference_model = mopt_re  # Use RESOLVE model as a reference model
 
         # run the inversion
         mopt_sky = inv.run(m0)
@@ -618,9 +618,9 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 22.841 seconds)
+   **Total running time of the script:** (0 minutes 19.867 seconds)
 
-**Estimated memory usage:**  14 MB
+**Estimated memory usage:**  18 MB
 
 
 .. _sphx_glr_download_content_examples_20-published_plot_booky_1D_time_freq_inv.py:
@@ -629,16 +629,13 @@ This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capri
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_booky_1D_time_freq_inv.ipynb <plot_booky_1D_time_freq_inv.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_booky_1D_time_freq_inv.py <plot_booky_1D_time_freq_inv.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_booky_1D_time_freq_inv.ipynb <plot_booky_1D_time_freq_inv.ipynb>`
 
 
 .. only:: html

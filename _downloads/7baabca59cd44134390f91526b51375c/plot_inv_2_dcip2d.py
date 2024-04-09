@@ -310,7 +310,7 @@ dc_data_misfit = data_misfit.L2DataMisfit(data=dc_data, simulation=dc_simulation
 # Define the regularization (model objective function)
 dc_regularization = regularization.WeightedLeastSquares(
     mesh,
-    indActive=ind_active,
+    active_cells=ind_active,
     reference_model=starting_conductivity_model,
     alpha_s=0.01,
     alpha_x=1,
@@ -393,10 +393,12 @@ true_resistor_conductivity = 1e-3
 
 true_conductivity_model = true_background_conductivity * np.ones(len(mesh))
 
-ind_conductor = model_builder.getIndicesSphere(np.r_[-120.0, -180.0], 60.0, mesh.gridCC)
+ind_conductor = model_builder.get_indices_sphere(
+    np.r_[-120.0, -180.0], 60.0, mesh.gridCC
+)
 true_conductivity_model[ind_conductor] = true_conductor_conductivity
 
-ind_resistor = model_builder.getIndicesSphere(np.r_[120.0, -180.0], 60.0, mesh.gridCC)
+ind_resistor = model_builder.get_indices_sphere(np.r_[120.0, -180.0], 60.0, mesh.gridCC)
 true_conductivity_model[ind_resistor] = true_resistor_conductivity
 
 true_conductivity_model[~ind_active] = np.NaN
@@ -540,7 +542,7 @@ ip_data_misfit = data_misfit.L2DataMisfit(data=ip_data, simulation=ip_simulation
 # Define the regularization (model objective function)
 ip_regularization = regularization.WeightedLeastSquares(
     mesh,
-    indActive=ind_active,
+    active_cells=ind_active,
     mapping=maps.IdentityMap(nP=nC),
     alpha_s=0.01,
     alpha_x=1,
@@ -565,7 +567,7 @@ ip_inverse_problem = inverse_problem.BaseInvProblem(
 # Here we define the directives in the same manner as the DC inverse problem.
 #
 
-update_sensitivity_weighting = directives.UpdateSensitivityWeights(threshold=1e-3)
+update_sensitivity_weighting = directives.UpdateSensitivityWeights(threshold_value=1e-3)
 starting_beta = directives.BetaEstimate_ByEig(beta0_ratio=1e1)
 beta_schedule = directives.BetaSchedule(coolingFactor=2, coolingRate=1)
 save_iteration = directives.SaveOutputEveryIteration(save_txt=False)

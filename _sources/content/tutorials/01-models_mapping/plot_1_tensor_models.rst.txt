@@ -37,7 +37,7 @@ Import modules
 
 .. GENERATED FROM PYTHON SOURCE LINES 20-30
 
-.. code-block:: default
+.. code-block:: Python
 
 
     from discretize import TensorMesh
@@ -66,7 +66,7 @@ Here, we create the tensor mesh that will be used for all examples.
 
 .. GENERATED FROM PYTHON SOURCE LINES 36-48
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -101,7 +101,7 @@ the model-space to the entire mesh.
 
 .. GENERATED FROM PYTHON SOURCE LINES 58-79
 
-.. code-block:: default
+.. code-block:: Python
 
 
     mesh = make_example_mesh()
@@ -148,7 +148,7 @@ to find the cells which lie below a set of xyz points defining a surface.
 
 .. GENERATED FROM PYTHON SOURCE LINES 87-128
 
-.. code-block:: default
+.. code-block:: Python
 
 
     mesh = make_example_mesh()
@@ -217,7 +217,7 @@ then map from below surface cell to the mesh.
 
 .. GENERATED FROM PYTHON SOURCE LINES 138-183
 
-.. code-block:: default
+.. code-block:: Python
 
 
     mesh = make_example_mesh()
@@ -287,9 +287,9 @@ find the indicies for mesh cells that lie within the new unit, 2) we
 replace the prexisting physical property value for those cells.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 192-235
+.. GENERATED FROM PYTHON SOURCE LINES 192-237
 
-.. code-block:: default
+.. code-block:: Python
 
 
     mesh = make_example_mesh()
@@ -312,7 +312,9 @@ replace the prexisting physical property value for those cells.
     model = background_value * np.ones(ind_active.sum())
 
     # Add a sphere
-    ind_sphere = model_builder.getIndicesSphere(np.r_[-25.0, 0.0, -15.0], 20.0, mesh.gridCC)
+    ind_sphere = model_builder.get_indices_sphere(
+        np.r_[-25.0, 0.0, -15.0], 20.0, mesh.gridCC
+    )
     ind_sphere = ind_sphere[ind_active]  # So it's same size and order as model
     model[ind_sphere] = sphere_value
 
@@ -346,7 +348,7 @@ replace the prexisting physical property value for those cells.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 236-244
+.. GENERATED FROM PYTHON SOURCE LINES 238-246
 
 Parameterized block model
 -------------------------
@@ -357,9 +359,9 @@ model as a block in a half-space. We then create a mapping which projects
 this model onto the mesh.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 244-278
+.. GENERATED FROM PYTHON SOURCE LINES 246-280
 
-.. code-block:: default
+.. code-block:: Python
 
 
     mesh = make_example_mesh()
@@ -407,7 +409,7 @@ this model onto the mesh.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 279-292
+.. GENERATED FROM PYTHON SOURCE LINES 281-294
 
 Using Wire Maps
 ---------------
@@ -423,9 +425,9 @@ permeability on the mesh. Wires are used to keep track of the mapping
 between the model vector and a particular physical property type.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 292-344
+.. GENERATED FROM PYTHON SOURCE LINES 294-348
 
-.. code-block:: default
+.. code-block:: Python
 
 
     mesh = make_example_mesh()
@@ -451,7 +453,9 @@ between the model vector and a particular physical property type.
     model = np.kron(np.ones((N, 1)), np.c_[background_sigma, background_myu])
 
     # Add a conductive and permeable sphere
-    ind_sphere = model_builder.getIndicesSphere(np.r_[-25.0, 0.0, -15.0], 20.0, mesh.gridCC)
+    ind_sphere = model_builder.get_indices_sphere(
+        np.r_[-25.0, 0.0, -15.0], 20.0, mesh.gridCC
+    )
     ind_sphere = ind_sphere[ind_active]  # So same size and order as model
     model[ind_sphere, :] = np.c_[sphere_sigma, sphere_mu]
 
@@ -494,7 +498,7 @@ between the model vector and a particular physical property type.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 7.110 seconds)
+   **Total running time of the script:** (0 minutes 5.746 seconds)
 
 **Estimated memory usage:**  8 MB
 
@@ -505,16 +509,13 @@ between the model vector and a particular physical property type.
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_1_tensor_models.ipynb <plot_1_tensor_models.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_1_tensor_models.py <plot_1_tensor_models.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_1_tensor_models.ipynb <plot_1_tensor_models.ipynb>`
 
 
 .. only:: html

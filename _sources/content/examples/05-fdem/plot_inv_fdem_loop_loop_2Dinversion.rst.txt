@@ -31,7 +31,7 @@ and perform the forward modelling in 3D.
 
 .. GENERATED FROM PYTHON SOURCE LINES 14-37
 
-.. code-block:: default
+.. code-block:: Python
 
 
     import numpy as np
@@ -73,7 +73,7 @@ Define the survey and model parameters
 
 .. GENERATED FROM PYTHON SOURCE LINES 43-54
 
-.. code-block:: default
+.. code-block:: Python
 
 
     sigma_surface = 10e-3
@@ -106,7 +106,7 @@ Define a dipping interface between the surface layer and the deeper layer
 
 .. GENERATED FROM PYTHON SOURCE LINES 58-80
 
-.. code-block:: default
+.. code-block:: Python
 
 
     z_interface_shallow = -0.25
@@ -152,7 +152,7 @@ simulations on.
 
 .. GENERATED FROM PYTHON SOURCE LINES 91-123
 
-.. code-block:: default
+.. code-block:: Python
 
 
     csx = 0.5  # cell size for the horizontal direction
@@ -215,7 +215,7 @@ on
 
 .. GENERATED FROM PYTHON SOURCE LINES 129-134
 
-.. code-block:: default
+.. code-block:: Python
 
 
     inversion_mesh = discretize.TensorMesh([mesh.h[0], mesh.h[2][mesh.cell_centers_z <= 0]])
@@ -251,7 +251,7 @@ the surface, fixing the conductivity of the air cells to 1e-8 S/m
 
 .. GENERATED FROM PYTHON SOURCE LINES 141-157
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # create a 2D mesh that includes air cells
@@ -285,7 +285,7 @@ Create our true model which we will use to generate synthetic data for
 
 .. GENERATED FROM PYTHON SOURCE LINES 162-174
 
-.. code-block:: default
+.. code-block:: Python
 
 
     m_true = np.log(sigma_deep) * np.ones(inversion_mesh.nC)
@@ -326,7 +326,7 @@ Create our true model which we will use to generate synthetic data for
 
 .. GENERATED FROM PYTHON SOURCE LINES 179-215
 
-.. code-block:: default
+.. code-block:: Python
 
 
     src_locations = np.arange(-11, 11, 0.5)
@@ -381,7 +381,7 @@ assign a standard deviation of 0.05, and a floor of 1e-11.
 
 .. GENERATED FROM PYTHON SOURCE LINES 221-269
 
-.. code-block:: default
+.. code-block:: Python
 
 
     t = time.time()
@@ -444,7 +444,7 @@ assign a standard deviation of 0.05, and a floor of 1e-11.
 
  .. code-block:: none
 
-    Done forward simulation. Elapsed time = 14.70 s
+    Done forward simulation. Elapsed time = 11.84 s
 
 
 
@@ -469,7 +469,7 @@ employ a beta-cooling schedule using :class:`SimPEG.directives.BetaSchedule`
 
 .. GENERATED FROM PYTHON SOURCE LINES 285-299
 
-.. code-block:: default
+.. code-block:: Python
 
 
     dmisfit = data_misfit.L2DataMisfit(simulation=prob, data=data)
@@ -493,7 +493,7 @@ employ a beta-cooling schedule using :class:`SimPEG.directives.BetaSchedule`
 
  .. code-block:: none
 
-    The target misfit is 132.00
+    The target misfit is 264.00
 
 
 
@@ -507,7 +507,7 @@ We start from a half-space equal to the deep conductivity.
 
 .. GENERATED FROM PYTHON SOURCE LINES 304-311
 
-.. code-block:: default
+.. code-block:: Python
 
 
     m0 = np.log(sigma_deep) * np.ones(inversion_mesh.nC)
@@ -538,17 +538,17 @@ We start from a half-space equal to the deep conductivity.
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  3.36e+00  7.10e+03  0.00e+00  7.10e+03    1.60e+03      0              
-       1  3.36e+00  7.39e+02  2.71e+00  7.48e+02    2.30e+02      0              
+       0  2.53e+00  1.42e+04  0.00e+00  1.42e+04    3.21e+03      0              
+       1  2.53e+00  1.48e+03  5.42e+00  1.49e+03    4.61e+02      0              
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 7.0960e+02
-    1 : |xc-x_last| = 6.2306e+00 <= tolX*(1+|x0|) = 1.3056e+01
-    0 : |proj(x-g)-x|    = 2.3043e+02 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 2.3043e+02 <= 1e3*eps       = 1.0000e-02
+    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 1.4191e+03
+    1 : |xc-x_last| = 6.2505e+00 <= tolX*(1+|x0|) = 1.3056e+01
+    0 : |proj(x-g)-x|    = 4.6148e+02 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 4.6148e+02 <= 1e3*eps       = 1.0000e-02
     0 : maxIter   =      20    <= iter          =      2
     ------------------------- DONE! -------------------------
 
-     Inversion Complete. Elapsed Time = 268.23 s
+     Inversion Complete. Elapsed Time = 194.65 s
 
 
 
@@ -561,7 +561,7 @@ Plot the predicted and observed data
 
 .. GENERATED FROM PYTHON SOURCE LINES 315-320
 
-.. code-block:: default
+.. code-block:: Python
 
 
     fig, ax = plt.subplots(1, 3, figsize=(15, 5))
@@ -581,10 +581,6 @@ Plot the predicted and observed data
 
  .. code-block:: none
 
-    /home/vsts/work/1/s/examples/05-fdem/plot_inv_fdem_loop_loop_2Dinversion.py:263: UserWarning:
-
-    The figure layout has changed to tight
-
 
     array([<Axes: title={'center': 'offset = 0.32m'}, xlabel='source location x (m)', ylabel='Secondary B-Field (T)'>,
            <Axes: title={'center': 'offset = 0.71m'}, xlabel='source location x (m)', ylabel='Secondary B-Field (T)'>,
@@ -601,7 +597,7 @@ Plot the recovered model
 
 .. GENERATED FROM PYTHON SOURCE LINES 324-356
 
-.. code-block:: default
+.. code-block:: Python
 
 
     fig, ax = plt.subplots(1, 2, figsize=(12, 5))
@@ -655,7 +651,7 @@ Print the version of SimPEG and dependencies
 
 .. GENERATED FROM PYTHON SOURCE LINES 360-363
 
-.. code-block:: default
+.. code-block:: Python
 
 
     Report()
@@ -670,7 +666,7 @@ Print the version of SimPEG and dependencies
     <div class="output_subarea output_html rendered_html output_result">
     <table style='border: 1.5px solid;'>
       <tr>
-         <td style='text-align: center; font-weight: bold; font-size: 1.2em; border: 1px solid;' colspan='6'>Wed Sep 06 18:19:11 2023 UTC</td>
+         <td style='text-align: center; font-weight: bold; font-size: 1.2em; border: 1px solid;' colspan='6'>Tue Apr 09 22:45:43 2024 UTC</td>
       </tr>
       <tr>
         <td style='text-align: right; border: 1px solid;'>OS</td>
@@ -693,14 +689,14 @@ Print the version of SimPEG and dependencies
         <td style='text-align: left; border: 1px solid;'>ext4</td>
       </tr>
       <tr>
-         <td style='text-align: center; border: 1px solid;' colspan='6'>Python 3.8.17 | packaged by conda-forge | (default, Jun 16 2023, 07:06:00) 
-    [GCC 11.4.0]</td>
+         <td style='text-align: center; border: 1px solid;' colspan='6'>Python 3.8.19 | packaged by conda-forge | (default, Mar 20 2024, 12:47:35) 
+    [GCC 12.3.0]</td>
       </tr>
       <tr>
         <td style='text-align: right; border: 1px solid;'>SimPEG</td>
-        <td style='text-align: left; border: 1px solid;'>0.20.0.post2</td>
+        <td style='text-align: left; border: 1px solid;'>0.21.0</td>
         <td style='text-align: right; border: 1px solid;'>discretize</td>
-        <td style='text-align: left; border: 1px solid;'>0.9.0</td>
+        <td style='text-align: left; border: 1px solid;'>0.10.0</td>
         <td style='text-align: right; border: 1px solid;'>pymatsolver</td>
         <td style='text-align: left; border: 1px solid;'>0.2.0</td>
       </tr>
@@ -710,23 +706,23 @@ Print the version of SimPEG and dependencies
         <td style='text-align: right; border: 1px solid;'>scipy</td>
         <td style='text-align: left; border: 1px solid;'>1.10.1</td>
         <td style='text-align: right; border: 1px solid;'>sklearn</td>
-        <td style='text-align: left; border: 1px solid;'>1.3.0</td>
+        <td style='text-align: left; border: 1px solid;'>1.3.2</td>
       </tr>
       <tr>
         <td style='text-align: right; border: 1px solid;'>matplotlib</td>
-        <td style='text-align: left; border: 1px solid;'>3.7.2</td>
+        <td style='text-align: left; border: 1px solid;'>3.7.3</td>
         <td style='text-align: right; border: 1px solid;'>empymod</td>
         <td style='text-align: left; border: 1px solid;'>2.2.2</td>
         <td style='text-align: right; border: 1px solid;'>geoana</td>
-        <td style='text-align: left; border: 1px solid;'>0.5.0</td>
+        <td style='text-align: left; border: 1px solid;'>0.6.0</td>
       </tr>
       <tr>
         <td style='text-align: right; border: 1px solid;'>pandas</td>
         <td style='text-align: left; border: 1px solid;'>2.0.3</td>
         <td style='text-align: right; border: 1px solid;'>pydiso</td>
-        <td style='text-align: left; border: 1px solid;'>0.0.3</td>
+        <td style='text-align: left; border: 1px solid;'>0.0.5</td>
         <td style='text-align: right; border: 1px solid;'>numba</td>
-        <td style='text-align: left; border: 1px solid;'>0.57.1</td>
+        <td style='text-align: left; border: 1px solid;'>0.58.1</td>
       </tr>
       <tr>
         <td style='text-align: right; border: 1px solid;'>dask</td>
@@ -738,17 +734,17 @@ Print the version of SimPEG and dependencies
       </tr>
       <tr>
         <td style='text-align: right; border: 1px solid;'>ipywidgets</td>
-        <td style='text-align: left; border: 1px solid;'>8.1.0</td>
+        <td style='text-align: left; border: 1px solid;'>8.1.2</td>
         <td style='text-align: right; border: 1px solid;'>plotly</td>
-        <td style='text-align: left; border: 1px solid;'>5.16.1</td>
+        <td style='text-align: left; border: 1px solid;'>5.19.0</td>
         <td style='text-align: right; border: 1px solid;'>vtk</td>
         <td style='text-align: left; border: 1px solid;'>9.2.6</td>
       </tr>
       <tr>
         <td style='text-align: right; border: 1px solid;'>memory_profiler</td>
         <td style='text-align: left; border: 1px solid;'>0.61.0</td>
-        <td style= border: 1px solid;'></td>
-        <td style= border: 1px solid;'></td>
+        <td style='text-align: right; border: 1px solid;'>choclo</td>
+        <td style='text-align: left; border: 1px solid;'>0.1.0</td>
         <td style= border: 1px solid;'></td>
         <td style= border: 1px solid;'></td>
       </tr>
@@ -774,9 +770,9 @@ You might try:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (4 minutes 49.894 seconds)
+   **Total running time of the script:** (3 minutes 32.603 seconds)
 
-**Estimated memory usage:**  2949 MB
+**Estimated memory usage:**  2931 MB
 
 
 .. _sphx_glr_download_content_examples_05-fdem_plot_inv_fdem_loop_loop_2Dinversion.py:
@@ -785,16 +781,13 @@ You might try:
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_inv_fdem_loop_loop_2Dinversion.ipynb <plot_inv_fdem_loop_loop_2Dinversion.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_inv_fdem_loop_loop_2Dinversion.py <plot_inv_fdem_loop_loop_2Dinversion.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_inv_fdem_loop_loop_2Dinversion.ipynb <plot_inv_fdem_loop_loop_2Dinversion.ipynb>`
 
 
 .. only:: html

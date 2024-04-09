@@ -300,7 +300,7 @@ dc_data_misfit = data_misfit.L2DataMisfit(data=dc_data, simulation=dc_simulation
 # Define the regularization (model objective function)
 dc_regularization = regularization.WeightedLeastSquares(
     mesh,
-    indActive=ind_active,
+    active_cells=ind_active,
     reference_model=starting_conductivity_model,
 )
 
@@ -388,12 +388,12 @@ resistor_value = 1e-3
 # Define model
 true_conductivity_model = background_value * np.ones(nC)
 
-ind_conductor = model_builder.getIndicesSphere(
+ind_conductor = model_builder.get_indices_sphere(
     np.r_[-350.0, 0.0, -300.0], 160.0, mesh.cell_centers[ind_active, :]
 )
 true_conductivity_model[ind_conductor] = conductor_value
 
-ind_resistor = model_builder.getIndicesSphere(
+ind_resistor = model_builder.get_indices_sphere(
     np.r_[350.0, 0.0, -300.0], 160.0, mesh.cell_centers[ind_active, :]
 )
 true_conductivity_model[ind_resistor] = resistor_value

@@ -39,7 +39,7 @@ Import modules
 
 .. GENERATED FROM PYTHON SOURCE LINES 23-53
 
-.. code-block:: default
+.. code-block:: Python
 
 
     from discretize import TreeMesh
@@ -90,7 +90,7 @@ of valleys that run North-South.
 
 .. GENERATED FROM PYTHON SOURCE LINES 61-75
 
-.. code-block:: default
+.. code-block:: Python
 
 
     x_topo, y_topo = np.meshgrid(
@@ -126,7 +126,7 @@ from scratch (see 1D example), we will use the *generat_dcip_survey_line* utilit
 
 .. GENERATED FROM PYTHON SOURCE LINES 84-107
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define survey line parameters
@@ -168,7 +168,7 @@ Here, we create the Tree mesh that will be used to predict DC data.
 
 .. GENERATED FROM PYTHON SOURCE LINES 113-160
 
-.. code-block:: default
+.. code-block:: Python
 
 
     dh = 4  # base cell width
@@ -256,9 +256,9 @@ the discretized topography. This step is carried out to ensure all electrodes
 lie on the discretized surface.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 169-217
+.. GENERATED FROM PYTHON SOURCE LINES 169-219
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define conductivity model in S/m (or resistivity model in Ohm m)
@@ -277,11 +277,13 @@ lie on the discretized surface.
     # Define model
     conductivity_model = background_conductivity * np.ones(nC)
 
-    ind_conductor = model_builder.getIndicesSphere(np.r_[-120.0, -160.0], 60.0, mesh.gridCC)
+    ind_conductor = model_builder.get_indices_sphere(
+        np.r_[-120.0, -160.0], 60.0, mesh.gridCC
+    )
     ind_conductor = ind_conductor[ind_active]
     conductivity_model[ind_conductor] = conductor_conductivity
 
-    ind_resistor = model_builder.getIndicesSphere(np.r_[120.0, -100.0], 60.0, mesh.gridCC)
+    ind_resistor = model_builder.get_indices_sphere(np.r_[120.0, -100.0], 60.0, mesh.gridCC)
     ind_resistor = ind_resistor[ind_active]
     conductivity_model[ind_resistor] = resistor_conductivity
 
@@ -320,7 +322,7 @@ lie on the discretized surface.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 218-226
+.. GENERATED FROM PYTHON SOURCE LINES 220-228
 
 Project Survey to Discretized Topography
 ----------------------------------------
@@ -331,9 +333,9 @@ the discretized topography. This step is carried out to ensure all electrodes
 like on the discretized surface.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 226-230
+.. GENERATED FROM PYTHON SOURCE LINES 228-232
 
-.. code-block:: default
+.. code-block:: Python
 
 
     survey.drape_electrodes_on_topography(mesh, ind_active, option="top")
@@ -346,7 +348,7 @@ like on the discretized surface.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 231-238
+.. GENERATED FROM PYTHON SOURCE LINES 233-240
 
 Predict DC Resistivity Data
 ---------------------------
@@ -356,9 +358,9 @@ defined, the simulation will expect a conductivity model. If the keyword
 argument *rhoMap* is defined, the simulation will expect a resistivity model.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 238-247
+.. GENERATED FROM PYTHON SOURCE LINES 240-249
 
-.. code-block:: default
+.. code-block:: Python
 
 
     simulation = dc.simulation_2d.Simulation2DNodal(
@@ -376,7 +378,7 @@ argument *rhoMap* is defined, the simulation will expect a resistivity model.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 248-257
+.. GENERATED FROM PYTHON SOURCE LINES 250-259
 
 Plotting in Pseudo-Section
 --------------------------
@@ -388,9 +390,9 @@ Next, we plot the apparent conductivities in pseudo-section as a filled
 contour plot.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 257-292
+.. GENERATED FROM PYTHON SOURCE LINES 259-294
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Plot voltages pseudo-section
@@ -451,7 +453,7 @@ contour plot.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 293-298
+.. GENERATED FROM PYTHON SOURCE LINES 295-300
 
 Optional: Write out dpred
 -------------------------
@@ -459,9 +461,9 @@ Optional: Write out dpred
 Write DC resistivity data, topography and true model
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 298-334
+.. GENERATED FROM PYTHON SOURCE LINES 300-336
 
-.. code-block:: default
+.. code-block:: Python
 
 
     if write_output:
@@ -475,7 +477,7 @@ Write DC resistivity data, topography and true model
         # Add 10% Gaussian noise to each datum
         np.random.seed(225)
         std = 0.05 * np.abs(dpred)
-        dc_noise = std * np.random.rand(len(dpred))
+        dc_noise = std * np.random.randn(len(dpred))
         dobs = dpred + dc_noise
 
         # Create a survey with the original electrode locations
@@ -509,7 +511,7 @@ Write DC resistivity data, topography and true model
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 7.517 seconds)
+   **Total running time of the script:** (0 minutes 6.230 seconds)
 
 **Estimated memory usage:**  8 MB
 
@@ -520,16 +522,13 @@ Write DC resistivity data, topography and true model
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_fwd_2_dcr2d.ipynb <plot_fwd_2_dcr2d.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_fwd_2_dcr2d.py <plot_fwd_2_dcr2d.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_fwd_2_dcr2d.ipynb <plot_fwd_2_dcr2d.ipynb>`
 
 
 .. only:: html

@@ -44,7 +44,7 @@ Import modules
 
 .. GENERATED FROM PYTHON SOURCE LINES 27-52
 
-.. code-block:: default
+.. code-block:: Python
 
 
     import os
@@ -92,7 +92,7 @@ tar-file on our google cloud bucket:
 
 .. GENERATED FROM PYTHON SOURCE LINES 62-83
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # storage bucket where we have the data
@@ -143,7 +143,7 @@ x, y, z and data.
 
 .. GENERATED FROM PYTHON SOURCE LINES 91-121
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Load topography
@@ -201,7 +201,7 @@ gravity anomaly value.
 
 .. GENERATED FROM PYTHON SOURCE LINES 131-136
 
-.. code-block:: default
+.. code-block:: Python
 
 
     maximum_anomaly = np.max(np.abs(dobs))
@@ -228,7 +228,7 @@ define the receivers and the source field.
 
 .. GENERATED FROM PYTHON SOURCE LINES 145-158
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define the receivers. The data consist of vertical gravity anomaly measurements.
@@ -261,7 +261,7 @@ the survey, the observation values and the standard deviation.
 
 .. GENERATED FROM PYTHON SOURCE LINES 165-169
 
-.. code-block:: default
+.. code-block:: Python
 
 
     data_object = data.Data(survey, dobs=dobs, standard_deviation=uncertainties)
@@ -285,7 +285,7 @@ data. If desired, we could define an OcTree mesh.
 
 .. GENERATED FROM PYTHON SOURCE LINES 176-183
 
-.. code-block:: default
+.. code-block:: Python
 
 
     dh = 5.0
@@ -314,7 +314,7 @@ structures.
 
 .. GENERATED FROM PYTHON SOURCE LINES 192-204
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Find the indices of the active cells in forward model (ones below surface)
@@ -335,7 +335,7 @@ structures.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 205-211
+.. GENERATED FROM PYTHON SOURCE LINES 205-218
 
 Define the Physics
 ------------------
@@ -343,14 +343,25 @@ Define the Physics
 Here, we define the physics of the gravity problem by using the simulation
 class.
 
+.. tip::
 
-.. GENERATED FROM PYTHON SOURCE LINES 211-217
+   Since SimPEG v0.21.0 we can use `Choclo
+   <https://www.fatiando.org/choclo>`_ as the engine for running the gravity
+   simulations, which results in faster and more memory efficient runs. Just
+   pass ``engine="choclo"`` when constructing the simulation.
 
-.. code-block:: default
+
+.. GENERATED FROM PYTHON SOURCE LINES 218-228
+
+.. code-block:: Python
 
 
     simulation = gravity.simulation.Simulation3DIntegral(
-        survey=survey, mesh=mesh, rhoMap=model_map, ind_active=ind_active
+        survey=survey,
+        mesh=mesh,
+        rhoMap=model_map,
+        ind_active=ind_active,
+        engine="choclo",
     )
 
 
@@ -361,7 +372,7 @@ class.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 218-227
+.. GENERATED FROM PYTHON SOURCE LINES 229-238
 
 Define the Inverse Problem
 --------------------------
@@ -373,9 +384,9 @@ The inverse problem is defined by 3 things:
     3) Optimization: the numerical approach used to solve the inverse problem
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 227-248
+.. GENERATED FROM PYTHON SOURCE LINES 238-259
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define the data misfit. Here the data misfit is the L2 norm of the weighted
@@ -405,7 +416,7 @@ The inverse problem is defined by 3 things:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 249-256
+.. GENERATED FROM PYTHON SOURCE LINES 260-267
 
 Define Inversion Directives
 ---------------------------
@@ -415,9 +426,9 @@ includes the cooling schedule for the trade-off parameter (beta), stopping
 criteria for the inversion and saving inversion results at each iteration.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 256-288
+.. GENERATED FROM PYTHON SOURCE LINES 267-299
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Defining a starting value for the trade-off parameter (beta) between the data
@@ -440,7 +451,7 @@ criteria for the inversion and saving inversion results at each iteration.
     update_jacobi = directives.UpdatePreconditioner()
 
     # Add sensitivity weights
-    sensitivity_weights = directives.UpdateSensitivityWeights(everyIter=False)
+    sensitivity_weights = directives.UpdateSensitivityWeights(every_iteration=False)
 
     # The directives are defined as a list.
     directives_list = [
@@ -455,19 +466,10 @@ criteria for the inversion and saving inversion results at each iteration.
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    /home/vsts/work/1/s/tutorials/03-gravity/plot_inv_1b_gravity_anomaly_irls.py:277: UserWarning:
-
-    'everyIter' property is deprecated and will be removed in SimPEG 0.20.0.Please use 'every_iteration'.
 
 
 
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 289-295
+.. GENERATED FROM PYTHON SOURCE LINES 300-306
 
 Running the Inversion
 ---------------------
@@ -476,9 +478,9 @@ To define the inversion object, we need to define the inversion problem and
 the set of directives. We can then run the inversion.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 295-303
+.. GENERATED FROM PYTHON SOURCE LINES 306-314
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Here we combine the inverse problem and the set of directives
@@ -509,65 +511,65 @@ the set of directives. We can then run the inversion.
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  3.21e+03  1.33e+05  0.00e+00  1.33e+05    2.19e+02      0              
-       1  1.60e+03  9.43e+03  5.73e+00  1.86e+04    2.13e+02      0              
-       2  8.01e+02  4.10e+03  8.03e+00  1.05e+04    2.10e+02      0   Skip BFGS  
-       3  4.01e+02  1.63e+03  1.02e+01  5.70e+03    2.02e+02      0   Skip BFGS  
-       4  2.00e+02  6.20e+02  1.19e+01  3.00e+03    1.86e+02      0   Skip BFGS  
-       5  1.00e+02  2.36e+02  1.32e+01  1.56e+03    1.72e+02      0   Skip BFGS  
+       0  3.11e+03  2.66e+05  0.00e+00  2.66e+05    2.19e+02      0              
+       1  1.56e+03  1.82e+04  1.17e+01  3.64e+04    2.16e+02      0              
+       2  7.78e+02  7.91e+03  1.63e+01  2.06e+04    2.14e+02      0   Skip BFGS  
+       3  3.89e+02  3.13e+03  2.05e+01  1.11e+04    2.09e+02      0   Skip BFGS  
+       4  1.95e+02  1.19e+03  2.39e+01  5.84e+03    1.99e+02      0   Skip BFGS  
+       5  9.73e+01  4.54e+02  2.65e+01  3.03e+03    1.91e+02      0   Skip BFGS  
     Reached starting chifact with l2-norm regularization: Start IRLS steps...
-    irls_threshold 0.054708593865006566
-       6  5.01e+01  9.51e+01  2.72e+01  1.46e+03    1.81e+02      0   Skip BFGS  
-       7  1.28e+02  4.66e+01  3.74e+01  4.82e+03    2.12e+02      0              
-       8  8.31e+01  2.63e+02  3.70e+01  3.34e+03    1.95e+02      0              
-       9  7.00e+01  1.54e+02  3.80e+01  2.82e+03    2.09e+02      0              
-      10  5.99e+01  1.50e+02  3.43e+01  2.21e+03    1.98e+02      0              
-      11  9.59e+01  1.20e+02  2.97e+01  2.96e+03    2.12e+02      0              
-      12  7.33e+01  1.85e+02  2.50e+01  2.02e+03    2.03e+02      0              
-      13  1.14e+02  1.30e+02  2.17e+01  2.60e+03    2.15e+02      0   Skip BFGS  
-      14  8.92e+01  1.77e+02  1.79e+01  1.78e+03    2.00e+02      0              
-      15  1.40e+02  1.28e+02  1.60e+01  2.36e+03    2.16e+02      0   Skip BFGS  
-      16  1.11e+02  1.72e+02  1.37e+01  1.69e+03    2.09e+02      0              
-      17  1.69e+02  1.38e+02  1.27e+01  2.28e+03    2.17e+02      0   Skip BFGS  
-      18  1.27e+02  1.91e+02  1.13e+01  1.63e+03    2.05e+02      0              
-      19  1.10e+02  1.49e+02  1.08e+01  1.34e+03    2.14e+02      0   Skip BFGS  
-      20  1.71e+02  1.29e+02  1.05e+01  1.92e+03    2.18e+02      0   Skip BFGS  
-      21  1.34e+02  1.76e+02  9.63e+00  1.47e+03    2.11e+02      0              
-      22  2.04e+02  1.40e+02  9.42e+00  2.06e+03    2.18e+02      0   Skip BFGS  
-      23  1.60e+02  1.77e+02  8.85e+00  1.59e+03    2.12e+02      0              
-      24  2.43e+02  1.38e+02  8.73e+00  2.26e+03    2.18e+02      0   Skip BFGS  
-      25  1.91e+02  1.75e+02  8.31e+00  1.77e+03    2.13e+02      0              
-      26  2.91e+02  1.38e+02  8.21e+00  2.53e+03    2.18e+02      0   Skip BFGS  
-      27  2.29e+02  1.77e+02  7.88e+00  1.98e+03    2.13e+02      0              
-      28  3.45e+02  1.42e+02  7.89e+00  2.86e+03    2.18e+02      0              
-      29  2.64e+02  1.86e+02  7.58e+00  2.18e+03    2.11e+02      0              
-      30  3.98e+02  1.41e+02  7.56e+00  3.15e+03    2.18e+02      0   Skip BFGS  
-      31  3.00e+02  1.90e+02  7.30e+00  2.38e+03    2.10e+02      0              
-      32  3.00e+02  1.46e+02  7.34e+00  2.35e+03    2.14e+02      0              
-      33  4.53e+02  1.43e+02  7.29e+00  3.44e+03    2.18e+02      0   Skip BFGS  
-      34  3.34e+02  1.99e+02  7.03e+00  2.55e+03    2.08e+02      0              
-      35  2.89e+02  1.47e+02  7.09e+00  2.20e+03    2.14e+02      0              
+    irls_threshold 0.05501210536869881
+       6  4.86e+01  1.83e+02  5.45e+01  2.83e+03    2.01e+02      0   Skip BFGS  
+       7  1.23e+02  9.44e+01  7.49e+01  9.30e+03    2.15e+02      0              
+       8  8.15e+01  5.04e+02  7.43e+01  6.56e+03    2.07e+02      0              
+       9  6.76e+01  3.18e+02  7.56e+01  5.43e+03    2.10e+02      0              
+      10  1.03e+02  2.78e+02  6.80e+01  7.26e+03    2.15e+02      0              
+      11  7.12e+01  4.54e+02  5.85e+01  4.62e+03    2.05e+02      0              
+      12  1.08e+02  2.80e+02  5.22e+01  5.91e+03    2.17e+02      0   Skip BFGS  
+      13  7.96e+01  3.98e+02  4.29e+01  3.81e+03    2.05e+02      0              
+      14  1.23e+02  2.65e+02  3.76e+01  4.89e+03    2.17e+02      0   Skip BFGS  
+      15  9.84e+01  3.40e+02  3.18e+01  3.47e+03    2.12e+02      0              
+      16  1.53e+02  2.58e+02  2.87e+01  4.66e+03    2.18e+02      0   Skip BFGS  
+      17  1.19e+02  3.58e+02  2.51e+01  3.35e+03    2.13e+02      0              
+      18  1.19e+02  2.89e+02  2.37e+01  3.12e+03    2.17e+02      0   Skip BFGS  
+      19  1.81e+02  2.79e+02  2.22e+01  4.31e+03    2.18e+02      0   Skip BFGS  
+      20  1.37e+02  3.82e+02  2.04e+01  3.17e+03    2.13e+02      0              
+      21  1.17e+02  3.01e+02  2.01e+01  2.65e+03    2.17e+02      0   Skip BFGS  
+      22  1.83e+02  2.56e+02  1.95e+01  3.81e+03    2.18e+02      0   Skip BFGS  
+      23  1.48e+02  3.32e+02  1.82e+01  3.02e+03    2.16e+02      0              
+      24  2.28e+02  2.66e+02  1.79e+01  4.35e+03    2.18e+02      0   Skip BFGS  
+      25  1.83e+02  3.40e+02  1.69e+01  3.43e+03    2.16e+02      0              
+      26  2.80e+02  2.72e+02  1.68e+01  4.96e+03    2.18e+02      0   Skip BFGS  
+      27  2.19e+02  3.54e+02  1.61e+01  3.88e+03    2.15e+02      0              
+      28  3.32e+02  2.80e+02  1.60e+01  5.61e+03    2.18e+02      0              
+      29  2.56e+02  3.66e+02  1.54e+01  4.30e+03    2.15e+02      0              
+      30  3.87e+02  2.82e+02  1.54e+01  6.24e+03    2.18e+02      0   Skip BFGS  
+      31  2.92e+02  3.81e+02  1.48e+01  4.71e+03    2.14e+02      0              
+      32  2.92e+02  2.89e+02  1.49e+01  4.63e+03    2.15e+02      0              
+      33  4.41e+02  2.82e+02  1.48e+01  6.81e+03    2.18e+02      0   Skip BFGS  
+      34  3.25e+02  3.99e+02  1.43e+01  5.06e+03    2.13e+02      0              
+      35  3.25e+02  2.90e+02  1.44e+01  4.97e+03    2.17e+02      0              
     Reach maximum number of IRLS cycles: 30
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 1.3311e+04
-    1 : |xc-x_last| = 4.6490e-02 <= tolX*(1+|x0|) = 1.0000e-01
-    0 : |proj(x-g)-x|    = 2.1446e+02 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 2.1446e+02 <= 1e3*eps       = 1.0000e-02
+    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 2.6622e+04
+    1 : |xc-x_last| = 3.5956e-02 <= tolX*(1+|x0|) = 1.0000e-01
+    0 : |proj(x-g)-x|    = 2.1663e+02 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 2.1663e+02 <= 1e3*eps       = 1.0000e-02
     0 : maxIter   =     100    <= iter          =     36
     ------------------------- DONE! -------------------------
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 304-307
+.. GENERATED FROM PYTHON SOURCE LINES 315-318
 
 Recreate True Model
 -------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 307-334
+.. GENERATED FROM PYTHON SOURCE LINES 318-347
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define density contrast values for each unit in g/cc
@@ -591,7 +593,9 @@ Recreate True Model
     true_model[ind_block] = block_density
 
     # You can also use SimPEG utilities to add structures to the model more concisely
-    ind_sphere = model_builder.getIndicesSphere(np.r_[35.0, 0.0, -40.0], 15.0, mesh.gridCC)
+    ind_sphere = model_builder.get_indices_sphere(
+        np.r_[35.0, 0.0, -40.0], 15.0, mesh.gridCC
+    )
     ind_sphere = ind_sphere[ind_active]
     true_model[ind_sphere] = sphere_density
 
@@ -603,15 +607,15 @@ Recreate True Model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 335-338
+.. GENERATED FROM PYTHON SOURCE LINES 348-351
 
 Plotting True Model and Recovered Model
 ---------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 338-390
+.. GENERATED FROM PYTHON SOURCE LINES 351-403
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Plot True Model
@@ -689,15 +693,15 @@ Plotting True Model and Recovered Model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 391-394
+.. GENERATED FROM PYTHON SOURCE LINES 404-407
 
 Plotting Predicted Data and Normalized Misfit
 ---------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 394-436
+.. GENERATED FROM PYTHON SOURCE LINES 407-449
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Predicted data with final recovered model
@@ -756,7 +760,7 @@ Plotting Predicted Data and Normalized Misfit
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 37.658 seconds)
+   **Total running time of the script:** (0 minutes 29.747 seconds)
 
 **Estimated memory usage:**  8 MB
 
@@ -767,16 +771,13 @@ Plotting Predicted Data and Normalized Misfit
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_inv_1b_gravity_anomaly_irls.ipynb <plot_inv_1b_gravity_anomaly_irls.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_inv_1b_gravity_anomaly_irls.py <plot_inv_1b_gravity_anomaly_irls.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_inv_1b_gravity_anomaly_irls.ipynb <plot_inv_1b_gravity_anomaly_irls.ipynb>`
 
 
 .. only:: html

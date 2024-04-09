@@ -47,7 +47,7 @@ Import modules
 
 .. GENERATED FROM PYTHON SOURCE LINES 31-63
 
-.. code-block:: default
+.. code-block:: Python
 
 
     from discretize import TreeMesh
@@ -100,7 +100,7 @@ of valleys that run North-South.
 
 .. GENERATED FROM PYTHON SOURCE LINES 71-85
 
-.. code-block:: default
+.. code-block:: Python
 
 
     x_topo, y_topo = np.meshgrid(
@@ -136,7 +136,7 @@ from scratch (see 1D example), we will use the *generat_dcip_survey_line* utilit
 
 .. GENERATED FROM PYTHON SOURCE LINES 94-118
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define survey line parameters
@@ -180,7 +180,7 @@ resistivity and IP data.
 
 .. GENERATED FROM PYTHON SOURCE LINES 125-172
 
-.. code-block:: default
+.. code-block:: Python
 
 
     dh = 4  # base cell width
@@ -268,9 +268,9 @@ resistive sphere within a moderately conductive background. Note that
 you can carry through this work flow with a resistivity model if desired.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 181-230
+.. GENERATED FROM PYTHON SOURCE LINES 181-232
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define conductivity model in S/m (or resistivity model in Ohm m)
@@ -289,11 +289,13 @@ you can carry through this work flow with a resistivity model if desired.
     # Define model
     conductivity_model = background_conductivity * np.ones(nC)
 
-    ind_conductor = model_builder.getIndicesSphere(np.r_[-120.0, -160.0], 60.0, mesh.gridCC)
+    ind_conductor = model_builder.get_indices_sphere(
+        np.r_[-120.0, -160.0], 60.0, mesh.gridCC
+    )
     ind_conductor = ind_conductor[ind_active]
     conductivity_model[ind_conductor] = conductor_conductivity
 
-    ind_resistor = model_builder.getIndicesSphere(np.r_[120.0, -100.0], 60.0, mesh.gridCC)
+    ind_resistor = model_builder.get_indices_sphere(np.r_[120.0, -100.0], 60.0, mesh.gridCC)
     ind_resistor = ind_resistor[ind_active]
     conductivity_model[ind_resistor] = resistor_conductivity
 
@@ -333,7 +335,7 @@ you can carry through this work flow with a resistivity model if desired.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 231-239
+.. GENERATED FROM PYTHON SOURCE LINES 233-241
 
 Project Survey to Discretized Topography
 ----------------------------------------
@@ -344,9 +346,9 @@ the discretized topography. This step is carried out to ensure all electrodes
 lie on the discretized surface.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 239-243
+.. GENERATED FROM PYTHON SOURCE LINES 241-245
 
-.. code-block:: default
+.. code-block:: Python
 
 
     dc_survey.drape_electrodes_on_topography(mesh, ind_active, option="top")
@@ -359,7 +361,7 @@ lie on the discretized surface.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 244-251
+.. GENERATED FROM PYTHON SOURCE LINES 246-253
 
 Predict DC Resistivity Data
 ---------------------------
@@ -369,9 +371,9 @@ defined, the simulation will expect a conductivity model. If the keyword
 argument *rhoMap* is defined, the simulation will expect a resistivity model.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 251-260
+.. GENERATED FROM PYTHON SOURCE LINES 253-262
 
-.. code-block:: default
+.. code-block:: Python
 
 
     dc_simulation = dc.Simulation2DNodal(
@@ -389,7 +391,7 @@ argument *rhoMap* is defined, the simulation will expect a resistivity model.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 261-270
+.. GENERATED FROM PYTHON SOURCE LINES 263-272
 
 Plotting DC Data in Pseudo-Section
 ----------------------------------
@@ -401,9 +403,9 @@ Next, we plot the apparent conductivities in pseudo-section as a filled
 contour plot.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 270-306
+.. GENERATED FROM PYTHON SOURCE LINES 272-308
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Plot voltages pseudo-section
@@ -465,7 +467,7 @@ contour plot.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 307-313
+.. GENERATED FROM PYTHON SOURCE LINES 309-315
 
 Define IP Survey
 ----------------
@@ -474,9 +476,9 @@ The geometry of the survey was defined earlier. We will define the IP
 data as apparent chargeability in V/V.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 313-332
+.. GENERATED FROM PYTHON SOURCE LINES 315-334
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Generate source list for IP survey line
@@ -504,7 +506,7 @@ data as apparent chargeability in V/V.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 333-340
+.. GENERATED FROM PYTHON SOURCE LINES 335-342
 
 Create Chargeability Model and Mapping for OcTree Mesh
 ------------------------------------------------------
@@ -514,9 +516,9 @@ Here we assume that the conductive sphere is also chargeable but the resistive
 sphere is not. Here, the chargeability is defined as mV/V.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 340-388
+.. GENERATED FROM PYTHON SOURCE LINES 342-390
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define chargeability model as intrinsic chargeability (V/V).
@@ -534,7 +536,7 @@ sphere is not. Here, the chargeability is defined as mV/V.
     # Define chargeability model
     chargeability_model = background_chargeability * np.ones(nC)
 
-    ind_chargeable = model_builder.getIndicesSphere(
+    ind_chargeable = model_builder.get_indices_sphere(
         np.r_[-120.0, -160.0], 60.0, mesh.gridCC
     )
     ind_chargeable = ind_chargeable[ind_active]
@@ -578,7 +580,7 @@ sphere is not. Here, the chargeability is defined as mV/V.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 389-395
+.. GENERATED FROM PYTHON SOURCE LINES 391-397
 
 Predict IP Data
 ---------------
@@ -587,9 +589,9 @@ Here we use a chargeability model and a background conductivity/resistivity
 model to predict IP data.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 395-411
+.. GENERATED FROM PYTHON SOURCE LINES 397-413
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # We use the keyword argument *sigma* to define the background conductivity on
@@ -614,7 +616,7 @@ model to predict IP data.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 412-418
+.. GENERATED FROM PYTHON SOURCE LINES 414-420
 
 Plot 2D IP Data in Pseudosection
 --------------------------------
@@ -623,9 +625,9 @@ We want to plot apparent chargeability. To accomplish this, we must normalize th
 voltage by the DC voltage. This is then multiplied by 1000 so that our
 apparent chargeability is in units mV/V.
 
-.. GENERATED FROM PYTHON SOURCE LINES 418-456
+.. GENERATED FROM PYTHON SOURCE LINES 420-458
 
-.. code-block:: default
+.. code-block:: Python
 
 
     fig = plt.figure(figsize=(12, 11))
@@ -677,15 +679,15 @@ apparent chargeability is in units mV/V.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 457-460
+.. GENERATED FROM PYTHON SOURCE LINES 459-462
 
 Write Outputs (Optional)
 ------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 460-521
+.. GENERATED FROM PYTHON SOURCE LINES 462-523
 
-.. code-block:: default
+.. code-block:: Python
 
 
     if write_output:
@@ -703,7 +705,7 @@ Write Outputs (Optional)
         # Add 5% Gaussian noise to each DC datum
         np.random.seed(225)
         std = 0.05 * np.abs(dpred_dc)
-        dc_noise = std * np.random.rand(len(dpred_dc))
+        dc_noise = std * np.random.randn(len(dpred_dc))
         dobs = dpred_dc + dc_noise
 
         # Create a survey with the original electrode locations
@@ -727,7 +729,7 @@ Write Outputs (Optional)
 
         # Add Gaussian noise equal to 5e-3 V/V
         std = 5e-3 * np.ones_like(dpred_ip)
-        ip_noise = std * np.random.rand(len(dpred_ip))
+        ip_noise = std * np.random.randn(len(dpred_ip))
         dobs = dpred_ip + ip_noise
 
         # Create a survey with the original electrode locations
@@ -758,9 +760,9 @@ Write Outputs (Optional)
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 12.270 seconds)
+   **Total running time of the script:** (0 minutes 10.195 seconds)
 
-**Estimated memory usage:**  9 MB
+**Estimated memory usage:**  11 MB
 
 
 .. _sphx_glr_download_content_tutorials_06-ip_plot_fwd_2_dcip2d.py:
@@ -769,16 +771,13 @@ Write Outputs (Optional)
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_fwd_2_dcip2d.ipynb <plot_fwd_2_dcip2d.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_fwd_2_dcip2d.py <plot_fwd_2_dcip2d.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_fwd_2_dcip2d.ipynb <plot_fwd_2_dcip2d.ipynb>`
 
 
 .. only:: html

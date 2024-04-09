@@ -35,15 +35,15 @@ consisted of a horizontal loop with a radius of 6 m, located 20 m above the
 surface. The receiver measured the vertical component of the magnetic flux
 at the loop's centre.
 
-.. GENERATED FROM PYTHON SOURCE LINES 23-26
+.. GENERATED FROM PYTHON SOURCE LINES 22-25
 
 Import modules
 --------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-53
+.. GENERATED FROM PYTHON SOURCE LINES 25-52
 
-.. code-block:: default
+.. code-block:: Python
 
 
     import os
@@ -79,7 +79,7 @@ Import modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 54-62
+.. GENERATED FROM PYTHON SOURCE LINES 53-61
 
 Download Test Data File
 -----------------------
@@ -90,9 +90,9 @@ tar-file on our google cloud bucket:
 "https://storage.googleapis.com/simpeg/doc-assets/em1dtm.tar.gz"
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 62-80
+.. GENERATED FROM PYTHON SOURCE LINES 61-79
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # storage bucket where we have the data
@@ -127,7 +127,7 @@ tar-file on our google cloud bucket:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 81-87
+.. GENERATED FROM PYTHON SOURCE LINES 80-86
 
 Load Data and Plot
 ------------------
@@ -136,9 +136,9 @@ Here we load and plot the 1D sounding data. In this case, we have the B-field
 response to a step-off waveform.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 87-102
+.. GENERATED FROM PYTHON SOURCE LINES 86-101
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Load field data
@@ -173,7 +173,7 @@ response to a step-off waveform.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 103-110
+.. GENERATED FROM PYTHON SOURCE LINES 102-109
 
 Defining the Survey
 -------------------
@@ -183,9 +183,9 @@ For this tutorial, we define a single horizontal loop source as well
 a receiver which measures the vertical component of the magnetic flux.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 110-147
+.. GENERATED FROM PYTHON SOURCE LINES 109-146
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Source loop geometry
@@ -231,7 +231,7 @@ a receiver which measures the vertical component of the magnetic flux.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 148-154
+.. GENERATED FROM PYTHON SOURCE LINES 147-153
 
 Assign Uncertainties and Define the Data Object
 -----------------------------------------------
@@ -240,9 +240,9 @@ Here is where we define the data that are inverted. The data are defined by
 the survey, the observation values and the uncertainties.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 154-162
+.. GENERATED FROM PYTHON SOURCE LINES 153-161
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # 5% of the absolute value
@@ -259,7 +259,7 @@ the survey, the observation values and the uncertainties.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 163-169
+.. GENERATED FROM PYTHON SOURCE LINES 162-168
 
 Defining a 1D Layered Earth (1D Tensor Mesh)
 --------------------------------------------
@@ -268,9 +268,9 @@ Here, we define the layer thicknesses for our 1D simulation. To do this, we use
 the TensorMesh class.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 169-177
+.. GENERATED FROM PYTHON SOURCE LINES 168-176
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Layer thicknesses
@@ -287,7 +287,7 @@ the TensorMesh class.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 178-190
+.. GENERATED FROM PYTHON SOURCE LINES 177-189
 
 Define a Starting and Reference Model
 -------------------------------------
@@ -302,9 +302,9 @@ log-conductivity. Don't make the values 0!
 Otherwise the gradient for the 1st iteration is zero and the inversion will
 not converge.
 
-.. GENERATED FROM PYTHON SOURCE LINES 190-198
+.. GENERATED FROM PYTHON SOURCE LINES 189-197
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define model. A resistivity (Ohm meters) or conductivity (S/m) for each layer.
@@ -321,15 +321,15 @@ not converge.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 199-202
+.. GENERATED FROM PYTHON SOURCE LINES 198-201
 
 Define the Physics using a Simulation Object
 --------------------------------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 202-207
+.. GENERATED FROM PYTHON SOURCE LINES 201-206
 
-.. code-block:: default
+.. code-block:: Python
 
 
     simulation = tdem.Simulation1DLayered(
@@ -343,7 +343,7 @@ Define the Physics using a Simulation Object
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 208-218
+.. GENERATED FROM PYTHON SOURCE LINES 207-217
 
 Define Inverse Problem
 ----------------------
@@ -356,9 +356,9 @@ The inverse problem is defined by 3 things:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 218-243
+.. GENERATED FROM PYTHON SOURCE LINES 217-242
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define the data misfit. Here the data misfit is the L2 norm of the weighted
@@ -372,7 +372,7 @@ The inverse problem is defined by 3 things:
     reg = regularization.Sparse(mesh, mapping=reg_map, alpha_s=0.01, alpha_x=1.0)
 
     # set reference model
-    reg.mref = starting_model
+    reg.reference_model = starting_model
 
     # Define sparse and blocky norms p, q
     reg.norms = [1, 0]
@@ -392,7 +392,7 @@ The inverse problem is defined by 3 things:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 244-251
+.. GENERATED FROM PYTHON SOURCE LINES 243-250
 
 Define Inversion Directives
 ---------------------------
@@ -402,9 +402,9 @@ includes the cooling schedule for the trade-off parameter (beta), stopping
 criteria for the inversion and saving inversion results at each iteration.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 251-282
+.. GENERATED FROM PYTHON SOURCE LINES 250-281
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Defining a starting value for the trade-off parameter (beta) between the data
@@ -444,7 +444,7 @@ criteria for the inversion and saving inversion results at each iteration.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 283-289
+.. GENERATED FROM PYTHON SOURCE LINES 282-288
 
 Running the Inversion
 ---------------------
@@ -453,9 +453,9 @@ To define the inversion object, we need to define the inversion problem and
 the set of directives. We can then run the inversion.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 289-297
+.. GENERATED FROM PYTHON SOURCE LINES 288-296
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Here we combine the inverse problem and the set of directives
@@ -482,51 +482,53 @@ the set of directives. We can then run the inversion.
       #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment   
     -----------------------------------------------------------------------------
     x0 has any nan: 0
-       0  1.15e+03  2.00e+03  0.00e+00  2.00e+03    4.02e+02      0              
-       1  5.75e+02  5.45e+02  6.35e-02  5.81e+02    4.85e+02      1              
-       2  2.88e+02  3.12e+02  6.65e-02  3.31e+02    5.69e+02      1              
-       3  1.44e+02  2.01e+02  7.25e-02  2.12e+02    8.29e+02      0   Skip BFGS  
+       0  1.12e+03  4.01e+03  0.00e+00  4.01e+03    8.04e+02      0              
+       1  5.62e+02  1.13e+03  1.28e-01  1.20e+03    1.01e+03      1              
+       2  2.81e+02  6.45e+02  1.34e-01  6.82e+02    1.17e+03      1              
+       3  1.40e+02  4.06e+02  1.45e-01  4.26e+02    1.66e+03      0   Skip BFGS  
     Reached starting chifact with l2-norm regularization: Start IRLS steps...
-    irls_threshold 2.654265360762362
-       4  7.19e+01  6.71e+00  6.10e-02  1.11e+01    1.02e+02      0   Skip BFGS  
-       5  4.13e+02  1.63e+00  6.27e-02  2.75e+01    4.05e+01      0   Skip BFGS  
-       6  1.78e+03  2.34e+00  6.61e-02  1.20e+02    8.76e+01      0   Skip BFGS  
-       7  4.79e+03  4.59e+00  7.04e-02  3.42e+02    1.74e+02      0              
-       8  4.79e+03  1.40e+01  7.41e-02  3.69e+02    8.96e+01      0              
-       9  3.33e+03  2.42e+01  7.72e-02  2.81e+02    3.81e+01      0   Skip BFGS  
-      10  2.21e+03  2.69e+01  7.61e-02  1.95e+02    4.98e+01      0   Skip BFGS  
-      11  1.54e+03  2.39e+01  7.06e-02  1.33e+02    3.89e+01      0              
-      12  1.13e+03  2.17e+01  6.33e-02  9.31e+01    2.93e+01      0              
-      13  8.20e+02  2.21e+01  5.74e-02  6.91e+01    1.55e+01      0   Skip BFGS  
-      14  5.93e+02  2.22e+01  5.40e-02  5.42e+01    1.02e+01      0   Skip BFGS  
-      15  4.37e+02  2.15e+01  5.25e-02  4.44e+01    1.11e+01      0   Skip BFGS  
-      16  3.40e+02  1.92e+01  5.25e-02  3.71e+01    1.56e+01      0              
-      17  2.79e+02  1.73e+01  5.25e-02  3.20e+01    3.50e+01      1              
-      18  2.79e+02  1.64e+01  5.25e-02  3.11e+01    8.43e+01      1   Skip BFGS  
-      19  2.79e+02  1.64e+01  5.13e-02  3.07e+01    1.15e+02      1   Skip BFGS  
-      20  2.79e+02  1.65e+01  4.89e-02  3.02e+01    1.27e+02      1   Skip BFGS  
-      21  2.19e+02  1.90e+01  4.27e-02  2.83e+01    1.94e+02      0   Skip BFGS  
-      22  2.19e+02  1.52e+01  3.91e-02  2.38e+01    2.86e+01      0   Skip BFGS  
+    irls_threshold 2.654983389533584
+       4  7.02e+01  1.34e+01  1.22e-01  2.20e+01    2.03e+02      0   Skip BFGS  
+       5  3.89e+02  3.41e+00  1.24e-01  5.17e+01    8.61e+01      0   Skip BFGS  
+       6  1.66e+03  4.76e+00  1.29e-01  2.19e+02    1.73e+02      0   Skip BFGS  
+       7  4.46e+03  9.16e+00  1.32e-01  5.99e+02    3.24e+02      0              
+       8  7.15e+03  2.57e+01  1.35e-01  9.89e+02    3.68e+02      0              
+       9  4.53e+03  6.00e+01  1.46e-01  7.21e+02    6.83e+01      0              
+      10  2.74e+03  6.76e+01  1.56e-01  4.95e+02    8.36e+01      0   Skip BFGS  
+      11  1.69e+03  6.42e+01  1.55e-01  3.27e+02    8.30e+01      0   Skip BFGS  
+      12  1.18e+03  4.81e+01  1.44e-01  2.18e+02    5.91e+01      0              
+      13  8.79e+02  4.17e+01  1.40e-01  1.65e+02    3.15e+02      0              
+      14  6.61e+02  4.10e+01  1.30e-01  1.27e+02    3.97e+02      0              
+      15  5.09e+02  3.93e+01  1.18e-01  9.91e+01    3.82e+02      0   Skip BFGS  
+      16  4.09e+02  3.60e+01  1.04e-01  7.88e+01    2.63e+02      0   Skip BFGS  
+      17  4.09e+02  3.37e+01  9.27e-02  7.16e+01    8.16e+01      0   Skip BFGS  
+      18  3.39e+02  3.43e+01  8.32e-02  6.25e+01    1.30e+01      0   Skip BFGS  
+      19  2.80e+02  3.43e+01  7.80e-02  5.61e+01    1.66e+01      0   Skip BFGS  
+      20  2.80e+02  3.36e+01  7.59e-02  5.49e+01    1.26e+01      0              
+      21  2.80e+02  3.32e+01  7.44e-02  5.41e+01    1.21e+01      0   Skip BFGS  
+      22  2.80e+02  3.30e+01  7.33e-02  5.35e+01    1.24e+01      0              
+      23  2.80e+02  3.28e+01  7.25e-02  5.31e+01    1.19e+01      0   Skip BFGS  
+      24  2.80e+02  3.27e+01  7.20e-02  5.29e+01    1.09e+01      0   Skip BFGS  
     Minimum decrease in regularization.End of IRLS
     ------------------------- STOP! -------------------------
-    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 2.0047e+02
-    1 : |xc-x_last| = 9.1057e-02 <= tolX*(1+|x0|) = 1.2741e+00
-    0 : |proj(x-g)-x|    = 2.8622e+01 <= tolG          = 1.0000e-01
-    0 : |proj(x-g)-x|    = 2.8622e+01 <= 1e3*eps       = 1.0000e-02
-    0 : maxIter   =     100    <= iter          =     23
+    1 : |fc-fOld| = 0.0000e+00 <= tolF*(1+|f0|) = 4.0084e+02
+    1 : |xc-x_last| = 2.0399e-03 <= tolX*(1+|x0|) = 1.2741e+00
+    0 : |proj(x-g)-x|    = 1.0926e+01 <= tolG          = 1.0000e-01
+    0 : |proj(x-g)-x|    = 1.0926e+01 <= 1e3*eps       = 1.0000e-02
+    0 : maxIter   =     100    <= iter          =     25
     ------------------------- DONE! -------------------------
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 298-300
+.. GENERATED FROM PYTHON SOURCE LINES 297-299
 
 Plotting Results
 ---------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 300-347
+.. GENERATED FROM PYTHON SOURCE LINES 299-346
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Load the true model and layer thicknesses
@@ -608,7 +610,7 @@ Plotting Results
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 24.778 seconds)
+   **Total running time of the script:** (0 minutes 20.366 seconds)
 
 **Estimated memory usage:**  8 MB
 
@@ -619,16 +621,13 @@ Plotting Results
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_inv_1_em1dtm.ipynb <plot_inv_1_em1dtm.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_inv_1_em1dtm.py <plot_inv_1_em1dtm.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_inv_1_em1dtm.ipynb <plot_inv_1_em1dtm.ipynb>`
 
 
 .. only:: html

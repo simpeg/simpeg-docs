@@ -348,7 +348,7 @@ dc_data_misfit = data_misfit.L2DataMisfit(data=dc_data, simulation=dc_simulation
 # Define the regularization (model objective function)
 dc_regularization = regularization.WeightedLeastSquares(
     mesh,
-    indActive=ind_active,
+    active_cells=ind_active,
     reference_model=starting_conductivity_model,
 )
 
@@ -430,12 +430,12 @@ conductor_value = 1e-1
 resistor_value = 1e-3
 true_conductivity_model = background_value * np.ones(nC)
 
-ind_conductor = model_builder.getIndicesSphere(
+ind_conductor = model_builder.get_indices_sphere(
     np.r_[-350.0, 0.0, -300.0], 160.0, mesh.cell_centers[ind_active, :]
 )
 true_conductivity_model[ind_conductor] = conductor_value
 
-ind_resistor = model_builder.getIndicesSphere(
+ind_resistor = model_builder.get_indices_sphere(
     np.r_[350.0, 0.0, -300.0], 160.0, mesh.cell_centers[ind_active, :]
 )
 true_conductivity_model[ind_resistor] = resistor_value
@@ -608,7 +608,7 @@ ip_data_misfit = data_misfit.L2DataMisfit(data=ip_data, simulation=ip_simulation
 # Define the regularization (model objective function)
 ip_regularization = regularization.WeightedLeastSquares(
     mesh,
-    indActive=ind_active,
+    active_cells=ind_active,
     mapping=maps.IdentityMap(nP=nC),
     alpha_s=0.01,
     alpha_x=1,
@@ -633,7 +633,7 @@ ip_inverse_problem = inverse_problem.BaseInvProblem(
 # Here we define the directives in the same manner as the DC inverse problem.
 #
 
-update_sensitivity_weighting = directives.UpdateSensitivityWeights(threshold=1e-3)
+update_sensitivity_weighting = directives.UpdateSensitivityWeights(threshold_value=1e-3)
 starting_beta = directives.BetaEstimate_ByEig(beta0_ratio=1e2)
 beta_schedule = directives.BetaSchedule(coolingFactor=2.5, coolingRate=1)
 save_iteration = directives.SaveOutputEveryIteration(save_txt=False)
@@ -672,7 +672,7 @@ background_value = 1e-6
 chargeable_value = 1e-1
 
 true_chargeability_model = background_value * np.ones(nC)
-ind_chargeable = model_builder.getIndicesSphere(
+ind_chargeable = model_builder.get_indices_sphere(
     np.r_[-350.0, 0.0, -300.0], 160.0, mesh.cell_centers[ind_active, :]
 )
 true_chargeability_model[ind_chargeable] = chargeable_value

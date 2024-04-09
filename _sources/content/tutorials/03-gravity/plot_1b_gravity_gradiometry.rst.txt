@@ -38,7 +38,7 @@ Import Modules
 
 .. GENERATED FROM PYTHON SOURCE LINES 21-35
 
-.. code-block:: default
+.. code-block:: Python
 
 
     import numpy as np
@@ -72,7 +72,7 @@ the topography could also be loaded from a file.
 
 .. GENERATED FROM PYTHON SOURCE LINES 42-49
 
-.. code-block:: default
+.. code-block:: Python
 
 
     [x_topo, y_topo] = np.meshgrid(np.linspace(-200, 200, 41), np.linspace(-200, 200, 41))
@@ -101,7 +101,7 @@ which are to be measured.
 
 .. GENERATED FROM PYTHON SOURCE LINES 58-86
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define the observation locations as an (N, 3) numpy array or load them
@@ -148,7 +148,7 @@ Here, we create the OcTree mesh that will be used in the forward simulation.
 
 .. GENERATED FROM PYTHON SOURCE LINES 92-125
 
-.. code-block:: default
+.. code-block:: Python
 
 
     dx = 5  # minimum cell width (base mesh cell width) in x
@@ -213,9 +213,9 @@ gradiometry data and the mapping from the model to the mesh. The model
 consists of a less dense block and a more dense sphere.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 133-194
+.. GENERATED FROM PYTHON SOURCE LINES 133-196
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define density contrast values for each unit in g/cc
@@ -247,7 +247,9 @@ consists of a less dense block and a more dense sphere.
     model[ind_block] = block_density
 
     # You can also use SimPEG utilities to add structures to the model more concisely
-    ind_sphere = model_builder.getIndicesSphere(np.r_[35.0, 0.0, -40.0], 15.0, mesh.gridCC)
+    ind_sphere = model_builder.get_indices_sphere(
+        np.r_[35.0, 0.0, -40.0], 15.0, mesh.gridCC
+    )
     ind_sphere = ind_sphere[ind_active]
     model[ind_sphere] = sphere_density
 
@@ -290,7 +292,7 @@ consists of a less dense block and a more dense sphere.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 195-201
+.. GENERATED FROM PYTHON SOURCE LINES 197-203
 
 Simulation: Gravity Gradiometry Data on an OcTree Mesh
 ------------------------------------------------------
@@ -299,22 +301,53 @@ Here we demonstrate how to predict gravity anomaly data using the integral
 formulation.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 201-271
+.. GENERATED FROM PYTHON SOURCE LINES 205-209
 
-.. code-block:: default
+Define the forward simulation. By setting the ``store_sensitivities`` keyword
+argument to ``"forward_only"``, we simulate the data without storing the
+sensitivities
 
 
-    # Define the forward simulation. By setting the 'store_sensitivities' keyword
-    # argument to "forward_only", we simulate the data without storing the sensitivities
+.. GENERATED FROM PYTHON SOURCE LINES 209-219
+
+.. code-block:: Python
+
+
     simulation = gravity.simulation.Simulation3DIntegral(
         survey=survey,
         mesh=mesh,
         rhoMap=model_map,
         ind_active=ind_active,
         store_sensitivities="forward_only",
+        engine="choclo",
     )
 
-    # Compute predicted data for some model
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 220-227
+
+.. tip::
+
+   Since SimPEG v0.21.0 we can use `Choclo
+   <https://www.fatiando.org/choclo>`_ as the engine for running the gravity
+   simulations, which results in faster and more memory efficient runs. Just
+   pass ``engine="choclo"`` when constructing the simulation.
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 229-230
+
+Compute predicted data for some model
+
+.. GENERATED FROM PYTHON SOURCE LINES 230-289
+
+.. code-block:: Python
+
+
     dpred = simulation.dpred(model)
     n_data = len(dpred)
 
@@ -388,7 +421,7 @@ formulation.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 5.262 seconds)
+   **Total running time of the script:** (0 minutes 6.230 seconds)
 
 **Estimated memory usage:**  8 MB
 
@@ -399,16 +432,13 @@ formulation.
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_1b_gravity_gradiometry.ipynb <plot_1b_gravity_gradiometry.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_1b_gravity_gradiometry.py <plot_1b_gravity_gradiometry.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_1b_gravity_gradiometry.ipynb <plot_1b_gravity_gradiometry.ipynb>`
 
 
 .. only:: html

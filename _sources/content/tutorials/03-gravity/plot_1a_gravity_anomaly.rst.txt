@@ -38,7 +38,7 @@ Import Modules
 
 .. GENERATED FROM PYTHON SOURCE LINES 21-39
 
-.. code-block:: default
+.. code-block:: Python
 
 
     import numpy as np
@@ -76,7 +76,7 @@ the topography could also be loaded from a file.
 
 .. GENERATED FROM PYTHON SOURCE LINES 46-53
 
-.. code-block:: default
+.. code-block:: Python
 
 
     [x_topo, y_topo] = np.meshgrid(np.linspace(-200, 200, 41), np.linspace(-200, 200, 41))
@@ -105,7 +105,7 @@ which are to be measured.
 
 .. GENERATED FROM PYTHON SOURCE LINES 62-89
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define the observation locations as an (N, 3) numpy array or load them.
@@ -152,7 +152,7 @@ data.
 
 .. GENERATED FROM PYTHON SOURCE LINES 96-103
 
-.. code-block:: default
+.. code-block:: Python
 
 
     dh = 5.0
@@ -178,9 +178,9 @@ gravity anomaly data and the mapping from the model to the mesh. The model
 consists of a less dense block and a more dense sphere.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 111-173
+.. GENERATED FROM PYTHON SOURCE LINES 111-175
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define density contrast values for each unit in g/cc
@@ -212,7 +212,9 @@ consists of a less dense block and a more dense sphere.
     model[ind_block] = block_density
 
     # You can also use SimPEG utilities to add structures to the model more concisely
-    ind_sphere = model_builder.getIndicesSphere(np.r_[35.0, 0.0, -40.0], 15.0, mesh.gridCC)
+    ind_sphere = model_builder.get_indices_sphere(
+        np.r_[35.0, 0.0, -40.0], 15.0, mesh.gridCC
+    )
     ind_sphere = ind_sphere[ind_active]
     model[ind_sphere] = sphere_density
 
@@ -256,7 +258,7 @@ consists of a less dense block and a more dense sphere.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 174-180
+.. GENERATED FROM PYTHON SOURCE LINES 176-182
 
 Simulation: Gravity Anomaly Data on Tensor Mesh
 -----------------------------------------------
@@ -265,24 +267,55 @@ Here we demonstrate how to predict gravity anomaly data using the integral
 formulation.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 180-215
+.. GENERATED FROM PYTHON SOURCE LINES 184-188
 
-.. code-block:: default
+Define the forward simulation. By setting the ``store_sensitivities`` keyword
+argument to ``"forward_only"``, we simulate the data without storing the
+sensitivities.
 
 
-    # Define the forward simulation. By setting the 'store_sensitivities' keyword
-    # argument to "forward_only", we simulate the data without storing the sensitivities
+.. GENERATED FROM PYTHON SOURCE LINES 188-198
+
+.. code-block:: Python
+
+
     simulation = gravity.simulation.Simulation3DIntegral(
         survey=survey,
         mesh=mesh,
         rhoMap=model_map,
         ind_active=ind_active,
         store_sensitivities="forward_only",
+        engine="choclo",
     )
 
-    # Compute predicted data for some model
-    # SimPEG uses right handed coordinate where Z is positive upward.
-    # This causes gravity signals look "inconsistent" with density values in visualization.
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 199-206
+
+.. tip::
+
+   Since SimPEG v0.21.0 we can use `Choclo
+   <https://www.fatiando.org/choclo>`_ as the engine for running the gravity
+   simulations, which results in faster and more memory efficient runs. Just
+   pass ``engine="choclo"`` when constructing the simulation.
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 208-211
+
+Compute predicted data for some model
+SimPEG uses right handed coordinate where Z is positive upward.
+This causes gravity signals look "inconsistent" with density values in visualization.
+
+.. GENERATED FROM PYTHON SOURCE LINES 211-233
+
+.. code-block:: Python
+
+
     dpred = simulation.dpred(model)
 
     # Plot
@@ -316,7 +349,7 @@ formulation.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 216-221
+.. GENERATED FROM PYTHON SOURCE LINES 234-239
 
 Optional: Exporting Results
 ---------------------------
@@ -324,9 +357,9 @@ Optional: Exporting Results
 Write the data, topography and true model
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 221-238
+.. GENERATED FROM PYTHON SOURCE LINES 239-256
 
-.. code-block:: default
+.. code-block:: Python
 
 
     if save_output:
@@ -342,7 +375,7 @@ Write the data, topography and true model
 
         np.random.seed(737)
         maximum_anomaly = np.max(np.abs(dpred))
-        noise = 0.01 * maximum_anomaly * np.random.rand(len(dpred))
+        noise = 0.01 * maximum_anomaly * np.random.randn(len(dpred))
         fname = dir_path + "gravity_data.obs"
         np.savetxt(fname, np.c_[receiver_locations, dpred + noise], fmt="%.4e")
 
@@ -355,9 +388,9 @@ Write the data, topography and true model
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 4.629 seconds)
+   **Total running time of the script:** (0 minutes 4.493 seconds)
 
-**Estimated memory usage:**  8 MB
+**Estimated memory usage:**  10 MB
 
 
 .. _sphx_glr_download_content_tutorials_03-gravity_plot_1a_gravity_anomaly.py:
@@ -366,16 +399,13 @@ Write the data, topography and true model
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_1a_gravity_anomaly.ipynb <plot_1a_gravity_anomaly.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_1a_gravity_anomaly.py <plot_1a_gravity_anomaly.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_1a_gravity_anomaly.ipynb <plot_1a_gravity_anomaly.ipynb>`
 
 
 .. only:: html

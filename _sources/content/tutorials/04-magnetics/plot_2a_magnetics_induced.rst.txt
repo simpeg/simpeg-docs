@@ -38,7 +38,7 @@ Import Modules
 
 .. GENERATED FROM PYTHON SOURCE LINES 21-39
 
-.. code-block:: default
+.. code-block:: Python
 
 
     import numpy as np
@@ -76,7 +76,7 @@ topography could also be loaded from a file.
 
 .. GENERATED FROM PYTHON SOURCE LINES 46-52
 
-.. code-block:: default
+.. code-block:: Python
 
 
     [x_topo, y_topo] = np.meshgrid(np.linspace(-200, 200, 41), np.linspace(-200, 200, 41))
@@ -102,9 +102,9 @@ the xyz locations of the observation locations, the list of field components
 which are to be modeled and the properties of the Earth's field.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 61-95
+.. GENERATED FROM PYTHON SOURCE LINES 61-97
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define the observation locations as an (N, 3) numpy array or load them.
@@ -130,10 +130,12 @@ which are to be modeled and the properties of the Earth's field.
     inclination = 90
     declination = 0
     strength = 50000
-    inducing_field = (strength, inclination, declination)
 
-    source_field = magnetics.sources.SourceField(
-        receiver_list=receiver_list, parameters=inducing_field
+    source_field = magnetics.sources.UniformBackgroundField(
+        receiver_list=receiver_list,
+        amplitude=strength,
+        inclination=inclination,
+        declination=declination,
     )
 
     # Define the survey
@@ -147,7 +149,7 @@ which are to be modeled and the properties of the Earth's field.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 96-101
+.. GENERATED FROM PYTHON SOURCE LINES 98-103
 
 Defining a Tensor Mesh
 ----------------------
@@ -155,9 +157,9 @@ Defining a Tensor Mesh
 Here, we create the tensor mesh that will be used for the forward simulation.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 101-109
+.. GENERATED FROM PYTHON SOURCE LINES 103-111
 
-.. code-block:: default
+.. code-block:: Python
 
 
     dh = 5.0
@@ -174,7 +176,7 @@ Here, we create the tensor mesh that will be used for the forward simulation.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 110-117
+.. GENERATED FROM PYTHON SOURCE LINES 112-119
 
 Defining a Susceptibility Model
 -------------------------------
@@ -184,9 +186,9 @@ and the mapping from the model to the mesh. The model
 consists of a susceptible sphere in a less susceptible host.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 117-162
+.. GENERATED FROM PYTHON SOURCE LINES 119-164
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define susceptibility values for each unit in SI
@@ -202,7 +204,7 @@ consists of a susceptible sphere in a less susceptible host.
 
     # Define model. Models in SimPEG are vector arrays
     model = background_susceptibility * np.ones(ind_active.sum())
-    ind_sphere = model_builder.getIndicesSphere(
+    ind_sphere = model_builder.get_indices_sphere(
         np.r_[0.0, 0.0, -45.0], 15.0, mesh.cell_centers
     )
     ind_sphere = ind_sphere[ind_active]
@@ -245,7 +247,7 @@ consists of a susceptible sphere in a less susceptible host.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 163-169
+.. GENERATED FROM PYTHON SOURCE LINES 165-171
 
 Simulation: TMI Data for a Susceptibility Model
 -----------------------------------------------
@@ -254,9 +256,9 @@ Here we demonstrate how to predict magnetic data for a magnetic
 susceptibility model using the integral formulation.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 169-211
+.. GENERATED FROM PYTHON SOURCE LINES 171-213
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Define the forward simulation. By setting the 'store_sensitivities' keyword
@@ -312,7 +314,7 @@ susceptibility model using the integral formulation.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 212-217
+.. GENERATED FROM PYTHON SOURCE LINES 214-219
 
 Optional: Export Data
 ---------------------
@@ -320,9 +322,9 @@ Optional: Export Data
 Write the data and topography
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 217-234
+.. GENERATED FROM PYTHON SOURCE LINES 219-236
 
-.. code-block:: default
+.. code-block:: Python
 
 
     if write_output:
@@ -338,7 +340,7 @@ Write the data and topography
 
         np.random.seed(211)
         maximum_anomaly = np.max(np.abs(dpred))
-        noise = 0.02 * maximum_anomaly * np.random.rand(len(dpred))
+        noise = 0.02 * maximum_anomaly * np.random.randn(len(dpred))
         fname = dir_path + "magnetics_data.obs"
         np.savetxt(fname, np.c_[receiver_locations, dpred + noise], fmt="%.4e")
 
@@ -351,7 +353,7 @@ Write the data and topography
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 6.692 seconds)
+   **Total running time of the script:** (0 minutes 5.864 seconds)
 
 **Estimated memory usage:**  8 MB
 
@@ -362,16 +364,13 @@ Write the data and topography
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_2a_magnetics_induced.ipynb <plot_2a_magnetics_induced.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_2a_magnetics_induced.py <plot_2a_magnetics_induced.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_2a_magnetics_induced.ipynb <plot_2a_magnetics_induced.ipynb>`
 
 
 .. only:: html

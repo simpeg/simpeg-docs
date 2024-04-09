@@ -138,7 +138,9 @@ ind_block = (
 model[ind_block] = block_density
 
 # You can also use SimPEG utilities to add structures to the model more concisely
-ind_sphere = model_builder.getIndicesSphere(np.r_[35.0, 0.0, -40.0], 15.0, mesh.gridCC)
+ind_sphere = model_builder.get_indices_sphere(
+    np.r_[35.0, 0.0, -40.0], 15.0, mesh.gridCC
+)
 ind_sphere = ind_sphere[ind_active]
 model[ind_sphere] = sphere_density
 
@@ -178,19 +180,35 @@ plt.show()
 # formulation.
 #
 
-# Define the forward simulation. By setting the 'store_sensitivities' keyword
-# argument to "forward_only", we simulate the data without storing the sensitivities
+###############################################################################
+# Define the forward simulation. By setting the ``store_sensitivities`` keyword
+# argument to ``"forward_only"``, we simulate the data without storing the
+# sensitivities.
+#
+
 simulation = gravity.simulation.Simulation3DIntegral(
     survey=survey,
     mesh=mesh,
     rhoMap=model_map,
     ind_active=ind_active,
     store_sensitivities="forward_only",
+    engine="choclo",
 )
 
+###############################################################################
+# .. tip::
+#
+#    Since SimPEG v0.21.0 we can use `Choclo
+#    <https://www.fatiando.org/choclo>`_ as the engine for running the gravity
+#    simulations, which results in faster and more memory efficient runs. Just
+#    pass ``engine="choclo"`` when constructing the simulation.
+#
+
+###############################################################################
 # Compute predicted data for some model
 # SimPEG uses right handed coordinate where Z is positive upward.
 # This causes gravity signals look "inconsistent" with density values in visualization.
+
 dpred = simulation.dpred(model)
 
 # Plot
@@ -232,6 +250,6 @@ if save_output:
 
     np.random.seed(737)
     maximum_anomaly = np.max(np.abs(dpred))
-    noise = 0.01 * maximum_anomaly * np.random.rand(len(dpred))
+    noise = 0.01 * maximum_anomaly * np.random.randn(len(dpred))
     fname = dir_path + "gravity_data.obs"
     np.savetxt(fname, np.c_[receiver_locations, dpred + noise], fmt="%.4e")

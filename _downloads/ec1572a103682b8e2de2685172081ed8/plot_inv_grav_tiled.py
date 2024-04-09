@@ -5,6 +5,7 @@ PF: Gravity: Tiled Inversion Linear
 Invert data in tiles.
 
 """
+
 import os
 import numpy as np
 import matplotlib.pyplot as plt
@@ -115,7 +116,7 @@ nC = int(activeCells.sum())
 # Here a simple block in half-space
 # Get the indices of the magnetized block
 model = np.zeros(mesh.nC)
-ind = utils.model_builder.getIndicesBlock(
+ind = utils.model_builder.get_indices_block(
     np.r_[-10, -10, -30],
     np.r_[10, 10, -10],
     mesh.gridCC,
@@ -243,7 +244,7 @@ update_IRLS = directives.Update_IRLS(
 )
 saveDict = directives.SaveOutputEveryIteration(save_txt=False)
 update_Jacobi = directives.UpdatePreconditioner()
-sensitivity_weights = directives.UpdateSensitivityWeights(everyIter=False)
+sensitivity_weights = directives.UpdateSensitivityWeights(every_iteration=False)
 inv = inversion.BaseInversion(
     invProb,
     directiveList=[update_IRLS, sensitivity_weights, betaest, update_Jacobi, saveDict],
