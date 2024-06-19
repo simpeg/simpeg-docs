@@ -1,0 +1,1284 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Heagy et al., 2017 1D RESOLVE and SkyTEM Bookpurnong Inversions &#8212; SimPEG 0.18.1 documentation</title>
+  <script>
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+
+  
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/examples/20-published/plot_booky_1D_time_freq_inv';</script>
+    <link rel="shortcut icon" href="../../../_static/logo-block.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Heagy et al., 2017 1D RESOLVE Bookpurnong Inversion" href="plot_booky_1Dstitched_resolve_inv.html" />
+    <link rel="prev" title="In Publication" href="index.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="None">
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-45185336-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../_static/simpeg-logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../_static/simpeg-logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="../../getting_started.html">
+                        Getting Started
+                    </a>
+                </li>
+                
+
+                <li class="nav-item current active">
+                    <a class="nav-link" href="../../user_guide.html">
+                        User Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../api/index.html">
+                        API Reference
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../release/index.html">
+                        Release Notes
+                    </a>
+                </li>
+                
+
+            <li class="nav-item">
+                <a class="nav-link nav-external" href="https://simpeg.xyz">SimPEG<i class="fa-solid fa-up-right-from-square"></i></a>
+            </li>
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+            <li class="nav-item">
+                <a class="nav-link nav-external" href="http://slack.simpeg.xyz">Contact<i class="fa-solid fa-up-right-from-square"></i></a>
+            </li>
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      <div class="navbar-end-item navbar-end__search-button-container">
+        
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
+    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="http://slack.simpeg.xyz/" title="Slack" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-slack"></i></span>
+            <label class="sr-only">Slack</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-discourse"></i></span>
+            <label class="sr-only">Discourse</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-youtube"></i></span>
+            <label class="sr-only">Youtube</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/simpegpy" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  <div class="search-button-container--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+  </div>
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="../../getting_started.html">
+                        Getting Started
+                    </a>
+                </li>
+                
+
+                <li class="nav-item current active">
+                    <a class="nav-link" href="../../user_guide.html">
+                        User Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../api/index.html">
+                        API Reference
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../release/index.html">
+                        Release Notes
+                    </a>
+                </li>
+                
+
+            <li class="nav-item">
+                <a class="nav-link nav-external" href="https://simpeg.xyz">SimPEG<i class="fa-solid fa-up-right-from-square"></i></a>
+            </li>
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+            <li class="nav-item">
+                <a class="nav-link nav-external" href="http://slack.simpeg.xyz">Contact<i class="fa-solid fa-up-right-from-square"></i></a>
+            </li>
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
+    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="http://slack.simpeg.xyz/" title="Slack" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-slack"></i></span>
+            <label class="sr-only">Slack</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-discourse"></i></span>
+            <label class="sr-only">Discourse</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-youtube"></i></span>
+            <label class="sr-only">Youtube</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/simpegpy" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/01-models_mapping/index.html">Models and Mapping</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/01-models_mapping/plot_1_tensor_models.html">Tensor Meshes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/01-models_mapping/plot_2_cyl_models.html">Cylindrical Meshes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/01-models_mapping/plot_3_tree_models.html">Tree Meshes</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/02-linear_inversion/index.html">Linear Problems</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/02-linear_inversion/plot_inv_1_inversion_lsq.html">Linear Least-Squares Inversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/02-linear_inversion/plot_inv_2_inversion_irls.html">Sparse Inversion with Iteratively Re-Weighted Least-Squares</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/03-gravity/index.html">Gravity</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/03-gravity/plot_1a_gravity_anomaly.html">Forward Simulation of Gravity Anomaly Data on a Tensor Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/03-gravity/plot_1b_gravity_gradiometry.html">Forward Simulation of Gradiometry Data on a Tree Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/03-gravity/plot_inv_1a_gravity_anomaly.html">Least-Squares Inversion of Gravity Anomaly Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/03-gravity/plot_inv_1b_gravity_anomaly_irls.html">Sparse Norm Inversion of Gravity Anomaly Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/04-magnetics/index.html">Magnetics</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/04-magnetics/plot_2a_magnetics_induced.html">Forward Simulation of Total Magnetic Intensity Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/04-magnetics/plot_2b_magnetics_mvi.html">Forward Simulation of Gradiometry Data for Magnetic Vector Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/04-magnetics/plot_inv_2a_magnetics_induced.html">Sparse Norm Inversion for Total Magnetic Intensity Data on a Tensor Mesh</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/05-dcr/index.html">Direct Current Resistivity</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/05-dcr/plot_fwd_1_dcr_sounding.html">Simulate a 1D Sounding over a Layered Earth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/05-dcr/plot_fwd_2_dcr2d.html">DC Resistivity Forward Simulation in 2.5D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/05-dcr/plot_fwd_3_dcr3d.html">DC Resistivity Forward Simulation in 3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/05-dcr/plot_gen_3_3d_to_2d.html">Convert 3D DC/IP Data to 2D Lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/05-dcr/plot_inv_1_dcr_sounding.html">Least-Squares 1D Inversion of Sounding Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/05-dcr/plot_inv_1_dcr_sounding_irls.html">Sparse 1D Inversion of Sounding Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/05-dcr/plot_inv_1_dcr_sounding_parametric.html">Parametric 1D Inversion of Sounding Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/05-dcr/plot_inv_2_dcr2d.html">2.5D DC Resistivity Least-Squares Inversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/05-dcr/plot_inv_2_dcr2d_irls.html">2.5D DC Resistivity Inversion with Sparse Norms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/05-dcr/plot_inv_3_dcr3d.html">3D Least-Squares Inversion of DC Resistivity Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/06-ip/index.html">Induced Polarization</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/06-ip/plot_fwd_2_dcip2d.html">2.5D Forward Simulation of a DCIP Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/06-ip/plot_fwd_3_dcip3d.html">DC/IP Forward Simulation in 3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/06-ip/plot_inv_2_dcip2d.html">2.5D DC Resistivity and IP Least-Squares Inversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/06-ip/plot_inv_3_dcip3d.html">3D Least-Squares Inversion of DC and IP Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/07-fdem/index.html">Frequency-Domain Electromagnetics</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/07-fdem/plot_fwd_1_em1dfm.html">1D Forward Simulation for a Single Sounding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/07-fdem/plot_fwd_1_em1dfm_dispersive.html">1D Forward Simulation for a Susceptible and Chargeable Earth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/07-fdem/plot_fwd_2_fem_cyl.html">3D Forward Simulation on a Cylindrical Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/07-fdem/plot_fwd_3_fem_3d.html">3D Forward Simulation on a Tree Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/07-fdem/plot_inv_1_em1dfm.html">1D Inversion of for a Single Sounding</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/08-tdem/index.html">Time-Domain Electromagnetics</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/08-tdem/plot_fwd_1_em1dtm.html">1D Forward Simulation for a Single Sounding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/08-tdem/plot_fwd_1_em1dtm_dispersive.html">1D Forward Simulation with Chargeable and/or Magnetic Viscosity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/08-tdem/plot_fwd_1_em1dtm_waveforms.html">1D Forward Simulation with User-Defined Waveforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/08-tdem/plot_fwd_2_tem_cyl.html">3D Forward Simulation for Transient Response on a Cylindrical Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/08-tdem/plot_fwd_3_tem_3d.html">3D Forward Simulation with User-Defined Waveforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/08-tdem/plot_inv_1_em1dtm.html">1D Inversion of Time-Domain Data for a Single Sounding</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/09-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/10-vrm/index.html">Viscous Remanent Magnetization</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/10-vrm/plot_fwd_1_vrm_layer.html">Response from a Homogeneous Layer for Different Waveforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/10-vrm/plot_fwd_2_vrm_topsoil.html">Forward Simulation of VRM Response on a Tree Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/10-vrm/plot_fwd_3_vrm_tem.html">Forward Simulation Including Inductive Response</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/11-flow/index.html">Flow</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/12-seismic/index.html">Seismic</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/12-seismic/plot_fwd_1_tomography_2D.html">Forward Simulation for Straight Ray Tomography in 2D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/12-seismic/plot_inv_1_tomography_2D.html">Sparse Norm Inversion of 2D Seismic Tomography Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/13-joint_inversion/index.html">Joint Inversion</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/13-joint_inversion/plot_inv_3_cross_gradient_pf.html">Cross-gradient Joint Inversion of Gravity and Magnetic Anomaly Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/14-pgi/index.html">Petrophysically Guided Inversion</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-12"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/14-pgi/plot_inv_1_joint_pf_pgi_full_info_tutorial.html">Joint PGI of Gravity + Magnetic on an Octree mesh using full petrophysical information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/14-pgi/plot_inv_2_joint_pf_pgi_no_info_tutorial.html">Joint PGI of Gravity + Magnetic on an Octree mesh without petrophysical information</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Gallery</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-13"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../01-maps/index.html">Mappings</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-14"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../01-maps/plot_block_in_layer.html">Maps: Parametric Block in a Layer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../01-maps/plot_combo.html">Maps: ComboMaps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../01-maps/plot_layer.html">Maps: Parametrized Layer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../01-maps/plot_mesh2mesh.html">Maps: Mesh2Mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../01-maps/plot_sumMap.html">Maps: ComboMaps</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../02-gravity/index.html">Gravity</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-15"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../02-gravity/plot_inv_grav_tiled.html">PF: Gravity: Tiled Inversion Linear</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../03-magnetics/index.html">Magnetics</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-16"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../03-magnetics/plot_0_analytic.html">PF: Magnetics: Analytics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../03-magnetics/plot_inv_mag_MVI_Sparse_TreeMesh.html">Magnetic inversion on a TreeMesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../03-magnetics/plot_inv_mag_nonLinear_Amplitude.html">Magnetic Amplitude inversion on a TreeMesh</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../04-dcip/index.html">DC Resistivity and Induced Polarization</a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-17"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../04-dcip/plot_dc_analytic.html">DC Analytic Dipole</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../04-dcip/plot_inv_dcip_dipoledipole_3Dinversion_twospheres.html">3D DC inversion of Dipole Dipole array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../04-dcip/plot_inv_dcip_dipoledipole_parametric_inversion.html">Parametric DC inversion with Dipole Dipole array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../04-dcip/plot_read_DC_data_with_IO_class.html">Reading and Plotting data with DC.IO class</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../05-fdem/index.html">Frequency Domain Electromagnetics</a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-18"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../05-fdem/plot_0_fdem_analytic.html">Simulation with Analytic FDEM Solutions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../05-fdem/plot_inv_fdem_loop_loop_2Dinversion.html">2D inversion of Loop-Loop EM Data</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../06-tdem/index.html">Time Domain Electromagnetics</a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-19"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../06-tdem/plot_0_tdem_analytic.html">Simulation with Analytic TDEM Solutions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../06-tdem/plot_fwd_tdem_3d_model.html">Time-domain CSEM for a resistive cube in a deep marine setting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../06-tdem/plot_fwd_tdem_inductive_src_permeable_target.html">EM: TDEM: Permeable Target, Inductive Source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../06-tdem/plot_fwd_tdem_waveforms.html">TDEM: Waveforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../06-tdem/plot_inv_tdem_1D.html">EM: TDEM: 1D: Inversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../06-tdem/plot_inv_tdem_1D_raw_waveform.html">EM: TDEM: 1D: Inversion with VTEM waveform</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../07-nsem/index.html">Natural Source Electromagnetics</a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-20"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../07-nsem/plot_fwd_nsem_MTTipper3D.html">MT: 3D: Forward</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../08-vrm/index.html">Viscous Remanent Magnetization</a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-21"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../08-vrm/plot_fwd_vrm.html">Predict Response from a Conductive and Magnetically Viscous Earth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../08-vrm/plot_inv_vrm_eq.html">Method of Equivalent Sources for Removing VRM Responses</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../09-flow/index.html">Richards Fluid Flow</a><input class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-22"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../09-flow/plot_fwd_flow_richards_1D.html">FLOW: Richards: 1D: Forward Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../09-flow/plot_inv_flow_richards_1D.html">FLOW: Richards: 1D: Inversion</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../10-pgi/index.html">PGI: Petrophysically and Geologically guided Inversion</a><input class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-23"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../10-pgi/plot_inv_0_PGI_Linear_1D.html">Petrophysically guided inversion (PGI): Linear example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../10-pgi/plot_inv_1_PGI_Linear_1D_joint_WithRelationships.html">Petrophysically guided inversion: Joint linear example with nonlinear relationships</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="index.html">In Publication</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-24"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Heagy et al., 2017 1D RESOLVE and SkyTEM Bookpurnong Inversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_booky_1Dstitched_resolve_inv.html">Heagy et al., 2017 1D RESOLVE Bookpurnong Inversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_effective_medium_theory.html">Effective Medium Theory Mapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_heagyetal2017_casing.html">Heagy et al., 2017 Casing Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_heagyetal2017_cyl_inversions.html">Heagy et al., 2017 1D FDEM and TDEM inversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_laguna_del_maule_inversion.html">PF: Gravity: Laguna del Maule Bouguer Gravity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_load_booky.html">Heagy et al., 2017 Load and Plot Bookpurnong Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_richards_celia1990.html">FLOW: Richards: 1D: Celia1990</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_schenkel_morrison_casing.html">EM: Schenkel and Morrison Casing Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_tomo_joint_with_volume.html">Straight Ray with Volume Data Misfit Term</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_vadose_vangenuchten.html">FLOW: Vadose: van Genuchten</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+      </div>
+      <main class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-content-examples-20-published-plot-booky-1d-time-freq-inv-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="heagy-et-al-2017-1d-resolve-and-skytem-bookpurnong-inversions">
+<span id="sphx-glr-content-examples-20-published-plot-booky-1d-time-freq-inv-py"></span><h1>Heagy et al., 2017 1D RESOLVE and SkyTEM Bookpurnong Inversions<a class="headerlink" href="#heagy-et-al-2017-1d-resolve-and-skytem-bookpurnong-inversions" title="Permalink to this headline">#</a></h1>
+<p>In this example, show 1D inversions of a single sounding from each of
+the RESOLVE and SkyTEM data sets. The original data can be downloaded from:
+<a class="reference external" href="https://storage.googleapis.com/simpeg/bookpurnong/bookpurnong.tar.gz">https://storage.googleapis.com/simpeg/bookpurnong/bookpurnong.tar.gz</a></p>
+<p>The forward simulation is performed on the cylindrically symmetric mesh using
+<code class="code docutils literal notranslate"><span class="pre">SimPEG.electromagnetics.frequency_domain</span></code>, and <code class="code docutils literal notranslate"><span class="pre">SimPEG.electromagnetics.time_domain</span></code></p>
+<p>The RESOLVE data are inverted first. This recovered model is then used as a
+reference model for the SkyTEM inversion</p>
+<p>This example is published in</p>
+<blockquote>
+<div><p>Lindsey J. Heagy, Rowan Cockett, Seogi Kang, Gudni K. Rosenkjaer, Douglas
+W. Oldenburg, A framework for simulation and inversion in electromagnetics,
+Computers &amp; Geosciences, Volume 107, 2017, Pages 1-19, ISSN 0098-3004,
+<a class="reference external" href="http://dx.doi.org/10.1016/j.cageo.2017.06.018">http://dx.doi.org/10.1016/j.cageo.2017.06.018</a>.</p>
+</div></blockquote>
+<p>The script and figures are also on figshare:
+<a class="reference external" href="https://doi.org/10.6084/m9.figshare.5107711">https://doi.org/10.6084/m9.figshare.5107711</a></p>
+<p>This example was updated for SimPEG 0.14.0 on January 31st, 2020 by Joseph Capriotti</p>
+<ul class="sphx-glr-horizontal">
+<li><img src="../../../_images/sphx_glr_plot_booky_1D_time_freq_inv_001.png" srcset="../../../_images/sphx_glr_plot_booky_1D_time_freq_inv_001.png" alt="RESOLVE In-phase 400 Hz, SkyTEM High moment 156 $\mu$s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../../_images/sphx_glr_plot_booky_1D_time_freq_inv_002.png" srcset="../../../_images/sphx_glr_plot_booky_1D_time_freq_inv_002.png" alt="plot booky 1D time freq inv" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../../_images/sphx_glr_plot_booky_1D_time_freq_inv_003.png" srcset="../../../_images/sphx_glr_plot_booky_1D_time_freq_inv_003.png" alt="(a) Recovered Models, (b) RESOLVE, (c) SkyTEM High-moment, (d) Waveform" class = "sphx-glr-multi-img"/></li>
+</ul>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Downloading https://storage.googleapis.com/simpeg/bookpurnong/bookpurnong_inversion.tar.gz
+   saved to: /home/vsts/work/1/s/examples/20-published/bookpurnong_inversion.tar.gz
+Download completed!
+
+                        SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
+                        ***Done using same Solver, and solver_opts as the Simulation3DMagneticFluxDensity problem***
+
+model has any nan: 0
+============================ Inexact Gauss Newton ============================
+  #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment
+-----------------------------------------------------------------------------
+x0 has any nan: 0
+   0  2.00e+00  1.24e+02  0.00e+00  1.24e+02    2.84e+01      0
+   1  2.00e+00  1.83e+01  2.92e+00  2.42e+01    1.13e+01      0
+   2  2.00e+00  6.08e+00  1.68e+00  9.44e+00    4.47e+00      0
+------------------------- STOP! -------------------------
+1 : |fc-fOld| = 0.0000e+00 &lt;= tolF*(1+|f0|) = 1.2510e+01
+0 : |xc-x_last| = 2.1978e+00 &lt;= tolX*(1+|x0|) = 1.3820e+00
+0 : |proj(x-g)-x|    = 4.4670e+00 &lt;= tolG          = 1.0000e-01
+0 : |proj(x-g)-x|    = 4.4670e+00 &lt;= 1e3*eps       = 1.0000e-02
+0 : maxIter   =       5    &lt;= iter          =      3
+------------------------- DONE! -------------------------
+
+                        SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
+                        ***Done using same Solver, and solver_opts as the Simulation3DElectricField problem***
+
+model has any nan: 0
+============================ Inexact Gauss Newton ============================
+  #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment
+-----------------------------------------------------------------------------
+x0 has any nan: 0
+/usr/share/miniconda/envs/simpeg-test/lib/python3.7/site-packages/pymatsolver/direct.py:26: PardisoTypeConversionWarning:
+
+Converting csc_matrix matrix to CSR format, will slow down.
+
+/usr/share/miniconda/envs/simpeg-test/lib/python3.7/site-packages/pymatsolver/direct.py:73: PardisoTypeConversionWarning:
+
+Converting csc_matrix matrix to CSR format, will slow down.
+
+   0  2.00e+01  2.28e+02  2.13e+01  6.53e+02    1.32e+02      0
+   1  2.00e+01  4.79e+01  2.02e+00  8.84e+01    4.59e+01      0
+   2  2.00e+01  1.88e+01  1.19e+00  4.27e+01    1.27e+01      0
+   3  2.00e+01  1.13e+01  1.39e+00  3.90e+01    4.09e+00      0
+   4  2.00e+01  1.06e+01  1.41e+00  3.88e+01    1.75e+00      0
+   5  2.00e+01  1.05e+01  1.41e+00  3.87e+01    1.22e+00      0
+------------------------- STOP! -------------------------
+1 : |fc-fOld| = 5.5725e-02 &lt;= tolF*(1+|f0|) = 6.5428e+01
+1 : |xc-x_last| = 1.0936e-01 &lt;= tolX*(1+|x0|) = 1.3820e+00
+0 : |proj(x-g)-x|    = 1.2230e+00 &lt;= tolG          = 1.0000e-01
+0 : |proj(x-g)-x|    = 1.2230e+00 &lt;= 1e3*eps       = 1.0000e-02
+1 : maxIter   =       5    &lt;= iter          =      5
+------------------------- DONE! -------------------------
+/home/vsts/work/1/s/examples/20-published/plot_booky_1D_time_freq_inv.py:480: UserWarning:
+
+This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+
+(&#39;/home/vsts/work/1/s/examples/20-published&#39;,)
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">import</span> <span class="nn">tarfile</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">mu_0</span>
+<span class="kn">from</span> <span class="nn">pymatsolver</span> <span class="kn">import</span> <span class="n">Pardiso</span> <span class="k">as</span> <span class="n">Solver</span>
+
+<span class="kn">import</span> <span class="nn">discretize</span>
+<span class="kn">from</span> <span class="nn">SimPEG</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">maps</span><span class="p">,</span>
+    <span class="n">utils</span><span class="p">,</span>
+    <span class="n">data_misfit</span><span class="p">,</span>
+    <span class="n">regularization</span><span class="p">,</span>
+    <span class="n">optimization</span><span class="p">,</span>
+    <span class="n">inversion</span><span class="p">,</span>
+    <span class="n">inverse_problem</span><span class="p">,</span>
+    <span class="n">directives</span><span class="p">,</span>
+    <span class="n">data</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">SimPEG.electromagnetics</span> <span class="kn">import</span> <span class="n">frequency_domain</span> <span class="k">as</span> <span class="n">FDEM</span><span class="p">,</span> <span class="n">time_domain</span> <span class="k">as</span> <span class="n">TDEM</span>
+
+
+<span class="k">def</span> <span class="nf">download_and_unzip_data</span><span class="p">(</span>
+    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://storage.googleapis.com/simpeg/bookpurnong/bookpurnong_inversion.tar.gz&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Download the data from the storage bucket, unzip the tar file, return</span>
+<span class="sd">    the directory where the data are</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># download the data</span>
+    <span class="n">downloads</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="c1"># directory where the downloaded files are</span>
+    <span class="n">directory</span> <span class="o">=</span> <span class="n">downloads</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># unzip the tarfile</span>
+    <span class="n">tar</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">downloads</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+    <span class="n">tar</span><span class="o">.</span><span class="n">extractall</span><span class="p">()</span>
+    <span class="n">tar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">downloads</span><span class="p">,</span> <span class="n">directory</span>
+
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">plotIt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">saveFig</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cleanup</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run 1D inversions for a single sounding of the RESOLVE and SkyTEM</span>
+<span class="sd">    bookpurnong data</span>
+
+<span class="sd">    :param bool plotIt: show the plots?</span>
+<span class="sd">    :param bool saveFig: save the figure</span>
+<span class="sd">    :param bool cleanup: remove the downloaded results</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">downloads</span><span class="p">,</span> <span class="n">directory</span> <span class="o">=</span> <span class="n">download_and_unzip_data</span><span class="p">()</span>
+
+    <span class="n">resolve</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">directory</span><span class="p">,</span> <span class="s2">&quot;booky_resolve.hdf5&quot;</span><span class="p">]),</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+    <span class="n">skytem</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">directory</span><span class="p">,</span> <span class="s2">&quot;booky_skytem.hdf5&quot;</span><span class="p">]),</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+    <span class="n">river_path</span> <span class="o">=</span> <span class="n">resolve</span><span class="p">[</span><span class="s2">&quot;river_path&quot;</span><span class="p">][()]</span>
+
+    <span class="c1"># Choose a sounding location to invert</span>
+    <span class="n">xloc</span><span class="p">,</span> <span class="n">yloc</span> <span class="o">=</span> <span class="mf">462100.0</span><span class="p">,</span> <span class="mf">6196500.0</span>
+    <span class="n">rxind_skytem</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span>
+        <span class="nb">abs</span><span class="p">(</span><span class="n">skytem</span><span class="p">[</span><span class="s2">&quot;xy&quot;</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">xloc</span><span class="p">)</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">skytem</span><span class="p">[</span><span class="s2">&quot;xy&quot;</span><span class="p">][:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">yloc</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">rxind_resolve</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span>
+        <span class="nb">abs</span><span class="p">(</span><span class="n">resolve</span><span class="p">[</span><span class="s2">&quot;xy&quot;</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">xloc</span><span class="p">)</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">resolve</span><span class="p">[</span><span class="s2">&quot;xy&quot;</span><span class="p">][:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">yloc</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Plot both resolve and skytem data on 2D plane</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;RESOLVE In-phase 400 Hz&quot;</span><span class="p">,</span> <span class="s2">&quot;SkyTEM High moment 156 $\mu$s&quot;</span><span class="p">]</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+    <span class="n">axs</span> <span class="o">=</span> <span class="p">[</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">]</span>
+    <span class="n">out_re</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">plot2Ddata</span><span class="p">(</span>
+        <span class="n">resolve</span><span class="p">[</span><span class="s2">&quot;xy&quot;</span><span class="p">],</span>
+        <span class="n">resolve</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="n">ncontour</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">contourOpts</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cmap&quot;</span><span class="p">:</span> <span class="s2">&quot;viridis&quot;</span><span class="p">},</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="n">out_re</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_clim</span><span class="p">()</span>
+    <span class="n">cb_re</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span>
+        <span class="n">out_re</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ticks</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.04</span>
+    <span class="p">)</span>
+    <span class="n">temp_skytem</span> <span class="o">=</span> <span class="n">skytem</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][:,</span> <span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">temp_skytem</span><span class="p">[</span><span class="n">skytem</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][:,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">7e-10</span><span class="p">]</span> <span class="o">=</span> <span class="mf">7e-10</span>
+    <span class="n">out_sky</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">plot2Ddata</span><span class="p">(</span>
+        <span class="n">skytem</span><span class="p">[</span><span class="s2">&quot;xy&quot;</span><span class="p">][:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">temp_skytem</span><span class="p">,</span>
+        <span class="n">ncontour</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">contourOpts</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cmap&quot;</span><span class="p">:</span> <span class="s2">&quot;viridis&quot;</span><span class="p">,</span> <span class="s2">&quot;vmax&quot;</span><span class="p">:</span> <span class="mf">7e-10</span><span class="p">},</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="n">out_sky</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_clim</span><span class="p">()</span>
+    <span class="n">cb_sky</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span>
+        <span class="n">out_sky</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">ticks</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">*</span> <span class="mf">0.99</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.1e</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">fraction</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span>
+        <span class="n">pad</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">cb_re</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s2">&quot;Bz (ppm)&quot;</span><span class="p">)</span>
+    <span class="n">cb_sky</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s2">&quot;dB$_z$ / dt (V/A-m$^4$)&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">axs</span><span class="p">):</span>
+        <span class="n">xticks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">460000</span><span class="p">,</span> <span class="mi">463000</span><span class="p">]</span>
+        <span class="n">yticks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">6195000</span><span class="p">,</span> <span class="mi">6198000</span><span class="p">,</span> <span class="mi">6201000</span><span class="p">]</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">xticks</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">yticks</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xloc</span><span class="p">,</span> <span class="n">yloc</span><span class="p">,</span> <span class="s2">&quot;wo&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">river_path</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">river_path</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">skytem</span><span class="p">[</span><span class="s2">&quot;xy&quot;</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">skytem</span><span class="p">[</span><span class="s2">&quot;xy&quot;</span><span class="p">][:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;k.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">yticks</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">resolve</span><span class="p">[</span><span class="s2">&quot;xy&quot;</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">resolve</span><span class="p">[</span><span class="s2">&quot;xy&quot;</span><span class="p">][:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;k.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">yticks</span><span class="p">])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Northing (m)&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Easting (m)&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+    <span class="c1"># plt.tight_layout()</span>
+
+    <span class="k">if</span> <span class="n">saveFig</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;resolve_skytem_data.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+
+    <span class="c1"># ------------------ Mesh ------------------ #</span>
+    <span class="c1"># Step1: Set 2D cylindrical mesh</span>
+    <span class="n">cs</span><span class="p">,</span> <span class="n">ncx</span><span class="p">,</span> <span class="n">ncz</span><span class="p">,</span> <span class="n">npad</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">20</span>
+    <span class="n">hx</span> <span class="o">=</span> <span class="p">[(</span><span class="n">cs</span><span class="p">,</span> <span class="n">ncx</span><span class="p">),</span> <span class="p">(</span><span class="n">cs</span><span class="p">,</span> <span class="n">npad</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">)]</span>
+    <span class="n">npad</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">1.0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">12.0</span><span class="p">),</span> <span class="mi">19</span><span class="p">)</span>
+    <span class="n">temp_pad</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1.3</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">npad</span><span class="p">)</span>
+    <span class="n">hz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">temp_pad</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">temp</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">temp</span><span class="p">,</span> <span class="n">temp_pad</span><span class="p">]</span>
+    <span class="n">mesh</span> <span class="o">=</span> <span class="n">discretize</span><span class="o">.</span><span class="n">CylindricalMesh</span><span class="p">([</span><span class="n">hx</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">hz</span><span class="p">],</span> <span class="s2">&quot;00C&quot;</span><span class="p">)</span>
+    <span class="n">active</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">cell_centers_z</span> <span class="o">&lt;</span> <span class="mf">0.0</span>
+
+    <span class="c1"># Step2: Set a SurjectVertical1D mapping</span>
+    <span class="c1"># Note: this sets our inversion model as 1D log conductivity</span>
+    <span class="c1"># below subsurface</span>
+
+    <span class="n">active</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">cell_centers_z</span> <span class="o">&lt;</span> <span class="mf">0.0</span>
+    <span class="n">actMap</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="n">InjectActiveCells</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">active</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1e-8</span><span class="p">),</span> <span class="n">nC</span><span class="o">=</span><span class="n">mesh</span><span class="o">.</span><span class="n">shape_cells</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">mapping</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="n">ExpMap</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span> <span class="o">*</span> <span class="n">maps</span><span class="o">.</span><span class="n">SurjectVertical1D</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span> <span class="o">*</span> <span class="n">actMap</span>
+    <span class="n">sig_half</span> <span class="o">=</span> <span class="mf">1e-1</span>
+    <span class="n">sig_air</span> <span class="o">=</span> <span class="mf">1e-8</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">shape_cells</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="n">sig_air</span>
+    <span class="n">sigma</span><span class="p">[</span><span class="n">active</span><span class="p">]</span> <span class="o">=</span> <span class="n">sig_half</span>
+
+    <span class="c1"># Initial and reference model</span>
+    <span class="n">m0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sigma</span><span class="p">[</span><span class="n">active</span><span class="p">])</span>
+
+    <span class="c1"># ------------------ RESOLVE Forward Simulation ------------------ #</span>
+    <span class="c1"># Step3: Invert Resolve data</span>
+
+    <span class="c1"># Bird height from the surface</span>
+    <span class="n">b_height_resolve</span> <span class="o">=</span> <span class="n">resolve</span><span class="p">[</span><span class="s2">&quot;src_elevation&quot;</span><span class="p">][()]</span>
+    <span class="n">src_height_resolve</span> <span class="o">=</span> <span class="n">b_height_resolve</span><span class="p">[</span><span class="n">rxind_resolve</span><span class="p">]</span>
+
+    <span class="c1"># Set Rx (In-phase and Quadrature)</span>
+    <span class="n">rxOffset</span> <span class="o">=</span> <span class="mf">7.86</span>
+    <span class="n">bzr</span> <span class="o">=</span> <span class="n">FDEM</span><span class="o">.</span><span class="n">Rx</span><span class="o">.</span><span class="n">PointMagneticFluxDensitySecondary</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">rxOffset</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">src_height_resolve</span><span class="p">]]),</span>
+        <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;z&quot;</span><span class="p">,</span>
+        <span class="n">component</span><span class="o">=</span><span class="s2">&quot;real&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">bzi</span> <span class="o">=</span> <span class="n">FDEM</span><span class="o">.</span><span class="n">Rx</span><span class="o">.</span><span class="n">PointMagneticFluxDensity</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">rxOffset</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">src_height_resolve</span><span class="p">]]),</span>
+        <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;z&quot;</span><span class="p">,</span>
+        <span class="n">component</span><span class="o">=</span><span class="s2">&quot;imag&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Set Source (In-phase and Quadrature)</span>
+    <span class="n">frequency_cp</span> <span class="o">=</span> <span class="n">resolve</span><span class="p">[</span><span class="s2">&quot;frequency_cp&quot;</span><span class="p">][()]</span>
+    <span class="n">freqs</span> <span class="o">=</span> <span class="n">frequency_cp</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">srcLoc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">src_height_resolve</span><span class="p">])</span>
+    <span class="n">source_list</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">FDEM</span><span class="o">.</span><span class="n">Src</span><span class="o">.</span><span class="n">MagDipole</span><span class="p">([</span><span class="n">bzr</span><span class="p">,</span> <span class="n">bzi</span><span class="p">],</span> <span class="n">freq</span><span class="p">,</span> <span class="n">srcLoc</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;Z&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">freq</span> <span class="ow">in</span> <span class="n">freqs</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Set FDEM survey (In-phase and Quadrature)</span>
+    <span class="n">survey</span> <span class="o">=</span> <span class="n">FDEM</span><span class="o">.</span><span class="n">Survey</span><span class="p">(</span><span class="n">source_list</span><span class="p">)</span>
+    <span class="n">prb</span> <span class="o">=</span> <span class="n">FDEM</span><span class="o">.</span><span class="n">Simulation3DMagneticFluxDensity</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">sigmaMap</span><span class="o">=</span><span class="n">mapping</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="n">Solver</span><span class="p">)</span>
+    <span class="n">prb</span><span class="o">.</span><span class="n">survey</span> <span class="o">=</span> <span class="n">survey</span>
+
+    <span class="c1"># ------------------ RESOLVE Inversion ------------------ #</span>
+
+    <span class="c1"># Primary field</span>
+    <span class="n">bp</span> <span class="o">=</span> <span class="o">-</span><span class="n">mu_0</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">rxOffset</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="c1"># Observed data</span>
+    <span class="n">cpi_inds</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+    <span class="n">cpq_inds</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">]</span>
+    <span class="n">dobs_re</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span>
+            <span class="n">resolve</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rxind_resolve</span><span class="p">,</span> <span class="p">:][</span><span class="n">cpi_inds</span><span class="p">],</span>
+            <span class="n">resolve</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rxind_resolve</span><span class="p">,</span> <span class="p">:][</span><span class="n">cpq_inds</span><span class="p">],</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="o">*</span> <span class="n">bp</span>
+        <span class="o">*</span> <span class="mf">1e-6</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Uncertainty</span>
+    <span class="n">relative</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.15</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">floor</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bp</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e-6</span>
+    <span class="n">std</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">dobs_re</span><span class="p">)</span> <span class="o">*</span> <span class="n">relative</span> <span class="o">+</span> <span class="n">floor</span>
+
+    <span class="c1"># Data Misfit</span>
+    <span class="n">data_resolve</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="p">(</span><span class="n">dobs</span><span class="o">=</span><span class="n">dobs_re</span><span class="p">,</span> <span class="n">survey</span><span class="o">=</span><span class="n">survey</span><span class="p">,</span> <span class="n">standard_deviation</span><span class="o">=</span><span class="n">std</span><span class="p">)</span>
+    <span class="n">dmisfit</span> <span class="o">=</span> <span class="n">data_misfit</span><span class="o">.</span><span class="n">L2DataMisfit</span><span class="p">(</span><span class="n">simulation</span><span class="o">=</span><span class="n">prb</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data_resolve</span><span class="p">)</span>
+
+    <span class="c1"># Regularization</span>
+    <span class="n">regMesh</span> <span class="o">=</span> <span class="n">discretize</span><span class="o">.</span><span class="n">TensorMesh</span><span class="p">([</span><span class="n">mesh</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">mapping</span><span class="o">.</span><span class="n">maps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">indActive</span><span class="p">]])</span>
+    <span class="n">reg</span> <span class="o">=</span> <span class="n">regularization</span><span class="o">.</span><span class="n">WeightedLeastSquares</span><span class="p">(</span>
+        <span class="n">regMesh</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="n">maps</span><span class="o">.</span><span class="n">IdentityMap</span><span class="p">(</span><span class="n">regMesh</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Optimization</span>
+    <span class="n">opt</span> <span class="o">=</span> <span class="n">optimization</span><span class="o">.</span><span class="n">InexactGaussNewton</span><span class="p">(</span><span class="n">maxIter</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+    <span class="c1"># statement of the inverse problem</span>
+    <span class="n">invProb</span> <span class="o">=</span> <span class="n">inverse_problem</span><span class="o">.</span><span class="n">BaseInvProblem</span><span class="p">(</span><span class="n">dmisfit</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+
+    <span class="c1"># Inversion directives and parameters</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">directives</span><span class="o">.</span><span class="n">TargetMisfit</span><span class="p">()</span>  <span class="c1"># stop when we hit target misfit</span>
+    <span class="n">invProb</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="mf">2.0</span>
+    <span class="n">inv</span> <span class="o">=</span> <span class="n">inversion</span><span class="o">.</span><span class="n">BaseInversion</span><span class="p">(</span><span class="n">invProb</span><span class="p">,</span> <span class="n">directiveList</span><span class="o">=</span><span class="p">[</span><span class="n">target</span><span class="p">])</span>
+    <span class="n">reg</span><span class="o">.</span><span class="n">alpha_s</span> <span class="o">=</span> <span class="mf">1e-3</span>
+    <span class="n">reg</span><span class="o">.</span><span class="n">alpha_x</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">reg</span><span class="o">.</span><span class="n">mref</span> <span class="o">=</span> <span class="n">m0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">opt</span><span class="o">.</span><span class="n">LSshorten</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="n">opt</span><span class="o">.</span><span class="n">remember</span><span class="p">(</span><span class="s2">&quot;xc&quot;</span><span class="p">)</span>
+    <span class="c1"># run the inversion</span>
+    <span class="n">mopt_re</span> <span class="o">=</span> <span class="n">inv</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">m0</span><span class="p">)</span>
+    <span class="n">dpred_re</span> <span class="o">=</span> <span class="n">invProb</span><span class="o">.</span><span class="n">dpred</span>
+
+    <span class="c1"># ------------------ SkyTEM Forward Simulation ------------------ #</span>
+    <span class="c1"># Step4: Invert SkyTEM data</span>
+
+    <span class="c1"># Bird height from the surface</span>
+    <span class="n">b_height_skytem</span> <span class="o">=</span> <span class="n">skytem</span><span class="p">[</span><span class="s2">&quot;src_elevation&quot;</span><span class="p">][()]</span>
+    <span class="n">src_height</span> <span class="o">=</span> <span class="n">b_height_skytem</span><span class="p">[</span><span class="n">rxind_skytem</span><span class="p">]</span>
+    <span class="n">srcLoc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">src_height</span><span class="p">])</span>
+
+    <span class="c1"># Radius of the source loop</span>
+    <span class="n">area</span> <span class="o">=</span> <span class="n">skytem</span><span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">][()]</span>
+    <span class="n">radius</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">area</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    <span class="n">rxLoc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">radius</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">src_height</span><span class="p">]])</span>
+
+    <span class="c1"># Parameters for current waveform</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">skytem</span><span class="p">[</span><span class="s2">&quot;t0&quot;</span><span class="p">][()]</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="n">skytem</span><span class="p">[</span><span class="s2">&quot;times&quot;</span><span class="p">][()]</span>
+    <span class="n">waveform_skytem</span> <span class="o">=</span> <span class="n">skytem</span><span class="p">[</span><span class="s2">&quot;waveform&quot;</span><span class="p">][()]</span>
+    <span class="n">off_time</span> <span class="o">=</span> <span class="n">t0</span>
+    <span class="n">times_off</span> <span class="o">=</span> <span class="n">times</span> <span class="o">-</span> <span class="n">t0</span>
+
+    <span class="c1"># Note: we are Using theoretical VTEM waveform,</span>
+    <span class="c1"># but effectively fits SkyTEM waveform</span>
+    <span class="n">peak_time</span> <span class="o">=</span> <span class="mf">1.0000000e-02</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mf">3.0</span>
+
+    <span class="n">dbdt_z</span> <span class="o">=</span> <span class="n">TDEM</span><span class="o">.</span><span class="n">Rx</span><span class="o">.</span><span class="n">PointMagneticFluxTimeDerivative</span><span class="p">(</span>
+        <span class="n">locations</span><span class="o">=</span><span class="n">rxLoc</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="n">times_off</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">off_time</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;z&quot;</span>
+    <span class="p">)</span>  <span class="c1"># vertical db_dt</span>
+
+    <span class="n">receiver_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">dbdt_z</span><span class="p">]</span>  <span class="c1"># list of receivers</span>
+    <span class="n">source_list</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">TDEM</span><span class="o">.</span><span class="n">Src</span><span class="o">.</span><span class="n">CircularLoop</span><span class="p">(</span>
+            <span class="n">receiver_list</span><span class="p">,</span>
+            <span class="n">location</span><span class="o">=</span><span class="n">srcLoc</span><span class="p">,</span>
+            <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span>
+            <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;z&quot;</span><span class="p">,</span>
+            <span class="n">waveform</span><span class="o">=</span><span class="n">TDEM</span><span class="o">.</span><span class="n">Src</span><span class="o">.</span><span class="n">VTEMWaveform</span><span class="p">(</span>
+                <span class="n">off_time</span><span class="o">=</span><span class="n">off_time</span><span class="p">,</span> <span class="n">peak_time</span><span class="o">=</span><span class="n">peak_time</span><span class="p">,</span> <span class="n">ramp_on_rate</span><span class="o">=</span><span class="mf">3.0</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+    <span class="p">]</span>
+    <span class="c1"># solve the problem at these times</span>
+    <span class="n">timeSteps</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">peak_time</span> <span class="o">/</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+        <span class="p">((</span><span class="n">off_time</span> <span class="o">-</span> <span class="n">peak_time</span><span class="p">)</span> <span class="o">/</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+        <span class="p">(</span><span class="mf">1e-5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+        <span class="p">(</span><span class="mf">5e-5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+        <span class="p">(</span><span class="mf">1e-4</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+        <span class="p">(</span><span class="mf">5e-4</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span>
+    <span class="p">]</span>
+    <span class="n">prob</span> <span class="o">=</span> <span class="n">TDEM</span><span class="o">.</span><span class="n">Simulation3DElectricField</span><span class="p">(</span>
+        <span class="n">mesh</span><span class="p">,</span> <span class="n">time_steps</span><span class="o">=</span><span class="n">timeSteps</span><span class="p">,</span> <span class="n">sigmaMap</span><span class="o">=</span><span class="n">mapping</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="n">Solver</span>
+    <span class="p">)</span>
+    <span class="n">survey</span> <span class="o">=</span> <span class="n">TDEM</span><span class="o">.</span><span class="n">Survey</span><span class="p">(</span><span class="n">source_list</span><span class="p">)</span>
+    <span class="n">prob</span><span class="o">.</span><span class="n">survey</span> <span class="o">=</span> <span class="n">survey</span>
+
+    <span class="n">src</span> <span class="o">=</span> <span class="n">source_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">rx</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">receiver_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">wave</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">time</span> <span class="ow">in</span> <span class="n">prob</span><span class="o">.</span><span class="n">times</span><span class="p">:</span>
+        <span class="n">wave</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">waveform</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">time</span><span class="p">))</span>
+    <span class="n">wave</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">wave</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">dpred</span><span class="p">(</span><span class="n">m0</span><span class="p">)</span>
+
+    <span class="c1"># plot the waveform</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">times_off</span> <span class="o">=</span> <span class="n">times</span> <span class="o">-</span> <span class="n">t0</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">waveform_skytem</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">waveform_skytem</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;k.&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">prob</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">wave</span><span class="p">,</span> <span class="s2">&quot;k-&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s2">&quot;SkyTEM waveform&quot;</span><span class="p">,</span> <span class="s2">&quot;Waveform (fit)&quot;</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">rx</span><span class="o">.</span><span class="n">times</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="o">-</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">],</span> <span class="s2">&quot;k-&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Normalized current&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">saveFig</span><span class="p">:</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;skytem_waveform&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+
+    <span class="c1"># Observed data</span>
+    <span class="n">dobs_sky</span> <span class="o">=</span> <span class="n">skytem</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rxind_skytem</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">area</span>
+
+    <span class="c1"># ------------------ SkyTEM Inversion ------------------ #</span>
+    <span class="c1"># Uncertainty</span>
+    <span class="n">relative</span> <span class="o">=</span> <span class="mf">0.12</span>
+    <span class="n">floor</span> <span class="o">=</span> <span class="mf">7.5e-12</span>
+    <span class="n">std</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">dobs_sky</span><span class="p">)</span> <span class="o">*</span> <span class="n">relative</span> <span class="o">+</span> <span class="n">floor</span>
+
+    <span class="c1"># Data Misfit</span>
+    <span class="n">data_sky</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="p">(</span><span class="n">dobs</span><span class="o">=-</span><span class="n">dobs_sky</span><span class="p">,</span> <span class="n">survey</span><span class="o">=</span><span class="n">survey</span><span class="p">,</span> <span class="n">standard_deviation</span><span class="o">=</span><span class="n">std</span><span class="p">)</span>
+    <span class="n">dmisfit</span> <span class="o">=</span> <span class="n">data_misfit</span><span class="o">.</span><span class="n">L2DataMisfit</span><span class="p">(</span><span class="n">simulation</span><span class="o">=</span><span class="n">prob</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data_sky</span><span class="p">)</span>
+
+    <span class="c1"># Regularization</span>
+    <span class="n">regMesh</span> <span class="o">=</span> <span class="n">discretize</span><span class="o">.</span><span class="n">TensorMesh</span><span class="p">([</span><span class="n">mesh</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">mapping</span><span class="o">.</span><span class="n">maps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">indActive</span><span class="p">]])</span>
+    <span class="n">reg</span> <span class="o">=</span> <span class="n">regularization</span><span class="o">.</span><span class="n">WeightedLeastSquares</span><span class="p">(</span>
+        <span class="n">regMesh</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="n">maps</span><span class="o">.</span><span class="n">IdentityMap</span><span class="p">(</span><span class="n">regMesh</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Optimization</span>
+    <span class="n">opt</span> <span class="o">=</span> <span class="n">optimization</span><span class="o">.</span><span class="n">InexactGaussNewton</span><span class="p">(</span><span class="n">maxIter</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+    <span class="c1"># statement of the inverse problem</span>
+    <span class="n">invProb</span> <span class="o">=</span> <span class="n">inverse_problem</span><span class="o">.</span><span class="n">BaseInvProblem</span><span class="p">(</span><span class="n">dmisfit</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+
+    <span class="c1"># Directives and Inversion Parameters</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">directives</span><span class="o">.</span><span class="n">TargetMisfit</span><span class="p">()</span>
+    <span class="n">invProb</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="mf">20.0</span>
+    <span class="n">inv</span> <span class="o">=</span> <span class="n">inversion</span><span class="o">.</span><span class="n">BaseInversion</span><span class="p">(</span><span class="n">invProb</span><span class="p">,</span> <span class="n">directiveList</span><span class="o">=</span><span class="p">[</span><span class="n">target</span><span class="p">])</span>
+    <span class="n">reg</span><span class="o">.</span><span class="n">alpha_s</span> <span class="o">=</span> <span class="mf">1e-1</span>
+    <span class="n">reg</span><span class="o">.</span><span class="n">alpha_x</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">opt</span><span class="o">.</span><span class="n">LSshorten</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="n">opt</span><span class="o">.</span><span class="n">remember</span><span class="p">(</span><span class="s2">&quot;xc&quot;</span><span class="p">)</span>
+    <span class="n">reg</span><span class="o">.</span><span class="n">mref</span> <span class="o">=</span> <span class="n">mopt_re</span>  <span class="c1"># Use RESOLVE model as a reference model</span>
+
+    <span class="c1"># run the inversion</span>
+    <span class="n">mopt_sky</span> <span class="o">=</span> <span class="n">inv</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">m0</span><span class="p">)</span>
+    <span class="n">dpred_sky</span> <span class="o">=</span> <span class="n">invProb</span><span class="o">.</span><span class="n">dpred</span>
+
+    <span class="c1"># Plot the figure from the paper</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+    <span class="n">fs</span> <span class="o">=</span> <span class="mi">13</span>  <span class="c1"># fontsize</span>
+    <span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;font.size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fs</span>
+
+    <span class="n">ax0</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">rowspan</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Recovered Models</span>
+    <span class="n">sigma_re</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">mopt_re</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">sigma_sky</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">mopt_sky</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">cell_centers_z</span><span class="p">[</span><span class="n">active</span><span class="p">][</span><span class="mi">1</span><span class="p">:],</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">mesh</span><span class="o">.</span><span class="n">cell_centers_z</span><span class="p">[</span><span class="n">active</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">z</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">cell_centers_z</span><span class="p">[</span><span class="n">active</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+
+    <span class="n">ax0</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">sigma_re</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;RESOLVE&quot;</span><span class="p">)</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">sigma_sky</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;SkyTEM&quot;</span><span class="p">)</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># ax0.set_xlim(5e-4, 1e2)</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Depth (m)&quot;</span><span class="p">)</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Conducivity (S/m)&quot;</span><span class="p">)</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;(a) Recovered Models&quot;</span><span class="p">)</span>
+
+    <span class="c1"># RESOLVE Data</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span>
+        <span class="n">frequency_cp</span><span class="p">,</span> <span class="n">dobs_re</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">))[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">bp</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">,</span> <span class="s2">&quot;k-&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Obs (real)&quot;</span>
+    <span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span>
+        <span class="n">frequency_cp</span><span class="p">,</span>
+        <span class="n">dobs_re</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">))[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">bp</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">,</span>
+        <span class="s2">&quot;k--&quot;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Obs (imag)&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span>
+        <span class="n">frequency_cp</span><span class="p">,</span>
+        <span class="n">dpred_re</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">))[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">bp</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">,</span>
+        <span class="s2">&quot;k+&quot;</span><span class="p">,</span>
+        <span class="n">ms</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">markeredgewidth</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Pred (real)&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span>
+        <span class="n">frequency_cp</span><span class="p">,</span>
+        <span class="n">dpred_re</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">))[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">bp</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">,</span>
+        <span class="s2">&quot;ko&quot;</span><span class="p">,</span>
+        <span class="n">ms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+        <span class="n">markeredgecolor</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+        <span class="n">markeredgewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Pred (imag)&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;(b) RESOLVE&quot;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Frequency (Hz)&quot;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Bz (ppm)&quot;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+
+    <span class="c1"># SkyTEM data</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">times_off</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">,</span> <span class="n">dobs_sky</span> <span class="o">/</span> <span class="n">area</span><span class="p">,</span> <span class="s2">&quot;b-&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Obs&quot;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span>
+        <span class="n">times_off</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">,</span>
+        <span class="o">-</span><span class="n">dpred_sky</span> <span class="o">/</span> <span class="n">area</span><span class="p">,</span>
+        <span class="s2">&quot;bo&quot;</span><span class="p">,</span>
+        <span class="n">ms</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">markeredgecolor</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+        <span class="n">markeredgewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Pred&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">times_off</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">*</span> <span class="mf">1e6</span> <span class="o">*</span> <span class="mf">1.2</span><span class="p">,</span> <span class="n">times_off</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">*</span> <span class="mf">1e6</span> <span class="o">*</span> <span class="mf">1.1</span><span class="p">)</span>
+
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time ($\mu s$)&quot;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;dBz / dt (V/A-m$^4$)&quot;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;(c) SkyTEM High-moment&quot;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="n">a3</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">([</span><span class="mf">0.86</span><span class="p">,</span> <span class="mf">0.33</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">],</span> <span class="n">facecolor</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">])</span>
+    <span class="n">a3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">prob</span><span class="o">.</span><span class="n">times</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">,</span> <span class="n">wave</span><span class="p">,</span> <span class="s2">&quot;k-&quot;</span><span class="p">)</span>
+    <span class="n">a3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">rx</span><span class="o">.</span><span class="n">times</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">rx</span><span class="o">.</span><span class="n">times</span><span class="p">),</span> <span class="s2">&quot;k|&quot;</span><span class="p">,</span> <span class="n">markeredgewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">12</span>
+    <span class="p">)</span>
+    <span class="n">a3</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="n">prob</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">*</span> <span class="mf">1e6</span> <span class="o">*</span> <span class="mf">0.75</span><span class="p">,</span> <span class="n">prob</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">*</span> <span class="mf">1e6</span> <span class="o">*</span> <span class="mf">1.1</span><span class="p">])</span>
+    <span class="n">a3</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;(d) Waveform&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+    <span class="n">a3</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="n">prob</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">,</span> <span class="n">t0</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">,</span> <span class="n">prob</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">])</span>
+    <span class="n">a3</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+    <span class="c1"># a3.set_xticklabels([&#39;0&#39;, &#39;2e4&#39;])</span>
+    <span class="n">a3</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s2">&quot;-1e4&quot;</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;1e4&quot;</span><span class="p">])</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">saveFig</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;booky1D_time_freq.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">plotIt</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="n">resolve</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">skytem</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">cleanup</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">directory</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;._bookpurnong_inversion&quot;</span><span class="p">])</span>
+        <span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">downloads</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">run</span><span class="p">(</span><span class="n">plotIt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">saveFig</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cleanup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  31.382 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  26 MB</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-content-examples-20-published-plot-booky-1d-time-freq-inv-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/7d4867e795660b8698b01265ebf57e9f/plot_booky_1D_time_freq_inv.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_booky_1D_time_freq_inv.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/09529b559fbda90a447993ef9cc0e22d/plot_booky_1D_time_freq_inv.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_booky_1D_time_freq_inv.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="index.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">In Publication</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="plot_booky_1Dstitched_resolve_inv.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">Heagy et al., 2017 1D RESOLVE Bookpurnong Inversion</p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div id="searchbox"></div>
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+<div class="tocsection sourcelink">
+    <a href="../../../_sources/content/examples/20-published/plot_booky_1D_time_freq_inv.rst.txt">
+        <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+</div>
+
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>

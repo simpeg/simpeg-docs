@@ -1,0 +1,1326 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>3D Least-Squares Inversion of DC Resistivity Data &#8212; SimPEG 0.18.1 documentation</title>
+  <script>
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+
+  
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/tutorials/05-dcr/plot_inv_3_dcr3d';</script>
+    <link rel="shortcut icon" href="../../../_static/logo-block.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Induced Polarization" href="../06-ip/index.html" />
+    <link rel="prev" title="2.5D DC Resistivity Inversion with Sparse Norms" href="plot_inv_2_dcr2d_irls.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="None">
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-45185336-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../_static/simpeg-logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../_static/simpeg-logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="../../getting_started.html">
+                        Getting Started
+                    </a>
+                </li>
+                
+
+                <li class="nav-item current active">
+                    <a class="nav-link" href="../../user_guide.html">
+                        User Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../api/index.html">
+                        API Reference
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../release/index.html">
+                        Release Notes
+                    </a>
+                </li>
+                
+
+            <li class="nav-item">
+                <a class="nav-link nav-external" href="https://simpeg.xyz">SimPEG<i class="fa-solid fa-up-right-from-square"></i></a>
+            </li>
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+            <li class="nav-item">
+                <a class="nav-link nav-external" href="http://slack.simpeg.xyz">Contact<i class="fa-solid fa-up-right-from-square"></i></a>
+            </li>
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      <div class="navbar-end-item navbar-end__search-button-container">
+        
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
+    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="http://slack.simpeg.xyz/" title="Slack" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-slack"></i></span>
+            <label class="sr-only">Slack</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-discourse"></i></span>
+            <label class="sr-only">Discourse</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-youtube"></i></span>
+            <label class="sr-only">Youtube</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/simpegpy" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  <div class="search-button-container--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+  </div>
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="../../getting_started.html">
+                        Getting Started
+                    </a>
+                </li>
+                
+
+                <li class="nav-item current active">
+                    <a class="nav-link" href="../../user_guide.html">
+                        User Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../api/index.html">
+                        API Reference
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../release/index.html">
+                        Release Notes
+                    </a>
+                </li>
+                
+
+            <li class="nav-item">
+                <a class="nav-link nav-external" href="https://simpeg.xyz">SimPEG<i class="fa-solid fa-up-right-from-square"></i></a>
+            </li>
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+            <li class="nav-item">
+                <a class="nav-link nav-external" href="http://slack.simpeg.xyz">Contact<i class="fa-solid fa-up-right-from-square"></i></a>
+            </li>
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
+    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="http://slack.simpeg.xyz/" title="Slack" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-slack"></i></span>
+            <label class="sr-only">Slack</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-discourse"></i></span>
+            <label class="sr-only">Discourse</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-youtube"></i></span>
+            <label class="sr-only">Youtube</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/simpegpy" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01-models_mapping/index.html">Models and Mapping</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01-models_mapping/plot_1_tensor_models.html">Tensor Meshes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01-models_mapping/plot_2_cyl_models.html">Cylindrical Meshes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01-models_mapping/plot_3_tree_models.html">Tree Meshes</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02-linear_inversion/index.html">Linear Problems</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02-linear_inversion/plot_inv_1_inversion_lsq.html">Linear Least-Squares Inversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02-linear_inversion/plot_inv_2_inversion_irls.html">Sparse Inversion with Iteratively Re-Weighted Least-Squares</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03-gravity/index.html">Gravity</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03-gravity/plot_1a_gravity_anomaly.html">Forward Simulation of Gravity Anomaly Data on a Tensor Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03-gravity/plot_1b_gravity_gradiometry.html">Forward Simulation of Gradiometry Data on a Tree Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03-gravity/plot_inv_1a_gravity_anomaly.html">Least-Squares Inversion of Gravity Anomaly Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03-gravity/plot_inv_1b_gravity_anomaly_irls.html">Sparse Norm Inversion of Gravity Anomaly Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04-magnetics/index.html">Magnetics</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04-magnetics/plot_2a_magnetics_induced.html">Forward Simulation of Total Magnetic Intensity Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04-magnetics/plot_2b_magnetics_mvi.html">Forward Simulation of Gradiometry Data for Magnetic Vector Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04-magnetics/plot_inv_2a_magnetics_induced.html">Sparse Norm Inversion for Total Magnetic Intensity Data on a Tensor Mesh</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Direct Current Resistivity</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="plot_fwd_1_dcr_sounding.html">Simulate a 1D Sounding over a Layered Earth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_fwd_2_dcr2d.html">DC Resistivity Forward Simulation in 2.5D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_fwd_3_dcr3d.html">DC Resistivity Forward Simulation in 3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_gen_3_3d_to_2d.html">Convert 3D DC/IP Data to 2D Lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inv_1_dcr_sounding.html">Least-Squares 1D Inversion of Sounding Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inv_1_dcr_sounding_irls.html">Sparse 1D Inversion of Sounding Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inv_1_dcr_sounding_parametric.html">Parametric 1D Inversion of Sounding Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inv_2_dcr2d.html">2.5D DC Resistivity Least-Squares Inversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inv_2_dcr2d_irls.html">2.5D DC Resistivity Inversion with Sparse Norms</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">3D Least-Squares Inversion of DC Resistivity Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../06-ip/index.html">Induced Polarization</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../06-ip/plot_fwd_2_dcip2d.html">2.5D Forward Simulation of a DCIP Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06-ip/plot_fwd_3_dcip3d.html">DC/IP Forward Simulation in 3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06-ip/plot_inv_2_dcip2d.html">2.5D DC Resistivity and IP Least-Squares Inversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06-ip/plot_inv_3_dcip3d.html">3D Least-Squares Inversion of DC and IP Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07-fdem/index.html">Frequency-Domain Electromagnetics</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07-fdem/plot_fwd_1_em1dfm.html">1D Forward Simulation for a Single Sounding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07-fdem/plot_fwd_1_em1dfm_dispersive.html">1D Forward Simulation for a Susceptible and Chargeable Earth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07-fdem/plot_fwd_2_fem_cyl.html">3D Forward Simulation on a Cylindrical Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07-fdem/plot_fwd_3_fem_3d.html">3D Forward Simulation on a Tree Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07-fdem/plot_inv_1_em1dfm.html">1D Inversion of for a Single Sounding</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../08-tdem/index.html">Time-Domain Electromagnetics</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../08-tdem/plot_fwd_1_em1dtm.html">1D Forward Simulation for a Single Sounding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08-tdem/plot_fwd_1_em1dtm_dispersive.html">1D Forward Simulation with Chargeable and/or Magnetic Viscosity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08-tdem/plot_fwd_1_em1dtm_waveforms.html">1D Forward Simulation with User-Defined Waveforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08-tdem/plot_fwd_2_tem_cyl.html">3D Forward Simulation for Transient Response on a Cylindrical Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08-tdem/plot_fwd_3_tem_3d.html">3D Forward Simulation with User-Defined Waveforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08-tdem/plot_inv_1_em1dtm.html">1D Inversion of Time-Domain Data for a Single Sounding</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../09-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../10-vrm/index.html">Viscous Remanent Magnetization</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../10-vrm/plot_fwd_1_vrm_layer.html">Response from a Homogeneous Layer for Different Waveforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10-vrm/plot_fwd_2_vrm_topsoil.html">Forward Simulation of VRM Response on a Tree Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10-vrm/plot_fwd_3_vrm_tem.html">Forward Simulation Including Inductive Response</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../11-flow/index.html">Flow</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../12-seismic/index.html">Seismic</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../12-seismic/plot_fwd_1_tomography_2D.html">Forward Simulation for Straight Ray Tomography in 2D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../12-seismic/plot_inv_1_tomography_2D.html">Sparse Norm Inversion of 2D Seismic Tomography Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../13-joint_inversion/index.html">Joint Inversion</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../13-joint_inversion/plot_inv_3_cross_gradient_pf.html">Cross-gradient Joint Inversion of Gravity and Magnetic Anomaly Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../14-pgi/index.html">Petrophysically Guided Inversion</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-12"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../14-pgi/plot_inv_1_joint_pf_pgi_full_info_tutorial.html">Joint PGI of Gravity + Magnetic on an Octree mesh using full petrophysical information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../14-pgi/plot_inv_2_joint_pf_pgi_no_info_tutorial.html">Joint PGI of Gravity + Magnetic on an Octree mesh without petrophysical information</a></li>
+</ul>
+</li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../examples/index.html">Gallery</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-13"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/01-maps/index.html">Mappings</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-14"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/01-maps/plot_block_in_layer.html">Maps: Parametric Block in a Layer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/01-maps/plot_combo.html">Maps: ComboMaps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/01-maps/plot_layer.html">Maps: Parametrized Layer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/01-maps/plot_mesh2mesh.html">Maps: Mesh2Mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/01-maps/plot_sumMap.html">Maps: ComboMaps</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/02-gravity/index.html">Gravity</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-15"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/02-gravity/plot_inv_grav_tiled.html">PF: Gravity: Tiled Inversion Linear</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/03-magnetics/index.html">Magnetics</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-16"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/03-magnetics/plot_0_analytic.html">PF: Magnetics: Analytics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/03-magnetics/plot_inv_mag_MVI_Sparse_TreeMesh.html">Magnetic inversion on a TreeMesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/03-magnetics/plot_inv_mag_nonLinear_Amplitude.html">Magnetic Amplitude inversion on a TreeMesh</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/04-dcip/index.html">DC Resistivity and Induced Polarization</a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-17"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/04-dcip/plot_dc_analytic.html">DC Analytic Dipole</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/04-dcip/plot_inv_dcip_dipoledipole_3Dinversion_twospheres.html">3D DC inversion of Dipole Dipole array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/04-dcip/plot_inv_dcip_dipoledipole_parametric_inversion.html">Parametric DC inversion with Dipole Dipole array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/04-dcip/plot_read_DC_data_with_IO_class.html">Reading and Plotting data with DC.IO class</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/05-fdem/index.html">Frequency Domain Electromagnetics</a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-18"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/05-fdem/plot_0_fdem_analytic.html">Simulation with Analytic FDEM Solutions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/05-fdem/plot_inv_fdem_loop_loop_2Dinversion.html">2D inversion of Loop-Loop EM Data</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/06-tdem/index.html">Time Domain Electromagnetics</a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-19"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/06-tdem/plot_0_tdem_analytic.html">Simulation with Analytic TDEM Solutions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/06-tdem/plot_fwd_tdem_3d_model.html">Time-domain CSEM for a resistive cube in a deep marine setting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/06-tdem/plot_fwd_tdem_inductive_src_permeable_target.html">EM: TDEM: Permeable Target, Inductive Source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/06-tdem/plot_fwd_tdem_waveforms.html">TDEM: Waveforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/06-tdem/plot_inv_tdem_1D.html">EM: TDEM: 1D: Inversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/06-tdem/plot_inv_tdem_1D_raw_waveform.html">EM: TDEM: 1D: Inversion with VTEM waveform</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/07-nsem/index.html">Natural Source Electromagnetics</a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-20"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/07-nsem/plot_fwd_nsem_MTTipper3D.html">MT: 3D: Forward</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/08-vrm/index.html">Viscous Remanent Magnetization</a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-21"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/08-vrm/plot_fwd_vrm.html">Predict Response from a Conductive and Magnetically Viscous Earth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/08-vrm/plot_inv_vrm_eq.html">Method of Equivalent Sources for Removing VRM Responses</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/09-flow/index.html">Richards Fluid Flow</a><input class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-22"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/09-flow/plot_fwd_flow_richards_1D.html">FLOW: Richards: 1D: Forward Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/09-flow/plot_inv_flow_richards_1D.html">FLOW: Richards: 1D: Inversion</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/10-pgi/index.html">PGI: Petrophysically and Geologically guided Inversion</a><input class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-23"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/10-pgi/plot_inv_0_PGI_Linear_1D.html">Petrophysically guided inversion (PGI): Linear example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/10-pgi/plot_inv_1_PGI_Linear_1D_joint_WithRelationships.html">Petrophysically guided inversion: Joint linear example with nonlinear relationships</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/20-published/index.html">In Publication</a><input class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-24"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_booky_1D_time_freq_inv.html">Heagy et al., 2017 1D RESOLVE and SkyTEM Bookpurnong Inversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_booky_1Dstitched_resolve_inv.html">Heagy et al., 2017 1D RESOLVE Bookpurnong Inversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_effective_medium_theory.html">Effective Medium Theory Mapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_heagyetal2017_casing.html">Heagy et al., 2017 Casing Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_heagyetal2017_cyl_inversions.html">Heagy et al., 2017 1D FDEM and TDEM inversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_laguna_del_maule_inversion.html">PF: Gravity: Laguna del Maule Bouguer Gravity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_load_booky.html">Heagy et al., 2017 Load and Plot Bookpurnong Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_richards_celia1990.html">FLOW: Richards: 1D: Celia1990</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_schenkel_morrison_casing.html">EM: Schenkel and Morrison Casing Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_tomo_joint_with_volume.html">Straight Ray with Volume Data Misfit Term</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_vadose_vangenuchten.html">FLOW: Vadose: van Genuchten</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+      </div>
+      <main class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-content-tutorials-05-dcr-plot-inv-3-dcr3d-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="d-least-squares-inversion-of-dc-resistivity-data">
+<span id="sphx-glr-content-tutorials-05-dcr-plot-inv-3-dcr3d-py"></span><h1>3D Least-Squares Inversion of DC Resistivity Data<a class="headerlink" href="#d-least-squares-inversion-of-dc-resistivity-data" title="Permalink to this headline">#</a></h1>
+<p>Here we invert 5 lines of DC data to recover an electrical
+conductivity model. We formulate the corresponding
+inverse problem as a least-squares optimization problem.
+For this tutorial, we focus on the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Generating a mesh based on survey geometry</p></li>
+<li><p>Including surface topography</p></li>
+<li><p>Defining the inverse problem (data misfit, regularization, directives)</p></li>
+<li><p>Applying sensitivity weighting</p></li>
+<li><p>Plotting the recovered model and data misfit</p></li>
+</ul>
+</div></blockquote>
+<p>The DC data are measured voltages normalized by the source current in V/A.</p>
+<section id="import-modules">
+<h2>Import Modules<a class="headerlink" href="#import-modules" title="Permalink to this headline">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">tarfile</span>
+
+<span class="kn">from</span> <span class="nn">discretize</span> <span class="kn">import</span> <span class="n">TreeMesh</span>
+<span class="kn">from</span> <span class="nn">discretize.utils</span> <span class="kn">import</span> <span class="n">mkvc</span><span class="p">,</span> <span class="n">refine_tree_xyz</span>
+
+<span class="kn">from</span> <span class="nn">SimPEG.utils</span> <span class="kn">import</span> <span class="n">surface2ind_topo</span><span class="p">,</span> <span class="n">model_builder</span>
+<span class="kn">from</span> <span class="nn">SimPEG.utils.io_utils.io_utils_electromagnetics</span> <span class="kn">import</span> <span class="n">read_dcip_xyz</span>
+<span class="kn">from</span> <span class="nn">SimPEG</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">maps</span><span class="p">,</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">data_misfit</span><span class="p">,</span>
+    <span class="n">regularization</span><span class="p">,</span>
+    <span class="n">optimization</span><span class="p">,</span>
+    <span class="n">inverse_problem</span><span class="p">,</span>
+    <span class="n">inversion</span><span class="p">,</span>
+    <span class="n">directives</span><span class="p">,</span>
+    <span class="n">utils</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">SimPEG.electromagnetics.static</span> <span class="kn">import</span> <span class="n">resistivity</span> <span class="k">as</span> <span class="n">dc</span>
+<span class="kn">from</span> <span class="nn">SimPEG.electromagnetics.static.utils.static_utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">apparent_resistivity_from_voltage</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># To plot DC/IP data in 3D, the user must have the plotly package</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">plotly</span>
+    <span class="kn">from</span> <span class="nn">SimPEG.electromagnetics.static.utils.static_utils</span> <span class="kn">import</span> <span class="n">plot_3d_pseudosection</span>
+
+    <span class="n">has_plotly</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">has_plotly</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">pass</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pymatsolver</span> <span class="kn">import</span> <span class="n">Pardiso</span> <span class="k">as</span> <span class="n">Solver</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">SimPEG</span> <span class="kn">import</span> <span class="n">SolverLU</span> <span class="k">as</span> <span class="n">Solver</span>
+
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;font.size&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">})</span>
+
+<span class="c1"># sphinx_gallery_thumbnail_number = 3</span>
+</pre></div>
+</div>
+</section>
+<section id="download-assets">
+<h2>Download Assets<a class="headerlink" href="#download-assets" title="Permalink to this headline">#</a></h2>
+<p>Here we provide the file paths to assets we need to run the inversion. The
+path to the true model conductivity and chargeability models are also
+provided for comparison with the inversion results. These files are stored as a
+tar-file on our google cloud bucket:
+“<a class="reference external" href="https://storage.googleapis.com/simpeg/doc-assets/dcr3d.tar.gz">https://storage.googleapis.com/simpeg/doc-assets/dcr3d.tar.gz</a>”</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># storage bucket where we have the data</span>
+<span class="n">data_source</span> <span class="o">=</span> <span class="s2">&quot;https://storage.googleapis.com/simpeg/doc-assets/dcr3d.tar.gz&quot;</span>
+
+<span class="c1"># download the data</span>
+<span class="n">downloaded_data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">data_source</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># unzip the tarfile</span>
+<span class="n">tar</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">downloaded_data</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+<span class="n">tar</span><span class="o">.</span><span class="n">extractall</span><span class="p">()</span>
+<span class="n">tar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c1"># path to the directory containing our data</span>
+<span class="n">dir_path</span> <span class="o">=</span> <span class="n">downloaded_data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span>
+
+<span class="c1"># files to work with</span>
+<span class="n">topo_filename</span> <span class="o">=</span> <span class="n">dir_path</span> <span class="o">+</span> <span class="s2">&quot;topo_xyz.txt&quot;</span>
+<span class="n">dc_data_filename</span> <span class="o">=</span> <span class="n">dir_path</span> <span class="o">+</span> <span class="s2">&quot;dc_data.xyz&quot;</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>overwriting /home/vsts/work/1/s/tutorials/05-dcr/dcr3d.tar.gz
+Downloading https://storage.googleapis.com/simpeg/doc-assets/dcr3d.tar.gz
+   saved to: /home/vsts/work/1/s/tutorials/05-dcr/dcr3d.tar.gz
+Download completed!
+</pre></div>
+</div>
+</section>
+<section id="load-data-and-topography">
+<h2>Load Data and Topography<a class="headerlink" href="#load-data-and-topography" title="Permalink to this headline">#</a></h2>
+<p>Here we load the observed data and topography.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">topo_xyz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">topo_filename</span><span class="p">))</span>
+
+<span class="n">dc_data</span> <span class="o">=</span> <span class="n">read_dcip_xyz</span><span class="p">(</span>
+    <span class="n">dc_data_filename</span><span class="p">,</span>
+    <span class="s2">&quot;volt&quot;</span><span class="p">,</span>
+    <span class="n">data_header</span><span class="o">=</span><span class="s2">&quot;V/A&quot;</span><span class="p">,</span>
+    <span class="n">uncertainties_header</span><span class="o">=</span><span class="s2">&quot;UNCERT&quot;</span><span class="p">,</span>
+    <span class="n">is_surface_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="plot-observed-data-in-pseudosection">
+<h2>Plot Observed Data in Pseudosection<a class="headerlink" href="#plot-observed-data-in-pseudosection" title="Permalink to this headline">#</a></h2>
+<p>Here we plot the observed DC and IP data in 3D pseudosections.
+To use this utility, you must have Python’s <em>plotly</em> package.
+Here, we represent the DC data as apparent conductivities
+and the IP data as apparent chargeabilities.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert predicted data to apparent conductivities</span>
+<span class="n">apparent_conductivity</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">apparent_resistivity_from_voltage</span><span class="p">(</span>
+    <span class="n">dc_data</span><span class="o">.</span><span class="n">survey</span><span class="p">,</span>
+    <span class="n">dc_data</span><span class="o">.</span><span class="n">dobs</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">if</span> <span class="n">has_plotly</span><span class="p">:</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plot_3d_pseudosection</span><span class="p">(</span>
+        <span class="n">dc_data</span><span class="o">.</span><span class="n">survey</span><span class="p">,</span>
+        <span class="n">apparent_conductivity</span><span class="p">,</span>
+        <span class="n">scale</span><span class="o">=</span><span class="s2">&quot;log&quot;</span><span class="p">,</span>
+        <span class="n">units</span><span class="o">=</span><span class="s2">&quot;S/m&quot;</span><span class="p">,</span>
+        <span class="n">plane_distance</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+        <span class="n">title_text</span><span class="o">=</span><span class="s2">&quot;Apparent Conductivity&quot;</span><span class="p">,</span>
+        <span class="n">title_x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">title_font_size</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span>
+        <span class="n">width</span><span class="o">=</span><span class="mi">650</span><span class="p">,</span>
+        <span class="n">height</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+        <span class="n">scene_camera</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">center</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=-</span><span class="mf">0.4</span><span class="p">),</span> <span class="n">eye</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">1.8</span><span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="n">plotly</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;INSTALL &#39;PLOTLY&#39; TO VISUALIZE 3D PSEUDOSECTIONS&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<html>
+<head><meta charset="utf-8" /></head>
+<body>
+    <div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script src="https://cdn.plot.ly/plotly-2.16.1.min.js"></script>                <div id="8f915b04-b0ea-4be3-9360-809f264378c7" class="plotly-graph-div" style="height:500px; width:650px;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("8f915b04-b0ea-4be3-9360-809f264378c7")) {                    Plotly.newPlot(                        "8f915b04-b0ea-4be3-9360-809f264378c7",                        [{"customdata":[0.012983446287017263,0.011321061538568987,0.011206553082367426,0.008715073075798847,0.02645066688517807,0.03016910944429822,0.013309093456340348,0.011474038774632945,0.008434806478163824,0.00900250433480571,0.0076284658720143905,0.021978151660330437,0.026476895399239305,0.011352589128753535,0.010534370915959584,0.010132001691554024,0.010924010192391672,0.00875403651631213,0.024366198170325707,0.03592090613515706,0.01476767456177847,0.012109731424632774,0.012683206898408302,0.012338557276803202,0.00861525485487011,0.023022293408219097,0.035368685749103325,0.01610084590932123,0.01278324921288801,0.012496157822372825,0.01151072356529956,0.010750632107901833,0.022721297989918,0.04093919332286396,0.019655913463375318,0.01676395918015761,0.014618378209297383,0.013278623584769687,0.011612099045268828,0.009447921461842276,0.018019557324764793,0.022455129967256068,0.018869599038667244,0.015424064092881043,0.015048982106108624,0.012736634241369248,0.009971650963070393,0.009363336015547463,0.01567737842154866,0.029578361260444764,0.031224782581048268,0.032286744389216755,0.030316102844842197,0.024747157479546197,0.02370857052009578,0.0325273036329148,0.013861485209228582,0.016369502306506918,0.018317049414674904,0.018685470448642754,0.014336576272008482,0.01345926355230262,0.018110701459364626,0.027339389197781307,0.009177004643003448,0.010416532750706121,0.010111393810920192,0.007815679157286485,0.0066676852164410175,0.009741544517116054,0.012517051609373919,0.014161189508183694,0.009702084999444877,0.010430494977016709,0.008310207045066562,0.007302247372935264,0.01019423097355589,0.01340196192943481,0.015748897484434612,0.010981706274873231,0.01010924840867281,0.00867231326350224,0.007366846115618703,0.009483057973104208,0.013035848224976478,0.016862139653509106,0.010935627175839438,0.015268576092390579,0.008745552347767487,0.00642140370239384,0.007809516231278559,0.012008703046541405,0.012988320051857682,0.009921438124378967,0.014254266293141098,0.006063497165883046,0.006517476816976906,0.009633239257942447,0.010981550671016443,0.007448064106429532,0.01068933836415368,0.008172458696285275,0.010494204269426632,0.01104975667263083,0.006825191787238993,0.010805522140244713,0.012689676830386194,0.012221261326993051,0.007739040657525369,0.010899778178453091,0.011231741226603946,0.008002849546695369,0.012301338373014593,0.007265438559676415,0.012962197635615652,0.016760187716454367,0.009866168802494054,0.009952072984704746,0.01776543323172697,0.009470425864011972,0.010376194977174614,0.009437845850387106,0.01038386140780879,0.017680890486357414,0.011508164718115988,0.01929536628297909,0.009934617929112122,0.010384343243072042,0.009335153482151292,0.010629163046526491,0.018553881114298617,0.032557243432871044,0.018120091396044882,0.008926034635376789,0.00911415168509392,0.009012189062640943,0.009495017482183206,0.015905861196754006,0.028715207498896365,0.01494285191570904,0.005964806470005193,0.007506236324014283,0.007191443872959104,0.007883458817122628,0.01429817047259075,0.02388814681303793,0.01256989251949226,0.007144352571863758,0.013090859605287226,0.012489689642860052,0.013372763866233869,0.02258381900125128,0.04161827273048225,0.02227860086941836,0.01285513712581584,0.021041397012050503,0.009029796702834922,0.010554311237330671,0.015403248892391832,0.031484178024007776,0.017075956856843395,0.009029839708016874,0.014137462290861904,0.00913031447729418,0.011702153447675579,0.016053917077359925,0.031423701791591714,0.01984653484795558,0.009853653649786031,0.014493386892742254,0.010522147168567537,0.011655937728622395,0.011315479357780003,0.025345641622718715,0.019606319437978158,0.01055333842901927,0.015209162858956099,0.010200125037102456,0.010707144406078204,0.011830828262734329,0.016878434163964676,0.027627656566287902,0.016539332354642056,0.022125169953192927,0.013245453949561621,0.014981886363893254,0.01662623044920828,0.012859475983158345,0.01904246550418449,0.024594715813243066,0.04271491379602034,0.028134986574529796,0.02960885523071023,0.034604456803940094,0.026209579262057654,0.02761750160347647,0.011823976895547043,0.030942156679757544,0.019289414221619196,0.023351934202650998,0.025575955939971372,0.02154359982043741,0.023806447860145595,0.0225466174203316,0.0208016428204792,0.01050109796525764,0.011987140268580254,0.012974363051693449,0.010412877671145631,0.010867241235076501,0.011027724169082435,0.006106368166617642,0.007945215310155093,0.008690886129692014,0.007391770702090891,0.007220651371686703,0.007586125295158963,0.013803282132582792,0.013595549332638006,0.011694248236062936,0.01239134231103417,0.011619766498319908,0.010105027377974609,0.008088951323427405,0.008975135827317333,0.009491304274471254,0.007271845141665701,0.009833144561378892,0.010645761159431798,0.01185513654109476,0.01300501714347869,0.011931592586430796,0.009474614279782414,0.011793605752130037,0.010895250165491213,0.009051166570866177,0.011007795923628208,0.011221389931620265,0.011729447691379041,0.009777268794042667,0.011620517154598031,0.011076022170212944,0.009627020151213767,0.010511274245324446,0.011820790130649277,0.01207325688503979,0.009930623884703537,0.009174006081879635,0.009457395893459323,0.008306671380968385,0.009356458574800669,0.009529911159725625,0.01174959820874829,0.00933577063054741,0.007958643600150994,0.010643735322792993,0.009944182398669605,0.011013656299091205,0.011629114120882677,0.013527535345597601,0.010749551103432866,0.009067254793221806,0.011377542644470055,0.014099673869872239,0.013181492089091097,0.013143194977921782,0.014490366574495392,0.011210350474644006,0.008782355943009077,0.011085437406429425,0.013274336888567252,0.0154724791375653,0.00980169353917843,0.012101212063110734,0.009597691442987883,0.007268467617739432,0.009069259839980685,0.010762296645019757,0.012623889470712907,0.012647999295204866,0.010625401197119896,0.009657691509939562,0.007367026535049439,0.008876311163299106,0.010979667379007971,0.012980041638606473,0.01331914663271865,0.016038144120335735,0.009599142143357341,0.006587466237738469,0.007909466953862005,0.008816511271856167,0.01117805728562437,0.011629443130890111,0.014927383338930568,0.01340279719450455,0.007277790565498415,0.006694939268634331,0.007985061028303136,0.009773337925229735,0.009438936026287413,0.012600551743238049,0.011805664730303202,0.011298597559048213,0.006757594766523303,0.006630812380612229,0.00721917986886979,0.007318245731765498,0.009094061841949334,0.009111602300065632,0.008738198067323101,0.008274223378401004,0.008654929826682272,0.009308356997034244,0.008664717696934077,0.010541427642334024,0.009737567841432048,0.008936882747246822,0.008421328450876583,0.008878619832572564,0.012253360796790121,0.012144231007993443,0.01386845183060832,0.012769713144876862,0.011265853320339374,0.011725341397268942,0.011892850905273537,0.011657462337098596,0.012314494826650507,0.012143627348762523,0.011103517467370566,0.010476912389472254,0.01189136917623809,0.015040664546675334,0.010318103175376563,0.009654227823517577,0.009559536183471266,0.010981566897838404,0.009151977267372765,0.008663684032328565,0.009684599436431069,0.009498261050038414,0.010943368436128408,0.011270293869798496,0.011414213568865099,0.009711598629622644,0.011472907540415597,0.010864065243407368],"hovertemplate":"x: %{x:.2f}<br>y: %{y:.2f}<br>z: %{z:.2f}<br>value: %{customdata:.3e} S/m","marker":{"cmax":-1.3694204657601192,"cmin":-2.224403642584136,"color":[-1.8866100144095448,-1.9461128488784907,-1.9505279473964938,-2.05972896698392,-1.5775633738782546,-1.5204375094847877,-1.875851525315504,-1.9402836868240962,-2.0739248770854912,-2.0456366608390155,-2.11756279236083,-1.6580088340905237,-1.5771329403057979,-1.944905079783843,-1.9773913941692987,-1.9943047463753194,-1.961617903323828,-2.057791646116807,-1.6132122279942933,-1.4446527164219112,-1.8306878868477625,-1.916865488739145,-1.8967709229374297,-1.9087356185323932,-2.064731870807169,-1.6378514155054127,-1.4513810776609815,-1.7931513063222089,-1.8933587443094024,-1.90322349843534,-1.9388973757151173,-1.968565999664373,-1.6435668624963515,-1.3878607190472403,-1.7065067685376067,-1.7756234053336528,-1.835100806162127,-1.8768469400673689,-1.9350892685146437,-2.0246637255586277,-1.7442558822677974,-1.6486844269562522,-1.724237328088612,-1.8118011787779449,-1.8224928741997213,-1.89494532266949,-2.001232931478476,-2.028569391110399,-1.804726558503834,-1.5290258910308403,-1.5055005769467729,-1.4909757445486629,-1.5183266282959975,-1.6064746780170156,-1.625094630498812,-1.4877519362841158,-1.8581902341098182,-1.785964524547955,-1.7371444829677294,-1.7284959633386934,-1.843554550460735,-1.8709787026619082,-1.7420647283700035,-1.5632111924381427,-2.03729904856914,-1.9822768163358773,-1.9951889747088116,-2.1070332772166167,-2.1760249115419388,-2.0113721804845928,-1.9024979571139953,-1.8489002653508217,-2.0131349248626895,-1.98169508172818,-2.080388155829636,-2.136543458858076,-1.9916455307037166,-1.8728316200861113,-1.8027498439814191,-1.959330176444133,-1.995281131659207,-2.0618650428267697,-2.132718401929513,-2.0230515944452607,-1.8848607046228896,-1.7730873181600533,-1.9611563044237457,-1.8162014622265898,-2.0582127563382855,-2.192370025892468,-2.1073758681193038,-1.9205038943577601,-1.8864470182410504,-2.0034253717758777,-1.846055132127989,-2.2172768210859126,-2.185920504966217,-2.0162276531350147,-1.9593363301668285,-2.127956593983107,-1.9710491753983093,-2.087647265672123,-1.9790504865240526,-1.956647285498985,-2.165885140482176,-1.966354242464386,-1.896549437997269,-1.912883969291167,-2.111312871741576,-1.962582340302867,-1.9495529110148926,-2.0967553477510728,-1.9100476351952178,-2.1387381654954987,-1.887321361111308,-1.775721121519361,-2.0058514583686518,-2.00208644769161,-1.7504241972456211,-2.0236304912995804,-1.9839618760994344,-2.0251271203256596,-1.9836411169829922,-1.7524958658177259,-1.9389939306140989,-1.7145469728237703,-2.0028488305641305,-1.9836209651788694,-2.0298785372860424,-1.97350093101625,-1.7315652305115061,-1.4873523732107392,-1.7418396161129663,-2.0493414323146877,-2.040283747812919,-2.045169705984999,-2.0225042313051933,-1.7984428117579536,-1.5418880411170965,-1.82556650740321,-2.224403642584136,-2.1245777665150394,-2.143183904734721,-2.1032831967726566,-1.8447195292824805,-1.6218175405008184,-1.9006684357898567,-2.1460371212756373,-1.8830318347650894,-1.903448353304643,-1.8737788240166997,-1.6462026155143783,-1.3807159481317581,-1.6521120870068755,-1.8909232863748726,-1.676925429229169,-2.0443220272978855,-1.976570103008786,-1.812387667006116,-1.501907640595921,-1.7676149511308288,-2.0443199589380594,-1.8496285404673678,-2.0395142637141714,-1.9317342113832363,-1.794418984596945,-1.5027426552933703,-1.7023153089401433,-2.006402706992128,-1.838830114394221,-1.9778956282136537,-1.9334527814326368,-1.9463270432974953,-1.596096710174289,-1.707603925852864,-1.9766101344939175,-1.817894689677536,-1.991394504454671,-1.9703263400032984,-1.9269848498485405,-1.7726678459504457,-1.5586559512576488,-1.7814820256508883,-1.6551133846097805,-1.8779331529264858,-1.824433501332641,-1.7792062042187085,-1.8907767283215577,-1.7202768224671965,-1.609158191256852,-1.3694204657601192,-1.550753287746847,-1.5285783834447595,-1.460867963614468,-1.5815399506532966,-1.558815612104272,-1.9272364275746072,-1.509449419095756,-1.7146809607532725,-1.6316771417039173,-1.5921681249004203,-1.6666817266866847,-1.6233054004717513,-1.646918604379186,-1.6819023650519074,-1.9787652899468897,-1.9212844127067643,-1.8869139537049218,-1.9824292336024425,-1.9638806922014311,-1.957514105219834,-2.214217014660642,-2.099894329199806,-2.0609359402814293,-2.1312515136982833,-2.1414236231548403,-2.11997998861098,-1.8600176351502478,-1.8666032399107173,-1.9320276915481527,-1.9068816454642048,-1.9348025990980189,-1.9954625054948236,-2.0921077780131254,-2.0469589702027857,-2.0226741036649574,-2.138355378250908,-2.007307576036931,-1.9728232815696503,-1.9260934396864242,-1.8858890709718925,-1.9233015843818622,-2.0234384615257874,-1.9283533943245545,-1.9627627934815086,-2.0432954426026013,-1.9582996305315028,-1.9499533460881813,-1.9307224371797473,-2.0097824451440416,-1.9347745438570092,-1.9556161836242323,-2.0165081191215966,-1.9783446327663916,-1.9273534931745406,-1.9181755587010776,-2.003023466391548,-2.037440976289725,-2.0242284307008274,-2.08057297025645,-2.0288885008833097,-2.020911147947274,-1.9299769843460324,-2.029849826961751,-2.0991609432127487,-1.9729059335644366,-2.00243091835583,-1.958068480581917,-1.9344533675644087,-1.8687813226418828,-1.968609671317918,-2.0425241802626224,-1.9439515280278257,-1.8507909326036915,-1.8800354266629788,-1.8812990493411923,-1.838920627691916,-1.9503808096329824,-2.056388965210215,-1.9552471659278567,-1.8769871646215655,-1.810440094219015,-2.0086988803098587,-1.9171711283647088,-2.017833216350019,-2.1385571400774013,-2.042428155115068,-1.9680950415108929,-1.8988068166116523,-1.8979781672764044,-1.973654662745338,-2.0151266711318514,-2.132707765871355,-2.051767481774064,-1.9594108163203046,-1.8867239143624586,-1.8755235998334192,-1.794845888229484,-2.0177675772784798,-2.1812815976316102,-2.1018527841125527,-2.0547032329083965,-1.951633669029757,-1.9344410807119456,-1.826016314248121,-1.8728045539215428,-2.1380004463531193,-2.174253358221295,-2.097721760282667,-2.0099570847019907,-2.025076957392017,-1.8996104379143808,-1.9279095544916478,-1.9469754600710594,-2.1702078551683335,-2.178433260312628,-2.1415121374241632,-2.1355930118816544,-2.041242096807178,-2.0404052444443512,-2.058578115432062,-2.0822727586764977,-2.0627364489911537,-2.0311269688673788,-2.062245582362756,-1.977100567946912,-2.011549503588242,-2.0488139400128986,-2.074619393847476,-2.0516545393659085,-1.9117447786203028,-1.9156299802049663,-1.8579720175821688,-1.893818858491975,-1.9482359075105662,-1.9308745034281003,-1.9247140256153823,-1.9333959789887758,-1.909583399374865,-1.915651568429761,-1.9545394198909993,-1.9797666877516762,-1.924768137689892,-1.822732974743172,-1.986400133734209,-2.015282456778039,-2.0195631786282515,-1.959335688434687,-2.038485067295241,-2.0622973949698116,-2.013918337375971,-2.022355898448125,-1.9608489789115149,-1.948064759697641,-1.9425540057215374,-2.0127092748419355,-1.9403265063585116,-1.964007634929671],"colorbar":{"thickness":20,"tickformat":".2f","tickprefix":"10^","title":{"text":"S/m"}},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"opacity":0.8,"size":4},"mode":"markers","name":"","x":[-831.801697493645,-762.1003298811206,-687.7795142053174,-618.1983879597631,-556.5436795981835,-499.84812392847897,-445.69351488034437,-392.88252185662935,-718.7641777454857,-644.5660155346561,-575.0163180584245,-513.3042065658518,-456.54367972348143,-402.34183199437837,-349.50009727196135,-299.3332452985202,-606.3641294812962,-536.8057599305594,-475.0163182953631,-418.1983883246089,-363.96784343404113,-311.1151329801461,-260.94670985968366,-213.47225921518285,-506.36412948129623,-444.56601577196216,-387.77951457160935,-333.59474355260363,-280.7866037875624,-230.66410351672312,-183.23496075539163,-137.16651530739807,-418.7641779863947,-362.10033025205996,-308.01582453213524,-255.28276457233065,-205.22801988605778,-157.85920364515118,-111.83771966133142,-68.39561762921252,-331.8016978689355,-277.77553524537626,-225.08299886504622,-175.0655769802099,-127.72965498108701,-81.7321146720638,-38.30902766597786,0.0,-239.42134825283478,-186.73970770142228,-136.7340369140297,-89.4088960395486,-43.41850768600071,0.0,38.30902766597786,68.39561762921252,-143.3123653984777,-93.31028734125245,-45.98860922870199,0.0,43.41850768600071,81.7321146720638,111.83771966133142,137.16651530739807,-47.32045651984216,0.0,45.98860922870199,89.4088960395486,127.72965498108701,157.85920364515118,183.23496075539163,213.47225921518285,47.32045651984216,93.31028734125245,136.7340369140297,175.0655769802099,205.22801988605778,230.66410351672312,260.94670985968366,299.3332452985202,143.3123653984777,186.73970770142228,225.08299886504622,255.28276457233065,280.7866037875624,311.1151329801461,349.50009727196135,392.88252185662935,239.42134825283478,277.77553524537626,308.01582453213524,333.59474355260363,363.96784343404113,402.34183199437837,445.69351488034437,331.8016978689355,362.10033025205996,387.77951457160935,418.1983883246089,456.54367972348143,499.84812392847897,418.7641779863947,444.56601577196216,475.0163182953631,513.3042065658518,556.5436795981835,506.36412948129623,536.8057599305594,575.0163180584245,618.1983879597631,606.3641294812962,644.5660155346561,687.7795142053174,718.7641777454857,762.1003298811206,831.801697493645,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,-350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0,350.0],"y":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-838.7967372111749,-777.5433556226294,-710.2346247381472,-639.6082629833975,-572.4542089454686,-511.7191692090214,-455.87944412222873,-403.2591906341685,-731.8932543700646,-664.6236283284164,-594.0565814009348,-526.9297518577417,-466.1772131920386,-410.30515556403293,-357.65527405781376,-307.52588359777394,-621.5498285947369,-551.0487144411794,-483.9389868879786,-423.153522953256,-367.24076269384466,-314.5599495977717,-264.41039187489855,-216.7998993779168,-512.3671336462647,-445.253173846378,-384.4276873075322,-328.4839975226312,-275.78947740323156,-225.63842220320572,-178.03400181703432,-133.70900918214252,-412.44196470245214,-351.6138668959079,-295.6921221221301,-243.0321699994674,-192.91885078819402,-145.35185249941566,-101.06378131769219,-61.79613930872789,-322.12063786423545,-266.27351236232676,-213.68317466056698,-163.62916840526236,-116.11252080717689,-71.86850143527315,-32.63955018719098,0.0,-233.47953220343356,-180.93570901393065,-130.91884567910765,-83.43198465890904,-39.212039878042205,0.0,32.63955018719098,61.79613930872789,-141.69397484306356,-91.6899925843092,-44.213191319316536,0.0,39.212039878042205,71.86850143527315,101.06378131769219,133.70900918214252,-47.47441839383657,0.0,44.213191319316536,83.43198465890904,116.11252080717689,145.35185249941566,178.03400181703432,216.7998993779168,47.47441839383657,91.6899925843092,130.91884567910765,163.62916840526236,192.91885078819402,225.63842220320572,264.41039187489855,307.51390028676377,141.69397484306356,180.93570901393065,213.68317466056698,243.0321699994674,275.78947740323156,314.5599495977717,357.6433409843503,403.2472254264266,233.47953220343356,266.27351236232676,295.6921221221301,328.4839975226312,367.24076269384466,410.2932785915366,455.86752043429885,322.12063786423545,351.6138668959079,384.4276873075322,423.153522953256,466.16539231187926,511.70728293208737,412.44196470245214,445.253173846378,483.9389868879786,526.9179642434526,572.4423371425238,512.3671336462647,551.0487144411794,594.0447613238174,639.5963528606212,621.5498285947369,664.6117058495589,710.2226292039804,731.8812282157645,777.5312822304456,838.7846188956951,-838.8364051947356,-777.5828764600024,-710.2226292039804,-639.5963528606212,-572.4852527452048,-511.75025078551437,-455.86752043429885,-403.2472254264266,-731.9326211999659,-664.6117058495589,-594.0447613238174,-526.9605756647044,-466.2081238674396,-410.2932785915366,-357.6433409843503,-307.51390028676377,-621.4993722289423,-550.9987501865583,-483.93129577455886,-423.1457884544739,-367.1902109447811,-314.50907826418165,-264.3592527716289,-216.74853493835477,-512.3178454651928,-445.2455541211448,-384.4199914248777,-328.43355671211367,-275.73863716187054,-225.58727065995055,-177.9826021593606,-133.65740195717783,-412.48367317542284,-351.65617567557763,-295.6921221221301,-243.0321699994674,-192.91885078819402,-145.35185249941566,-101.06378131769219,-61.79613930872789,-322.1633766924443,-266.27351236232676,-213.68317466056698,-163.62916840526236,-116.11252080717689,-71.86850143527315,-32.63955018719098,0.0,-233.435969584803,-180.89196246531893,-130.8749826722217,-83.38804382133097,-39.16804780635035,0.044013499913003,32.68353267964564,61.8400340372795,-141.6500757648258,-91.64602999971905,-44.16919174160014,0.0440134998294664,39.256032123774034,71.91240851762814,101.10754823465918,133.75266522371558,-47.47441839383657,0.0,44.213191319316536,83.43198465890904,116.11252080717689,145.35185249941566,178.03400181703432,216.7998993779168,47.47441839383657,91.6899925843092,130.91884567910765,163.62916840526236,192.91885078819402,225.63842220320572,264.41039187489855,307.52588359777394,141.69397484306356,180.93570901393065,213.68317466056698,243.0321699994674,275.78947740323156,314.5599495977717,357.65527405781376,403.2591906341685,233.47953220343356,266.27351236232676,295.6921221221301,328.4839975226312,367.24076269384466,410.30515556403293,455.87944412222873,322.12063786423545,351.6138668959079,384.4276873075322,423.153522953256,466.1772131920386,511.7191692090214,412.44196470245214,445.253173846378,483.9389868879786,526.9297518577417,572.4542089454686,512.3671336462647,551.0487144411794,594.0565814009348,639.6082629833975,621.5498285947369,664.6236283284164,710.2346247381472,731.8932543700646,777.5433556226294,838.7967372111749],"z":[-118.54057891,-178.50641176,-240.89711236,-300.86294521,-356.70905566,-409.99999981,-462.00579606,-513.34568806,-131.797355975,-194.18805657500002,-254.153889425,-309.999999875,-363.290944025,-415.296740275,-466.636632275,-516.636632275,-150.03416715,-210.0,-265.84611044999997,-319.1370546,-371.14285085,-422.48274285,-472.48274285,-521.1428508500001,-169.96583285,-225.8119433,-279.10288745,-331.10868370000003,-382.4485757,-432.4485757,-481.10868370000003,-529.10288745,-188.2026439,-241.49358805,-293.4993843,-344.8392763,-394.8392763,-443.4993843,-491.49358804999997,-538.2026439,-201.4594209,-253.46521715,-304.80510915,-354.80510915,-403.46521715,-451.4594209,-498.16847674999997,-542.3223663,-209.3113276,-260.6512196,-310.6512196,-359.3113276,-407.30553135,-454.0145872,-498.16847674999997,-538.2026439,-213.94216375,-263.94216374999996,-312.60227175,-360.5964755,-407.30553135,-451.4594209,-491.49358804999997,-529.10288745,-215.94796,-264.608068,-312.60227175,-359.3113276,-403.46521715,-443.4993843,-481.10868370000003,-521.1428508500001,-215.94796,-263.94216374999996,-310.6512196,-354.80510915,-394.8392763,-432.4485757,-472.48274285,-516.636632275,-213.94216375,-260.6512196,-304.80510915,-344.8392763,-382.4485757,-422.48274285,-466.636632275,-513.34568806,-209.3113276,-253.46521715,-293.4993843,-331.10868370000003,-371.14285085,-415.296740275,-462.00579606,-201.4594209,-241.49358805,-279.10288745,-319.1370546,-363.290944025,-409.99999981,-188.2026439,-225.8119433,-265.84611044999997,-309.999999875,-356.70905566,-169.96583285,-210.0,-254.153889425,-300.86294521,-150.03416715,-194.18805657500002,-240.89711236,-131.797355975,-178.50641176,-118.54057891,-112.2807128925,-167.9301853675,-226.6519448425,-287.0888388675,-345.7711083175,-401.1659604675,-454.0596676425,-505.3225591425,-120.099393655,-178.82115313,-239.25804715499999,-297.940316605,-353.335168755,-406.22887593,-457.49176743,-507.49176743,-132.26238545,-192.699279475,-251.381548925,-306.77640107499997,-359.67010825,-410.93299975,-460.93299975,-509.67010825,-148.34875195,-207.0310214,-262.42587355,-315.319580725,-366.582472225,-416.582472225,-465.319580725,-512.42587355,-165.75278087499998,-221.147633025,-274.0413402,-325.3042317,-375.3042317,-424.0413402,-471.147633025,-515.752780875,-181.58452705,-234.478234225,-285.74112572499996,-335.74112572499996,-384.478234225,-431.58452705,-476.1896749,-517.50740545,-193.160503675,-244.423395175,-294.423395175,-343.160503675,-390.2667965,-434.87194435000004,-476.1896749,-515.752780875,-199.818247325,-249.818247325,-298.555355825,-345.66164864999996,-390.2667965,-431.58452705,-471.147633025,-512.42587355,-202.7119545,-251.449063,-298.555355825,-343.160503675,-384.478234225,-424.0413402,-465.319580725,-509.67010825,-202.7119545,-249.818247325,-294.423395175,-335.74112572499996,-375.3042317,-416.582472225,-460.93299975,-507.48567961,-199.818247325,-244.423395175,-285.74112572499996,-325.3042317,-366.582472225,-410.93299975,-457.48567961,-505.3164713225,-193.160503675,-234.478234225,-274.0413402,-315.319580725,-359.67010825,-406.22278811,-454.0535798225,-181.58452705,-221.147633025,-262.42587355,-306.77640107499997,-353.329080935,-401.1598726475,-165.75278087499998,-207.0310214,-251.381548925,-297.934228785,-345.7650204975,-148.34875195,-192.699279475,-239.25195933499998,-287.0827510475,-132.26238545,-178.81506531,-226.6458570225,-120.093305835,-167.9240975475,-112.2746250725,-112.2486098725,-167.8980823475,-226.6458570225,-287.0827510475,-345.7430137475,-401.1378658975,-454.0535798225,-505.3164713225,-120.067290635,-178.81506531,-239.25195933499998,-297.912222035,-353.307074185,-406.22278811,-457.48567961,-507.48567961,-132.23637025,-192.673264275,-251.33352697499998,-306.728379125,-359.64409305,-410.90698455,-460.90698455,-509.64409305,-148.32273675,-206.98299945,-262.3778516,-315.29356552499996,-366.556457025,-416.556457025,-465.29356552499996,-512.39985835,-165.73077412499998,-221.125626275,-274.0413402,-325.3042317,-375.3042317,-424.0413402,-471.147633025,-515.752780875,-181.5625203,-234.478234225,-285.74112572499996,-335.74112572499996,-384.478234225,-431.58452705,-476.1896749,-517.50740545,-193.138496925,-244.401388425,-294.401388425,-343.138496925,-390.24478975,-434.8499376,-476.16766815,-515.730774125,-199.796240575,-249.796240575,-298.533349075,-345.6396419,-390.24478975,-431.56252029999996,-471.125626275,-512.4038668000001,-202.7119545,-251.449063,-298.555355825,-343.160503675,-384.478234225,-424.0413402,-465.319580725,-509.67010825,-202.7119545,-249.818247325,-294.423395175,-335.74112572499996,-375.3042317,-416.582472225,-460.93299975,-507.49176743,-199.818247325,-244.423395175,-285.74112572499996,-325.3042317,-366.582472225,-410.93299975,-457.49176743,-505.3225591425,-193.160503675,-234.478234225,-274.0413402,-315.319580725,-359.67010825,-406.22887593,-454.0596676425,-181.58452705,-221.147633025,-262.42587355,-306.77640107499997,-353.335168755,-401.1659604675,-165.75278087499998,-207.0310214,-251.381548925,-297.940316605,-345.7711083175,-148.34875195,-192.699279475,-239.25804715499999,-287.0888388675,-132.26238545,-178.82115313,-226.6519448425,-120.099393655,-167.9301853675,-112.2807128925],"type":"scatter3d"}],                        {"height":500,"scene":{"camera":{"center":{"x":0,"y":0,"z":-0.4},"eye":{"x":1.5,"y":-1.5,"z":1.8}},"xaxis":{"title":{"text":"X[m]"}},"yaxis":{"title":{"text":"Y[m]"}},"zaxis":{"title":{"text":"Z[m]"}}},"template":{"data":{"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"#E5ECF6","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2}}},"title":{"font":{"size":24},"text":"Apparent Conductivity","x":0.5},"width":650},                        {"responsive": true}                    )                };                            </script>        </div>
+</body>
+</html></section>
+<section id="assign-uncertainties">
+<h2>Assign Uncertainties<a class="headerlink" href="#assign-uncertainties" title="Permalink to this headline">#</a></h2>
+<p>Inversion with SimPEG requires that we define the uncertainties on our data.
+This represents our estimate of the standard deviation of the
+noise in our data. For DC data, the uncertainties are 10% of the absolute value.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dc_data</span><span class="o">.</span><span class="n">standard_deviation</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dc_data</span><span class="o">.</span><span class="n">dobs</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="create-tree-mesh">
+<h2>Create Tree Mesh<a class="headerlink" href="#create-tree-mesh" title="Permalink to this headline">#</a></h2>
+<p>Here, we create the Tree mesh that will be used to invert
+DC data.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dh</span> <span class="o">=</span> <span class="mf">25.0</span>  <span class="c1"># base cell width</span>
+<span class="n">dom_width_x</span> <span class="o">=</span> <span class="mf">6000.0</span>  <span class="c1"># domain width x</span>
+<span class="n">dom_width_y</span> <span class="o">=</span> <span class="mf">6000.0</span>  <span class="c1"># domain width y</span>
+<span class="n">dom_width_z</span> <span class="o">=</span> <span class="mf">4000.0</span>  <span class="c1"># domain width z</span>
+<span class="n">nbcx</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">dom_width_x</span> <span class="o">/</span> <span class="n">dh</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)))</span>  <span class="c1"># num. base cells x</span>
+<span class="n">nbcy</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">dom_width_y</span> <span class="o">/</span> <span class="n">dh</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)))</span>  <span class="c1"># num. base cells y</span>
+<span class="n">nbcz</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">dom_width_z</span> <span class="o">/</span> <span class="n">dh</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)))</span>  <span class="c1"># num. base cells z</span>
+
+<span class="c1"># Define the base mesh</span>
+<span class="n">hx</span> <span class="o">=</span> <span class="p">[(</span><span class="n">dh</span><span class="p">,</span> <span class="n">nbcx</span><span class="p">)]</span>
+<span class="n">hy</span> <span class="o">=</span> <span class="p">[(</span><span class="n">dh</span><span class="p">,</span> <span class="n">nbcy</span><span class="p">)]</span>
+<span class="n">hz</span> <span class="o">=</span> <span class="p">[(</span><span class="n">dh</span><span class="p">,</span> <span class="n">nbcz</span><span class="p">)]</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">TreeMesh</span><span class="p">([</span><span class="n">hx</span><span class="p">,</span> <span class="n">hy</span><span class="p">,</span> <span class="n">hz</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="s2">&quot;CCN&quot;</span><span class="p">)</span>
+
+<span class="c1"># Mesh refinement based on topography</span>
+<span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">topo_xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">1200</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">refine_tree_xyz</span><span class="p">(</span>
+    <span class="n">mesh</span><span class="p">,</span> <span class="n">topo_xyz</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="n">octree_levels</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;surface&quot;</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+
+<span class="c1"># Mesh refinement near sources and receivers.</span>
+<span class="n">electrode_locations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span>
+    <span class="n">dc_data</span><span class="o">.</span><span class="n">survey</span><span class="o">.</span><span class="n">locations_a</span><span class="p">,</span>
+    <span class="n">dc_data</span><span class="o">.</span><span class="n">survey</span><span class="o">.</span><span class="n">locations_b</span><span class="p">,</span>
+    <span class="n">dc_data</span><span class="o">.</span><span class="n">survey</span><span class="o">.</span><span class="n">locations_m</span><span class="p">,</span>
+    <span class="n">dc_data</span><span class="o">.</span><span class="n">survey</span><span class="o">.</span><span class="n">locations_n</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">unique_locations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">electrode_locations</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">refine_tree_xyz</span><span class="p">(</span>
+    <span class="n">mesh</span><span class="p">,</span> <span class="n">unique_locations</span><span class="p">,</span> <span class="n">octree_levels</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;radial&quot;</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+
+<span class="c1"># Finalize the mesh</span>
+<span class="n">mesh</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="project-electrodes-to-discretized-topography">
+<h2>Project Electrodes to Discretized Topography<a class="headerlink" href="#project-electrodes-to-discretized-topography" title="Permalink to this headline">#</a></h2>
+<p>It is important that electrodes are not modeled as being in the air. Even if the
+electrodes are properly located along surface topography, they may lie above
+the discretized topography. This step is carried out to ensure all electrodes
+lie on the discretized surface.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find cells that lie below surface topography</span>
+<span class="n">ind_active</span> <span class="o">=</span> <span class="n">surface2ind_topo</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">topo_xyz</span><span class="p">)</span>
+
+<span class="c1"># Extract survey from data object</span>
+<span class="n">dc_survey</span> <span class="o">=</span> <span class="n">dc_data</span><span class="o">.</span><span class="n">survey</span>
+
+<span class="c1"># Shift electrodes to the surface of discretized topography</span>
+<span class="n">dc_survey</span><span class="o">.</span><span class="n">drape_electrodes_on_topography</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">ind_active</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">)</span>
+
+<span class="c1"># Reset survey in data object</span>
+<span class="n">dc_data</span><span class="o">.</span><span class="n">survey</span> <span class="o">=</span> <span class="n">dc_survey</span>
+</pre></div>
+</div>
+</section>
+<section id="starting-reference-model-and-mapping-on-octree-mesh">
+<h2>Starting/Reference Model and Mapping on OcTree Mesh<a class="headerlink" href="#starting-reference-model-and-mapping-on-octree-mesh" title="Permalink to this headline">#</a></h2>
+<p>Here, we create starting and/or reference models for the DC inversion as
+well as the mapping from the model space to the active cells. Starting and
+reference models can be a constant background value or contain a-priori
+structures. Here, the starting model is the natural log of 0.01 S/m.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define conductivity model in S/m (or resistivity model in Ohm m)</span>
+<span class="n">air_conductivity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1e-8</span><span class="p">)</span>
+<span class="n">background_conductivity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1e-2</span><span class="p">)</span>
+
+<span class="c1"># Define the mapping from active cells to the entire domain</span>
+<span class="n">active_map</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="n">InjectActiveCells</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">ind_active</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">air_conductivity</span><span class="p">))</span>
+<span class="n">nC</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ind_active</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+
+<span class="c1"># Define the mapping from the model to the conductivity of the entire domain</span>
+<span class="n">conductivity_map</span> <span class="o">=</span> <span class="n">active_map</span> <span class="o">*</span> <span class="n">maps</span><span class="o">.</span><span class="n">ExpMap</span><span class="p">()</span>
+
+<span class="c1"># Define starting model</span>
+<span class="n">starting_conductivity_model</span> <span class="o">=</span> <span class="n">background_conductivity</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nC</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="define-the-physics-of-the-dc-simulation">
+<h2>Define the Physics of the DC Simulation<a class="headerlink" href="#define-the-physics-of-the-dc-simulation" title="Permalink to this headline">#</a></h2>
+<p>Here, we define the physics of the DC resistivity simulation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dc_simulation</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">Simulation3DNodal</span><span class="p">(</span>
+    <span class="n">mesh</span><span class="p">,</span> <span class="n">survey</span><span class="o">=</span><span class="n">dc_survey</span><span class="p">,</span> <span class="n">sigmaMap</span><span class="o">=</span><span class="n">conductivity_map</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="n">Solver</span><span class="p">,</span> <span class="n">storeJ</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="define-dc-inverse-problem">
+<h2>Define DC Inverse Problem<a class="headerlink" href="#define-dc-inverse-problem" title="Permalink to this headline">#</a></h2>
+<p>The inverse problem is defined by 3 things:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Data Misfit: a measure of how well our recovered model explains the field data</p></li>
+<li><p>Regularization: constraints placed on the recovered model and a priori information</p></li>
+<li><p>Optimization: the numerical approach used to solve the inverse problem</p></li>
+</ol>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the data misfit. Here the data misfit is the L2 norm of the weighted</span>
+<span class="c1"># residual between the observed data and the data predicted for a given model.</span>
+<span class="c1"># Within the data misfit, the residual between predicted and observed data are</span>
+<span class="c1"># normalized by the data&#39;s standard deviation.</span>
+<span class="n">dc_data_misfit</span> <span class="o">=</span> <span class="n">data_misfit</span><span class="o">.</span><span class="n">L2DataMisfit</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">dc_data</span><span class="p">,</span> <span class="n">simulation</span><span class="o">=</span><span class="n">dc_simulation</span><span class="p">)</span>
+
+<span class="c1"># Define the regularization (model objective function)</span>
+<span class="n">dc_regularization</span> <span class="o">=</span> <span class="n">regularization</span><span class="o">.</span><span class="n">WeightedLeastSquares</span><span class="p">(</span>
+    <span class="n">mesh</span><span class="p">,</span>
+    <span class="n">indActive</span><span class="o">=</span><span class="n">ind_active</span><span class="p">,</span>
+    <span class="n">reference_model</span><span class="o">=</span><span class="n">starting_conductivity_model</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">dc_regularization</span><span class="o">.</span><span class="n">reference_model_in_smooth</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="kc">True</span>  <span class="c1"># Include reference model in smoothness</span>
+<span class="p">)</span>
+
+<span class="c1"># Define how the optimization problem is solved.</span>
+<span class="n">dc_optimization</span> <span class="o">=</span> <span class="n">optimization</span><span class="o">.</span><span class="n">InexactGaussNewton</span><span class="p">(</span>
+    <span class="n">maxIter</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">maxIterLS</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">maxIterCG</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">tolCG</span><span class="o">=</span><span class="mf">1e-2</span>
+<span class="p">)</span>
+
+<span class="c1"># Here we define the inverse problem that is to be solved</span>
+<span class="n">dc_inverse_problem</span> <span class="o">=</span> <span class="n">inverse_problem</span><span class="o">.</span><span class="n">BaseInvProblem</span><span class="p">(</span>
+    <span class="n">dc_data_misfit</span><span class="p">,</span> <span class="n">dc_regularization</span><span class="p">,</span> <span class="n">dc_optimization</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="define-dc-inversion-directives">
+<h2>Define DC Inversion Directives<a class="headerlink" href="#define-dc-inversion-directives" title="Permalink to this headline">#</a></h2>
+<p>Here we define any directives that are carried out during the inversion. This
+includes the cooling schedule for the trade-off parameter (beta), stopping
+criteria for the inversion and saving inversion results at each iteration.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply and update sensitivity weighting as the model updates</span>
+<span class="n">update_sensitivity_weighting</span> <span class="o">=</span> <span class="n">directives</span><span class="o">.</span><span class="n">UpdateSensitivityWeights</span><span class="p">()</span>
+
+<span class="c1"># Defining a starting value for the trade-off parameter (beta) between the data</span>
+<span class="c1"># misfit and the regularization.</span>
+<span class="n">starting_beta</span> <span class="o">=</span> <span class="n">directives</span><span class="o">.</span><span class="n">BetaEstimate_ByEig</span><span class="p">(</span><span class="n">beta0_ratio</span><span class="o">=</span><span class="mf">1e1</span><span class="p">)</span>
+
+<span class="c1"># Set the rate of reduction in trade-off parameter (beta) each time the</span>
+<span class="c1"># the inverse problem is solved. And set the number of Gauss-Newton iterations</span>
+<span class="c1"># for each trade-off paramter value.</span>
+<span class="n">beta_schedule</span> <span class="o">=</span> <span class="n">directives</span><span class="o">.</span><span class="n">BetaSchedule</span><span class="p">(</span><span class="n">coolingFactor</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">coolingRate</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Options for outputting recovered models and predicted data for each beta.</span>
+<span class="n">save_iteration</span> <span class="o">=</span> <span class="n">directives</span><span class="o">.</span><span class="n">SaveOutputEveryIteration</span><span class="p">(</span><span class="n">save_txt</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Setting a stopping criteria for the inversion.</span>
+<span class="n">target_misfit</span> <span class="o">=</span> <span class="n">directives</span><span class="o">.</span><span class="n">TargetMisfit</span><span class="p">(</span><span class="n">chifact</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Apply and update preconditioner as the model updates</span>
+<span class="n">update_jacobi</span> <span class="o">=</span> <span class="n">directives</span><span class="o">.</span><span class="n">UpdatePreconditioner</span><span class="p">()</span>
+
+<span class="n">directives_list</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">update_sensitivity_weighting</span><span class="p">,</span>
+    <span class="n">starting_beta</span><span class="p">,</span>
+    <span class="n">beta_schedule</span><span class="p">,</span>
+    <span class="n">save_iteration</span><span class="p">,</span>
+    <span class="n">target_misfit</span><span class="p">,</span>
+    <span class="n">update_jacobi</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="running-the-dc-inversion">
+<h2>Running the DC Inversion<a class="headerlink" href="#running-the-dc-inversion" title="Permalink to this headline">#</a></h2>
+<p>To define the inversion object, we need to define the inversion problem and
+the set of directives. We can then run the inversion.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Here we combine the inverse problem and the set of directives</span>
+<span class="n">dc_inversion</span> <span class="o">=</span> <span class="n">inversion</span><span class="o">.</span><span class="n">BaseInversion</span><span class="p">(</span>
+    <span class="n">dc_inverse_problem</span><span class="p">,</span> <span class="n">directiveList</span><span class="o">=</span><span class="n">directives_list</span>
+<span class="p">)</span>
+
+<span class="c1"># Run inversion</span>
+<span class="n">recovered_conductivity_model</span> <span class="o">=</span> <span class="n">dc_inversion</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">starting_conductivity_model</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>                        SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
+                        ***Done using same Solver, and solver_opts as the Simulation3DNodal problem***
+
+model has any nan: 0
+============================ Inexact Gauss Newton ============================
+  #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment
+-----------------------------------------------------------------------------
+x0 has any nan: 0
+   0  9.69e-03  9.09e+03  0.00e+00  9.09e+03    8.30e+02      0
+   1  9.69e-03  2.42e+03  2.00e+05  4.36e+03    8.18e+01      0
+   2  3.88e-03  2.69e+03  1.67e+05  3.34e+03    2.00e+02      0
+   3  3.88e-03  1.41e+03  4.21e+05  3.04e+03    3.85e+01      0
+   4  1.55e-03  1.59e+03  3.67e+05  2.16e+03    1.41e+02      0
+   5  1.55e-03  7.30e+02  8.11e+05  1.99e+03    2.70e+01      0
+   6  6.20e-04  8.40e+02  6.90e+05  1.27e+03    9.74e+01      0
+   7  6.20e-04  3.32e+02  1.30e+06  1.14e+03    1.29e+01      0
+   8  2.48e-04  3.72e+02  1.17e+06  6.62e+02    5.57e+01      0
+------------------------- STOP! -------------------------
+1 : |fc-fOld| = 0.0000e+00 &lt;= tolF*(1+|f0|) = 9.0894e+02
+1 : |xc-x_last| = 1.1926e+01 &lt;= tolX*(1+|x0|) = 8.6273e+01
+0 : |proj(x-g)-x|    = 5.5693e+01 &lt;= tolG          = 1.0000e-01
+0 : |proj(x-g)-x|    = 5.5693e+01 &lt;= 1e3*eps       = 1.0000e-02
+0 : maxIter   =      15    &lt;= iter          =      9
+------------------------- DONE! -------------------------
+</pre></div>
+</div>
+</section>
+<section id="recreate-true-conductivity-model">
+<h2>Recreate True Conductivity Model<a class="headerlink" href="#recreate-true-conductivity-model" title="Permalink to this headline">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define conductivity model in S/m (or resistivity model in Ohm m)</span>
+<span class="n">background_value</span> <span class="o">=</span> <span class="mf">1e-2</span>
+<span class="n">conductor_value</span> <span class="o">=</span> <span class="mf">1e-1</span>
+<span class="n">resistor_value</span> <span class="o">=</span> <span class="mf">1e-3</span>
+
+<span class="c1"># Define model</span>
+<span class="n">true_conductivity_model</span> <span class="o">=</span> <span class="n">background_value</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nC</span><span class="p">)</span>
+
+<span class="n">ind_conductor</span> <span class="o">=</span> <span class="n">model_builder</span><span class="o">.</span><span class="n">getIndicesSphere</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="o">-</span><span class="mf">350.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">300.0</span><span class="p">],</span> <span class="mf">160.0</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">cell_centers</span><span class="p">[</span><span class="n">ind_active</span><span class="p">,</span> <span class="p">:]</span>
+<span class="p">)</span>
+<span class="n">true_conductivity_model</span><span class="p">[</span><span class="n">ind_conductor</span><span class="p">]</span> <span class="o">=</span> <span class="n">conductor_value</span>
+
+<span class="n">ind_resistor</span> <span class="o">=</span> <span class="n">model_builder</span><span class="o">.</span><span class="n">getIndicesSphere</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mf">350.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">300.0</span><span class="p">],</span> <span class="mf">160.0</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">cell_centers</span><span class="p">[</span><span class="n">ind_active</span><span class="p">,</span> <span class="p">:]</span>
+<span class="p">)</span>
+<span class="n">true_conductivity_model</span><span class="p">[</span><span class="n">ind_resistor</span><span class="p">]</span> <span class="o">=</span> <span class="n">resistor_value</span>
+<span class="n">true_conductivity_model_log10</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">true_conductivity_model</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="plotting-true-and-recovered-conductivity-model">
+<h2>Plotting True and Recovered Conductivity Model<a class="headerlink" href="#plotting-true-and-recovered-conductivity-model" title="Permalink to this headline">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot True Model</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+<span class="n">plotting_map</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="n">InjectActiveCells</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">ind_active</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.67</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">])</span>
+<span class="n">mesh</span><span class="o">.</span><span class="n">plot_slice</span><span class="p">(</span>
+    <span class="n">plotting_map</span> <span class="o">*</span> <span class="n">true_conductivity_model_log10</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span>
+    <span class="n">normal</span><span class="o">=</span><span class="s2">&quot;Y&quot;</span><span class="p">,</span>
+    <span class="n">ind</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="n">grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="n">true_conductivity_model_log10</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">true_conductivity_model_log10</span><span class="o">.</span><span class="n">max</span><span class="p">()),</span>
+    <span class="n">pcolor_opts</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cmap&quot;</span><span class="p">:</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">viridis</span><span class="p">},</span>
+<span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;True Conductivity Model&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x (m)&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;z (m)&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">])</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.84</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">])</span>
+<span class="n">norm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="n">true_conductivity_model_log10</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">true_conductivity_model_log10</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">ColorbarBase</span><span class="p">(</span>
+    <span class="n">ax2</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">viridis</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;$10^{</span><span class="si">%.1f</span><span class="s2">}$&quot;</span>
+<span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s2">&quot;Conductivity [S/m]&quot;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">270</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="c1"># Plot recovered model</span>
+<span class="n">recovered_conductivity_model_log10</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">recovered_conductivity_model</span><span class="p">))</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.67</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">])</span>
+<span class="n">mesh</span><span class="o">.</span><span class="n">plot_slice</span><span class="p">(</span>
+    <span class="n">plotting_map</span> <span class="o">*</span> <span class="n">recovered_conductivity_model_log10</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span>
+    <span class="n">normal</span><span class="o">=</span><span class="s2">&quot;Y&quot;</span><span class="p">,</span>
+    <span class="n">ind</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="n">grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="n">true_conductivity_model_log10</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">true_conductivity_model_log10</span><span class="o">.</span><span class="n">max</span><span class="p">()),</span>
+    <span class="n">pcolor_opts</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cmap&quot;</span><span class="p">:</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">viridis</span><span class="p">},</span>
+<span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Recovered Conductivity Model&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x (m)&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;z (m)&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">])</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.84</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">])</span>
+<span class="n">norm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="n">true_conductivity_model_log10</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">true_conductivity_model_log10</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">ColorbarBase</span><span class="p">(</span>
+    <span class="n">ax2</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">viridis</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;$10^{</span><span class="si">%.1f</span><span class="s2">}$&quot;</span>
+<span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s2">&quot;Conductivity [S/m]&quot;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">270</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../../../_images/sphx_glr_plot_inv_3_dcr3d_002.png" srcset="../../../_images/sphx_glr_plot_inv_3_dcr3d_002.png" alt="True Conductivity Model" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../../_images/sphx_glr_plot_inv_3_dcr3d_003.png" srcset="../../../_images/sphx_glr_plot_inv_3_dcr3d_003.png" alt="Recovered Conductivity Model" class = "sphx-glr-multi-img"/></li>
+</ul>
+</section>
+<section id="plotting-normalized-data-misfit-or-predicted-dc-data">
+<h2>Plotting Normalized Data Misfit or Predicted DC Data<a class="headerlink" href="#plotting-normalized-data-misfit-or-predicted-dc-data" title="Permalink to this headline">#</a></h2>
+<p>To see how well the recovered model reproduces the observed data,
+it is a good idea to compare the predicted and observed data.
+Here, we accomplish this by plotting the normalized misfit.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Predicted data from recovered model</span>
+<span class="n">dpred_dc</span> <span class="o">=</span> <span class="n">dc_inverse_problem</span><span class="o">.</span><span class="n">dpred</span>
+
+<span class="c1"># Compute the normalized data misfit</span>
+<span class="n">dc_normalized_misfit</span> <span class="o">=</span> <span class="p">(</span><span class="n">dc_data</span><span class="o">.</span><span class="n">dobs</span> <span class="o">-</span> <span class="n">dpred_dc</span><span class="p">)</span> <span class="o">/</span> <span class="n">dc_data</span><span class="o">.</span><span class="n">standard_deviation</span>
+
+<span class="k">if</span> <span class="n">has_plotly</span><span class="p">:</span>
+
+    <span class="c1"># Plot IP Data</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plot_3d_pseudosection</span><span class="p">(</span>
+        <span class="n">dc_data</span><span class="o">.</span><span class="n">survey</span><span class="p">,</span>
+        <span class="n">dc_normalized_misfit</span><span class="p">,</span>
+        <span class="n">scale</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+        <span class="n">units</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">vlim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+        <span class="n">plane_distance</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+        <span class="n">title_text</span><span class="o">=</span><span class="s2">&quot;Normalized Data Misfit&quot;</span><span class="p">,</span>
+        <span class="n">title_x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">title_font_size</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span>
+        <span class="n">width</span><span class="o">=</span><span class="mi">650</span><span class="p">,</span>
+        <span class="n">height</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+        <span class="n">scene_camera</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">center</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=-</span><span class="mf">0.4</span><span class="p">),</span> <span class="n">eye</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">1.8</span><span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="n">plotly</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;INSTALL &#39;PLOTLY&#39; TO VISUALIZE 3D PSEUDOSECTIONS&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<html>
+<head><meta charset="utf-8" /></head>
+<body>
+    <div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script src="https://cdn.plot.ly/plotly-2.16.1.min.js"></script>                <div id="75c5d0cc-eb71-4462-9fe6-18f263de200d" class="plotly-graph-div" style="height:500px; width:650px;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("75c5d0cc-eb71-4462-9fe6-18f263de200d")) {                    Plotly.newPlot(                        "75c5d0cc-eb71-4462-9fe6-18f263de200d",                        [{"customdata":[0.22165182690814456,-0.6031665385082166,0.10878084563716905,-0.6695054708836488,0.06554667962793256,0.5003695397032903,0.16048217183663982,-0.04462938727252707,-1.639709983635088,0.1392301722197286,0.19808878181060194,0.08641707792246399,0.6059823241521926,-0.28424223131251536,0.2746815662867388,0.1660255939627612,1.43725168911271,0.10295446240142375,-0.6501797257126443,1.5870574617464894,-0.11006932153570537,-0.6503995379737638,0.20531930669342427,-0.07768282161027189,-0.06742454197886914,-1.2890535044809524,1.2621831348778325,0.36628301492876,-0.2849409999976135,0.13010351569757136,-0.50955827340127,-0.2543492370873969,-2.975461333812256,1.5608288445277192,0.40220314476857355,0.6764023382686333,0.23270453972828828,-0.34286028330413953,-0.5299063700465863,-1.1532613350151246,2.3612452313665675,3.55105395191053,1.4361470893984207,0.17731443442692457,0.3299435243772501,-0.06662185386804301,-0.8779614471069268,-1.0251311804430205,-1.0980778568383263,0.7189283571474642,0.6970833116332532,0.5126884686184835,0.8159369821847425,0.4236911836133142,0.40714809971383364,0.9835548413977147,0.24245344476029204,-0.30205993231348877,-0.8135182576158315,-0.22471470311058214,-1.1242085756287648,-1.407539911084267,-1.2167987344780138,0.20966628344007338,-0.5055930021636619,-0.6967115104396606,-0.04643886829910829,-0.3372602893277245,-1.2197949134228585,-0.02205668862971314,-0.0717924081414925,-0.45300224364460356,-2.7685290043895634,-0.9996626325321124,-0.35752084703790554,-0.719724793706861,0.33271273311455046,0.5296699421746283,0.6159217513092461,0.13188079899889701,-0.7751165093543317,0.6825925901792276,-0.27749005330462284,0.06408737654525198,0.4430731061898606,1.5059494951738408,0.214123301214509,0.27889516083614396,3.2305299179206015,-0.6675856529214722,-0.6516687653208165,0.5665587852415044,-0.28717824505829825,0.18661178190819722,0.3470770922044958,-1.75946555888498,-1.5085244899390808,-0.7404335702046986,-0.8237103214718239,-1.289515150405033,-1.2605837201040613,2.6671358628392636,0.6738890234099999,0.09303137932621548,-0.9826876407077894,-0.11276102630066404,0.13746889158352002,-0.16001489565331536,-0.21707208317142856,-0.22669371761112236,-1.7967354711677086,-0.5011481033742645,0.12627098662391253,-0.7416187498987916,0.697695072273927,1.759496773080204,1.2307355186817734,-1.5985018082901303,1.0106461342324244,0.2232575039344742,0.3761939819065919,0.4713594514353436,-0.034566658983523985,-0.5508717499248716,-2.677852053539757,0.7288082200487829,0.18144237582900305,0.013884147552275936,-0.15526036799816606,-0.2229797571070672,-0.5398790419889975,0.5901902556497345,3.851852795020676,0.3534308702186398,-0.1869926036246198,0.48167966008194496,-0.2599045956025806,-0.865500307846611,0.5539579141291939,-0.6375512655272721,-2.3453843678549764,-0.8110300466968987,-0.25201188498599014,-0.3383723961837353,0.22285848398393074,0.2246676510527905,-1.0521824956858838,-0.5310584412513919,-0.36097917318041933,-0.3938755711163601,-0.5908861203728816,-0.5002927095093183,0.7372144352365055,-0.35625295744238383,-0.05090344409632477,0.41586909885479706,-0.2475376320902648,0.1293974463533764,-0.5293875704966274,1.6004929298637443,0.3502816220324357,-0.0175780014601708,0.2009245808869661,0.16421963798743197,0.6258777192580045,-0.09656342117772715,0.7418200373682197,0.35787694441845525,-0.5445888706708675,-0.769911138433574,0.501652394581894,0.06838043302768419,0.07438045820276039,0.4099688824837371,0.34233632300763117,-0.13164155891033652,-0.28709484115506984,0.2967553146462535,-0.36666519346380455,-0.14507242768638842,-1.470145677762233,1.2674987671932776,1.1677080354375615,-0.035144706152037214,-0.31295348219931185,-0.1314638454244258,0.36834256032824053,-0.25799813303082625,0.11237835792326042,0.6112723732121204,1.5565123655334603,1.4104405182767092,1.0261431484058874,0.5919288265254381,0.45670599753581803,0.8826724689530518,-0.7809052868464095,1.2633338885519418,-0.0847800987308139,0.04543075253999308,0.005464419245607169,-0.21495338603999514,-0.024600324755259827,-0.18902746088344194,2.0867598539505554,-0.30921259817123337,-0.5129774765257523,0.7038968292571258,-0.5578087026905422,-1.1207241210886374,-0.04698057107819075,-2.6381512651957584,-0.5867867725102252,-0.661277439212168,0.1506478074380661,-0.5846007995053034,-0.2743745856195903,0.8920138323770834,-0.4692151639234424,0.2629976145634158,0.018969138797892627,-0.5576942965731765,-1.3253926369975506,-0.11874779942383333,0.08607367711601593,0.4183213984270349,-0.7408392523540601,-0.2853221737817341,1.1197973942685506,0.9850232443173993,-0.340349114188888,0.1068968196457632,-0.0018769559840161954,-0.5560448777778632,-0.030593416451835755,-0.41351187405722656,0.23712274746369655,0.09308701349872003,-0.21342908479899805,-0.5430861456415305,-1.70400705994036,0.11039018138281052,0.057715491361798474,-0.13292161503115024,0.4476479361498635,-0.13212702288471273,0.10647386479037116,0.2957188084580884,1.7419914877730525,-0.19909262973571612,0.16590122245804617,-0.5391637505999524,0.5357463765848217,0.07846240664186939,-0.34785570763785595,0.8354558930364381,-2.231632361447607,-0.2945978991293672,-0.31600861868850866,0.3428673324339991,-0.10259428054471581,-0.4608257159847445,0.09565309621191816,0.7245685576024047,2.5473490299162305,0.20810952413570544,0.682217006622384,0.10350903397391904,-0.775069521223314,-0.07090656842948656,0.08792774205926668,-0.07712422956093132,-2.612207998841446,0.09638120163726895,0.1279839747772262,-0.6235718298652921,0.21427954944148975,0.23511554830964854,0.13332471951403302,-0.12591657750145152,1.8701305505376582,0.07925710617019757,-0.27755001028706816,0.36691990015796117,0.5379036191332506,0.34423373154607323,0.16235198759528344,-0.5764084851524368,-1.6383983489175593,-0.9421989687545601,0.5411714603979748,-0.19671188686370622,0.24786281729519963,0.18605927871441869,0.0837848622821865,-0.1196073770066052,0.9025068816442194,0.5445412042085438,0.6250346789265725,0.46807778430571806,-0.395575511075899,-0.07228362027592126,0.04871354958501056,0.4055023058536724,-0.8951027244589427,-0.9889507472746688,-1.7797789121325918,-1.566502605757093,-1.4613955343919485,-0.518830003429419,-0.15518659347205752,-0.31818889263864164,-0.4871740662758981,-0.9945864616449426,-0.702454338285285,-0.21847361374352114,0.25345356765495386,0.25682307851789327,-0.021739554435095433,-0.599606436158672,-2.8662447669060143,-0.8523641992343308,-0.07255717446331802,0.762725492959829,0.3762268594378236,1.0811569699330874,0.12896078700841257,0.10077194637989198,0.19355032937382788,1.6222218450766384,1.1739275975065233,0.3061282397489709,0.4277732065884304,3.9127748143096728,0.35233310280833186,0.012642208187399489,-0.5629155243399756,-0.32791637098579807,-0.7246209646269004,-0.6758820918489483,-0.07710577658569123,-1.095942870268195,0.10191186845415938,-0.5591074628668927,-0.8603519330665954,-2.507800514135902,-0.09564307621749701,0.8825263333844797],"hovertemplate":"x: %{x:.2f}<br>y: %{y:.2f}<br>z: %{z:.2f}<br>value: %{customdata:.6g} ","marker":{"cmax":2,"cmin":-2,"color":[0.22165182690814456,-0.6031665385082166,0.10878084563716905,-0.6695054708836488,0.06554667962793256,0.5003695397032903,0.16048217183663982,-0.04462938727252707,-1.639709983635088,0.1392301722197286,0.19808878181060194,0.08641707792246399,0.6059823241521926,-0.28424223131251536,0.2746815662867388,0.1660255939627612,1.43725168911271,0.10295446240142375,-0.6501797257126443,1.5870574617464894,-0.11006932153570537,-0.6503995379737638,0.20531930669342427,-0.07768282161027189,-0.06742454197886914,-1.2890535044809524,1.2621831348778325,0.36628301492876,-0.2849409999976135,0.13010351569757136,-0.50955827340127,-0.2543492370873969,-2.975461333812256,1.5608288445277192,0.40220314476857355,0.6764023382686333,0.23270453972828828,-0.34286028330413953,-0.5299063700465863,-1.1532613350151246,2.3612452313665675,3.55105395191053,1.4361470893984207,0.17731443442692457,0.3299435243772501,-0.06662185386804301,-0.8779614471069268,-1.0251311804430205,-1.0980778568383263,0.7189283571474642,0.6970833116332532,0.5126884686184835,0.8159369821847425,0.4236911836133142,0.40714809971383364,0.9835548413977147,0.24245344476029204,-0.30205993231348877,-0.8135182576158315,-0.22471470311058214,-1.1242085756287648,-1.407539911084267,-1.2167987344780138,0.20966628344007338,-0.5055930021636619,-0.6967115104396606,-0.04643886829910829,-0.3372602893277245,-1.2197949134228585,-0.02205668862971314,-0.0717924081414925,-0.45300224364460356,-2.7685290043895634,-0.9996626325321124,-0.35752084703790554,-0.719724793706861,0.33271273311455046,0.5296699421746283,0.6159217513092461,0.13188079899889701,-0.7751165093543317,0.6825925901792276,-0.27749005330462284,0.06408737654525198,0.4430731061898606,1.5059494951738408,0.214123301214509,0.27889516083614396,3.2305299179206015,-0.6675856529214722,-0.6516687653208165,0.5665587852415044,-0.28717824505829825,0.18661178190819722,0.3470770922044958,-1.75946555888498,-1.5085244899390808,-0.7404335702046986,-0.8237103214718239,-1.289515150405033,-1.2605837201040613,2.6671358628392636,0.6738890234099999,0.09303137932621548,-0.9826876407077894,-0.11276102630066404,0.13746889158352002,-0.16001489565331536,-0.21707208317142856,-0.22669371761112236,-1.7967354711677086,-0.5011481033742645,0.12627098662391253,-0.7416187498987916,0.697695072273927,1.759496773080204,1.2307355186817734,-1.5985018082901303,1.0106461342324244,0.2232575039344742,0.3761939819065919,0.4713594514353436,-0.034566658983523985,-0.5508717499248716,-2.677852053539757,0.7288082200487829,0.18144237582900305,0.013884147552275936,-0.15526036799816606,-0.2229797571070672,-0.5398790419889975,0.5901902556497345,3.851852795020676,0.3534308702186398,-0.1869926036246198,0.48167966008194496,-0.2599045956025806,-0.865500307846611,0.5539579141291939,-0.6375512655272721,-2.3453843678549764,-0.8110300466968987,-0.25201188498599014,-0.3383723961837353,0.22285848398393074,0.2246676510527905,-1.0521824956858838,-0.5310584412513919,-0.36097917318041933,-0.3938755711163601,-0.5908861203728816,-0.5002927095093183,0.7372144352365055,-0.35625295744238383,-0.05090344409632477,0.41586909885479706,-0.2475376320902648,0.1293974463533764,-0.5293875704966274,1.6004929298637443,0.3502816220324357,-0.0175780014601708,0.2009245808869661,0.16421963798743197,0.6258777192580045,-0.09656342117772715,0.7418200373682197,0.35787694441845525,-0.5445888706708675,-0.769911138433574,0.501652394581894,0.06838043302768419,0.07438045820276039,0.4099688824837371,0.34233632300763117,-0.13164155891033652,-0.28709484115506984,0.2967553146462535,-0.36666519346380455,-0.14507242768638842,-1.470145677762233,1.2674987671932776,1.1677080354375615,-0.035144706152037214,-0.31295348219931185,-0.1314638454244258,0.36834256032824053,-0.25799813303082625,0.11237835792326042,0.6112723732121204,1.5565123655334603,1.4104405182767092,1.0261431484058874,0.5919288265254381,0.45670599753581803,0.8826724689530518,-0.7809052868464095,1.2633338885519418,-0.0847800987308139,0.04543075253999308,0.005464419245607169,-0.21495338603999514,-0.024600324755259827,-0.18902746088344194,2.0867598539505554,-0.30921259817123337,-0.5129774765257523,0.7038968292571258,-0.5578087026905422,-1.1207241210886374,-0.04698057107819075,-2.6381512651957584,-0.5867867725102252,-0.661277439212168,0.1506478074380661,-0.5846007995053034,-0.2743745856195903,0.8920138323770834,-0.4692151639234424,0.2629976145634158,0.018969138797892627,-0.5576942965731765,-1.3253926369975506,-0.11874779942383333,0.08607367711601593,0.4183213984270349,-0.7408392523540601,-0.2853221737817341,1.1197973942685506,0.9850232443173993,-0.340349114188888,0.1068968196457632,-0.0018769559840161954,-0.5560448777778632,-0.030593416451835755,-0.41351187405722656,0.23712274746369655,0.09308701349872003,-0.21342908479899805,-0.5430861456415305,-1.70400705994036,0.11039018138281052,0.057715491361798474,-0.13292161503115024,0.4476479361498635,-0.13212702288471273,0.10647386479037116,0.2957188084580884,1.7419914877730525,-0.19909262973571612,0.16590122245804617,-0.5391637505999524,0.5357463765848217,0.07846240664186939,-0.34785570763785595,0.8354558930364381,-2.231632361447607,-0.2945978991293672,-0.31600861868850866,0.3428673324339991,-0.10259428054471581,-0.4608257159847445,0.09565309621191816,0.7245685576024047,2.5473490299162305,0.20810952413570544,0.682217006622384,0.10350903397391904,-0.775069521223314,-0.07090656842948656,0.08792774205926668,-0.07712422956093132,-2.612207998841446,0.09638120163726895,0.1279839747772262,-0.6235718298652921,0.21427954944148975,0.23511554830964854,0.13332471951403302,-0.12591657750145152,1.8701305505376582,0.07925710617019757,-0.27755001028706816,0.36691990015796117,0.5379036191332506,0.34423373154607323,0.16235198759528344,-0.5764084851524368,-1.6383983489175593,-0.9421989687545601,0.5411714603979748,-0.19671188686370622,0.24786281729519963,0.18605927871441869,0.0837848622821865,-0.1196073770066052,0.9025068816442194,0.5445412042085438,0.6250346789265725,0.46807778430571806,-0.395575511075899,-0.07228362027592126,0.04871354958501056,0.4055023058536724,-0.8951027244589427,-0.9889507472746688,-1.7797789121325918,-1.566502605757093,-1.4613955343919485,-0.518830003429419,-0.15518659347205752,-0.31818889263864164,-0.4871740662758981,-0.9945864616449426,-0.702454338285285,-0.21847361374352114,0.25345356765495386,0.25682307851789327,-0.021739554435095433,-0.599606436158672,-2.8662447669060143,-0.8523641992343308,-0.07255717446331802,0.762725492959829,0.3762268594378236,1.0811569699330874,0.12896078700841257,0.10077194637989198,0.19355032937382788,1.6222218450766384,1.1739275975065233,0.3061282397489709,0.4277732065884304,3.9127748143096728,0.35233310280833186,0.012642208187399489,-0.5629155243399756,-0.32791637098579807,-0.7246209646269004,-0.6758820918489483,-0.07710577658569123,-1.095942870268195,0.10191186845415938,-0.5591074628668927,-0.8603519330665954,-2.507800514135902,-0.09564307621749701,0.8825263333844797],"colorbar":{"thickness":20,"tickformat":"g","title":{"text":""}},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"opacity":0.8,"size":4},"mode":"markers","name":"","x":[-831.4212348919281,-769.0171185567405,-700.7492478905561,-619.9980627678393,-557.5567119224318,-501.4253332313714,-438.9984957811123,-388.68846585278106,-731.4212348919281,-663.1803038083929,-582.4597567425069,-519.9980627678393,-463.8606076167856,-401.4253332313714,-351.09613488072114,-294.5953665866851,-619.4782246615905,-538.8137237663997,-476.28458597992585,-420.12626938803515,-357.6678830215873,-307.2913560715489,-250.77221232863323,-194.345132679784,-501.4928749927334,-438.8137237663997,-382.6165112057289,-320.12626938803515,-269.70460943534096,-213.17568578755407,-156.75302522753947,-125.25906813163402,-419.3206165443274,-363.1803038083928,-300.74924789055615,-250.48263270539576,-194.07286609179587,-137.7309519390663,-106.34440650385659,-68.78162629996146,-331.46930248293415,-269.0649845805167,-218.92437449167625,-162.6050258791829,-106.32008624130424,-75.01592864131126,-37.50152559956631,12.498794541681946,-231.46930248293413,-181.34398529510793,-125.04868553792778,-68.77969122187758,-37.5027117908986,0.0,50.0,68.75991276803443,-150.0243427689639,-93.75998801597763,-37.50540306919559,-6.25,31.252602269206925,81.25192322487483,100.04113096113107,119.0020544843734,-56.25,0.0,31.255735260682734,68.77969122187758,118.77079867248557,137.62706500846326,156.75302522753947,200.57929524341506,50.0,81.25998801597763,118.79578758422022,168.77969122187758,187.67271208775603,206.90244766329397,250.72662179662916,282.0953665866851,137.5243427689639,175.08635604387803,225.04868553792778,244.0109280694474,263.41586415696287,307.2206022848156,338.59613488072114,376.18846585278106,231.46930248293413,281.3439852951079,300.43860496586825,320.12626938803515,363.8606076167856,395.2266094240032,432.79555894194215,337.5243427689639,356.5649845805167,376.28458597992585,419.9980627678394,451.3606076167856,488.9253332313714,418.96930248293415,438.8137237663997,482.45975674250695,513.8098341238759,551.3606076167856,490.34500137281066,533.3209523514612,564.5212484778272,601.941932430908,601.1906469908024,632.4637077693175,669.9597567425069,725.1930530821583,762.7895796232375,831.4693024829342,-357.89845118348944,-357.3318558060198,-357.4931128952471,-357.88012665924157,-358.13009081134675,-358.081550982183,-357.8494370971953,-350.0,-362.5,-362.5,-362.5,-362.5,-362.5,-362.5,-354.86977766827357,-347.54806711502965,-362.5,-362.5,-362.5,-362.5,-362.5,-354.8946274984725,-347.6309554325353,-355.19751742312013,-362.5,-362.5,-362.5,-362.5,-354.6674538364551,-347.29058195060367,-355.0650342687134,-355.19751742312013,-362.5,-362.5,-362.5,-354.70004265423927,-347.4120692936705,-355.1385265718288,-355.27652226350835,-348.61378256749646,-362.5,-362.5,-355.08380547455414,-348.1325710823289,-355.4704399219443,-355.58142226657435,-349.2195118236819,-349.6529451057342,-362.5,-355.7300685432452,-349.2206503920143,-355.93769512958505,-355.9896962878677,-350.0,-350.3903867994778,-356.7703317119771,-356.25,-350.0,-356.25,-356.25,-350.5202691111621,-350.891720468758,-357.02963378287495,-357.2879690806072,-350.0,-356.25,-356.25,-350.62402572037416,-351.03986291350964,-357.14044688495824,-357.4166176985564,-352.07534199842183,-350.0,-350.0,-344.140244088159,-344.37402572037416,-350.0,-350.0,-344.9166176985564,-350.0,-343.75,-337.5,-337.5,-342.506588171745,-342.1998970008454,-337.5,-342.391081521659,-342.3697374214761,-344.52821600795585,-344.7871747670563,-350.0,-350.0,-345.3001029991546,-350.0,-350.0,-345.29746115147543,-350.0,-350.0,-345.60368921723983,-350.0,-350.0,-341.4507274769314,-341.2026901689399,-337.5,-341.89631078276017,-341.9465470200731,-340.723862336656,-337.5,-341.82120812547385,-341.89631078276017,-345.29746115147543,-350.0,-350.0,-350.0,-350.0,-342.20253884852457,342.20253884852457,342.20088927855244,341.82120812547385,341.89631078276017,341.9465470200731,341.98250919589935,342.1997521343071,350.0,342.2919703912005,341.77665740509036,341.87827266176413,341.94053709754985,341.9825937053977,342.22658967315215,350.0,357.45945912049865,337.5,337.5,337.5,337.5,337.5,345.08145418583433,352.3690445674647,352.10434363950367,337.5,337.5,337.5,337.5,345.0447981101016,352.26191091677276,351.9769178288566,344.61588687296637,337.5,337.5,337.5,344.68458397427355,351.5910698131493,351.3607156464306,344.3352235512762,337.5,337.5,337.5,344.5293496079857,351.2786929232189,351.06190864835304,344.19607310631017,337.5,337.5,337.5,344.2699314567548,350.80436181510976,350.6399746063114,344.0103037121323,337.5,337.5,337.5,343.75,350.0,350.0,343.75,337.5,337.5,337.5,337.5,350.0,350.0,343.75,337.5,337.5,337.5,337.5,337.5,356.25,350.0,344.1284405262354,344.37402572037416,344.5460724907603,344.88151134706993,344.9166176985564,344.9430462524462,356.25,350.9580020815492,351.5096166965979,351.8674289176711,352.5879307063295,352.6155276908981,352.63553021336446,352.7224116002641,351.3782946160499,351.9873215837929,352.329012852667,353.09705894269655,353.03603916272897,352.9937501966558,353.05245697663753,345.29746115147543,345.3652393459523,345.7393969189976,345.60368921723983,345.5174062946023,345.51749080410065,337.5,337.5,337.5,337.5,337.5,337.5,337.5,337.5,337.5,337.5,337.5,337.5,337.5,337.5,337.5],"y":[-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-819.023232247658,-768.8673164615449,-712.7066131425864,-638.0551869488205,-563.5158226780501,-501.0962469621188,-450.8348999738945,-400.6467327343596,-737.524342768964,-681.3439852951079,-606.6611066682988,-532.1221226762037,-469.70460943534096,-419.4501827241833,-369.2959931012366,-319.2063825835535,-643.7776855267924,-569.0649845805167,-494.54742995545956,-432.12212267620373,-381.8537665297113,-331.7045124159898,-281.6250961248615,-231.5237370415295,-519.4782246615905,-445.17647725482493,-382.6165112057289,-332.12212267620373,-281.8703303133899,-231.74100364160006,-181.5971589289461,-131.5237370415295,-413.9928749927334,-351.3137237663997,-300.74924789055615,-250.50170616956964,-200.38966304809264,-150.25748802241185,-100.19742486453363,-62.59617242987151,-325.6422929899629,-275.28957962323744,-225.18177518573262,-175.15142164657806,-125.08111625332714,-75.05964692816488,-37.52437835782149,-0.006023806431450396,-250.0243427689639,-200.02164503788447,-150.03040627222902,-100.00780518340231,-50.005421817648255,-12.5,25.007622416709786,50.036116737648385,-162.5,-112.5,-62.5,-12.5,25.01354133210848,62.53182687477524,87.60343789600128,112.76622619628372,-62.5,-12.5,37.5,75.01948559251706,112.54329007576891,137.63497444233926,162.83646729238995,212.78768805681446,37.5,87.5,125.01218917891075,162.53897118503411,187.67271208775603,212.92681345601432,262.83646729238995,300.41062334541334,137.5,175.0108365863456,212.54868553792778,237.76352686980061,263.0950560405799,312.9268134560143,350.5292173861752,388.12109434627877,225.0485438727062,262.6078055906493,287.88610616431663,313.3297735348777,363.0950560405799,400.6756857875541,438.27221232863326,312.7406215763931,338.1803038083928,363.78458597992585,413.35243131040716,450.91586415696287,488.50505063388334,400.711639630902,426.36456405455834,475.74924789055615,513.3524313104072,550.9342569635098,489.0817973864958,538.1803038083929,575.7786600151633,613.3524313104072,612.7406215763931,650.2895796232375,687.8861061643166,725.024342768964,762.586356043878,812.7406215763931,-825.2406215763931,-762.8213426852587,-688.2786600151633,-625.8524313104072,-563.4342569635098,-501.02051497036234,-450.784136595656,-400.6116265326381,-731.4634966504083,-656.9164351272589,-594.4829978382162,-532.0620209995427,-469.6470915644861,-419.415611369673,-369.25302522753947,-325.41894332409527,-613.1422929899629,-550.6803038083929,-488.24924789055615,-425.8297735348777,-375.57915924647494,-325.43856559327804,-281.6250961248615,-231.54580079762044,-513.1422929899629,-450.6803038083928,-388.24924789055615,-337.98263270539576,-287.8496907151219,-244.04744978874874,-193.97708839101765,-137.65614514642328,-425.1930530821583,-362.78957962323744,-312.66371652277667,-262.616641029058,-218.85985939099083,-168.83031972315814,-112.54569271832256,-68.75937734466598,-325.1930530821583,-275.086356043878,-225.060812544458,-181.31548799723123,-131.29514676370334,-75.01990604663118,-31.251479027396762,0.0,-237.5243427689639,-187.52164503788447,-143.78239186579913,-93.77049517692727,-37.505421817648255,6.25,37.50152559956631,68.75991276803443,-150.0,-106.25,-56.25,0.0,43.752602269206925,75.01592864131126,106.29244483533358,131.40440509778566,-56.25,-6.25,50.0,93.75371636696188,125.02167317269121,156.30566095258953,181.44591296397894,225.25906813163402,43.75,100.0,143.76146263423112,175.03897118503411,206.33459293426642,231.51687591115362,275.33646729238995,319.1576235714273,143.75,187.5459729398606,218.8413245061343,250.15142164657806,275.38966304809264,319.2074608094046,363.02750295897346,394.3819765903603,237.59534845555063,268.90848020258863,300.2357943573278,325.5588211460695,369.36704051314064,413.1812442969821,444.54514825928015,325.2406215763931,356.59949504309697,382.07869551107456,425.85243131040716,469.6470915644861,501.02051497036234,425.25126265847086,450.8065044950046,494.54742995545956,538.3297735348776,569.704609435341,506.9782246615905,550.6803038083929,594.4552809859521,625.8297735348776,606.8206165443273,650.5814151174691,681.9552809859521,725.1529066331595,756.5171185567405,825.1930530821583],"z":[-118.75,-175.0,-231.25,-300.0,-356.25,-406.25,-462.5,-512.5,-131.25,-187.5,-256.25,-312.5,-362.5,-418.75,-468.75,-525.0,-137.5,-206.25,-262.5,-312.5,-368.75,-418.75,-475.0,-531.25,-162.5,-218.75,-268.75,-325.0,-375.0,-431.25,-487.5,-525.0,-187.5,-237.5,-293.75,-343.75,-400.0,-456.25,-493.75,-537.5,-193.75,-250.0,-300.0,-356.25,-412.5,-450.0,-493.75,-543.75,-206.25,-256.25,-312.5,-368.75,-406.25,-450.0,-500.0,-531.25,-218.75,-275.0,-331.25,-368.75,-412.5,-462.5,-493.75,-531.25,-231.25,-287.5,-325.0,-368.75,-418.75,-450.0,-487.5,-537.5,-237.5,-275.0,-318.75,-368.75,-400.0,-437.5,-487.5,-525.0,-218.75,-262.5,-312.5,-343.75,-381.25,-431.25,-468.75,-512.5,-206.25,-256.25,-287.5,-325.0,-375.0,-412.5,-456.25,-206.25,-237.5,-275.0,-325.0,-362.5,-406.25,-181.25,-218.75,-268.75,-306.25,-350.0,-168.75,-218.75,-256.25,-300.0,-162.5,-200.0,-243.75,-125.0,-168.75,-106.25,-106.45810236483068,-156.38580541526673,-206.35413774754542,-268.8322226093527,-331.31792675818355,-387.5578654097694,-437.55039994818736,-487.5,-118.75,-168.75,-231.25,-293.75,-350.0,-400.0,-450.0496000505841,-500.17602142699405,-125.0,-187.5,-250.0,-306.25,-356.25,-406.30681348687665,-456.44836273298563,-506.2940119019183,-137.5,-200.0,-256.25,-306.25,-356.31648183857897,-406.47719764542535,-456.2996000505841,-506.2940119019183,-162.5,-218.75,-268.75,-318.82811279678197,-369.01030373660785,-418.8057991235112,-468.7988251451315,-512.6735776342277,-181.25,-231.25,-281.3476324197765,-331.56230493125986,-381.3150971039451,-431.3057991235112,-475.19526483955303,-518.9235776342277,-193.75,-243.88015186830393,-294.14024427351745,-343.82811279678197,-393.8150971039451,-437.7231431530475,-481.44526483955303,-518.7934006848673,-200.19512213675873,-250.5199322349037,-300.0976324197765,-350.07811279678197,-394.01030373660785,-437.7231431530475,-475.0488251451315,-512.5434006848673,-200.77822185373185,-250.13015186830393,-300.0976324197765,-344.06230493125986,-387.76030373660785,-425.0557991235112,-462.5488251451315,-512.6735776342277,-200.0,-250.0,-293.8476324197765,-337.57811279678197,-375.0,-412.5,-462.5488251451315,-506.25,-200.19512213675873,-243.75,-287.5,-325.07811279678197,-362.5650971039451,-412.5,-456.2988251451315,-500.04340068486727,-193.94512213675873,-237.63015186830393,-275.0,-312.5,-362.5650971039451,-406.25,-450.0,-187.69512213675873,-225.0,-262.5,-312.57811279678197,-356.25,-400.0,-168.94512213675873,-206.38015186830393,-256.25,-300.07811279678197,-343.8150971039451,-150.19512213675873,-200.0,-243.84763241977652,-287.57811279678197,-137.69512213675873,-181.25,-225.0,-118.75,-162.5,-112.69512213675873,-112.69512213675873,-168.88015186830393,-231.34763241977652,-287.57811279678197,-343.8150971039451,-400.0557991235112,-450.0488251451315,-500.0,-131.43366478704002,-193.87495003996005,-250.09467524023972,-306.3262081801235,-362.56376887107115,-412.5548203434806,-462.5,-506.29340068486727,-143.75,-200.0,-256.25,-312.5,-362.5,-412.5557991235112,-456.44836273298563,-506.42602142699405,-156.25,-212.5,-268.75,-318.75,-368.8150971039451,-412.72719764542535,-462.69836273298563,-518.7934006848673,-175.0,-231.25,-281.25,-331.32811279678197,-375.26583715847687,-425.22719764542535,-481.2988251451315,-531.25,-187.5,-237.5,-287.5976324197765,-331.57030237208295,-381.51583715847687,-437.5557991235112,-487.5,-525.0,-193.75,-243.88015186830393,-287.9028070876133,-337.82030237208295,-393.8150971039451,-443.75,-481.25,-518.75,-200.19512213675873,-244.29245475768994,-294.1528070876133,-350.07811279678197,-400.0,-437.5,-475.0,-512.5,-194.57966219013474,-244.29245475768994,-300.0976324197765,-350.0,-387.5,-425.0,-462.5,-512.5,-193.95810236483067,-250.0,-300.0946752402397,-337.57811279678197,-375.06648183857897,-412.55681348687665,-462.5488251451315,-512.5428062110996,-206.43366478704002,-256.73006013006625,-294.1284406852067,-331.56230493125986,-369.01030373660785,-418.96923078998,-468.93935048047945,-506.4212007564942,-206.9423142267177,-244.24920254980566,-281.64024427351745,-319.06230493125986,-369.0049958809807,-418.96545321367273,-456.4422621972277,-187.69512213675873,-225.13580541526673,-262.6007802408853,-312.57811279678197,-362.56376887107115,-400.0557991235112,-162.5,-200.0,-250.0,-300.0,-337.5,-150.0,-200.0,-250.0,-287.5,-150.0,-200.0,-237.5,-137.5,-175.0,-112.5],"type":"scatter3d"}],                        {"height":500,"scene":{"camera":{"center":{"x":0,"y":0,"z":-0.4},"eye":{"x":1.5,"y":-1.5,"z":1.8}},"xaxis":{"title":{"text":"X[m]"}},"yaxis":{"title":{"text":"Y[m]"}},"zaxis":{"title":{"text":"Z[m]"}}},"template":{"data":{"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"#E5ECF6","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2}}},"title":{"font":{"size":24},"text":"Normalized Data Misfit","x":0.5},"width":650},                        {"responsive": true}                    )                };                            </script>        </div>
+</body>
+</html><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 4 minutes  38.205 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  18 MB</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-content-tutorials-05-dcr-plot-inv-3-dcr3d-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/6b2f8b15409796a0d6536b98e50cfe89/plot_inv_3_dcr3d.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_inv_3_dcr3d.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/7d1223ef2894a14db74b7110bbd942a1/plot_inv_3_dcr3d.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_inv_3_dcr3d.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="plot_inv_2_dcr2d_irls.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">2.5D DC Resistivity Inversion with Sparse Norms</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="../06-ip/index.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">Induced Polarization</p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#import-modules">
+   Import Modules
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#download-assets">
+   Download Assets
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#load-data-and-topography">
+   Load Data and Topography
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#plot-observed-data-in-pseudosection">
+   Plot Observed Data in Pseudosection
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#assign-uncertainties">
+   Assign Uncertainties
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#create-tree-mesh">
+   Create Tree Mesh
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#project-electrodes-to-discretized-topography">
+   Project Electrodes to Discretized Topography
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#starting-reference-model-and-mapping-on-octree-mesh">
+   Starting/Reference Model and Mapping on OcTree Mesh
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-the-physics-of-the-dc-simulation">
+   Define the Physics of the DC Simulation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-dc-inverse-problem">
+   Define DC Inverse Problem
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-dc-inversion-directives">
+   Define DC Inversion Directives
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#running-the-dc-inversion">
+   Running the DC Inversion
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#recreate-true-conductivity-model">
+   Recreate True Conductivity Model
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#plotting-true-and-recovered-conductivity-model">
+   Plotting True and Recovered Conductivity Model
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#plotting-normalized-data-misfit-or-predicted-dc-data">
+   Plotting Normalized Data Misfit or Predicted DC Data
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+<div class="toc-item">
+  
+<div id="searchbox"></div>
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+<div class="tocsection sourcelink">
+    <a href="../../../_sources/content/tutorials/05-dcr/plot_inv_3_dcr3d.rst.txt">
+        <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+</div>
+
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>
