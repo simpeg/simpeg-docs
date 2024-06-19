@@ -1,0 +1,792 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Gravity &#8212; SimPEG 0.20.0.post2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=45118af6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=8cf59ab3"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/examples/02-gravity/index';</script>
+    <link rel="icon" href="../../../_static/logo-block.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="PF: Gravity: Tiled Inversion Linear" href="plot_inv_grav_tiled.html" />
+    <link rel="prev" title="Maps: ComboMaps" href="../01-maps/plot_sumMap.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+<script defer data-domain="docs.simpeg.xyz" src="https://plausible.io/js/script.js"></script>
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/simpeg-logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../../_static/simpeg-logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../api/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../release/index.html">
+                        Release Notes
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://simpeg.xyz">
+                    SimPEG
+                  </a>
+                </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="http://slack.simpeg.xyz">
+                    Contact
+                  </a>
+                </li>
+                
+                </div>
+            </div>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="http://slack.simpeg.xyz/" title="Slack" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-slack"></i></span>
+            <label class="sr-only">Slack</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-discourse"></i></span>
+            <label class="sr-only">Discourse</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-youtube"></i></span>
+            <label class="sr-only">Youtube</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/simpegpy" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../api/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../release/index.html">
+                        Release Notes
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://simpeg.xyz">
+                    SimPEG
+                  </a>
+                </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="http://slack.simpeg.xyz">
+                    Contact
+                  </a>
+                </li>
+                
+                </div>
+            </div>
+            
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="http://slack.simpeg.xyz/" title="Slack" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-slack"></i></span>
+            <label class="sr-only">Slack</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-discourse"></i></span>
+            <label class="sr-only">Discourse</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-youtube"></i></span>
+            <label class="sr-only">Youtube</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/simpegpy" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/01-models_mapping/index.html">Models and Mapping</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/01-models_mapping/plot_1_tensor_models.html">Tensor Meshes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/01-models_mapping/plot_2_cyl_models.html">Cylindrical Meshes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/01-models_mapping/plot_3_tree_models.html">Tree Meshes</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/02-linear_inversion/index.html">Linear Problems</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/02-linear_inversion/plot_inv_1_inversion_lsq.html">Linear Least-Squares Inversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/02-linear_inversion/plot_inv_2_inversion_irls.html">Sparse Inversion with Iteratively Re-Weighted Least-Squares</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/03-gravity/index.html">Gravity</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/03-gravity/plot_1a_gravity_anomaly.html">Forward Simulation of Gravity Anomaly Data on a Tensor Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/03-gravity/plot_1b_gravity_gradiometry.html">Forward Simulation of Gradiometry Data on a Tree Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/03-gravity/plot_inv_1a_gravity_anomaly.html">Least-Squares Inversion of Gravity Anomaly Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/03-gravity/plot_inv_1b_gravity_anomaly_irls.html">Sparse Norm Inversion of Gravity Anomaly Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/04-magnetics/index.html">Magnetics</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/04-magnetics/plot_2a_magnetics_induced.html">Forward Simulation of Total Magnetic Intensity Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/04-magnetics/plot_2b_magnetics_mvi.html">Forward Simulation of Gradiometry Data for Magnetic Vector Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/04-magnetics/plot_inv_2a_magnetics_induced.html">Sparse Norm Inversion for Total Magnetic Intensity Data on a Tensor Mesh</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/05-dcr/index.html">Direct Current Resistivity</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/05-dcr/plot_fwd_1_dcr_sounding.html">Simulate a 1D Sounding over a Layered Earth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/05-dcr/plot_fwd_2_dcr2d.html">DC Resistivity Forward Simulation in 2.5D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/05-dcr/plot_fwd_3_dcr3d.html">DC Resistivity Forward Simulation in 3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/05-dcr/plot_gen_3_3d_to_2d.html">Convert 3D DC/IP Data to 2D Lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/05-dcr/plot_inv_1_dcr_sounding.html">Least-Squares 1D Inversion of Sounding Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/05-dcr/plot_inv_1_dcr_sounding_irls.html">Sparse 1D Inversion of Sounding Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/05-dcr/plot_inv_1_dcr_sounding_parametric.html">Parametric 1D Inversion of Sounding Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/05-dcr/plot_inv_2_dcr2d.html">2.5D DC Resistivity Least-Squares Inversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/05-dcr/plot_inv_2_dcr2d_irls.html">2.5D DC Resistivity Inversion with Sparse Norms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/05-dcr/plot_inv_3_dcr3d.html">3D Least-Squares Inversion of DC Resistivity Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/06-ip/index.html">Induced Polarization</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/06-ip/plot_fwd_2_dcip2d.html">2.5D Forward Simulation of a DCIP Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/06-ip/plot_fwd_3_dcip3d.html">DC/IP Forward Simulation in 3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/06-ip/plot_inv_2_dcip2d.html">2.5D DC Resistivity and IP Least-Squares Inversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/06-ip/plot_inv_3_dcip3d.html">3D Least-Squares Inversion of DC and IP Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/07-fdem/index.html">Frequency-Domain Electromagnetics</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/07-fdem/plot_fwd_1_em1dfm.html">1D Forward Simulation for a Single Sounding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/07-fdem/plot_fwd_1_em1dfm_dispersive.html">1D Forward Simulation for a Susceptible and Chargeable Earth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/07-fdem/plot_fwd_2_fem_cyl.html">3D Forward Simulation on a Cylindrical Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/07-fdem/plot_fwd_3_fem_3d.html">3D Forward Simulation on a Tree Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/07-fdem/plot_inv_1_em1dfm.html">1D Inversion of for a Single Sounding</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/08-tdem/index.html">Time-Domain Electromagnetics</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/08-tdem/plot_fwd_1_em1dtm.html">1D Forward Simulation for a Single Sounding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/08-tdem/plot_fwd_1_em1dtm_dispersive.html">1D Forward Simulation with Chargeable and/or Magnetic Viscosity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/08-tdem/plot_fwd_1_em1dtm_waveforms.html">1D Forward Simulation with User-Defined Waveforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/08-tdem/plot_fwd_2_tem_cyl.html">3D Forward Simulation for Transient Response on a Cylindrical Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/08-tdem/plot_fwd_3_tem_3d.html">3D Forward Simulation with User-Defined Waveforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/08-tdem/plot_inv_1_em1dtm.html">1D Inversion of Time-Domain Data for a Single Sounding</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/09-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/10-vrm/index.html">Viscous Remanent Magnetization</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/10-vrm/plot_fwd_1_vrm_layer.html">Response from a Homogeneous Layer for Different Waveforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/10-vrm/plot_fwd_2_vrm_topsoil.html">Forward Simulation of VRM Response on a Tree Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/10-vrm/plot_fwd_3_vrm_tem.html">Forward Simulation Including Inductive Response</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/11-flow/index.html">Flow</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/12-seismic/index.html">Seismic</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/12-seismic/plot_fwd_1_tomography_2D.html">Forward Simulation for Straight Ray Tomography in 2D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/12-seismic/plot_inv_1_tomography_2D.html">Sparse Norm Inversion of 2D Seismic Tomography Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/13-joint_inversion/index.html">Joint Inversion</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/13-joint_inversion/plot_inv_3_cross_gradient_pf.html">Cross-gradient Joint Inversion of Gravity and Magnetic Anomaly Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/14-pgi/index.html">Petrophysically Guided Inversion</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-12"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/14-pgi/plot_inv_1_joint_pf_pgi_full_info_tutorial.html">Joint PGI of Gravity + Magnetic on an Octree mesh using full petrophysical information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/14-pgi/plot_inv_2_joint_pf_pgi_no_info_tutorial.html">Joint PGI of Gravity + Magnetic on an Octree mesh without petrophysical information</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Gallery</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-13"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../01-maps/index.html">Mappings</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-14"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../01-maps/plot_block_in_layer.html">Maps: Parametric Block in a Layer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../01-maps/plot_combo.html">Maps: ComboMaps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../01-maps/plot_layer.html">Maps: Parametrized Layer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../01-maps/plot_mesh2mesh.html">Maps: Mesh2Mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../01-maps/plot_sumMap.html">Maps: ComboMaps</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current active has-children"><a class="current reference internal" href="#">Gravity</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-15"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="plot_inv_grav_tiled.html">PF: Gravity: Tiled Inversion Linear</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../03-magnetics/index.html">Magnetics</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-16"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../03-magnetics/plot_0_analytic.html">PF: Magnetics: Analytics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../03-magnetics/plot_inv_mag_MVI_Sparse_TreeMesh.html">Magnetic inversion on a TreeMesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../03-magnetics/plot_inv_mag_MVI_VectorAmplitude.html">Magnetic inversion on a TreeMesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../03-magnetics/plot_inv_mag_nonLinear_Amplitude.html">Magnetic Amplitude inversion on a TreeMesh</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../04-dcip/index.html">DC Resistivity and Induced Polarization</a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-17"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../04-dcip/plot_dc_analytic.html">DC Analytic Dipole</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../04-dcip/plot_inv_dcip_dipoledipole_3Dinversion_twospheres.html">3D DC inversion of Dipole Dipole array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../04-dcip/plot_inv_dcip_dipoledipole_parametric_inversion.html">Parametric DC inversion with Dipole Dipole array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../04-dcip/plot_read_DC_data_with_IO_class.html">Reading and Plotting data with DC.IO class</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../05-fdem/index.html">Frequency Domain Electromagnetics</a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-18"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../05-fdem/plot_0_fdem_analytic.html">Simulation with Analytic FDEM Solutions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../05-fdem/plot_inv_fdem_loop_loop_2Dinversion.html">2D inversion of Loop-Loop EM Data</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../06-tdem/index.html">Time Domain Electromagnetics</a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-19"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../06-tdem/plot_0_tdem_analytic.html">Simulation with Analytic TDEM Solutions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../06-tdem/plot_fwd_tdem_3d_model.html">Time-domain CSEM for a resistive cube in a deep marine setting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../06-tdem/plot_fwd_tdem_inductive_src_permeable_target.html">EM: TDEM: Permeable Target, Inductive Source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../06-tdem/plot_fwd_tdem_waveforms.html">TDEM: Waveforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../06-tdem/plot_inv_tdem_1D.html">EM: TDEM: 1D: Inversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../06-tdem/plot_inv_tdem_1D_raw_waveform.html">EM: TDEM: 1D: Inversion with VTEM waveform</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../07-nsem/index.html">Natural Source Electromagnetics</a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-20"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../07-nsem/plot_fwd_nsem_MTTipper3D.html">MT: 3D: Forward</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../08-vrm/index.html">Viscous Remanent Magnetization</a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-21"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../08-vrm/plot_fwd_vrm.html">Predict Response from a Conductive and Magnetically Viscous Earth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../08-vrm/plot_inv_vrm_eq.html">Method of Equivalent Sources for Removing VRM Responses</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../09-flow/index.html">Richards Fluid Flow</a><input class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-22"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../09-flow/plot_fwd_flow_richards_1D.html">FLOW: Richards: 1D: Forward Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../09-flow/plot_inv_flow_richards_1D.html">FLOW: Richards: 1D: Inversion</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../10-pgi/index.html">PGI: Petrophysically and Geologically guided Inversion</a><input class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-23"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../10-pgi/plot_inv_0_PGI_Linear_1D.html">Petrophysically guided inversion (PGI): Linear example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../10-pgi/plot_inv_1_PGI_Linear_1D_joint_WithRelationships.html">Petrophysically guided inversion: Joint linear example with nonlinear relationships</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../20-published/index.html">In Publication</a><input class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-24"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../20-published/plot_booky_1D_time_freq_inv.html">Heagy et al., 2017 1D RESOLVE and SkyTEM Bookpurnong Inversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../20-published/plot_booky_1Dstitched_resolve_inv.html">Heagy et al., 2017 1D RESOLVE Bookpurnong Inversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../20-published/plot_effective_medium_theory.html">Effective Medium Theory Mapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../20-published/plot_heagyetal2017_casing.html">Heagy et al., 2017 Casing Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../20-published/plot_heagyetal2017_cyl_inversions.html">Heagy et al., 2017 1D FDEM and TDEM inversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../20-published/plot_laguna_del_maule_inversion.html">PF: Gravity: Laguna del Maule Bouguer Gravity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../20-published/plot_load_booky.html">Heagy et al., 2017 Load and Plot Bookpurnong Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../20-published/plot_richards_celia1990.html">FLOW: Richards: 1D: Celia1990</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../20-published/plot_schenkel_morrison_casing.html">EM: Schenkel and Morrison Casing Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../20-published/plot_tomo_joint_with_volume.html">Straight Ray with Volume Data Misfit Term</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../20-published/plot_vadose_vangenuchten.html">FLOW: Vadose: van Genuchten</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../user_guide.html" class="nav-link">User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Gallery</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Gravity</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="gravity">
+<span id="sphx-glr-content-examples-02-gravity"></span><h1>Gravity<a class="headerlink" href="#gravity" title="Permalink to this heading">#</a></h1>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="Invert data in tiles."><img alt="" src="../../../_images/sphx_glr_plot_inv_grav_tiled_thumb.png" />
+<p><a class="reference internal" href="plot_inv_grav_tiled.html#sphx-glr-content-examples-02-gravity-plot-inv-grav-tiled-py"><span class="std std-ref">PF: Gravity: Tiled Inversion Linear</span></a></p>
+  <div class="sphx-glr-thumbnail-title">PF: Gravity: Tiled Inversion Linear</div>
+</div></div><div class="toctree-wrapper compound">
+</div>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../01-maps/plot_sumMap.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Maps: ComboMaps</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="plot_inv_grav_tiled.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">PF: Gravity: Tiled Inversion Linear</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/content/examples/02-gravity/index.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
