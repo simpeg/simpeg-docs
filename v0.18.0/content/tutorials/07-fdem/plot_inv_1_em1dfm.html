@@ -1,0 +1,1200 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>1D Inversion of for a Single Sounding &#8212; SimPEG 0.18.0 documentation</title>
+  <script>
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+
+  
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/tutorials/07-fdem/plot_inv_1_em1dfm';</script>
+    <link rel="shortcut icon" href="../../../_static/logo-block.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Time-Domain Electromagnetics" href="../08-tdem/index.html" />
+    <link rel="prev" title="3D Forward Simulation on a Tree Mesh" href="plot_fwd_3_fem_3d.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="None">
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-45185336-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../_static/simpeg-logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../_static/simpeg-logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="../../getting_started.html">
+                        Getting Started
+                    </a>
+                </li>
+                
+
+                <li class="nav-item current active">
+                    <a class="nav-link" href="../../user_guide.html">
+                        User Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../api/index.html">
+                        API Reference
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../release/index.html">
+                        Release Notes
+                    </a>
+                </li>
+                
+
+            <li class="nav-item">
+                <a class="nav-link nav-external" href="https://simpeg.xyz">SimPEG<i class="fa-solid fa-up-right-from-square"></i></a>
+            </li>
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+            <li class="nav-item">
+                <a class="nav-link nav-external" href="http://slack.simpeg.xyz">Contact<i class="fa-solid fa-up-right-from-square"></i></a>
+            </li>
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      <div class="navbar-end-item navbar-end__search-button-container">
+        
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
+    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="http://slack.simpeg.xyz/" title="Slack" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-slack"></i></span>
+            <label class="sr-only">Slack</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-discourse"></i></span>
+            <label class="sr-only">Discourse</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-youtube"></i></span>
+            <label class="sr-only">Youtube</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/simpegpy" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  <div class="search-button-container--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+  </div>
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="../../getting_started.html">
+                        Getting Started
+                    </a>
+                </li>
+                
+
+                <li class="nav-item current active">
+                    <a class="nav-link" href="../../user_guide.html">
+                        User Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../api/index.html">
+                        API Reference
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../release/index.html">
+                        Release Notes
+                    </a>
+                </li>
+                
+
+            <li class="nav-item">
+                <a class="nav-link nav-external" href="https://simpeg.xyz">SimPEG<i class="fa-solid fa-up-right-from-square"></i></a>
+            </li>
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+            <li class="nav-item">
+                <a class="nav-link nav-external" href="http://slack.simpeg.xyz">Contact<i class="fa-solid fa-up-right-from-square"></i></a>
+            </li>
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
+    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="http://slack.simpeg.xyz/" title="Slack" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-slack"></i></span>
+            <label class="sr-only">Slack</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-discourse"></i></span>
+            <label class="sr-only">Discourse</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-youtube"></i></span>
+            <label class="sr-only">Youtube</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/simpegpy" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01-models_mapping/index.html">Models and Mapping</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01-models_mapping/plot_1_tensor_models.html">Tensor Meshes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01-models_mapping/plot_2_cyl_models.html">Cylindrical Meshes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01-models_mapping/plot_3_tree_models.html">Tree Meshes</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02-linear_inversion/index.html">Linear Problems</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02-linear_inversion/plot_inv_1_inversion_lsq.html">Linear Least-Squares Inversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02-linear_inversion/plot_inv_2_inversion_irls.html">Sparse Inversion with Iteratively Re-Weighted Least-Squares</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03-gravity/index.html">Gravity</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03-gravity/plot_1a_gravity_anomaly.html">Forward Simulation of Gravity Anomaly Data on a Tensor Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03-gravity/plot_1b_gravity_gradiometry.html">Forward Simulation of Gradiometry Data on a Tree Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03-gravity/plot_inv_1a_gravity_anomaly.html">Least-Squares Inversion of Gravity Anomaly Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03-gravity/plot_inv_1b_gravity_anomaly_irls.html">Sparse Norm Inversion of Gravity Anomaly Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04-magnetics/index.html">Magnetics</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04-magnetics/plot_2a_magnetics_induced.html">Forward Simulation of Total Magnetic Intensity Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04-magnetics/plot_2b_magnetics_mvi.html">Forward Simulation of Gradiometry Data for Magnetic Vector Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04-magnetics/plot_inv_2a_magnetics_induced.html">Sparse Norm Inversion for Total Magnetic Intensity Data on a Tensor Mesh</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../05-dcr/index.html">Direct Current Resistivity</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../05-dcr/plot_fwd_1_dcr_sounding.html">Simulate a 1D Sounding over a Layered Earth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05-dcr/plot_fwd_2_dcr2d.html">DC Resistivity Forward Simulation in 2.5D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05-dcr/plot_fwd_3_dcr3d.html">DC Resistivity Forward Simulation in 3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05-dcr/plot_gen_3_3d_to_2d.html">Convert 3D DC/IP Data to 2D Lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05-dcr/plot_inv_1_dcr_sounding.html">Least-Squares 1D Inversion of Sounding Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05-dcr/plot_inv_1_dcr_sounding_irls.html">Sparse 1D Inversion of Sounding Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05-dcr/plot_inv_1_dcr_sounding_parametric.html">Parametric 1D Inversion of Sounding Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05-dcr/plot_inv_2_dcr2d.html">2.5D DC Resistivity Least-Squares Inversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05-dcr/plot_inv_2_dcr2d_irls.html">2.5D DC Resistivity Inversion with Sparse Norms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05-dcr/plot_inv_3_dcr3d.html">3D Least-Squares Inversion of DC Resistivity Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../06-ip/index.html">Induced Polarization</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../06-ip/plot_fwd_2_dcip2d.html">2.5D Forward Simulation of a DCIP Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06-ip/plot_fwd_3_dcip3d.html">DC/IP Forward Simulation in 3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06-ip/plot_inv_2_dcip2d.html">2.5D DC Resistivity and IP Least-Squares Inversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06-ip/plot_inv_3_dcip3d.html">3D Least-Squares Inversion of DC and IP Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Frequency-Domain Electromagnetics</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="plot_fwd_1_em1dfm.html">1D Forward Simulation for a Single Sounding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_fwd_1_em1dfm_dispersive.html">1D Forward Simulation for a Susceptible and Chargeable Earth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_fwd_2_fem_cyl.html">3D Forward Simulation on a Cylindrical Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_fwd_3_fem_3d.html">3D Forward Simulation on a Tree Mesh</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">1D Inversion of for a Single Sounding</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../08-tdem/index.html">Time-Domain Electromagnetics</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../08-tdem/plot_fwd_1_em1dtm.html">1D Forward Simulation for a Single Sounding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08-tdem/plot_fwd_1_em1dtm_dispersive.html">1D Forward Simulation with Chargeable and/or Magnetic Viscosity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08-tdem/plot_fwd_1_em1dtm_waveforms.html">1D Forward Simulation with User-Defined Waveforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08-tdem/plot_fwd_2_tem_cyl.html">3D Forward Simulation for Transient Response on a Cylindrical Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08-tdem/plot_fwd_3_tem_3d.html">3D Forward Simulation with User-Defined Waveforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08-tdem/plot_inv_1_em1dtm.html">1D Inversion of Time-Domain Data for a Single Sounding</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../09-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../10-vrm/index.html">Viscous Remanent Magnetization</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../10-vrm/plot_fwd_1_vrm_layer.html">Response from a Homogeneous Layer for Different Waveforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10-vrm/plot_fwd_2_vrm_topsoil.html">Forward Simulation of VRM Response on a Tree Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10-vrm/plot_fwd_3_vrm_tem.html">Forward Simulation Including Inductive Response</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../11-flow/index.html">Flow</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../12-seismic/index.html">Seismic</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../12-seismic/plot_fwd_1_tomography_2D.html">Forward Simulation for Straight Ray Tomography in 2D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../12-seismic/plot_inv_1_tomography_2D.html">Sparse Norm Inversion of 2D Seismic Tomography Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../13-joint_inversion/index.html">Joint Inversion</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../13-joint_inversion/plot_inv_3_cross_gradient_pf.html">Cross-gradient Joint Inversion of Gravity and Magnetic Anomaly Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../14-pgi/index.html">Petrophysically Guided Inversion</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-12"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../14-pgi/plot_inv_1_joint_pf_pgi_full_info_tutorial.html">Joint PGI of Gravity + Magnetic on an Octree mesh using full petrophysical information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../14-pgi/plot_inv_2_joint_pf_pgi_no_info_tutorial.html">Joint PGI of Gravity + Magnetic on an Octree mesh without petrophysical information</a></li>
+</ul>
+</li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../examples/index.html">Gallery</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-13"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/01-maps/index.html">Mappings</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-14"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/01-maps/plot_block_in_layer.html">Maps: Parametric Block in a Layer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/01-maps/plot_combo.html">Maps: ComboMaps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/01-maps/plot_layer.html">Maps: Parametrized Layer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/01-maps/plot_mesh2mesh.html">Maps: Mesh2Mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/01-maps/plot_sumMap.html">Maps: ComboMaps</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/02-gravity/index.html">Gravity</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-15"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/02-gravity/plot_inv_grav_tiled.html">PF: Gravity: Tiled Inversion Linear</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/03-magnetics/index.html">Magnetics</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-16"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/03-magnetics/plot_0_analytic.html">PF: Magnetics: Analytics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/03-magnetics/plot_inv_mag_MVI_Sparse_TreeMesh.html">Magnetic inversion on a TreeMesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/03-magnetics/plot_inv_mag_nonLinear_Amplitude.html">Magnetic Amplitude inversion on a TreeMesh</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/04-dcip/index.html">DC Resistivity and Induced Polarization</a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-17"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/04-dcip/plot_dc_analytic.html">DC Analytic Dipole</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/04-dcip/plot_inv_dcip_dipoledipole_3Dinversion_twospheres.html">3D DC inversion of Dipole Dipole array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/04-dcip/plot_inv_dcip_dipoledipole_parametric_inversion.html">Parametric DC inversion with Dipole Dipole array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/04-dcip/plot_read_DC_data_with_IO_class.html">Reading and Plotting data with DC.IO class</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/05-fdem/index.html">Frequency Domain Electromagnetics</a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-18"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/05-fdem/plot_0_fdem_analytic.html">Simulation with Analytic FDEM Solutions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/05-fdem/plot_inv_fdem_loop_loop_2Dinversion.html">2D inversion of Loop-Loop EM Data</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/06-tdem/index.html">Time Domain Electromagnetics</a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-19"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/06-tdem/plot_0_tdem_analytic.html">Simulation with Analytic TDEM Solutions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/06-tdem/plot_fwd_tdem_3d_model.html">Time-domain CSEM for a resistive cube in a deep marine setting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/06-tdem/plot_fwd_tdem_inductive_src_permeable_target.html">EM: TDEM: Permeable Target, Inductive Source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/06-tdem/plot_fwd_tdem_waveforms.html">TDEM: Waveforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/06-tdem/plot_inv_tdem_1D.html">EM: TDEM: 1D: Inversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/06-tdem/plot_inv_tdem_1D_raw_waveform.html">EM: TDEM: 1D: Inversion with VTEM waveform</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/07-nsem/index.html">Natural Source Electromagnetics</a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-20"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/07-nsem/plot_fwd_nsem_MTTipper3D.html">MT: 3D: Forward</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/08-vrm/index.html">Viscous Remanent Magnetization</a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-21"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/08-vrm/plot_fwd_vrm.html">Predict Response from a Conductive and Magnetically Viscous Earth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/08-vrm/plot_inv_vrm_eq.html">Method of Equivalent Sources for Removing VRM Responses</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/09-flow/index.html">Richards Fluid Flow</a><input class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-22"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/09-flow/plot_fwd_flow_richards_1D.html">FLOW: Richards: 1D: Forward Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/09-flow/plot_inv_flow_richards_1D.html">FLOW: Richards: 1D: Inversion</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/10-pgi/index.html">PGI: Petrophysically and Geologically guided Inversion</a><input class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-23"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/10-pgi/plot_inv_0_PGI_Linear_1D.html">Petrophysically guided inversion (PGI): Linear example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/10-pgi/plot_inv_1_PGI_Linear_1D_joint_WithRelationships.html">Petrophysically guided inversion: Joint linear example with nonlinear relationships</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/20-published/index.html">In Publication</a><input class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-24"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_booky_1D_time_freq_inv.html">Heagy et al., 2017 1D RESOLVE and SkyTEM Bookpurnong Inversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_booky_1Dstitched_resolve_inv.html">Heagy et al., 2017 1D RESOLVE Bookpurnong Inversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_effective_medium_theory.html">Effective Medium Theory Mapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_heagyetal2017_casing.html">Heagy et al., 2017 Casing Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_heagyetal2017_cyl_inversions.html">Heagy et al., 2017 1D FDEM and TDEM inversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_laguna_del_maule_inversion.html">PF: Gravity: Laguna del Maule Bouguer Gravity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_load_booky.html">Heagy et al., 2017 Load and Plot Bookpurnong Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_richards_celia1990.html">FLOW: Richards: 1D: Celia1990</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_schenkel_morrison_casing.html">EM: Schenkel and Morrison Casing Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_tomo_joint_with_volume.html">Straight Ray with Volume Data Misfit Term</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/20-published/plot_vadose_vangenuchten.html">FLOW: Vadose: van Genuchten</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+      </div>
+      <main class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-content-tutorials-07-fdem-plot-inv-1-em1dfm-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="d-inversion-of-for-a-single-sounding">
+<span id="sphx-glr-content-tutorials-07-fdem-plot-inv-1-em1dfm-py"></span><h1>1D Inversion of for a Single Sounding<a class="headerlink" href="#d-inversion-of-for-a-single-sounding" title="Permalink to this headline">#</a></h1>
+<p>Here we use the module <em>SimPEG.electromangetics.frequency_domain_1d</em> to invert
+frequency domain data and recover a 1D electrical conductivity model.
+In this tutorial, we focus on the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>How to define sources and receivers from a survey file</p></li>
+<li><p>How to define the survey</p></li>
+<li><p>Sparse 1D inversion of with iteratively re-weighted least-squares</p></li>
+</ul>
+</div></blockquote>
+<p>For this tutorial, we will invert 1D frequency domain data for a single sounding.
+The end product is layered Earth model which explains the data. The survey
+consisted of a vertical magnetic dipole source located 30 m above the
+surface. The receiver measured the vertical component of the secondary field
+at a 10 m offset from the source in ppm.</p>
+<section id="import-modules">
+<h2>Import modules<a class="headerlink" href="#import-modules" title="Permalink to this headline">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">tarfile</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">discretize</span> <span class="kn">import</span> <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class"><span class="n">TensorMesh</span></a>
+
+<span class="kn">import</span> <span class="nn">SimPEG.electromagnetics.frequency_domain</span> <span class="k">as</span> <span class="nn">fdem</span>
+<span class="kn">from</span> <span class="nn">SimPEG.electromagnetics.utils.em1d_utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">get_vertical_discretization_frequency</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">SimPEG.utils</span> <span class="kn">import</span> <span class="n">mkvc</span><span class="p">,</span> <span class="n">plot_1d_layer_model</span>
+<span class="kn">from</span> <span class="nn">SimPEG</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">maps</span><span class="p">,</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">data_misfit</span><span class="p">,</span>
+    <span class="n">inverse_problem</span><span class="p">,</span>
+    <span class="n">regularization</span><span class="p">,</span>
+    <span class="n">optimization</span><span class="p">,</span>
+    <span class="n">directives</span><span class="p">,</span>
+    <span class="n">inversion</span><span class="p">,</span>
+    <span class="n">utils</span><span class="p">,</span>
+<span class="p">)</span>
+
+<a href="https://docs.python.org/3/library/stdtypes.html#dict.update" title="builtins.dict.update" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-method"><span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span></a><span class="p">({</span><span class="s2">&quot;font.size&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;lines.linewidth&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;lines.markersize&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">})</span>
+
+<span class="c1"># sphinx_gallery_thumbnail_number = 2</span>
+</pre></div>
+</div>
+</section>
+<section id="download-test-data-file">
+<h2>Download Test Data File<a class="headerlink" href="#download-test-data-file" title="Permalink to this headline">#</a></h2>
+<p>Here we provide the file path to the data we plan on inverting.
+The path to the data file is stored as a
+tar-file on our google cloud bucket:
+“<a class="reference external" href="https://storage.googleapis.com/simpeg/doc-assets/em1dfm.tar.gz">https://storage.googleapis.com/simpeg/doc-assets/em1dfm.tar.gz</a>”</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># storage bucket where we have the data</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_source</span></a> <span class="o">=</span> <span class="s2">&quot;https://storage.googleapis.com/simpeg/doc-assets/em1dfm.tar.gz&quot;</span>
+
+<span class="c1"># download the data</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">downloaded_data</span></a> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_source</span></a><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># unzip the tarfile</span>
+<a href="https://docs.python.org/3/library/tarfile.html#tarfile.TarFile" title="tarfile.TarFile" class="sphx-glr-backref-module-tarfile sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tar</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/tarfile.html#tarfile.open" title="tarfile.open" class="sphx-glr-backref-module-tarfile sphx-glr-backref-type-py-function"><span class="n">tarfile</span><span class="o">.</span><span class="n">open</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">downloaded_data</span></a><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/tarfile.html#tarfile.TarFile.extractall" title="tarfile.TarFile.extractall" class="sphx-glr-backref-module-tarfile sphx-glr-backref-type-py-method"><span class="n">tar</span><span class="o">.</span><span class="n">extractall</span></a><span class="p">()</span>
+<a href="https://docs.python.org/3/library/tarfile.html#tarfile.TarFile.close" title="tarfile.TarFile.close" class="sphx-glr-backref-module-tarfile sphx-glr-backref-type-py-method"><span class="n">tar</span><span class="o">.</span><span class="n">close</span></a><span class="p">()</span>
+
+<span class="c1"># path to the directory containing our data</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dir_path</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">downloaded_data</span></a><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span></a>
+
+<span class="c1"># files to work with</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_filename</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dir_path</span></a> <span class="o">+</span> <span class="s2">&quot;em1dfm_data.txt&quot;</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Downloading https://storage.googleapis.com/simpeg/doc-assets/em1dfm.tar.gz
+   saved to: /home/vsts/work/1/s/tutorials/07-fdem/em1dfm.tar.gz
+Download completed!
+</pre></div>
+</div>
+</section>
+<section id="load-data-and-plot">
+<h2>Load Data and Plot<a class="headerlink" href="#load-data-and-plot" title="Permalink to this headline">#</a></h2>
+<p>Here we load and plot the 1D sounding data. In this case, we have the
+secondary field response in ppm for a set of frequencies.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load field data</span>
+<span class="c1"># dobs = np.loadtxt(str(data_filename))</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.loadtxt.html#numpy.loadtxt" title="numpy.loadtxt" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span></a><span class="p">(</span><span class="nb">str</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_filename</span></a><span class="p">),</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Define receiver locations and observed data</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">frequencies</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a> <span class="o">=</span> <span class="n">mkvc</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+<a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.loglog.html#matplotlib.axes.Axes.loglog" title="matplotlib.axes.Axes.loglog" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">loglog</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">frequencies</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">abs</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">]),</span> <span class="s2">&quot;k-o&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.loglog.html#matplotlib.axes.Axes.loglog" title="matplotlib.axes.Axes.loglog" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">loglog</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">frequencies</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">abs</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]),</span> <span class="s2">&quot;k:o&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_xlabel.html#matplotlib.axes.Axes.set_xlabel" title="matplotlib.axes.Axes.set_xlabel" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span></a><span class="p">(</span><span class="s2">&quot;Frequency (Hz)&quot;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_ylabel.html#matplotlib.axes.Axes.set_ylabel" title="matplotlib.axes.Axes.set_ylabel" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span></a><span class="p">(</span><span class="s2">&quot;|Hs/Hp| (ppm)&quot;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_title.html#matplotlib.axes.Axes.set_title" title="matplotlib.axes.Axes.set_title" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">set_title</span></a><span class="p">(</span><span class="s2">&quot;Magnetic Field as a Function of Frequency&quot;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.legend.html#matplotlib.axes.Axes.legend" title="matplotlib.axes.Axes.legend" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">legend</span></a><span class="p">([</span><span class="s2">&quot;Real&quot;</span><span class="p">,</span> <span class="s2">&quot;Imaginary&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<img src="../../../_images/sphx_glr_plot_inv_1_em1dfm_001.png" srcset="../../../_images/sphx_glr_plot_inv_1_em1dfm_001.png" alt="Magnetic Field as a Function of Frequency" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7feed7a7c910&gt;
+</pre></div>
+</div>
+</section>
+<section id="defining-the-survey">
+<h2>Defining the Survey<a class="headerlink" href="#defining-the-survey" title="Permalink to this headline">#</a></h2>
+<p>Here we demonstrate a general way to define the receivers, sources and survey.
+The survey consisted of a vertical magnetic dipole source located 30 m above the
+surface. The receiver measured the vertical component of the secondary field
+at a 10 m offset from the source in ppm.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">source_location</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">])</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">moment</span></a> <span class="o">=</span> <span class="mf">1.0</span>
+
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">receiver_location</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">])</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">receiver_orientation</span></a> <span class="o">=</span> <span class="s2">&quot;z&quot;</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_type</span></a> <span class="o">=</span> <span class="s2">&quot;ppm&quot;</span>
+
+<span class="c1"># Receiver list</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">receiver_list</span></a> <span class="o">=</span> <span class="p">[]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">receiver_list</span></a><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+    <span class="n">fdem</span><span class="o">.</span><span class="n">receivers</span><span class="o">.</span><span class="n">PointMagneticFieldSecondary</span><span class="p">(</span>
+        <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">receiver_location</span></a><span class="p">,</span>
+        <span class="n">orientation</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">receiver_orientation</span></a><span class="p">,</span>
+        <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_type</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_type</span></a><span class="p">,</span>
+        <span class="n">component</span><span class="o">=</span><span class="s2">&quot;real&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">receiver_list</span></a><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+    <span class="n">fdem</span><span class="o">.</span><span class="n">receivers</span><span class="o">.</span><span class="n">PointMagneticFieldSecondary</span><span class="p">(</span>
+        <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">receiver_location</span></a><span class="p">,</span>
+        <span class="n">orientation</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">receiver_orientation</span></a><span class="p">,</span>
+        <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_type</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_type</span></a><span class="p">,</span>
+        <span class="n">component</span><span class="o">=</span><span class="s2">&quot;imag&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># Define source list</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">source_list</span></a> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">freq</span></a> <span class="ow">in</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">frequencies</span></a><span class="p">:</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">source_list</span></a><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+        <span class="n">fdem</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">MagDipole</span><span class="p">(</span>
+            <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">receiver_list</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">receiver_list</span></a><span class="p">,</span>
+            <span class="n">frequency</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">freq</span></a><span class="p">,</span>
+            <span class="n">location</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">source_location</span></a><span class="p">,</span>
+            <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;z&quot;</span><span class="p">,</span>
+            <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">moment</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">moment</span></a><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="c1"># Survey</span>
+<span class="n">survey</span> <span class="o">=</span> <span class="n">fdem</span><span class="o">.</span><span class="n">survey</span><span class="o">.</span><span class="n">Survey</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">source_list</span></a><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="assign-uncertainties-and-define-the-data-object">
+<h2>Assign Uncertainties and Define the Data Object<a class="headerlink" href="#assign-uncertainties-and-define-the-data-object" title="Permalink to this headline">#</a></h2>
+<p>Here is where we define the data that are inverted. The data are defined by
+the survey, the observation values and the uncertainties.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># 5% of the absolute value</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">uncertainties</span></a> <span class="o">=</span> <span class="mf">0.05</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">abs</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="p">)</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ones.html#numpy.ones" title="numpy.ones" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.shape.html#numpy.shape" title="numpy.shape" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">shape</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="p">))</span>
+
+<span class="c1"># Define the data object</span>
+<span class="n">data_object</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="p">(</span><span class="n">survey</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="p">,</span> <span class="n">noise_floor</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">uncertainties</span></a><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="defining-a-1d-layered-earth-1d-tensor-mesh">
+<h2>Defining a 1D Layered Earth (1D Tensor Mesh)<a class="headerlink" href="#defining-a-1d-layered-earth-1d-tensor-mesh" title="Permalink to this headline">#</a></h2>
+<p>Here, we define the layer thicknesses for our 1D simulation. To do this, we use
+the TensorMesh class.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Layer thicknesses</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">inv_thicknesses</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.logspace.html#numpy.logspace" title="numpy.logspace" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">logspace</span></a><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
+
+<span class="c1"># Define a mesh for plotting and regularization.</span>
+<a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a> <span class="o">=</span> <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class"><span class="n">TensorMesh</span></a><span class="p">([(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">inv_thicknesses</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">inv_thicknesses</span></a><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])],</span> <span class="s2">&quot;0&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="define-a-starting-and-or-reference-model-and-the-mapping">
+<h2>Define a Starting and/or Reference Model and the Mapping<a class="headerlink" href="#define-a-starting-and-or-reference-model-and-the-mapping" title="Permalink to this headline">#</a></h2>
+<p>Here, we create starting and/or reference models for the inversion as
+well as the mapping from the model space to the active cells. Starting and
+reference models can be a constant background value or contain a-priori
+structures. Here, the starting model is log(0.1) S/m.</p>
+<p>Define log-conductivity values for each layer since our model is the
+log-conductivity. Don’t make the values 0!
+Otherwise the gradient for the 1st iteration is zero and the inversion will
+not converge.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define model. A resistivity (Ohm meters) or conductivity (S/m) for each layer.</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">starting_model</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">log</span></a><span class="p">(</span><span class="mf">0.1</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ones.html#numpy.ones" title="numpy.ones" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span><span class="o">.</span><span class="n">nC</span></a><span class="p">))</span>
+
+<span class="c1"># Define mapping from model to active cells.</span>
+<span class="n">model_mapping</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="n">ExpMap</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="define-the-physics-using-a-simulation-object">
+<h2>Define the Physics using a Simulation Object<a class="headerlink" href="#define-the-physics-using-a-simulation-object" title="Permalink to this headline">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">simulation</span> <span class="o">=</span> <span class="n">fdem</span><span class="o">.</span><span class="n">Simulation1DLayered</span><span class="p">(</span>
+    <span class="n">survey</span><span class="o">=</span><span class="n">survey</span><span class="p">,</span> <span class="n">thicknesses</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">inv_thicknesses</span></a><span class="p">,</span> <span class="n">sigmaMap</span><span class="o">=</span><span class="n">model_mapping</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="define-inverse-problem">
+<h2>Define Inverse Problem<a class="headerlink" href="#define-inverse-problem" title="Permalink to this headline">#</a></h2>
+<p>The inverse problem is defined by 3 things:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Data Misfit: a measure of how well our recovered model explains the field data</p></li>
+<li><p>Regularization: constraints placed on the recovered model and a priori information</p></li>
+<li><p>Optimization: the numerical approach used to solve the inverse problem</p></li>
+</ol>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the data misfit. Here the data misfit is the L2 norm of the weighted</span>
+<span class="c1"># residual between the observed data and the data predicted for a given model.</span>
+<span class="c1"># The weighting is defined by the reciprocal of the uncertainties.</span>
+<span class="n">dmis</span> <span class="o">=</span> <span class="n">data_misfit</span><span class="o">.</span><span class="n">L2DataMisfit</span><span class="p">(</span><span class="n">simulation</span><span class="o">=</span><span class="n">simulation</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data_object</span><span class="p">)</span>
+
+<span class="c1"># Define the regularization (model objective function)</span>
+<span class="n">reg_map</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="n">IdentityMap</span><span class="p">(</span><span class="n">nP</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span><span class="o">.</span><span class="n">nC</span></a><span class="p">)</span>
+<span class="n">reg</span> <span class="o">=</span> <span class="n">regularization</span><span class="o">.</span><span class="n">Sparse</span><span class="p">(</span><a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="n">reg_map</span><span class="p">,</span> <span class="n">alpha_s</span><span class="o">=</span><span class="mf">0.025</span><span class="p">,</span> <span class="n">alpha_x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+
+<span class="c1"># reference model</span>
+<span class="n">reg</span><span class="o">.</span><span class="n">mref</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">starting_model</span></a>
+
+<span class="c1"># Define sparse and blocky norms p, q</span>
+<span class="n">reg</span><span class="o">.</span><span class="n">norms</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Define how the optimization problem is solved. Here we will use an inexact</span>
+<span class="c1"># Gauss-Newton approach that employs the conjugate gradient solver.</span>
+<span class="n">opt</span> <span class="o">=</span> <span class="n">optimization</span><span class="o">.</span><span class="n">ProjectedGNCG</span><span class="p">(</span><span class="n">maxIter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">maxIterLS</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">maxIterCG</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">tolCG</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
+
+<span class="c1"># Define the inverse problem</span>
+<span class="n">inv_prob</span> <span class="o">=</span> <span class="n">inverse_problem</span><span class="o">.</span><span class="n">BaseInvProblem</span><span class="p">(</span><span class="n">dmis</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="define-inversion-directives">
+<h2>Define Inversion Directives<a class="headerlink" href="#define-inversion-directives" title="Permalink to this headline">#</a></h2>
+<p>Here we define any directiveas that are carried out during the inversion. This
+includes the cooling schedule for the trade-off parameter (beta), stopping
+criteria for the inversion and saving inversion results at each iteration.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Defining a starting value for the trade-off parameter (beta) between the data</span>
+<span class="c1"># misfit and the regularization.</span>
+<span class="n">starting_beta</span> <span class="o">=</span> <span class="n">directives</span><span class="o">.</span><span class="n">BetaEstimate_ByEig</span><span class="p">(</span><span class="n">beta0_ratio</span><span class="o">=</span><span class="mf">1e1</span><span class="p">)</span>
+
+<span class="c1"># Update the preconditionner</span>
+<span class="n">update_Jacobi</span> <span class="o">=</span> <span class="n">directives</span><span class="o">.</span><span class="n">UpdatePreconditioner</span><span class="p">()</span>
+
+<span class="c1"># Options for outputting recovered models and predicted data for each beta.</span>
+<span class="n">save_iteration</span> <span class="o">=</span> <span class="n">directives</span><span class="o">.</span><span class="n">SaveOutputEveryIteration</span><span class="p">(</span><span class="n">save_txt</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Directive for the IRLS</span>
+<span class="n">update_IRLS</span> <span class="o">=</span> <span class="n">directives</span><span class="o">.</span><span class="n">Update_IRLS</span><span class="p">(</span>
+    <span class="n">max_irls_iterations</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">minGNiter</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">coolEpsFact</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">update_beta</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="c1"># Updating the preconditionner if it is model dependent.</span>
+<span class="n">update_jacobi</span> <span class="o">=</span> <span class="n">directives</span><span class="o">.</span><span class="n">UpdatePreconditioner</span><span class="p">()</span>
+
+<span class="c1"># Add sensitivity weights</span>
+<span class="n">sensitivity_weights</span> <span class="o">=</span> <span class="n">directives</span><span class="o">.</span><span class="n">UpdateSensitivityWeights</span><span class="p">()</span>
+
+<span class="c1"># The directives are defined as a list.</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">directives_list</span></a> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">sensitivity_weights</span><span class="p">,</span>
+    <span class="n">starting_beta</span><span class="p">,</span>
+    <span class="n">save_iteration</span><span class="p">,</span>
+    <span class="n">update_IRLS</span><span class="p">,</span>
+    <span class="n">update_jacobi</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="running-the-inversion">
+<h2>Running the Inversion<a class="headerlink" href="#running-the-inversion" title="Permalink to this headline">#</a></h2>
+<p>To define the inversion object, we need to define the inversion problem and
+the set of directives. We can then run the inversion.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Here we combine the inverse problem and the set of directives</span>
+<span class="n">inv</span> <span class="o">=</span> <span class="n">inversion</span><span class="o">.</span><span class="n">BaseInversion</span><span class="p">(</span><span class="n">inv_prob</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">directives_list</span></a><span class="p">)</span>
+
+<span class="c1"># Run the inversion</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">recovered_model</span></a> <span class="o">=</span> <span class="n">inv</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">starting_model</span></a><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>                        SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
+                        ***Done using same Solver, and solver_opts as the Simulation1DLayered problem***
+
+model has any nan: 0
+=============================== Projected GNCG ===============================
+  #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment
+-----------------------------------------------------------------------------
+x0 has any nan: 0
+   0  3.15e+02  1.40e+02  0.00e+00  1.40e+02    3.95e+01      0
+   1  1.58e+02  2.44e+01  1.13e-01  4.22e+01    1.76e+01      0
+   2  7.88e+01  7.94e+00  1.48e-01  1.96e+01    7.25e+00      0
+Reached starting chifact with l2-norm regularization: Start IRLS steps...
+irls_threshold 2.42689865225539
+   3  3.94e+01  3.46e+00  1.70e-01  1.02e+01    5.06e+00      0
+   4  9.79e+01  1.68e+00  1.54e-01  1.68e+01    6.33e+00      0
+   5  1.73e+02  3.25e+00  1.28e-01  2.54e+01    8.16e+00      0
+   6  1.41e+02  5.69e+00  1.00e-01  1.98e+01    3.06e+00      0
+   7  1.41e+02  5.03e+00  8.46e-02  1.70e+01    3.69e+00      0
+   8  1.41e+02  4.56e+00  7.25e-02  1.48e+01    3.79e+00      0
+   9  2.27e+02  4.08e+00  6.36e-02  1.85e+01    1.05e+01      0
+  10  2.27e+02  4.76e+00  5.57e-02  1.74e+01    5.42e+00      0
+  11  2.27e+02  4.50e+00  4.86e-02  1.56e+01    5.17e+00      0
+  12  3.61e+02  4.26e+00  4.07e-02  1.90e+01    1.34e+01      0   Skip BFGS
+  13  3.61e+02  4.95e+00  3.05e-02  1.60e+01    6.73e+00      0
+  14  3.61e+02  4.52e+00  2.22e-02  1.25e+01    7.08e+00      0
+  15  5.68e+02  4.36e+00  1.54e-02  1.31e+01    1.53e+01      0   Skip BFGS
+  16  5.68e+02  4.76e+00  1.02e-02  1.05e+01    8.06e+00      0
+  17  5.68e+02  4.64e+00  6.88e-03  8.54e+00    9.59e+00      0
+  18  8.86e+02  4.46e+00  4.58e-03  8.52e+00    1.64e+01      0
+  19  1.38e+03  4.49e+00  2.98e-03  8.59e+00    1.53e+01      0
+  20  1.38e+03  4.51e+00  1.97e-03  7.22e+00    6.19e+00      0   Skip BFGS
+  21  2.17e+03  4.36e+00  1.32e-03  7.23e+00    1.55e+01      0
+  22  3.43e+03  4.32e+00  8.82e-04  7.35e+00    1.54e+01      0   Skip BFGS
+  23  5.41e+03  4.32e+00  5.88e-04  7.50e+00    1.53e+01      0   Skip BFGS
+  24  8.53e+03  4.34e+00  3.91e-04  7.67e+00    1.52e+01      0
+  25  1.34e+04  4.36e+00  2.60e-04  7.85e+00    1.51e+01      0
+  26  2.11e+04  4.39e+00  1.73e-04  8.04e+00    1.50e+01      0
+  27  3.30e+04  4.42e+00  1.15e-04  8.22e+00    1.49e+01      0
+  28  5.15e+04  4.45e+00  7.67e-05  8.40e+00    1.48e+01      0
+  29  8.03e+04  4.48e+00  5.10e-05  8.57e+00    1.48e+01      0
+  30  8.03e+04  4.51e+00  3.40e-05  7.23e+00    5.95e+00      0
+  31  1.26e+05  4.36e+00  2.29e-05  7.25e+00    1.56e+01      0
+  32  1.99e+05  4.32e+00  1.53e-05  7.37e+00    1.53e+01      0   Skip BFGS
+Reach maximum number of IRLS cycles: 30
+------------------------- STOP! -------------------------
+1 : |fc-fOld| = 0.0000e+00 &lt;= tolF*(1+|f0|) = 1.4148e+01
+1 : |xc-x_last| = 4.7725e-03 &lt;= tolX*(1+|x0|) = 1.2741e+00
+0 : |proj(x-g)-x|    = 1.5289e+01 &lt;= tolG          = 1.0000e-01
+0 : |proj(x-g)-x|    = 1.5289e+01 &lt;= 1e3*eps       = 1.0000e-02
+0 : maxIter   =      50    &lt;= iter          =     33
+------------------------- DONE! -------------------------
+</pre></div>
+</div>
+</section>
+<section id="plotting-results">
+<h2>Plotting Results<a class="headerlink" href="#plotting-results" title="Permalink to this headline">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the true model and layer thicknesses</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">true_model</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">true_layers</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="mf">20.0</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">,</span> <span class="mf">160.0</span><span class="p">]</span>
+
+<span class="c1"># Extract Least-Squares model</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">l2_model</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">inv_prob</span><span class="o">.</span><span class="n">l2model</span></a>
+
+<span class="c1"># Plot true model and recovered model</span>
+<a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+<a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">x_min</span></a> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="n">model_mapping</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">recovered_model</span></a><span class="p">,</span> <span class="n">model_mapping</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">l2_model</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">true_model</span></a><span class="p">]</span>
+<span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">x_max</span></a> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="n">model_mapping</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">recovered_model</span></a><span class="p">,</span> <span class="n">model_mapping</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">l2_model</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">true_model</span></a><span class="p">]</span>
+<span class="p">)</span>
+
+<a href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure.add_axes" title="matplotlib.figure.Figure.add_axes" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span></a><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">])</span>
+<span class="n">plot_1d_layer_model</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">true_layers</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">true_model</span></a><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><a href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a><span class="p">,</span> <span class="n">show_layers</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+<span class="n">plot_1d_layer_model</span><span class="p">(</span>
+    <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.h.html#discretize.TensorMesh.h" title="discretize.TensorMesh.h" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-property"><span class="n">mesh</span><span class="o">.</span><span class="n">h</span></a><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">model_mapping</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">l2_model</span></a><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><a href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a><span class="p">,</span> <span class="n">show_layers</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span>
+<span class="p">)</span>
+<span class="n">plot_1d_layer_model</span><span class="p">(</span>
+    <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.h.html#discretize.TensorMesh.h" title="discretize.TensorMesh.h" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-property"><span class="n">mesh</span><span class="o">.</span><span class="n">h</span></a><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">model_mapping</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">recovered_model</span></a><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><a href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a><span class="p">,</span> <span class="n">show_layers</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span>
+<span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_xlim.html#matplotlib.axes.Axes.set_xlim" title="matplotlib.axes.Axes.set_xlim" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span></a><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_title.html#matplotlib.axes.Axes.set_title" title="matplotlib.axes.Axes.set_title" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span></a><span class="p">(</span><span class="s2">&quot;True and Recovered Models&quot;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.legend.html#matplotlib.axes.Axes.legend" title="matplotlib.axes.Axes.legend" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax1</span><span class="o">.</span><span class="n">legend</span></a><span class="p">([</span><span class="s2">&quot;True Model&quot;</span><span class="p">,</span> <span class="s2">&quot;L2-Model&quot;</span><span class="p">,</span> <span class="s2">&quot;Sparse Model&quot;</span><span class="p">])</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.gca.html#matplotlib.pyplot.gca" title="matplotlib.pyplot.gca" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">gca</span></a><span class="p">()</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
+
+<span class="c1"># Plot predicted and observed data</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dpred_l2</span></a> <span class="o">=</span> <span class="n">simulation</span><span class="o">.</span><span class="n">dpred</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">l2_model</span></a><span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dpred_final</span></a> <span class="o">=</span> <span class="n">simulation</span><span class="o">.</span><span class="n">dpred</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">recovered_model</span></a><span class="p">)</span>
+
+<a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<a href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure.add_axes" title="matplotlib.figure.Figure.add_axes" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span></a><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">])</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.loglog.html#matplotlib.axes.Axes.loglog" title="matplotlib.axes.Axes.loglog" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax1</span><span class="o">.</span><span class="n">loglog</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">frequencies</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">abs</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">]),</span> <span class="s2">&quot;k-o&quot;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.loglog.html#matplotlib.axes.Axes.loglog" title="matplotlib.axes.Axes.loglog" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax1</span><span class="o">.</span><span class="n">loglog</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">frequencies</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">abs</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs</span></a><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]),</span> <span class="s2">&quot;k:o&quot;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.loglog.html#matplotlib.axes.Axes.loglog" title="matplotlib.axes.Axes.loglog" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax1</span><span class="o">.</span><span class="n">loglog</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">frequencies</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">abs</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dpred_l2</span></a><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">]),</span> <span class="s2">&quot;b-o&quot;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.loglog.html#matplotlib.axes.Axes.loglog" title="matplotlib.axes.Axes.loglog" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax1</span><span class="o">.</span><span class="n">loglog</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">frequencies</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">abs</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dpred_l2</span></a><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]),</span> <span class="s2">&quot;b:o&quot;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.loglog.html#matplotlib.axes.Axes.loglog" title="matplotlib.axes.Axes.loglog" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax1</span><span class="o">.</span><span class="n">loglog</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">frequencies</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">abs</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dpred_final</span></a><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">]),</span> <span class="s2">&quot;r-o&quot;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.loglog.html#matplotlib.axes.Axes.loglog" title="matplotlib.axes.Axes.loglog" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax1</span><span class="o">.</span><span class="n">loglog</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">frequencies</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">abs</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dpred_final</span></a><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]),</span> <span class="s2">&quot;r:o&quot;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_xlabel.html#matplotlib.axes.Axes.set_xlabel" title="matplotlib.axes.Axes.set_xlabel" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span></a><span class="p">(</span><span class="s2">&quot;Frequencies (Hz)&quot;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_ylabel.html#matplotlib.axes.Axes.set_ylabel" title="matplotlib.axes.Axes.set_ylabel" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span></a><span class="p">(</span><span class="s2">&quot;|Hs/Hp| (ppm)&quot;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_title.html#matplotlib.axes.Axes.set_title" title="matplotlib.axes.Axes.set_title" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span></a><span class="p">(</span><span class="s2">&quot;Predicted and Observed Data&quot;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.legend.html#matplotlib.axes.Axes.legend" title="matplotlib.axes.Axes.legend" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax1</span><span class="o">.</span><span class="n">legend</span></a><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="s2">&quot;Observed (real)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Observed (imag)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;L2-Model (real)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;L2-Model (imag)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Sparse (real)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Sparse (imag)&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../../../_images/sphx_glr_plot_inv_1_em1dfm_002.png" srcset="../../../_images/sphx_glr_plot_inv_1_em1dfm_002.png" alt="True and Recovered Models" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../../_images/sphx_glr_plot_inv_1_em1dfm_003.png" srcset="../../../_images/sphx_glr_plot_inv_1_em1dfm_003.png" alt="Predicted and Observed Data" class = "sphx-glr-multi-img"/></li>
+</ul>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  19.153 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  18 MB</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-content-tutorials-07-fdem-plot-inv-1-em1dfm-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/433d669208457843036f9f320bf7ed69/plot_inv_1_em1dfm.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_inv_1_em1dfm.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/41348e6c1eaaa9f22ea53949ef5fc196/plot_inv_1_em1dfm.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_inv_1_em1dfm.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="plot_fwd_3_fem_3d.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">3D Forward Simulation on a Tree Mesh</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="../08-tdem/index.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">Time-Domain Electromagnetics</p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#import-modules">
+   Import modules
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#download-test-data-file">
+   Download Test Data File
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#load-data-and-plot">
+   Load Data and Plot
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#defining-the-survey">
+   Defining the Survey
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#assign-uncertainties-and-define-the-data-object">
+   Assign Uncertainties and Define the Data Object
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#defining-a-1d-layered-earth-1d-tensor-mesh">
+   Defining a 1D Layered Earth (1D Tensor Mesh)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-a-starting-and-or-reference-model-and-the-mapping">
+   Define a Starting and/or Reference Model and the Mapping
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-the-physics-using-a-simulation-object">
+   Define the Physics using a Simulation Object
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-inverse-problem">
+   Define Inverse Problem
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-inversion-directives">
+   Define Inversion Directives
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#running-the-inversion">
+   Running the Inversion
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#plotting-results">
+   Plotting Results
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+<div class="toc-item">
+  
+<div id="searchbox"></div>
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+<div class="tocsection sourcelink">
+    <a href="../../../_sources/content/tutorials/07-fdem/plot_inv_1_em1dfm.rst.txt">
+        <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+</div>
+
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>

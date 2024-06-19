@@ -1,0 +1,744 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Getting Started: for Developers &#8212; SimPEG 0.18.0 documentation</title>
+  <script>
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+
+  
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/basic/installing_for_developers';</script>
+    <link rel="shortcut icon" href="../../_static/logo-block.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Practices" href="practices.html" />
+    <link rel="prev" title="Getting Started with SimPEG" href="installing.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="None">
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-45185336-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../_static/simpeg-logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/simpeg-logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item current active">
+                    <a class="nav-link" href="../getting_started.html">
+                        Getting Started
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../user_guide.html">
+                        User Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../api/index.html">
+                        API Reference
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../release/index.html">
+                        Release Notes
+                    </a>
+                </li>
+                
+
+            <li class="nav-item">
+                <a class="nav-link nav-external" href="https://simpeg.xyz">SimPEG<i class="fa-solid fa-up-right-from-square"></i></a>
+            </li>
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+            <li class="nav-item">
+                <a class="nav-link nav-external" href="http://slack.simpeg.xyz">Contact<i class="fa-solid fa-up-right-from-square"></i></a>
+            </li>
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      <div class="navbar-end-item navbar-end__search-button-container">
+        
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
+    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="http://slack.simpeg.xyz/" title="Slack" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-slack"></i></span>
+            <label class="sr-only">Slack</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-discourse"></i></span>
+            <label class="sr-only">Discourse</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-youtube"></i></span>
+            <label class="sr-only">Youtube</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/simpegpy" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  <div class="search-button-container--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+  </div>
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item current active">
+                    <a class="nav-link" href="../getting_started.html">
+                        Getting Started
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../user_guide.html">
+                        User Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../api/index.html">
+                        API Reference
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../release/index.html">
+                        Release Notes
+                    </a>
+                </li>
+                
+
+            <li class="nav-item">
+                <a class="nav-link nav-external" href="https://simpeg.xyz">SimPEG<i class="fa-solid fa-up-right-from-square"></i></a>
+            </li>
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+            <li class="nav-item">
+                <a class="nav-link nav-external" href="http://slack.simpeg.xyz">Contact<i class="fa-solid fa-up-right-from-square"></i></a>
+            </li>
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
+    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="http://slack.simpeg.xyz/" title="Slack" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-slack"></i></span>
+            <label class="sr-only">Slack</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-discourse"></i></span>
+            <label class="sr-only">Discourse</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-youtube"></i></span>
+            <label class="sr-only">Youtube</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/simpegpy" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="big_picture.html">Why SimPEG?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Getting Started with SimPEG</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Getting Started: for Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="practices.html">Practices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to SimPEG</a></li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+      </div>
+      <main class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <section id="getting-started-for-developers">
+<span id="getting-started-developers"></span><h1>Getting Started: for Developers<a class="headerlink" href="#getting-started-for-developers" title="Permalink to this headline">#</a></h1>
+<ul class="simple">
+<li><p><strong>Purpose:</strong> To download and set up your environment for using and developing within SimPEG.</p></li>
+</ul>
+<section id="installing-python">
+<span id="getting-started-installing-python"></span><h2>Installing Python<a class="headerlink" href="#installing-python" title="Permalink to this headline">#</a></h2>
+<a class="reference external image-reference" href="https://www.python.org/"><img alt="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/220px-Python-logo-notext.svg.png" class="align-right" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/220px-Python-logo-notext.svg.png" style="width: 100px;" /></a>
+<p>SimPEG is written in <a class="reference external" href="https://www.python.org/">Python</a>! To install and maintain your <a class="reference external" href="https://www.python.org/">Python</a>
+environment, <a class="reference external" href="https://www.anaconda.com/products/individual">Anaconda</a> is a package manager that you can use.
+If you and <a class="reference external" href="https://www.python.org/">Python</a> are not yet acquainted, we highly
+recommend checking out <a class="reference external" href="http://software-carpentry.org/">Software Carpentry</a>.</p>
+</section>
+<section id="working-with-git-and-github">
+<span id="getting-started-working-with-git-and-github"></span><h2>Working with Git and GitHub<a class="headerlink" href="#working-with-git-and-github" title="Permalink to this headline">#</a></h2>
+<a class="reference external image-reference" href="http://github.com"><img alt="https://github.githubassets.com/images/modules/logos_page/Octocat.png" class="align-right" src="https://github.githubassets.com/images/modules/logos_page/Octocat.png" style="width: 100px;" /></a>
+<p>To keep track of your code changes and contribute back to SimPEG, you will
+need a <a class="reference external" href="http://github.com">github</a> account and fork the <a class="reference external" href="http://github.com/simpeg/simpeg">SimPEG repository</a>
+(<a class="reference external" href="https://docs.github.com/en/get-started/quickstart/fork-a-repo">How to fork a repo</a>). Software</p>
+<p>Next, clone your fork so that you have a local copy. We recommend setting up a
+directory called <code class="code docutils literal notranslate"><span class="pre">git</span></code> in your home directory to put your version-
+controlled repositories. There are two ways you can clone a repository: (1)
+from a terminal (checkout: <a class="reference external" href="https://docs.github.com/en/get-started/quickstart/set-up-git">https://docs.github.com/en/get-started/quickstart/set-up-git</a> for an tutorial):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">YOUR</span><span class="o">-</span><span class="n">USERNAME</span><span class="o">/</span><span class="n">SimPEG</span>
+</pre></div>
+</div>
+<p>or (2) using a desktop client such as <a class="reference external" href="https://www.sourcetreeapp.com/">SourceTree</a>.</p>
+<a class="reference external image-reference" href="https://www.sourcetreeapp.com/"><img alt="../../_images/sourceTreeSimPEG.png" class="align-center" src="../../_images/sourceTreeSimPEG.png" style="width: 400px;" /></a>
+<p>If this is your first time managing a <a class="reference external" href="http://github.com">github</a> repository through <a class="reference external" href="https://www.sourcetreeapp.com/">SourceTree</a>,
+it is also handy to set up the remote account so it remembers your <a class="reference external" href="http://github.com">github</a>
+user name and password</p>
+<a class="reference internal image-reference" href="../../_images/sourceTreeRemote.png"><img alt="../../_images/sourceTreeRemote.png" class="align-center" src="../../_images/sourceTreeRemote.png" style="width: 400px;" /></a>
+<p>For managing your copy of SimPEG and contributing back to the main
+repository, have a look at the article: <a class="reference external" href="http://nvie.com/posts/a-successful-git-branching-model/">A successful git branching model</a></p>
+</section>
+<section id="setting-up-your-environment">
+<span id="getting-started-setting-up-your-environment"></span><h2>Setting up your environment<a class="headerlink" href="#setting-up-your-environment" title="Permalink to this headline">#</a></h2>
+<p>So that you can access SimPEG from anywhere on your computer, you need to add
+it to your path. This can be done using symlinks. In your <code class="code docutils literal notranslate"><span class="pre">git</span></code> directory,
+create a directory called <code class="code docutils literal notranslate"><span class="pre">python_symlinks</span></code>.</p>
+<a class="reference internal image-reference" href="../../_images/gitfolders.png"><img alt="../../_images/gitfolders.png" class="align-center" src="../../_images/gitfolders.png" style="width: 40%;" /></a>
+<p>Open a terminal in this directory and create a symlink for SimPEG</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">../</span><span class="n">SimPEG</span><span class="o">/</span><span class="n">SimPEG</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>Then, in your shell, you need to add a <code class="code docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> variable. For Mac and
+Linux, if you are using Z shell (<a class="reference external" href="http://ohmyz.sh/">Oh My Zsh</a> is used by a
+lot of SimPEG developers) or bash open the config in a text editor, ie:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nano</span> <span class="o">~/.</span><span class="n">zshrc</span>
+</pre></div>
+</div>
+<p>or:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nano</span> <span class="o">~/.</span><span class="n">bash_profile</span>
+</pre></div>
+</div>
+<p>and add a <code class="code docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> variable:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">PYTHONPATH</span><span class="o">=</span><span class="s2">&quot;$PYTHONPATH:/Users/USER/git/python_symlinks&quot;</span>
+</pre></div>
+</div>
+<p>and save and close. If you then restart the terminal, and run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>echo $PYTHONPATH
+</pre></div>
+</div>
+<p>the output should be:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">USER</span><span class="o">/</span><span class="n">git</span><span class="o">/</span><span class="n">python_symlinks</span>
+</pre></div>
+</div>
+</section>
+<section id="text-editors">
+<span id="getting-started-text-editors"></span><h2>Text Editors<a class="headerlink" href="#text-editors" title="Permalink to this headline">#</a></h2>
+<p><a class="reference external" href="https://www.sublimetext.com/">Sublime</a> is a text editor used by many SimPEG developers.</p>
+<p>You can configure the Sublime so that you can use the sublime
+build (Tools / Build) to run <a class="reference external" href="https://www.python.org/">Python</a> code.</p>
+<p>Open your user settings</p>
+<a class="reference internal image-reference" href="../../_images/sublimeSettings.png"><img alt="../../_images/sublimeSettings.png" class="align-center" src="../../_images/sublimeSettings.png" style="width: 400px;" /></a>
+<p>and edit them to include the path to your <code class="code docutils literal notranslate"><span class="pre">python_symlinks</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="s2">&quot;added_words&quot;</span><span class="p">:</span>
+<span class="p">[</span>
+    <span class="s2">&quot;electromagnetics&quot;</span>
+<span class="p">],</span>
+<span class="s2">&quot;ensure_newline_at_eof_on_save&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+<span class="s2">&quot;extra_paths&quot;</span><span class="p">:</span>
+<span class="p">[</span>
+    <span class="s2">&quot;/Users/USER/git/python_symlinks/&quot;</span>
+<span class="p">],</span>
+<span class="s2">&quot;font_size&quot;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
+<span class="s2">&quot;ignored_packages&quot;</span><span class="p">:</span>
+<span class="p">[</span>
+    <span class="s2">&quot;Vintage&quot;</span>
+<span class="p">],</span>
+<span class="s2">&quot;translate_tabs_to_spaces&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+<span class="s2">&quot;trim_trailing_white_space_on_save&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+<span class="s2">&quot;word_wrap&quot;</span><span class="p">:</span> <span class="n">false</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>There are a few other things configured here. In particular you will want to
+ensure that <code class="code docutils literal notranslate"><span class="pre">&quot;translate_tabs_to_spaces&quot;:</span> <span class="pre">true</span></code> is configured (<a class="reference external" href="https://www.python.org/">Python</a> is
+sensitive to tabs and spaces), that
+<code class="code docutils literal notranslate"><span class="pre">&quot;trim_trailing_white_space_on_save&quot;:</span> <span class="pre">true</span></code> so that your git flow does
+not get cluttered with extra spaces that are not actually changes to code and
+that <code class="code docutils literal notranslate"><span class="pre">&quot;ensure_newline_at_eof_on_save&quot;:</span> <span class="pre">true</span></code>, so that there is a blank
+line at the end of all saved documents. The rest are up to you.</p>
+</section>
+<section id="jupyter-notebook">
+<span id="getting-started-jupyter-notebook"></span><h2>Jupyter Notebook<a class="headerlink" href="#jupyter-notebook" title="Permalink to this headline">#</a></h2>
+<a class="reference internal image-reference" href="https://raw.githubusercontent.com/jupyter/design/master/logos/Square%20Logo/squarelogo-greytext-orangebody-greymoons/squarelogo-greytext-orangebody-greymoons.svg"><img alt="https://raw.githubusercontent.com/jupyter/design/master/logos/Square%20Logo/squarelogo-greytext-orangebody-greymoons/squarelogo-greytext-orangebody-greymoons.svg" class="align-right" src="https://raw.githubusercontent.com/jupyter/design/master/logos/Square%20Logo/squarelogo-greytext-orangebody-greymoons/squarelogo-greytext-orangebody-greymoons.svg" width="100" /></a>
+<p>The SimPEG team loves the <a class="reference external" href="http://jupyter.org/">Jupyter notebook</a>. It is an interactive
+development environment. It is installed it you used <a class="reference external" href="https://www.anaconda.com/products/individual">Anaconda</a> and can be
+launched from a terminal using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">notebook</span>
+</pre></div>
+</div>
+</section>
+<section id="if-all-is-well">
+<span id="getting-started-if-all-is-well"></span><h2>If all is well …<a class="headerlink" href="#if-all-is-well" title="Permalink to this headline">#</a></h2>
+<p>You should be able to open a terminal within SimPEG/tutorials and run an example, ie.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="mi">02</span><span class="o">-</span><span class="n">linear_inversion</span><span class="o">/</span><span class="n">plot_inv_1_inversion_lsq</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>or you can download and run the <a class="reference internal" href="../tutorials/02-linear_inversion/plot_inv_1_inversion_lsq.html#sphx-glr-content-tutorials-02-linear-inversion-plot-inv-1-inversion-lsq-py"><span class="std std-ref">notebook from the docs</span></a>.</p>
+<img alt="../../_images/sphx_glr_plot_inv_1_inversion_lsq_003.png" src="../../_images/sphx_glr_plot_inv_1_inversion_lsq_003.png" />
+<p>You are now set up to SimPEG!</p>
+</section>
+<section id="if-all-is-not-well">
+<h2>If all is not well …<a class="headerlink" href="#if-all-is-not-well" title="Permalink to this headline">#</a></h2>
+<p>Submit an <a class="reference external" href="https://github.com/simpeg/simpeg/issues">issue</a></p>
+</section>
+<section id="advanced-installing-solvers">
+<h2>Advanced: Installing Solvers<a class="headerlink" href="#advanced-installing-solvers" title="Permalink to this headline">#</a></h2>
+<p><a class="reference external" href="https://www.pardiso-project.org">Pardiso</a> is a direct solvers that can be used for solving large(ish)
+linear systems of equations. To install, follow the instructions to download
+and install <a class="reference external" href="https://github.com/rowanc1/pymatsolver">pymatsolver</a>.</p>
+<p>If you open a <a class="reference external" href="http://jupyter.org/">Jupyter notebook</a> and are able to run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymatsolver</span> <span class="kn">import</span> <span class="n">Pardiso</span>
+</pre></div>
+</div>
+<p>then you have succeeded! Otherwise, make an <a class="reference external" href="https://github.com/rowanc1/pymatsolver/issues">issue in pymatsolver</a>.</p>
+</section>
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="installing.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">Getting Started with SimPEG</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="practices.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">Practices</p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#installing-python">
+   Installing Python
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#working-with-git-and-github">
+   Working with Git and GitHub
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setting-up-your-environment">
+   Setting up your environment
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#text-editors">
+   Text Editors
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#jupyter-notebook">
+   Jupyter Notebook
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#if-all-is-well">
+   If all is well …
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#if-all-is-not-well">
+   If all is not well …
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#advanced-installing-solvers">
+   Advanced: Installing Solvers
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+<div class="toc-item">
+  
+<div id="searchbox"></div>
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+<div class="tocsection sourcelink">
+    <a href="../../_sources/content/basic/installing_for_developers.rst.txt">
+        <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+</div>
+
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>

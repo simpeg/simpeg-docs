@@ -1,0 +1,878 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Practices &#8212; SimPEG 0.18.0 documentation</title>
+  <script>
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+
+  
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/basic/practices';</script>
+    <link rel="shortcut icon" href="../../_static/logo-block.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Contributing to SimPEG" href="contributing.html" />
+    <link rel="prev" title="Getting Started: for Developers" href="installing_for_developers.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="None">
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-45185336-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../_static/simpeg-logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/simpeg-logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item current active">
+                    <a class="nav-link" href="../getting_started.html">
+                        Getting Started
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../user_guide.html">
+                        User Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../api/index.html">
+                        API Reference
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../release/index.html">
+                        Release Notes
+                    </a>
+                </li>
+                
+
+            <li class="nav-item">
+                <a class="nav-link nav-external" href="https://simpeg.xyz">SimPEG<i class="fa-solid fa-up-right-from-square"></i></a>
+            </li>
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+            <li class="nav-item">
+                <a class="nav-link nav-external" href="http://slack.simpeg.xyz">Contact<i class="fa-solid fa-up-right-from-square"></i></a>
+            </li>
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      <div class="navbar-end-item navbar-end__search-button-container">
+        
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
+    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="http://slack.simpeg.xyz/" title="Slack" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-slack"></i></span>
+            <label class="sr-only">Slack</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-discourse"></i></span>
+            <label class="sr-only">Discourse</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-youtube"></i></span>
+            <label class="sr-only">Youtube</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/simpegpy" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  <div class="search-button-container--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+  </div>
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item current active">
+                    <a class="nav-link" href="../getting_started.html">
+                        Getting Started
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../user_guide.html">
+                        User Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../api/index.html">
+                        API Reference
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../release/index.html">
+                        Release Notes
+                    </a>
+                </li>
+                
+
+            <li class="nav-item">
+                <a class="nav-link nav-external" href="https://simpeg.xyz">SimPEG<i class="fa-solid fa-up-right-from-square"></i></a>
+            </li>
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+            <li class="nav-item">
+                <a class="nav-link nav-external" href="http://slack.simpeg.xyz">Contact<i class="fa-solid fa-up-right-from-square"></i></a>
+            </li>
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
+    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="http://slack.simpeg.xyz/" title="Slack" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-slack"></i></span>
+            <label class="sr-only">Slack</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-discourse"></i></span>
+            <label class="sr-only">Discourse</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-youtube"></i></span>
+            <label class="sr-only">Youtube</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/simpegpy" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="big_picture.html">Why SimPEG?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Getting Started with SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing_for_developers.html">Getting Started: for Developers</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Practices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to SimPEG</a></li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+      </div>
+      <main class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <section id="practices">
+<span id="id1"></span><h1>Practices<a class="headerlink" href="#practices" title="Permalink to this headline">#</a></h1>
+<ul class="simple">
+<li><p><strong>Purpose</strong>: In the development of SimPEG, we strive to follow best practices. Here, we
+provide an overview of those practices and some tools we use to support them.</p></li>
+</ul>
+<p>Here we cover</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#testing"><span class="std std-ref">Testing</span></a></p></li>
+<li><p><a class="reference internal" href="#style"><span class="std std-ref">Style</span></a></p></li>
+<li><p><a class="reference internal" href="#licensing"><span class="std std-ref">Licensing</span></a></p></li>
+</ul>
+<section id="testing">
+<span id="id2"></span><h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">#</a></h2>
+<a class="reference external image-reference" href="https://travis-ci.org/simpeg/simpeg"><img alt="https://travis-ci.org/simpeg/simpeg.svg?branch=main" src="https://travis-ci.org/simpeg/simpeg.svg?branch=main" /></a>
+<a class="reference external image-reference" href="https://codecov.io/gh/simpeg/simpeg"><img alt="Coverage status" src="https://codecov.io/gh/simpeg/simpeg/branch/main/graph/badge.svg" /></a>
+<a class="reference external image-reference" href="https://travis-ci.org/simpeg/simpeg"><img alt="https://blog.travis-ci.com/images/travis-mascot-200px.png" class="align-right" src="https://blog.travis-ci.com/images/travis-mascot-200px.png" style="width: 80px;" /></a>
+<p>On each update, SimPEG is tested using the continuous integration service
+<a class="reference external" href="https://travis-ci.org/">Travis CI</a>. We use <a class="reference external" href="http://codecov.io">Codecov</a>
+to check and provide stats on how much of the code base is covered by tests.
+This tells which lines of code have been run in the test suite. It does not
+tell you about the quality of the tests run! In order to assess that, have a
+look at the tests we are running - they tell you the assumptions that we do
+not want to break within the code base.</p>
+<p>Within the repository, the tests are located in the top-level <strong>tests</strong>
+directory. Tests are organized similar to the structure of the repository.
+There are several types of tests we employ, this is not an exhaustive list,
+but meant to provide a few places to look when you are developing and would
+like to check that the code you wrote satisfies the assumptions you think it
+should.</p>
+<p>All tests inherit from <code class="code docutils literal notranslate"><span class="pre">unittest</span></code> which is a part of core python.
+Checkout the docs on <a class="reference external" href="https://docs.python.org/2.7/library/unittest.html">unittest</a>.</p>
+<section id="compare-with-known-values">
+<h3>Compare with known values<a class="headerlink" href="#compare-with-known-values" title="Permalink to this headline">#</a></h3>
+<p>In a simple case, you might know the exact value of what the output should be
+and you can <code class="code docutils literal notranslate"><span class="pre">assert</span></code> that this is in fact the case. For example, in
+<a class="reference external" href="https://github.com/simpeg/discretize/blob/main/tests/base/test_basemesh.py">test_basemesh.py</a>,
+we setup a 3D <code class="code docutils literal notranslate"><span class="pre">BaseRectangularMesh</span></code> and assert that it has 3 dimensions.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">discretize.base</span> <span class="kn">import</span> <span class="n">BaseRectangularMesh</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">class</span> <span class="nc">TestBaseMesh</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="o">=</span> <span class="n">BaseRectangularMesh</span><span class="p">([</span><span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">test_meshDimensions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The class inherits from <code class="code docutils literal notranslate"><span class="pre">unittest.TestCase</span></code>. When running the tests, the
+<code class="code docutils literal notranslate"><span class="pre">setUp</span></code> is run first, in this case we attach a mesh to the instance of
+this class, and then all functions with the naming convention <code class="code docutils literal notranslate"><span class="pre">test_XXX</span></code>
+are run. Here we check that the dimensions are correct for the 3D mesh.</p>
+<p>If the value is not an integer, you can be subject to floating point errors,
+so <code class="code docutils literal notranslate"><span class="pre">assertTrue</span></code> might be too harsh. In this case, you will want to use a
+tolerance. For instance in <a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/tests/base/test_maps.py">test_maps.py</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MapTests</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="c1"># method setUp is used to create meshes</span>
+
+    <span class="k">def</span> <span class="nf">test_mapMultiplication</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">discretize</span><span class="o">.</span><span class="n">TensorMesh</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">expMap</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="n">ExpMap</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+        <span class="n">vertMap</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="n">SurjectVertical1D</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+        <span class="n">combo</span> <span class="o">=</span> <span class="n">expMap</span><span class="o">*</span><span class="n">vertMap</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span>
+        <span class="n">t_true</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mf">2.</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertLess</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">((</span><span class="n">combo</span> <span class="o">*</span> <span class="n">m</span><span class="p">)</span><span class="o">-</span><span class="n">t_true</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),</span><span class="n">TOL</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>These are rather simple examples, more advanced tests might include <a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/tests/em/fdem/forward/test_FDEM_analytics.py">solving an
+electromagnetic problem numerically and comparing it to an analytical
+solution</a> , or
+<a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/tests/em/fdem/inverse/adjoint/test_FDEM_adjointEB.py">performing an adjoint test</a> to test <code class="code docutils literal notranslate"><span class="pre">Jvec</span></code> and <code class="code docutils literal notranslate"><span class="pre">Jtvec</span></code>.</p>
+</section>
+<section id="order-and-derivative-tests">
+<span id="order-test"></span><h3>Order and Derivative Tests<a class="headerlink" href="#order-and-derivative-tests" title="Permalink to this headline">#</a></h3>
+<p>Order tests can be used when you are testing differential operators (we are using a second-order,
+staggered grid discretization for our operators). For example, testing a 2D
+curl operator in <a class="reference external" href="https://github.com/simpeg/discretize/blob/main/tests/base/test_operators.py">test_operators.py</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">SimPEG.tests</span> <span class="kn">import</span> <span class="n">OrderTest</span>
+
+<span class="k">class</span> <span class="nc">TestCurl2D</span><span class="p">(</span><span class="n">OrderTest</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Cell Grad 2D - Dirichlet&quot;</span>
+    <span class="n">meshTypes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;uniformTensorMesh&#39;</span><span class="p">]</span>
+    <span class="n">meshDimension</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">meshSizes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">getError</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Test function</span>
+        <span class="n">ex</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">ey</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">sol</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="n">sol_curl2d</span> <span class="o">=</span> <span class="n">call2</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="o">.</span><span class="n">gridCC</span><span class="p">)</span>
+        <span class="n">Ec</span> <span class="o">=</span> <span class="n">cartE2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">,</span> <span class="n">ex</span><span class="p">,</span> <span class="n">ey</span><span class="p">)</span>
+        <span class="n">sol_ana</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="o">.</span><span class="n">edge_curl</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="o">.</span><span class="n">project_face_vector</span><span class="p">(</span><span class="n">Ec</span><span class="p">)</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">((</span><span class="n">sol_curl2d</span><span class="o">-</span><span class="n">sol_ana</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">err</span>
+
+    <span class="k">def</span> <span class="nf">test_order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">orderTest</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Derivative tests are a particular type or <a class="reference internal" href="#order-test"><span class="std std-ref">Order and Derivative Tests</span></a>, and since they
+are used so extensively, SimPEG includes a <code class="code docutils literal notranslate"><span class="pre">check_derivative</span></code> method.</p>
+<p>In the case
+of testing a derivative, we consider a Taylor expansion of a function about
+<span class="math notranslate nohighlight">\(x\)</span>. For a small perturbation <span class="math notranslate nohighlight">\(\Delta x\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[f(x + \Delta x) \simeq f(x) + J(x) \Delta x + \mathcal{O}(h^2)\]</div>
+<p>As <span class="math notranslate nohighlight">\(\Delta x\)</span> decreases, we expect <span class="math notranslate nohighlight">\(\|f(x) - f(x + \Delta x)\|\)</span> to
+have first order convergence (e.g. the improvement in the approximation is
+directly related to how small <span class="math notranslate nohighlight">\(\Delta x\)</span> is, while if we include the
+first derivative in our approximation, we expect that <span class="math notranslate nohighlight">\(\|f(x) +
+J(x)\Delta x - f(x + \Delta x)\|\)</span> to converge at a second-order rate. For
+example, all <a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/maps.py#L127">maps have an associated derivative test</a> . An example from <a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/tests/em/fdem/inverse/derivs/test_FDEM_derivs.py">test_FDEM_derivs.py</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">derivTest</span><span class="p">(</span><span class="n">fdemType</span><span class="p">,</span> <span class="n">comp</span><span class="p">):</span>
+
+    <span class="c1"># setup problem, survey</span>
+
+    <span class="k">def</span> <span class="nf">fun</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">survey</span><span class="o">.</span><span class="n">dpred</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">prb</span><span class="o">.</span><span class="n">Jvec</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tests</span><span class="o">.</span><span class="n">check_derivative</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">plotIt</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">FLR</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="documentation">
+<span id="id3"></span><h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">#</a></h2>
+<p>Documentation helps others use your code! Please document new contributions.
+SimPEG uses <a class="reference external" href="http://www.sphinx-doc.org/">sphinx</a> to build the documentation.
+When documenting a new class or function, please include a description
+(with math if it solves an equation), inputs, outputs and preferably a small example.</p>
+<p>For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">WeightedLeastSquares</span><span class="p">(</span><span class="n">BaseComboRegularization</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    L2 WeightedLeastSquares regularization with both smallness and smoothness (first order</span>
+<span class="sd">    derivative) contributions.</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \phi_m(\mathbf{m}) = \\alpha_s \| W_s (\mathbf{m} - \mathbf{m_{ref}} ) \|^2</span>
+<span class="sd">        + \\alpha_x \| W_x \\frac{\partial}{\partial x} (\mathbf{m} - \mathbf{m_{ref}} ) \|^2</span>
+<span class="sd">        + \\alpha_y \| W_y \\frac{\partial}{\partial y} (\mathbf{m} - \mathbf{m_{ref}} ) \|^2</span>
+<span class="sd">        + \\alpha_z \| W_z \\frac{\partial}{\partial z} (\mathbf{m} - \mathbf{m_{ref}} ) \|^2</span>
+
+<span class="sd">    Note if the key word argument `mrefInSmooth` is False, then mref is not</span>
+<span class="sd">    included in the smoothness contribution.</span>
+
+<span class="sd">    :param discretize.base.BaseMesh mesh: SimPEG mesh</span>
+<span class="sd">    :param IdentityMap mapping: regularization mapping, takes the model from model space to the thing you want to regularize</span>
+<span class="sd">    :param numpy.ndarray indActive: active cell indices for reducing the size of differential operators in the definition of a regularization mesh</span>
+<span class="sd">    :param bool mrefInSmooth: (default = False) put mref in the smoothness component?</span>
+<span class="sd">    :param float alpha_s: (default 1e-6) smallness weight</span>
+<span class="sd">    :param float alpha_x: (default 1) smoothness weight for first derivative in the x-direction</span>
+<span class="sd">    :param float alpha_y: (default 1) smoothness weight for first derivative in the y-direction</span>
+<span class="sd">    :param float alpha_z: (default 1) smoothness weight for first derivative in the z-direction</span>
+<span class="sd">    :param float alpha_xx: (default 1) smoothness weight for second derivative in the x-direction</span>
+<span class="sd">    :param float alpha_yy: (default 1) smoothness weight for second derivative in the y-direction</span>
+<span class="sd">    :param float alpha_zz: (default 1) smoothness weight for second derivative in the z-direction</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="style">
+<span id="id4"></span><h2>Style<a class="headerlink" href="#style" title="Permalink to this headline">#</a></h2>
+<p>Consistency make code more readable and easier for collaborators to jump in.
+<a class="reference external" href="https://www.python.org/dev/peps/pep-0008/">PEP 8</a> provides conventions for
+coding in Python. SimPEG is currently not <a class="reference external" href="https://www.python.org/dev/peps/pep-0008/">PEP 8</a> compliant, but we are working
+towards it and would appreciate contributions that do too! If you have sublime text 3, the linter can be set up through sublime text 3’s package manager. The step by step process is found <a class="reference internal" href="#api-practices-linter-install"><span class="std std-ref">here</span></a>.</p>
+<p>Sublime has PEP 8 linter packages that you can use. I use <a class="reference external" href="https://github.com/SublimeLinter/SublimeLinter-pep8">SublimeLinter-pep8</a>.
+You can install it by going to your package manager (<cite>cmd + shift + p</cite>),
+install package and search for SublimeLinter-pep8. Installation instructions are available at <a class="github reference external" href="https://github.com/SublimeLinter/SublimeLinter-pep8">SublimeLinter/SublimeLinter-pep8</a>.</p>
+<p>This highlights and gives you tips on how to correct the code.</p>
+<a class="reference internal image-reference" href="../../_images/pep8sublime.png"><img alt="../../_images/pep8sublime.png" src="../../_images/pep8sublime.png" style="width: 95%;" /></a>
+<p>Below is a sample user-settings configuration for the SublimeLinter (Sublime
+Text &gt; Preferences &gt; Package Settings &gt; SublimeLinter &gt; Settings-User)</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;user&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;debug&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;delay&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.25</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;error_color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;D02000&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;gutter_theme&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Packages/SublimeLinter/gutter-themes/Default/Default.gutter-theme&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;gutter_theme_excludes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;lint_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;background&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;linters&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;pep8&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;@disable&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;excludes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;ignore&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;max-line-length&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;select&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;proselint&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;@disable&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;excludes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;mark_style&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;solid underline&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;no_column_highlights_line&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;passive_warnings&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;paths&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;linux&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;osx&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">                </span><span class="s2">&quot;/anaconda/bin&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="p">],</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;windows&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;python_paths&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;linux&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;osx&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;windows&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;rc_search_limit&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;shell_timeout&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;show_errors_on_save&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;show_marks_in_minimap&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;syntax_map&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;html (django)&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;html&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;html (rails)&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;html&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;html 5&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;html&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;javascript (babel)&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;javascript&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;magicpython&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;python&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;php&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;html&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;python django&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;python&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;pythonimproved&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;python&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;warning_color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;DDB700&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;wrap_find&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<section id="install-pep8-linter-through-sublime-text-3">
+<h3>Install PEP8 Linter Through Sublime Text 3<a class="headerlink" href="#install-pep8-linter-through-sublime-text-3" title="Permalink to this headline">#</a></h3>
+<p id="api-practices-linter-install">Instructions for installing and activating the pep8 linter for Mac OS X/Linux/Windows are below. For this to work, you MUST have installed sublime text 3.</p>
+<p><strong>Step 1: Install Sublime Linter 3:</strong></p>
+<ul class="simple">
+<li><p>Open sublime text 3</p></li>
+<li><p>Open the Command Palette (cmd+shift+p on Mac OS X, ctrl+shift+p on Linux/Windows).</p></li>
+<li><p>Type ‘install’ and select ‘Package Control: Install Package’ from the Command Palette. There will be a pause of a few seconds while Package Control finds the available packages.</p></li>
+<li><p>When the list of available packages appears, type ‘linter’ and select ‘SublimeLinter’. Note: The github repository name is “SublimeLinter3”, but the plugin name remains “SublimeLinter”.</p></li>
+<li><p>After a few seconds SublimeLinter will be installed and loaded. Depending on your setup, you may see some prompts from SublimeLinter. For more information on SublimeLinter’s startup actions, see Startup actions. You will see an install message.</p></li>
+<li><p>After reading the message, close Sublime Text 3</p></li>
+</ul>
+<p><strong>Step 2: Install pep8 Linter:</strong></p>
+<ul class="simple">
+<li><p>Open sublime text 3</p></li>
+<li><p>Open the Command Palette (cmd+shift+p on Mac OS X, ctrl+shift+p on Linux/Windows).</p></li>
+<li><p>Type ‘install’ and select ‘Package Control: Install Package’ from the Command Palette. There will be a pause of a few seconds while Package Control finds the available packages.</p></li>
+<li><p>When the list of available packages appears, type ‘pep8’ and select the appropriate option.</p></li>
+<li><p>After a few seconds pep8 linter will be installed and loaded. Depending on your setup, you may see some prompts from SublimeLinter. For more information on SublimeLinter’s startup actions, see Startup actions. You will see an install message.</p></li>
+<li><p>After reading the message, close Sublime Text 3</p></li>
+</ul>
+<p>The next time you open a .py file in sublime text 3, the linter should be activated.</p>
+</section>
+</section>
+<section id="licensing">
+<span id="id6"></span><h2>Licensing<a class="headerlink" href="#licensing" title="Permalink to this headline">#</a></h2>
+<a class="reference external image-reference" href="https://github.com/simpeg/simpeg/blob/main/LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-blue.svg" /></a>
+<p>We want SimPEG to be a useful resource for the geoscience community and
+believe that following open development practices is the best way to do that.
+SimPEG is licensed under the <a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/LICENSE">MIT license</a> which is allows open
+and commercial use and extension of SimPEG. It does not force packages that
+use SimPEG to be open source nor does it restrict commercial use.</p>
+</section>
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="installing_for_developers.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">Getting Started: for Developers</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="contributing.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">Contributing to SimPEG</p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#testing">
+   Testing
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#compare-with-known-values">
+     Compare with known values
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#order-and-derivative-tests">
+     Order and Derivative Tests
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#documentation">
+   Documentation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#style">
+   Style
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#install-pep8-linter-through-sublime-text-3">
+     Install PEP8 Linter Through Sublime Text 3
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#licensing">
+   Licensing
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+<div class="toc-item">
+  
+<div id="searchbox"></div>
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+<div class="tocsection sourcelink">
+    <a href="../../_sources/content/basic/practices.rst.txt">
+        <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+</div>
+
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>
