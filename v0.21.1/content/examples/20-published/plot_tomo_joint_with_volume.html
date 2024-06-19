@@ -1,0 +1,1047 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Straight Ray with Volume Data Misfit Term &#8212; SimPEG 0.21.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=45118af6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=cfc953b7"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script data-domain="docs.simpeg.xyz" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/examples/20-published/plot_tomo_joint_with_volume';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.14.4';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.simpeg.xyz/latest/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.21.1';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="icon" href="../../../_static/logo-block.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="FLOW: Vadose: van Genuchten" href="plot_vadose_vangenuchten.html" />
+    <link rel="prev" title="EM: Schenkel and Morrison Casing Model" href="plot_schenkel_morrison_casing.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/simpeg-logo.png" class="logo__image only-light" alt="SimPEG 0.21.1 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/simpeg-logo.png" class="logo__image only-dark" alt="SimPEG 0.21.1 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../api/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../release/index.html">
+                        Release Notes
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+                    User Tutorials
+                  </a>
+                </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+                    SimPEG
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+                    Contact
+                  </a>
+                </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-comment fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-discourse fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-youtube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../api/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../release/index.html">
+                        Release Notes
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+                    User Tutorials
+                  </a>
+                </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links-2">
+                    More
+                </button>
+                <ul id="pst-nav-more-links-2" class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+                    SimPEG
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+                    Contact
+                  </a>
+                </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-3"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-3"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-3"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-3">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-comment fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-discourse fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-youtube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/01-models_mapping/index.html">Models and Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/02-linear_inversion/index.html">Linear Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/03-gravity/index.html">Gravity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/04-magnetics/index.html">Magnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/05-dcr/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/06-ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/07-fdem/index.html">Frequency-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/08-tdem/index.html">Time-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/09-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/10-vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/11-flow/index.html">Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/12-seismic/index.html">Seismic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/13-joint_inversion/index.html">Joint Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/14-pgi/index.html">Petrophysically Guided Inversion</a></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Gallery</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../01-maps/index.html">Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02-gravity/index.html">Gravity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03-magnetics/index.html">Magnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04-dcip/index.html">DC Resistivity and Induced Polarization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05-fdem/index.html">Frequency Domain Electromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06-tdem/index.html">Time Domain Electromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08-vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09-flow/index.html">Richards Fluid Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10-pgi/index.html">PGI: Petrophysically and Geologically guided Inversion</a></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="index.html">In Publication</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="plot_booky_1D_time_freq_inv.html">Heagy et al., 2017 1D RESOLVE and SkyTEM Bookpurnong Inversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_booky_1Dstitched_resolve_inv.html">Heagy et al., 2017 1D RESOLVE Bookpurnong Inversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_effective_medium_theory.html">Effective Medium Theory Mapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_heagyetal2017_casing.html">Heagy et al., 2017 Casing Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_heagyetal2017_cyl_inversions.html">Heagy et al., 2017 1D FDEM and TDEM inversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_laguna_del_maule_inversion.html">PF: Gravity: Laguna del Maule Bouguer Gravity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_load_booky.html">Heagy et al., 2017 Load and Plot Bookpurnong Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_richards_celia1990.html">FLOW: Richards: 1D: Celia1990</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_schenkel_morrison_casing.html">EM: Schenkel and Morrison Casing Model</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Straight Ray with Volume Data Misfit Term</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_vadose_vangenuchten.html">FLOW: Vadose: van Genuchten</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../user_guide.html" class="nav-link">User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><i class="fa-solid fa-ellipsis"></i></li>
+    
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">In Publication</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Straight...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-content-examples-20-published-plot-tomo-joint-with-volume-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="straight-ray-with-volume-data-misfit-term">
+<span id="sphx-glr-content-examples-20-published-plot-tomo-joint-with-volume-py"></span><h1>Straight Ray with Volume Data Misfit Term<a class="headerlink" href="#straight-ray-with-volume-data-misfit-term" title="Permalink to this heading">#</a></h1>
+<p>Based on the SEG abstract Heagy, Cockett and Oldenburg, 2014.</p>
+<p>Heagy, L. J., Cockett, A. R., &amp; Oldenburg, D. W. (2014, August 5).
+Parametrized Inversion Framework for Proppant Volume in a Hydraulically
+Fractured Reservoir. SEG Technical Program Expanded Abstracts 2014.
+Society of Exploration Geophysicists. doi:10.1190/segam2014-1639.1</p>
+<p>This example is a simple joint inversion that consists of a</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>data misfit for the tomography problem</p></li>
+<li><p>data misfit for the volume of the inclusions
+(uses the effective medium theory mapping)</p></li>
+<li><p>model regularization</p></li>
+</ul>
+</div></blockquote>
+<ul class="sphx-glr-horizontal">
+<li><img src="../../../_images/sphx_glr_plot_tomo_joint_with_volume_001.png" srcset="../../../_images/sphx_glr_plot_tomo_joint_with_volume_001.png" alt="Model Transform" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../../_images/sphx_glr_plot_tomo_joint_with_volume_002.png" srcset="../../../_images/sphx_glr_plot_tomo_joint_with_volume_002.png" alt="plot tomo joint with volume" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../../_images/sphx_glr_plot_tomo_joint_with_volume_003.png" srcset="../../../_images/sphx_glr_plot_tomo_joint_with_volume_003.png" alt="plot tomo joint with volume" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../../_images/sphx_glr_plot_tomo_joint_with_volume_004.png" srcset="../../../_images/sphx_glr_plot_tomo_joint_with_volume_004.png" alt="true, vol: 6.240e-01, recovered(no Volume term), vol: 3.444e-02 , recovered(with Volume term), vol: 3.566e-02" class = "sphx-glr-multi-img"/></li>
+</ul>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>True Volume: 0.6240000000000001
+SimPEG.InvProblem will set Regularization.reference_model to m0.
+SimPEG.InvProblem will set Regularization.reference_model to m0.
+SimPEG.InvProblem will set Regularization.reference_model to m0.
+SimPEG.InvProblem will set Regularization.reference_model to m0.
+SimPEG.InvProblem will set Regularization.reference_model to m0.
+
+                    SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
+                    ***Done using the default solver Pardiso and no solver_opts.***
+
+model has any nan: 0
+=============================== Projected GNCG ===============================
+  #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment
+-----------------------------------------------------------------------------
+x0 has any nan: 0
+   0  2.50e-01  8.48e+04  0.00e+00  8.48e+04    3.83e+01      0
+   1  2.50e-01  4.27e+03  9.97e-01  4.27e+03    3.72e+01      0
+/home/ssoler/simpeg/SimPEG/maps.py:1844: UserWarning:
+
+Maximum number of iterations reached
+
+   2  2.50e-01  1.03e+03  8.29e-01  1.03e+03    3.28e+01      0
+   3  2.50e-01  9.21e+02  8.19e-01  9.21e+02    3.26e+01      4
+   4  2.50e-01  2.81e+02  7.78e-01  2.81e+02    2.47e+01      1
+   5  2.50e-01  1.50e+02  7.48e-01  1.50e+02    1.68e+01      0
+   6  2.50e-01  7.16e+01  7.52e-01  7.18e+01    1.45e+01      0
+   7  2.50e-01  4.52e+01  7.58e-01  4.54e+01    1.60e+01      0   Skip BFGS
+   8  2.50e-01  3.15e+01  7.59e-01  3.17e+01    1.23e+01      0
+   9  2.50e-01  2.29e+01  7.67e-01  2.31e+01    9.78e+00      0   Skip BFGS
+  10  2.50e-01  2.26e+01  7.64e-01  2.28e+01    1.13e+01      0
+  11  2.50e-01  1.76e+01  7.67e-01  1.78e+01    9.10e+00      0
+  12  2.50e-01  1.50e+01  7.66e-01  1.52e+01    8.92e+00      1
+  13  2.50e-01  1.13e+01  7.69e-01  1.15e+01    8.03e+00      0
+  14  2.50e-01  9.66e+00  7.68e-01  9.85e+00    7.56e+00      0
+  15  2.50e-01  7.46e+00  7.69e-01  7.65e+00    7.20e+00      0   Skip BFGS
+------------------------- STOP! -------------------------
+1 : |fc-fOld| = 2.2026e+00 &lt;= tolF*(1+|f0|) = 8.4760e+03
+0 : |xc-x_last| = 5.8258e-01 &lt;= tolX*(1+|x0|) = 1.0000e-01
+0 : |proj(x-g)-x|    = 7.2049e+00 &lt;= tolG          = 1.0000e-01
+0 : |proj(x-g)-x|    = 7.2049e+00 &lt;= 1e3*eps       = 1.0000e-02
+1 : maxIter   =      15    &lt;= iter          =     15
+------------------------- DONE! -------------------------
+
+Total recovered volume (no vol misfit term in inversion): 0.03444034268723054
+
+                    SimPEG.InvProblem is setting bfgsH0 to the inverse of the eval2Deriv.
+                    ***Done using the default solver Pardiso and no solver_opts.***
+
+model has any nan: 0
+=============================== Projected GNCG ===============================
+  #     beta     phi_d     phi_m       f      |proj(x-g)-x|  LS    Comment
+-----------------------------------------------------------------------------
+x0 has any nan: 0
+   0  2.50e-01  1.20e+05  0.00e+00  1.20e+05    1.55e+01      0
+   1  2.50e-01  7.60e+03  8.46e-01  7.60e+03    2.73e+01      0
+   2  2.50e-01  7.50e+03  8.19e-01  7.50e+03    2.67e+01      4
+   3  2.50e-01  7.35e+03  7.68e-01  7.35e+03    2.63e+01      2   Skip BFGS
+   4  2.50e-01  7.29e+03  7.36e-01  7.29e+03    2.55e+01      4
+   5  2.50e-01  7.28e+03  7.28e-01  7.28e+03    2.54e+01      6   Skip BFGS
+   6  2.50e-01  7.26e+03  6.98e-01  7.26e+03    2.46e+01      4   Skip BFGS
+   7  2.50e-01  7.26e+03  6.92e-01  7.26e+03    2.45e+01      6
+   8  2.50e-01  7.26e+03  6.86e-01  7.26e+03    2.44e+01      6   Skip BFGS
+   9  2.50e-01  7.25e+03  6.58e-01  7.25e+03    2.39e+01      4   Skip BFGS
+------------------------------------------------------------------
+0 :    ft     = 7.2537e+03 &lt;= alp*descent     = 7.2522e+03
+1 : maxIterLS =      10    &lt;= iterLS          =     10
+------------------------- End Linesearch -------------------------
+The linesearch got broken. Boo.
+
+Total volume (vol misfit term in inversion): 0.03566030591476015
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">SimPEG.seismic</span> <span class="kn">import</span> <span class="n">straight_ray_tomography</span> <span class="k">as</span> <span class="n">tomo</span>
+<span class="kn">import</span> <span class="nn">discretize</span>
+<span class="kn">from</span> <span class="nn">SimPEG</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">maps</span><span class="p">,</span>
+    <span class="n">utils</span><span class="p">,</span>
+    <span class="n">regularization</span><span class="p">,</span>
+    <span class="n">optimization</span><span class="p">,</span>
+    <span class="n">inverse_problem</span><span class="p">,</span>
+    <span class="n">inversion</span><span class="p">,</span>
+    <span class="n">data_misfit</span><span class="p">,</span>
+    <span class="n">objective_function</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Volume</span><span class="p">(</span><span class="n">objective_function</span><span class="o">.</span><span class="n">BaseObjectiveFunction</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A regularization on the volume integral of the model</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \phi_v = || \int_V m dV - \text{knownVolume} ||^2</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">knownVolume</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="o">=</span> <span class="n">mesh</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">knownVolume</span> <span class="o">=</span> <span class="n">knownVolume</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">knownVolume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;known volume&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_knownVolume</span>
+
+    <span class="nd">@knownVolume</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">knownVolume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_knownVolume</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">validate_float</span><span class="p">(</span><span class="s2">&quot;knownVolume&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">min_val</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">estVol</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">knownVolume</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+
+    <span class="k">def</span> <span class="nf">estVol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+        <span class="k">return</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.inner.html#numpy.inner" title="numpy.inner" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">inner</span></a><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">cell_volumes</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">deriv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+        <span class="c1"># return (self.mesh.cell_volumes * np.inner(self.mesh.cell_volumes, m))</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="mi">2</span>
+            <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">cell_volumes</span>
+            <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">knownVolume</span> <span class="o">-</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.inner.html#numpy.inner" title="numpy.inner" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">inner</span></a><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">cell_volumes</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
+        <span class="p">)</span>  <span class="c1"># factor of 2 from deriv of ||estVol - knownVol||^2</span>
+
+    <span class="k">def</span> <span class="nf">deriv2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">utils</span><span class="o">.</span><span class="n">mkvc</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">cell_volumes</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.inner.html#numpy.inner" title="numpy.inner" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">inner</span></a><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">cell_volumes</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># TODO: this is inefficent. It is a fully dense matrix</span>
+            <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csc_matrix.html#scipy.sparse.csc_matrix" title="scipy.sparse.csc_matrix" class="sphx-glr-backref-module-scipy-sparse sphx-glr-backref-type-py-class"><span class="n">sp</span><span class="o">.</span><span class="n">csc_matrix</span></a><span class="p">(</span>
+                <a href="https://numpy.org/doc/stable/reference/generated/numpy.outer.html#numpy.outer" title="numpy.outer" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">outer</span></a><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">cell_volumes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">cell_volumes</span><span class="p">)</span>
+            <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">plotIt</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">nC</span> <span class="o">=</span> <span class="mi">40</span>
+    <span class="n">de</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">h</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ones.html#numpy.ones" title="numpy.ones" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">(</span><span class="n">nC</span><span class="p">)</span> <span class="o">*</span> <span class="n">de</span> <span class="o">/</span> <span class="n">nC</span>
+    <span class="n">M</span> <span class="o">=</span> <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="discretize.TensorMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class"><span class="n">discretize</span><span class="o">.</span><span class="n">TensorMesh</span></a><span class="p">([</span><span class="n">h</span><span class="p">,</span> <span class="n">h</span><span class="p">])</span>
+
+    <span class="n">y</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html#numpy.linspace" title="numpy.linspace" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">cell_centers_y</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">M</span><span class="o">.</span><span class="n">cell_centers_x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">floor</span></a><span class="p">(</span><span class="n">nC</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)))</span>
+    <span class="n">rlocs</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.c_.html#numpy.c_" title="numpy.c_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">c_</span></a><span class="p">[</span><span class="mi">0</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="n">M</span><span class="o">.</span><span class="n">cell_centers_x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="p">]</span>
+    <span class="n">rx</span> <span class="o">=</span> <span class="n">tomo</span><span class="o">.</span><span class="n">Rx</span><span class="p">(</span><span class="n">rlocs</span><span class="p">)</span>
+
+    <span class="n">source_list</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">tomo</span><span class="o">.</span><span class="n">Src</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="n">M</span><span class="o">.</span><span class="n">cell_centers_x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">yi</span><span class="p">],</span> <span class="n">receiver_list</span><span class="o">=</span><span class="p">[</span><span class="n">rx</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">yi</span> <span class="ow">in</span> <span class="n">y</span>
+    <span class="p">]</span>
+
+    <span class="c1"># phi model</span>
+    <span class="n">phi0</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">phi1</span> <span class="o">=</span> <span class="mf">0.65</span>
+    <span class="n">phitrue</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">model_builder</span><span class="o">.</span><span class="n">create_block_in_wholespace</span><span class="p">(</span>
+        <span class="n">M</span><span class="o">.</span><span class="n">gridCC</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="p">[</span><span class="n">phi1</span><span class="p">,</span> <span class="n">phi0</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="n">knownVolume</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.sum.html#numpy.sum" title="numpy.sum" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">sum</span></a><span class="p">(</span><span class="n">phitrue</span> <span class="o">*</span> <span class="n">M</span><span class="o">.</span><span class="n">cell_volumes</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;True Volume: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">knownVolume</span><span class="p">))</span>
+
+    <span class="c1"># Set up true conductivity model and plot the model transform</span>
+    <span class="n">sigma0</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">exp</span></a><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">sigma1</span> <span class="o">=</span> <span class="mf">1e4</span>
+
+    <span class="k">if</span> <span class="n">plotIt</span><span class="p">:</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">sigmaMapTest</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="n">SelfConsistentEffectiveMedium</span><span class="p">(</span>
+            <span class="n">nP</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">sigma0</span><span class="o">=</span><span class="n">sigma0</span><span class="p">,</span> <span class="n">sigma1</span><span class="o">=</span><span class="n">sigma1</span><span class="p">,</span> <span class="n">rel_tol</span><span class="o">=</span><span class="mf">1e-1</span><span class="p">,</span> <span class="n">maxIter</span><span class="o">=</span><span class="mi">150</span>
+        <span class="p">)</span>
+        <span class="n">testphis</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html#numpy.linspace" title="numpy.linspace" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+
+        <span class="n">sigetest</span> <span class="o">=</span> <span class="n">sigmaMapTest</span> <span class="o">*</span> <span class="n">testphis</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">testphis</span><span class="p">,</span> <span class="n">sigetest</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Model Transform&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\varphi$&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\sigma$&quot;</span><span class="p">)</span>
+
+    <span class="n">sigmaMap</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="n">SelfConsistentEffectiveMedium</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">sigma0</span><span class="o">=</span><span class="n">sigma0</span><span class="p">,</span> <span class="n">sigma1</span><span class="o">=</span><span class="n">sigma1</span><span class="p">)</span>
+
+    <span class="c1"># scale the slowness so it is on a ~linear scale</span>
+    <span class="n">slownessMap</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="n">LogMap</span><span class="p">(</span><span class="n">M</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigmaMap</span>
+
+    <span class="c1"># set up the problem and survey</span>
+    <span class="n">survey</span> <span class="o">=</span> <span class="n">tomo</span><span class="o">.</span><span class="n">Survey</span><span class="p">(</span><span class="n">source_list</span><span class="p">)</span>
+    <span class="n">problem</span> <span class="o">=</span> <span class="n">tomo</span><span class="o">.</span><span class="n">Simulation</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">survey</span><span class="o">=</span><span class="n">survey</span><span class="p">,</span> <span class="n">slownessMap</span><span class="o">=</span><span class="n">slownessMap</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">plotIt</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">cb</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.colorbar.html#matplotlib.pyplot.colorbar" title="matplotlib.pyplot.colorbar" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span></a><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">plot_image</span><span class="p">(</span><span class="n">phitrue</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+        <span class="n">survey</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+        <span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\varphi$&quot;</span><span class="p">)</span>
+
+    <span class="c1"># get observed data</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">make_synthetic_data</span><span class="p">(</span><span class="n">phitrue</span><span class="p">,</span> <span class="n">relative_error</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">add_noise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">dpred</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">dpred</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">nC</span><span class="p">))</span>
+
+    <span class="c1"># objective function pieces</span>
+    <span class="n">reg</span> <span class="o">=</span> <span class="n">regularization</span><span class="o">.</span><span class="n">WeightedLeastSquares</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+    <span class="n">dmis</span> <span class="o">=</span> <span class="n">data_misfit</span><span class="o">.</span><span class="n">L2DataMisfit</span><span class="p">(</span><span class="n">simulation</span><span class="o">=</span><span class="n">problem</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">dmisVol</span> <span class="o">=</span> <span class="n">Volume</span><span class="p">(</span><span class="n">mesh</span><span class="o">=</span><span class="n">M</span><span class="p">,</span> <span class="n">knownVolume</span><span class="o">=</span><span class="n">knownVolume</span><span class="p">)</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="mf">0.25</span>
+    <span class="n">maxIter</span> <span class="o">=</span> <span class="mi">15</span>
+
+    <span class="c1"># without the volume regularization</span>
+    <span class="n">opt</span> <span class="o">=</span> <span class="n">optimization</span><span class="o">.</span><span class="n">ProjectedGNCG</span><span class="p">(</span><span class="n">maxIter</span><span class="o">=</span><span class="n">maxIter</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">opt</span><span class="o">.</span><span class="n">remember</span><span class="p">(</span><span class="s2">&quot;xc&quot;</span><span class="p">)</span>
+    <span class="n">invProb</span> <span class="o">=</span> <span class="n">inverse_problem</span><span class="o">.</span><span class="n">BaseInvProblem</span><span class="p">(</span><span class="n">dmis</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="n">opt</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">)</span>
+    <span class="n">inv</span> <span class="o">=</span> <span class="n">inversion</span><span class="o">.</span><span class="n">BaseInversion</span><span class="p">(</span><span class="n">invProb</span><span class="p">)</span>
+
+    <span class="n">mopt1</span> <span class="o">=</span> <span class="n">inv</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">nC</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-16</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Total recovered volume (no vol misfit term in inversion): &quot;</span>
+        <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dmisVol</span><span class="p">(</span><span class="n">mopt1</span><span class="p">))</span>
+    <span class="p">)</span>
+
+    <span class="c1"># with the volume regularization</span>
+    <span class="n">vol_multiplier</span> <span class="o">=</span> <span class="mf">9e4</span>
+    <span class="n">reg2</span> <span class="o">=</span> <span class="n">reg</span>
+    <span class="n">dmis2</span> <span class="o">=</span> <span class="n">dmis</span> <span class="o">+</span> <span class="n">vol_multiplier</span> <span class="o">*</span> <span class="n">dmisVol</span>
+    <span class="n">opt2</span> <span class="o">=</span> <span class="n">optimization</span><span class="o">.</span><span class="n">ProjectedGNCG</span><span class="p">(</span><span class="n">maxIter</span><span class="o">=</span><span class="n">maxIter</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">opt2</span><span class="o">.</span><span class="n">remember</span><span class="p">(</span><span class="s2">&quot;xc&quot;</span><span class="p">)</span>
+    <span class="n">invProb2</span> <span class="o">=</span> <span class="n">inverse_problem</span><span class="o">.</span><span class="n">BaseInvProblem</span><span class="p">(</span><span class="n">dmis2</span><span class="p">,</span> <span class="n">reg2</span><span class="p">,</span> <span class="n">opt2</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">)</span>
+    <span class="n">inv2</span> <span class="o">=</span> <span class="n">inversion</span><span class="o">.</span><span class="n">BaseInversion</span><span class="p">(</span><span class="n">invProb2</span><span class="p">)</span>
+
+    <span class="n">mopt2</span> <span class="o">=</span> <span class="n">inv2</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">nC</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-16</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Total volume (vol misfit term in inversion): </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dmisVol</span><span class="p">(</span><span class="n">mopt2</span><span class="p">)))</span>
+
+    <span class="c1"># plot results</span>
+
+    <span class="k">if</span> <span class="n">plotIt</span><span class="p">:</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">dobs</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dpred</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">problem</span><span class="o">.</span><span class="n">dpred</span><span class="p">(</span><span class="n">mopt1</span><span class="p">),</span> <span class="s2">&quot;o&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">problem</span><span class="o">.</span><span class="n">dpred</span><span class="p">(</span><span class="n">mopt2</span><span class="p">),</span> <span class="s2">&quot;s&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s2">&quot;dobs&quot;</span><span class="p">,</span> <span class="s2">&quot;dpred0&quot;</span><span class="p">,</span> <span class="s2">&quot;dpred w/o Vol&quot;</span><span class="p">,</span> <span class="s2">&quot;dpred with Vol&quot;</span><span class="p">])</span>
+
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+        <span class="n">im0</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">plot_image</span><span class="p">(</span><span class="n">phitrue</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">im1</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">plot_image</span><span class="p">(</span><span class="n">mopt1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">im2</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">plot_image</span><span class="p">(</span><span class="n">mopt2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">im</span> <span class="ow">in</span> <span class="p">[</span><span class="n">im0</span><span class="p">,</span> <span class="n">im1</span><span class="p">,</span> <span class="n">im2</span><span class="p">]:</span>
+            <span class="n">im</span><span class="o">.</span><span class="n">set_clim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">phi1</span><span class="p">])</span>
+
+        <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.colorbar.html#matplotlib.pyplot.colorbar" title="matplotlib.pyplot.colorbar" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span></a><span class="p">(</span><span class="n">im0</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.colorbar.html#matplotlib.pyplot.colorbar" title="matplotlib.pyplot.colorbar" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span></a><span class="p">(</span><span class="n">im1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.colorbar.html#matplotlib.pyplot.colorbar" title="matplotlib.pyplot.colorbar" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span></a><span class="p">(</span><span class="n">im2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;true, vol: </span><span class="si">{:1.3e}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">knownVolume</span><span class="p">))</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
+            <span class="s2">&quot;recovered(no Volume term), vol: </span><span class="si">{:1.3e}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dmisVol</span><span class="p">(</span><span class="n">mopt1</span><span class="p">))</span>
+        <span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
+            <span class="s2">&quot;recovered(with Volume term), vol: </span><span class="si">{:1.3e}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dmisVol</span><span class="p">(</span><span class="n">mopt2</span><span class="p">))</span>
+        <span class="p">)</span>
+
+        <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.tight_layout.html#matplotlib.pyplot.tight_layout" title="matplotlib.pyplot.tight_layout" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">run</span><span class="p">()</span>
+    <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 40.206 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  9 MB</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-content-examples-20-published-plot-tomo-joint-with-volume-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/e860bcfc8b12a7e1d623a91ca4afdf66/plot_tomo_joint_with_volume.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_tomo_joint_with_volume.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/904e30bfef6141cb934e0151303f794c/plot_tomo_joint_with_volume.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_tomo_joint_with_volume.py</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="plot_schenkel_morrison_casing.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">EM: Schenkel and Morrison Casing Model</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="plot_vadose_vangenuchten.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">FLOW: Vadose: van Genuchten</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/content/examples/20-published/plot_tomo_joint_with_volume.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

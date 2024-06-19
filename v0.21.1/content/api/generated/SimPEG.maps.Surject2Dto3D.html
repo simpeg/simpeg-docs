@@ -1,0 +1,934 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>SimPEG.maps.Surject2Dto3D &#8212; SimPEG 0.21.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=45118af6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=cfc953b7"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script data-domain="docs.simpeg.xyz" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/api/generated/SimPEG.maps.Surject2Dto3D';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.14.4';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.simpeg.xyz/latest/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.21.1';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="icon" href="../../../_static/logo-block.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="SimPEG.maps.Surject2Dto3D.is_linear" href="SimPEG.maps.Surject2Dto3D.is_linear.html" />
+    <link rel="prev" title="SimPEG.maps.SphericalSystem.test" href="SimPEG.maps.SphericalSystem.test.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/simpeg-logo.png" class="logo__image only-light" alt="SimPEG 0.21.1 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/simpeg-logo.png" class="logo__image only-dark" alt="SimPEG 0.21.1 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../release/index.html">
+                        Release Notes
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+                    User Tutorials
+                  </a>
+                </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+                    SimPEG
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+                    Contact
+                  </a>
+                </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-comment fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-discourse fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-youtube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../release/index.html">
+                        Release Notes
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+                    User Tutorials
+                  </a>
+                </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links-2">
+                    More
+                </button>
+                <ul id="pst-nav-more-links-2" class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+                    SimPEG
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+                    Contact
+                  </a>
+                </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-3"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-3"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-3"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-3">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-comment fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-discourse fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-youtube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.potential_fields.html">Potential Fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.electromagnetics.html">Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.flow.html">Fluid Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.seismic.html">Seismic</a></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../SimPEG.html">Base SimPEG Classes (<code class="xref py py-mod docutils literal notranslate"><span class="pre">SimPEG</span></code>)</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.simulation.BaseSimulation.html">SimPEG.simulation.BaseSimulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.simulation.BaseTimeSimulation.html">SimPEG.simulation.BaseTimeSimulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.simulation.LinearSimulation.html">SimPEG.simulation.LinearSimulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.simulation.ExponentialSinusoidSimulation.html">SimPEG.simulation.ExponentialSinusoidSimulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.base.BasePDESimulation.html">SimPEG.base.BasePDESimulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.base.BaseElectricalPDESimulation.html">SimPEG.base.BaseElectricalPDESimulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.base.BaseMagneticPDESimulation.html">SimPEG.base.BaseMagneticPDESimulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.survey.BaseRx.html">SimPEG.survey.BaseRx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.survey.BaseTimeRx.html">SimPEG.survey.BaseTimeRx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.survey.BaseSrc.html">SimPEG.survey.BaseSrc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.survey.BaseSurvey.html">SimPEG.survey.BaseSurvey</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.survey.BaseTimeSurvey.html">SimPEG.survey.BaseTimeSurvey</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.models.Model.html">SimPEG.models.Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.props.PhysicalProperty.html">SimPEG.props.PhysicalProperty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.props.Derivative.html">SimPEG.props.Derivative</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.props.Invertible.html">SimPEG.props.Invertible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.props.Reciprocal.html">SimPEG.props.Reciprocal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.props.HasModel.html">SimPEG.props.HasModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.data.Data.html">SimPEG.data.Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.data.SyntheticData.html">SimPEG.data.SyntheticData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.fields.Fields.html">SimPEG.fields.Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.fields.TimeFields.html">SimPEG.fields.TimeFields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.BaseParametric.html">SimPEG.maps.BaseParametric</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.ChiMap.html">SimPEG.maps.ChiMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.ComboMap.html">SimPEG.maps.ComboMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.ComplexMap.html">SimPEG.maps.ComplexMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.ExpMap.html">SimPEG.maps.ExpMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.LinearMap.html">SimPEG.maps.LinearMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.IdentityMap.html">SimPEG.maps.IdentityMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.InjectActiveCells.html">SimPEG.maps.InjectActiveCells</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.MuRelative.html">SimPEG.maps.MuRelative</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.LogMap.html">SimPEG.maps.LogMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.LogisticSigmoidMap.html">SimPEG.maps.LogisticSigmoidMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.ParametricBlock.html">SimPEG.maps.ParametricBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.ParametricCircleMap.html">SimPEG.maps.ParametricCircleMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.ParametricEllipsoid.html">SimPEG.maps.ParametricEllipsoid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.ParametricLayer.html">SimPEG.maps.ParametricLayer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.ParametricPolyMap.html">SimPEG.maps.ParametricPolyMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.Projection.html">SimPEG.maps.Projection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.ReciprocalMap.html">SimPEG.maps.ReciprocalMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.SphericalSystem.html">SimPEG.maps.SphericalSystem</a></li>
+<li class="toctree-l2 current active has-children"><a class="current reference internal" href="#">SimPEG.maps.Surject2Dto3D</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.maps.Surject2Dto3D.is_linear.html">SimPEG.maps.Surject2Dto3D.is_linear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.maps.Surject2Dto3D.mesh.html">SimPEG.maps.Surject2Dto3D.mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.maps.Surject2Dto3D.nP.html">SimPEG.maps.Surject2Dto3D.nP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.maps.Surject2Dto3D.normal.html">SimPEG.maps.Surject2Dto3D.normal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.maps.Surject2Dto3D.shape.html">SimPEG.maps.Surject2Dto3D.shape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.maps.Surject2Dto3D.deriv.html">SimPEG.maps.Surject2Dto3D.deriv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.maps.Surject2Dto3D.dot.html">SimPEG.maps.Surject2Dto3D.dot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.maps.Surject2Dto3D.inverse.html">SimPEG.maps.Surject2Dto3D.inverse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.maps.Surject2Dto3D.test.html">SimPEG.maps.Surject2Dto3D.test</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.SurjectFull.html">SimPEG.maps.SurjectFull</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.SurjectUnits.html">SimPEG.maps.SurjectUnits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.SurjectVertical1D.html">SimPEG.maps.SurjectVertical1D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.Weighting.html">SimPEG.maps.Weighting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.maps.Wires.html">SimPEG.maps.Wires</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.objective_function.BaseObjectiveFunction.html">SimPEG.objective_function.BaseObjectiveFunction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.objective_function.ComboObjectiveFunction.html">SimPEG.objective_function.ComboObjectiveFunction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.objective_function.L2ObjectiveFunction.html">SimPEG.objective_function.L2ObjectiveFunction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.data_misfit.BaseDataMisfit.html">SimPEG.data_misfit.BaseDataMisfit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.data_misfit.L2DataMisfit.html">SimPEG.data_misfit.L2DataMisfit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.optimization.ProjectedGradient.html">SimPEG.optimization.ProjectedGradient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.optimization.BFGS.html">SimPEG.optimization.BFGS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.optimization.GaussNewton.html">SimPEG.optimization.GaussNewton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.optimization.InexactGaussNewton.html">SimPEG.optimization.InexactGaussNewton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.optimization.SteepestDescent.html">SimPEG.optimization.SteepestDescent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.optimization.NewtonRoot.html">SimPEG.optimization.NewtonRoot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.optimization.ProjectedGNCG.html">SimPEG.optimization.ProjectedGNCG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.optimization.Minimize.html">SimPEG.optimization.Minimize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.optimization.Remember.html">SimPEG.optimization.Remember</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.optimization.IterationPrinters.html">SimPEG.optimization.IterationPrinters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.optimization.StoppingCriteria.html">SimPEG.optimization.StoppingCriteria</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.inverse_problem.BaseInvProblem.html">SimPEG.inverse_problem.BaseInvProblem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.inversion.BaseInversion.html">SimPEG.inversion.BaseInversion</a></li>
+</ul>
+</li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.regularization.html">Regularization (<code class="xref py py-mod docutils literal notranslate"><span class="pre">SimPEG.regularization</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.directives.html">Directives (<code class="xref py py-mod docutils literal notranslate"><span class="pre">SimPEG.directives</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.utils.html">Utility Classes and Functions (<code class="xref py py-mod docutils literal notranslate"><span class="pre">SimPEG.utils</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.meta.html">Meta SimPEG Classes (<code class="xref py py-mod docutils literal notranslate"><span class="pre">SimPEG.meta</span></code>)</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">API Reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../SimPEG.html" class="nav-link">Base SimPEG Classes (<code class="xref py py-mod docutils literal notranslate"><span class="pre">SimPEG</span></code>)</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">SimPEG.maps....</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="simpeg-maps-surject2dto3d">
+<h1>SimPEG.maps.Surject2Dto3D<a class="headerlink" href="#simpeg-maps-surject2dto3d" title="Permalink to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="SimPEG.maps.Surject2Dto3D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SimPEG.maps.</span></span><span class="sig-name descname"><span class="pre">Surject2Dto3D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'y'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/maps.py#L3035-L3207"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SimPEG.maps.Surject2Dto3D" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="SimPEG.maps.IdentityMap.html#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">IdentityMap</span></code></a></p>
+<p>Map 2D tensor model to 3D tensor mesh.</p>
+<p>Let <span class="math notranslate nohighlight">\(m\)</span> define the parameters for a 2D tensor model.
+<code class="docutils literal notranslate"><span class="pre">Surject2Dto3D</span></code> constructs a surjective mapping that projects
+the 2D tensor model to a 3D tensor mesh.</p>
+<p>Mathematically, the mapping <span class="math notranslate nohighlight">\(\mathbf{u}(\mathbf{m})\)</span> can be
+represented by a projection matrix:</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{u}(\mathbf{m}) = \mathbf{Pm}\]</div>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>mesh</strong><span class="classifier"><a class="reference external" href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="(in discretize v0.10.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discretize.TensorMesh</span></code></a></span></dt><dd><p>A 3D tensor mesh</p>
+</dd>
+<dt><strong>normal</strong><span class="classifier">{‘y’, ‘x’, ‘z’}</span></dt><dd><p>Define the projection axis.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Here we project a 3 layered Earth model defined on a 2D tensor mesh
+to a 3D tensor mesh. We assume that at for some y-location, we
+have a 2D tensor model which defines the physical property distribution
+as a function of the <em>x</em> and <em>z</em> location. Using <code class="docutils literal notranslate"><span class="pre">Surject2Dto3D</span></code>,
+we project the model along the y-axis to obtain a 3D distribution
+for the physical property (i.e. a 3D tensor model).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">SimPEG.maps</span> <span class="kn">import</span> <span class="n">Surject2Dto3D</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">discretize</span> <span class="kn">import</span> <span class="n">TensorMesh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mesh2D</span> <span class="o">=</span> <span class="n">TensorMesh</span><span class="p">([</span><span class="n">dh</span><span class="p">,</span> <span class="n">dh</span><span class="p">],</span> <span class="s1">&#39;CC&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mesh3D</span> <span class="o">=</span> <span class="n">TensorMesh</span><span class="p">([</span><span class="n">dh</span><span class="p">,</span> <span class="n">dh</span><span class="p">,</span> <span class="n">dh</span><span class="p">],</span> <span class="s1">&#39;CCC&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here, we define the 2D tensor model.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">mesh2D</span><span class="o">.</span><span class="n">nC</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="p">[</span><span class="n">mesh2D</span><span class="o">.</span><span class="n">cell_centers</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">10.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="p">[</span><span class="n">mesh2D</span><span class="o">.</span><span class="n">cell_centers</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mf">5.</span>
+</pre></div>
+</div>
+<p>We then plot the 2D tensor model; which is defined along the
+x and z axes.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fig1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax11</span> <span class="o">=</span> <span class="n">fig1</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mesh2D</span><span class="o">.</span><span class="n">plot_image</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax11</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax11</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax11</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;2D Tensor Model&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax12</span> <span class="o">=</span> <span class="n">fig1</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.83</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">norm1</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cbar1</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">ColorbarBase</span><span class="p">(</span><span class="n">ax12</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm1</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>By setting <em>normal = ‘Y’</em> we are projecting along the y-axis.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mapping</span> <span class="o">=</span> <span class="n">Surject2Dto3D</span><span class="p">(</span><span class="n">mesh3D</span><span class="p">,</span> <span class="n">normal</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">mapping</span> <span class="o">*</span> <span class="n">m</span>
+</pre></div>
+</div>
+<p>Finally we plot a slice of the resulting 3D tensor model.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fig2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax21</span> <span class="o">=</span> <span class="n">fig2</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mesh3D</span><span class="o">.</span><span class="n">plot_slice</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax21</span><span class="p">,</span> <span class="n">ind</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">normal</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax21</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax21</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Projected to 3D Mesh (y=0)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax22</span> <span class="o">=</span> <span class="n">fig2</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.83</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">norm2</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cbar2</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">ColorbarBase</span><span class="p">(</span><span class="n">ax22</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm2</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference download internal" download="" href="../../../_downloads/7472fdc9214c9c3019b34884e95f2f88/SimPEG-maps-Surject2Dto3D-1.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>)</p>
+<figure class="align-default" id="id1">
+<img alt="../../../_images/SimPEG-maps-Surject2Dto3D-1_00.png" class="plot-directive" src="../../../_images/SimPEG-maps-Surject2Dto3D-1_00.png" />
+<figcaption>
+<p><span class="caption-text">(<a class="reference download internal" download="" href="../../../_downloads/bd5f8806f707407f96b8990ccbdb2db0/SimPEG-maps-Surject2Dto3D-1_00.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../../../_downloads/eb1af0839cbd793645088cf4b2057d86/SimPEG-maps-Surject2Dto3D-1_00.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id2">
+<img alt="../../../_images/SimPEG-maps-Surject2Dto3D-1_01.png" class="plot-directive" src="../../../_images/SimPEG-maps-Surject2Dto3D-1_01.png" />
+<figcaption>
+<p><span class="caption-text">(<a class="reference download internal" download="" href="../../../_downloads/51557eef14464cf5bb8f39671dcb4c70/SimPEG-maps-Surject2Dto3D-1_01.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../../../_downloads/e89858b68deec5403f59d33da98c6999/SimPEG-maps-Surject2Dto3D-1_01.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.maps.Surject2Dto3D.is_linear.html#SimPEG.maps.Surject2Dto3D.is_linear" title="SimPEG.maps.Surject2Dto3D.is_linear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_linear</span></code></a></p></td>
+<td><p>Determine whether or not this mapping is a linear operation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.maps.Surject2Dto3D.mesh.html#SimPEG.maps.Surject2Dto3D.mesh" title="SimPEG.maps.Surject2Dto3D.mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh</span></code></a></p></td>
+<td><p>The mesh used for the mapping</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.maps.Surject2Dto3D.nP.html#SimPEG.maps.Surject2Dto3D.nP" title="SimPEG.maps.Surject2Dto3D.nP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nP</span></code></a></p></td>
+<td><p>Number of model properties.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.maps.Surject2Dto3D.normal.html#SimPEG.maps.Surject2Dto3D.normal" title="SimPEG.maps.Surject2Dto3D.normal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normal</span></code></a></p></td>
+<td><p>The projection axis.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.maps.Surject2Dto3D.shape.html#SimPEG.maps.Surject2Dto3D.shape" title="SimPEG.maps.Surject2Dto3D.shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape</span></code></a></p></td>
+<td><p>Dimensions of the mapping operator</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.maps.Surject2Dto3D.deriv.html#SimPEG.maps.Surject2Dto3D.deriv" title="SimPEG.maps.Surject2Dto3D.deriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deriv</span></code></a>(m[, v])</p></td>
+<td><p>Derivative of the mapping with respect to the model paramters.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.maps.Surject2Dto3D.dot.html#SimPEG.maps.Surject2Dto3D.dot" title="SimPEG.maps.Surject2Dto3D.dot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dot</span></code></a>(map1)</p></td>
+<td><p>Multiply two mappings to create a <a class="reference internal" href="SimPEG.maps.ComboMap.html#SimPEG.maps.ComboMap" title="SimPEG.maps.ComboMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.maps.ComboMap</span></code></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.maps.Surject2Dto3D.inverse.html#SimPEG.maps.Surject2Dto3D.inverse" title="SimPEG.maps.Surject2Dto3D.inverse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inverse</span></code></a>(D)</p></td>
+<td><p>The transform inverse is not implemented.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.maps.Surject2Dto3D.test.html#SimPEG.maps.Surject2Dto3D.test" title="SimPEG.maps.Surject2Dto3D.test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code></a>([m, num])</p></td>
+<td><p>Derivative test for the mapping.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<section id="galleries-and-tutorials-using-simpeg-maps-surject2dto3d">
+<h2>Galleries and Tutorials using <code class="docutils literal notranslate"><span class="pre">SimPEG.maps.Surject2Dto3D</span></code><a class="headerlink" href="#galleries-and-tutorials-using-simpeg-maps-surject2dto3d" title="Permalink to this heading">#</a></h2>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="In this example, we consider a single line of loop-loop EM data at 30kHz with 3 different coil ..."><img alt="" src="../../../_images/sphx_glr_plot_inv_fdem_loop_loop_2Dinversion_thumb.png" />
+<p><a class="reference internal" href="../../examples/05-fdem/plot_inv_fdem_loop_loop_2Dinversion.html#sphx-glr-content-examples-05-fdem-plot-inv-fdem-loop-loop-2dinversion-py"><span class="std std-ref">2D inversion of Loop-Loop EM Data</span></a></p>
+  <div class="sphx-glr-thumbnail-title">2D inversion of Loop-Loop EM Data</div>
+</div></div></section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="SimPEG.maps.SphericalSystem.test.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">SimPEG.maps.SphericalSystem.test</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="SimPEG.maps.Surject2Dto3D.is_linear.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">SimPEG.maps.Surject2Dto3D.is_linear</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#SimPEG.maps.Surject2Dto3D"><code class="docutils literal notranslate"><span class="pre">Surject2Dto3D</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#galleries-and-tutorials-using-simpeg-maps-surject2dto3d">Galleries and Tutorials using <code class="docutils literal notranslate"><span class="pre">SimPEG.maps.Surject2Dto3D</span></code></a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/content/api/generated/SimPEG.maps.Surject2Dto3D.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,930 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>SimPEG.regularization.SmoothnessFullGradient &#8212; SimPEG 0.21.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=45118af6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=cfc953b7"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script data-domain="docs.simpeg.xyz" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/api/generated/SimPEG.regularization.SmoothnessFullGradient';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.14.4';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.simpeg.xyz/latest/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.21.1';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="icon" href="../../../_static/logo-block.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="SimPEG.regularization.SmoothnessFullGradient.W" href="SimPEG.regularization.SmoothnessFullGradient.W.html" />
+    <link rel="prev" title="SimPEG.regularization.SmoothnessSecondOrder.test" href="SimPEG.regularization.SmoothnessSecondOrder.test.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/simpeg-logo.png" class="logo__image only-light" alt="SimPEG 0.21.1 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/simpeg-logo.png" class="logo__image only-dark" alt="SimPEG 0.21.1 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../release/index.html">
+                        Release Notes
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+                    User Tutorials
+                  </a>
+                </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+                    SimPEG
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+                    Contact
+                  </a>
+                </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-comment fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-discourse fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-youtube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../release/index.html">
+                        Release Notes
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+                    User Tutorials
+                  </a>
+                </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links-2">
+                    More
+                </button>
+                <ul id="pst-nav-more-links-2" class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+                    SimPEG
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+                    Contact
+                  </a>
+                </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-3"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-3"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-3"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-3">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-comment fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-discourse fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-youtube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.potential_fields.html">Potential Fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.electromagnetics.html">Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.flow.html">Fluid Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.seismic.html">Seismic</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.html">Base SimPEG Classes (<code class="xref py py-mod docutils literal notranslate"><span class="pre">SimPEG</span></code>)</a></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../SimPEG.regularization.html">Regularization (<code class="xref py py-mod docutils literal notranslate"><span class="pre">SimPEG.regularization</span></code>)</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.WeightedLeastSquares.html">SimPEG.regularization.WeightedLeastSquares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.Smallness.html">SimPEG.regularization.Smallness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.SmoothnessFirstOrder.html">SimPEG.regularization.SmoothnessFirstOrder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.SmoothnessSecondOrder.html">SimPEG.regularization.SmoothnessSecondOrder</a></li>
+<li class="toctree-l2 current active has-children"><a class="current reference internal" href="#">SimPEG.regularization.SmoothnessFullGradient</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.W.html">SimPEG.regularization.SmoothnessFullGradient.W</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.active_cells.html">SimPEG.regularization.SmoothnessFullGradient.active_cells</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.cell_gradient.html">SimPEG.regularization.SmoothnessFullGradient.cell_gradient</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.cell_weights.html">SimPEG.regularization.SmoothnessFullGradient.cell_weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.indActive.html">SimPEG.regularization.SmoothnessFullGradient.indActive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.mapping.html">SimPEG.regularization.SmoothnessFullGradient.mapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.model.html">SimPEG.regularization.SmoothnessFullGradient.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.mref.html">SimPEG.regularization.SmoothnessFullGradient.mref</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.nP.html">SimPEG.regularization.SmoothnessFullGradient.nP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.parent.html">SimPEG.regularization.SmoothnessFullGradient.parent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.reference_model.html">SimPEG.regularization.SmoothnessFullGradient.reference_model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.regmesh.html">SimPEG.regularization.SmoothnessFullGradient.regmesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.regularization_mesh.html">SimPEG.regularization.SmoothnessFullGradient.regularization_mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.units.html">SimPEG.regularization.SmoothnessFullGradient.units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.weights_keys.html">SimPEG.regularization.SmoothnessFullGradient.weights_keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.__call__.html">SimPEG.regularization.SmoothnessFullGradient.__call__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.deriv.html">SimPEG.regularization.SmoothnessFullGradient.deriv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.deriv2.html">SimPEG.regularization.SmoothnessFullGradient.deriv2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.f_m.html">SimPEG.regularization.SmoothnessFullGradient.f_m</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.f_m_deriv.html">SimPEG.regularization.SmoothnessFullGradient.f_m_deriv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.get_weights.html">SimPEG.regularization.SmoothnessFullGradient.get_weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.remove_weights.html">SimPEG.regularization.SmoothnessFullGradient.remove_weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.set_weights.html">SimPEG.regularization.SmoothnessFullGradient.set_weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.test.html">SimPEG.regularization.SmoothnessFullGradient.test</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.Sparse.html">SimPEG.regularization.Sparse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.SparseSmallness.html">SimPEG.regularization.SparseSmallness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.SparseSmoothness.html">SimPEG.regularization.SparseSmoothness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.CrossReferenceRegularization.html">SimPEG.regularization.CrossReferenceRegularization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.VectorAmplitude.html">SimPEG.regularization.VectorAmplitude</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.AmplitudeSmallness.html">SimPEG.regularization.AmplitudeSmallness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.AmplitudeSmoothnessFirstOrder.html">SimPEG.regularization.AmplitudeSmoothnessFirstOrder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.CrossGradient.html">SimPEG.regularization.CrossGradient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.JointTotalVariation.html">SimPEG.regularization.JointTotalVariation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.PGI.html">SimPEG.regularization.PGI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.PGIsmallness.html">SimPEG.regularization.PGIsmallness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.LinearCorrespondence.html">SimPEG.regularization.LinearCorrespondence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.RegularizationMesh.html">SimPEG.regularization.RegularizationMesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.BaseRegularization.html">SimPEG.regularization.BaseRegularization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.BaseSimilarityMeasure.html">SimPEG.regularization.BaseSimilarityMeasure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.BaseSparse.html">SimPEG.regularization.BaseSparse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.BaseVectorRegularization.html">SimPEG.regularization.BaseVectorRegularization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.regularization.BaseAmplitude.html">SimPEG.regularization.BaseAmplitude</a></li>
+</ul>
+</li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.directives.html">Directives (<code class="xref py py-mod docutils literal notranslate"><span class="pre">SimPEG.directives</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.utils.html">Utility Classes and Functions (<code class="xref py py-mod docutils literal notranslate"><span class="pre">SimPEG.utils</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.meta.html">Meta SimPEG Classes (<code class="xref py py-mod docutils literal notranslate"><span class="pre">SimPEG.meta</span></code>)</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">API Reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../SimPEG.regularization.html" class="nav-link">Regularization (<code class="xref py py-mod docutils literal notranslate"><span class="pre">SimPEG.regularization</span></code>)</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">SimPEG.regul...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="simpeg-regularization-smoothnessfullgradient">
+<h1>SimPEG.regularization.SmoothnessFullGradient<a class="headerlink" href="#simpeg-regularization-smoothnessfullgradient" title="Permalink to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="SimPEG.regularization.SmoothnessFullGradient">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SimPEG.regularization.</span></span><span class="sig-name descname"><span class="pre">SmoothnessFullGradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg_dirs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ortho_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/regularization/_gradient.py#L7-L271"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SimPEG.regularization.SmoothnessFullGradient" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="SimPEG.regularization.BaseRegularization.html#SimPEG.regularization.BaseRegularization" title="SimPEG.regularization.base.BaseRegularization"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseRegularization</span></code></a></p>
+<p>Measures the gradient of a model using optionally anisotropic weighting.</p>
+<p>This regularizer measures the first order smoothness in a mesh ambivalent way
+by observing that the N-d smoothness operator can be represented as an
+inner product with an arbitrarily anisotropic weight.</p>
+<p>By default it assumes uniform weighting in each dimension, which works
+for most <code class="docutils literal notranslate"><span class="pre">discretize</span></code> mesh types.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>mesh</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discretize.BaseMesh</span></code></span></dt><dd><p>The mesh object to use for regularization. The mesh should either have
+a <cite>cell_gradient</cite> or a <cite>stencil_cell_gradient</cite> defined.</p>
+</dd>
+<dt><strong>alphas</strong><span class="classifier">(mesh.dim,) <code class="xref py py-obj docutils literal notranslate"><span class="pre">or</span></code> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh.n_cells</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh.dim</span></code>) <a class="reference external" href="https://numpy.org/doc/stable/glossary.html#term-array_like" title="(in NumPy v2.0)"><span>array_like</span></a> <code class="xref py py-obj docutils literal notranslate"><span class="pre">of</span></code> <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a>, optional.</span></dt><dd><p>The weights of the regularization for each axis. This can be defined for each cell
+in the mesh. Default is uniform weights equal to the smallest edge length squared.</p>
+</dd>
+<dt><strong>reg_dirs</strong><span class="classifier">(<code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh.dim</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh.dim</span></code>) <code class="xref py py-obj docutils literal notranslate"><span class="pre">or</span></code> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh.n_cells</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh.dim</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh.dim</span></code>) <a class="reference external" href="https://numpy.org/doc/stable/glossary.html#term-array_like" title="(in NumPy v2.0)"><span>array_like</span></a> <code class="xref py py-obj docutils literal notranslate"><span class="pre">of</span></code> <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>Matrix or list of matrices whose columns represent the regularization directions.
+Each matrix should be orthonormal. Default is Identity.</p>
+</dd>
+<dt><strong>ortho_check</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.12)"><span class="xref std std-ref">bool</span></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">optional</span></code></span></dt><dd><p>Whether to check <cite>reg_dirs</cite> for orthogonality.</p>
+</dd>
+<dt><strong>**kwargs</strong></dt><dd><p>Keyword arguments passed to the parent class <code class="docutils literal notranslate"><span class="pre">BaseRegularization</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The regularization object is the discretized form of the continuous regularization</p>
+<dl class="simple">
+<dt>..math:</dt><dd><p>f(m) = int_V nabla m cdot mathbf{a} nabla m hspace{5pt} partial V</p>
+</dd>
+</dl>
+<p>The tensor quantity <cite>a</cite> is used to represent the potential preferential directions of
+regularization. <cite>a</cite> must be symmetric positive semi-definite with an eigendecomposition of:</p>
+<dl class="simple">
+<dt>..math:</dt><dd><p>mathbf{a} = mathbf{Q}mathbf{L}mathbf{Q}^{-1}</p>
+</dd>
+</dl>
+<p><cite>Q</cite> is then the regularization directions <code class="docutils literal notranslate"><span class="pre">reg_dirs</span></code>, and <cite>L</cite> is represents the weighting
+along each direction, with <code class="docutils literal notranslate"><span class="pre">alphas</span></code> along its diagonal. These are multiplied to form the
+anisotropic alpha used for rotated gradients.</p>
+<p class="rubric">Examples</p>
+<p>Construct of 2D measure with uniform smoothing in each direction.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">discretize</span> <span class="kn">import</span> <span class="n">TensorMesh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">SimPEG.regularization</span> <span class="kn">import</span> <span class="n">SmoothnessFullGradient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mesh</span> <span class="o">=</span> <span class="n">TensorMesh</span><span class="p">([</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reg</span> <span class="o">=</span> <span class="n">SmoothnessFullGradient</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can instead create a measure that smooths twice as much in the 1st dimension
+than it does in the second dimension.
+&gt;&gt;&gt; reg = SmoothnessFullGradient(mesh, [2, 1])</p>
+<p>The <cite>alphas</cite> parameter can also be indepenant for each cell. Here we set all cells
+lower than 0.5 in the x2 to twice as much in the first dimension
+otherwise it is uniform smoothing.
+&gt;&gt;&gt; alphas = np.ones((mesh.n_cells, mesh.dim))
+&gt;&gt;&gt; alphas[mesh.cell_centers[:, 1] &lt; 0.5] = [2, 1]
+&gt;&gt;&gt; reg = SmoothnessFullGradient(mesh, alphas)</p>
+<p>We can also rotate the axis in which we want to preferentially smooth. Say we want to
+smooth twice as much along the +x1,+x2 diagonal as we do along the -x1,+x2 diagonal,
+effectively rotating our smoothing 45 degrees. Note and the columns of the matrix
+represent the directional vectors (not the rows).
+&gt;&gt;&gt; sqrt2 = np.sqrt(2)
+&gt;&gt;&gt; reg_dirs = np.array([
+…     [sqrt2, -sqrt2],
+…     [sqrt2, sqrt2],
+… ])
+&gt;&gt;&gt; reg = SmoothnessFullGradient(mesh, alphas, reg_dirs=reg_dirs)</p>
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.W.html#SimPEG.regularization.SmoothnessFullGradient.W" title="SimPEG.regularization.SmoothnessFullGradient.W"><code class="xref py py-obj docutils literal notranslate"><span class="pre">W</span></code></a></p></td>
+<td><p>The inner product operator using rotated coordinates</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.active_cells.html#SimPEG.regularization.SmoothnessFullGradient.active_cells" title="SimPEG.regularization.SmoothnessFullGradient.active_cells"><code class="xref py py-obj docutils literal notranslate"><span class="pre">active_cells</span></code></a></p></td>
+<td><p>Active cells defined on the regularization mesh.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.cell_gradient.html#SimPEG.regularization.SmoothnessFullGradient.cell_gradient" title="SimPEG.regularization.SmoothnessFullGradient.cell_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell_gradient</span></code></a></p></td>
+<td><p>The (approximate) cell gradient operator</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.cell_weights.html#SimPEG.regularization.SmoothnessFullGradient.cell_weights" title="SimPEG.regularization.SmoothnessFullGradient.cell_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell_weights</span></code></a></p></td>
+<td><p>Deprecated property for 'volume' and user defined weights.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.indActive.html#SimPEG.regularization.SmoothnessFullGradient.indActive" title="SimPEG.regularization.SmoothnessFullGradient.indActive"><code class="xref py py-obj docutils literal notranslate"><span class="pre">indActive</span></code></a></p></td>
+<td><p><cite>active_cells.indActive</cite> has been deprecated.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.mapping.html#SimPEG.regularization.SmoothnessFullGradient.mapping" title="SimPEG.regularization.SmoothnessFullGradient.mapping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mapping</span></code></a></p></td>
+<td><p>Mapping from the inversion model parameters to the regularization mesh.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.model.html#SimPEG.regularization.SmoothnessFullGradient.model" title="SimPEG.regularization.SmoothnessFullGradient.model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model</span></code></a></p></td>
+<td><p>The model parameters.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.mref.html#SimPEG.regularization.SmoothnessFullGradient.mref" title="SimPEG.regularization.SmoothnessFullGradient.mref"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mref</span></code></a></p></td>
+<td><p><cite>reference_model.mref</cite> has been deprecated.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.nP.html#SimPEG.regularization.SmoothnessFullGradient.nP" title="SimPEG.regularization.SmoothnessFullGradient.nP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nP</span></code></a></p></td>
+<td><p>Number of model parameters.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.parent.html#SimPEG.regularization.SmoothnessFullGradient.parent" title="SimPEG.regularization.SmoothnessFullGradient.parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parent</span></code></a></p></td>
+<td><p>The parent objective function</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.reference_model.html#SimPEG.regularization.SmoothnessFullGradient.reference_model" title="SimPEG.regularization.SmoothnessFullGradient.reference_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reference_model</span></code></a></p></td>
+<td><p>Reference model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.regmesh.html#SimPEG.regularization.SmoothnessFullGradient.regmesh" title="SimPEG.regularization.SmoothnessFullGradient.regmesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regmesh</span></code></a></p></td>
+<td><p><cite>regularization_mesh.regmesh</cite> has been deprecated.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.regularization_mesh.html#SimPEG.regularization.SmoothnessFullGradient.regularization_mesh" title="SimPEG.regularization.SmoothnessFullGradient.regularization_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regularization_mesh</span></code></a></p></td>
+<td><p>Regularization mesh.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.units.html#SimPEG.regularization.SmoothnessFullGradient.units" title="SimPEG.regularization.SmoothnessFullGradient.units"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a></p></td>
+<td><p>Units for the model parameters.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.weights_keys.html#SimPEG.regularization.SmoothnessFullGradient.weights_keys" title="SimPEG.regularization.SmoothnessFullGradient.weights_keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">weights_keys</span></code></a></p></td>
+<td><p>Return the keys for the existing cell weights</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.__call__.html#SimPEG.regularization.SmoothnessFullGradient.__call__" title="SimPEG.regularization.SmoothnessFullGradient.__call__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code></a>(m)</p></td>
+<td><p>Evaluate the regularization function for the model provided.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.deriv.html#SimPEG.regularization.SmoothnessFullGradient.deriv" title="SimPEG.regularization.SmoothnessFullGradient.deriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deriv</span></code></a>(m)</p></td>
+<td><p>Gradient of the regularization function evaluated for the model provided.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.deriv2.html#SimPEG.regularization.SmoothnessFullGradient.deriv2" title="SimPEG.regularization.SmoothnessFullGradient.deriv2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deriv2</span></code></a>(m[, v])</p></td>
+<td><p>Hessian of the regularization function evaluated for the model provided.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.f_m.html#SimPEG.regularization.SmoothnessFullGradient.f_m" title="SimPEG.regularization.SmoothnessFullGradient.f_m"><code class="xref py py-obj docutils literal notranslate"><span class="pre">f_m</span></code></a>(m)</p></td>
+<td><p>Not implemented for <code class="docutils literal notranslate"><span class="pre">BaseRegularization</span></code> class.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.f_m_deriv.html#SimPEG.regularization.SmoothnessFullGradient.f_m_deriv" title="SimPEG.regularization.SmoothnessFullGradient.f_m_deriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">f_m_deriv</span></code></a>(m)</p></td>
+<td><p>Not implemented for <code class="docutils literal notranslate"><span class="pre">BaseRegularization</span></code> class.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.get_weights.html#SimPEG.regularization.SmoothnessFullGradient.get_weights" title="SimPEG.regularization.SmoothnessFullGradient.get_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_weights</span></code></a>(key)</p></td>
+<td><p>Cell weights for a given key.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">map_class</span></code></p></td>
+<td><p>alias of <a class="reference internal" href="SimPEG.maps.IdentityMap.html#SimPEG.maps.IdentityMap" title="SimPEG.maps.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">IdentityMap</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.remove_weights.html#SimPEG.regularization.SmoothnessFullGradient.remove_weights" title="SimPEG.regularization.SmoothnessFullGradient.remove_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_weights</span></code></a>(key)</p></td>
+<td><p>Removes the weights for the key provided.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.set_weights.html#SimPEG.regularization.SmoothnessFullGradient.set_weights" title="SimPEG.regularization.SmoothnessFullGradient.set_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_weights</span></code></a>(**weights)</p></td>
+<td><p>Adds (or updates) the specified weights to the regularization.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.regularization.SmoothnessFullGradient.test.html#SimPEG.regularization.SmoothnessFullGradient.test" title="SimPEG.regularization.SmoothnessFullGradient.test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code></a>([x, num])</p></td>
+<td><p>Run a convergence test on both the first and second derivatives.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="SimPEG.regularization.SmoothnessSecondOrder.test.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">SimPEG.regularization.SmoothnessSecondOrder.test</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="SimPEG.regularization.SmoothnessFullGradient.W.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">SimPEG.regularization.SmoothnessFullGradient.W</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#SimPEG.regularization.SmoothnessFullGradient"><code class="docutils literal notranslate"><span class="pre">SmoothnessFullGradient</span></code></a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/content/api/generated/SimPEG.regularization.SmoothnessFullGradient.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

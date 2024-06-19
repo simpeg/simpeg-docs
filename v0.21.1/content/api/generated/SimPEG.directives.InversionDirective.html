@@ -1,0 +1,951 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>SimPEG.directives.InversionDirective &#8212; SimPEG 0.21.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=45118af6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=cfc953b7"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script data-domain="docs.simpeg.xyz" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/api/generated/SimPEG.directives.InversionDirective';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.14.4';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.simpeg.xyz/latest/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.21.1';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="icon" href="../../../_static/logo-block.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="SimPEG.directives.InversionDirective.debug" href="SimPEG.directives.InversionDirective.debug.html" />
+    <link rel="prev" title="SimPEG.directives.MovingAndMultiTargetStopping.validate" href="SimPEG.directives.MovingAndMultiTargetStopping.validate.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/simpeg-logo.png" class="logo__image only-light" alt="SimPEG 0.21.1 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/simpeg-logo.png" class="logo__image only-dark" alt="SimPEG 0.21.1 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../release/index.html">
+                        Release Notes
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+                    User Tutorials
+                  </a>
+                </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+                    SimPEG
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+                    Contact
+                  </a>
+                </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-comment fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-discourse fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-youtube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../release/index.html">
+                        Release Notes
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+                    User Tutorials
+                  </a>
+                </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links-2">
+                    More
+                </button>
+                <ul id="pst-nav-more-links-2" class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+                    SimPEG
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+                    Contact
+                  </a>
+                </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-3"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-3"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-3"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-3">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-comment fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-discourse fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-youtube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.potential_fields.html">Potential Fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.electromagnetics.html">Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.flow.html">Fluid Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.seismic.html">Seismic</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.html">Base SimPEG Classes (<code class="xref py py-mod docutils literal notranslate"><span class="pre">SimPEG</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.regularization.html">Regularization (<code class="xref py py-mod docutils literal notranslate"><span class="pre">SimPEG.regularization</span></code>)</a></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../SimPEG.directives.html">Directives (<code class="xref py py-mod docutils literal notranslate"><span class="pre">SimPEG.directives</span></code>)</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.AlphasSmoothEstimate_ByEig.html">SimPEG.directives.AlphasSmoothEstimate_ByEig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.BetaEstimateMaxDerivative.html">SimPEG.directives.BetaEstimateMaxDerivative</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.BetaEstimate_ByEig.html">SimPEG.directives.BetaEstimate_ByEig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.BetaSchedule.html">SimPEG.directives.BetaSchedule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.JointScalingSchedule.html">SimPEG.directives.JointScalingSchedule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.MultiTargetMisfits.html">SimPEG.directives.MultiTargetMisfits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.ProjectSphericalBounds.html">SimPEG.directives.ProjectSphericalBounds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.ScalingMultipleDataMisfits_ByEig.html">SimPEG.directives.ScalingMultipleDataMisfits_ByEig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.TargetMisfit.html">SimPEG.directives.TargetMisfit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.UpdatePreconditioner.html">SimPEG.directives.UpdatePreconditioner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.UpdateSensitivityWeights.html">SimPEG.directives.UpdateSensitivityWeights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.Update_Wj.html">SimPEG.directives.Update_Wj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.SaveEveryIteration.html">SimPEG.directives.SaveEveryIteration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.SaveModelEveryIteration.html">SimPEG.directives.SaveModelEveryIteration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.SaveOutputDictEveryIteration.html">SimPEG.directives.SaveOutputDictEveryIteration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.SaveOutputEveryIteration.html">SimPEG.directives.SaveOutputEveryIteration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.Update_IRLS.html">SimPEG.directives.Update_IRLS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.PGI_AddMrefInSmooth.html">SimPEG.directives.PGI_AddMrefInSmooth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.PGI_BetaAlphaSchedule.html">SimPEG.directives.PGI_BetaAlphaSchedule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.PGI_UpdateParameters.html">SimPEG.directives.PGI_UpdateParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.SimilarityMeasureInversionDirective.html">SimPEG.directives.SimilarityMeasureInversionDirective</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.SimilarityMeasureSaveOutputEveryIteration.html">SimPEG.directives.SimilarityMeasureSaveOutputEveryIteration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.PairedBetaEstimate_ByEig.html">SimPEG.directives.PairedBetaEstimate_ByEig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.PairedBetaSchedule.html">SimPEG.directives.PairedBetaSchedule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.MovingAndMultiTargetStopping.html">SimPEG.directives.MovingAndMultiTargetStopping</a></li>
+<li class="toctree-l2 current active has-children"><a class="current reference internal" href="#">SimPEG.directives.InversionDirective</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.directives.InversionDirective.debug.html">SimPEG.directives.InversionDirective.debug</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.directives.InversionDirective.dmisfit.html">SimPEG.directives.InversionDirective.dmisfit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.directives.InversionDirective.invProb.html">SimPEG.directives.InversionDirective.invProb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.directives.InversionDirective.inversion.html">SimPEG.directives.InversionDirective.inversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.directives.InversionDirective.opt.html">SimPEG.directives.InversionDirective.opt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.directives.InversionDirective.reg.html">SimPEG.directives.InversionDirective.reg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.directives.InversionDirective.simulation.html">SimPEG.directives.InversionDirective.simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.directives.InversionDirective.survey.html">SimPEG.directives.InversionDirective.survey</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.directives.InversionDirective.verbose.html">SimPEG.directives.InversionDirective.verbose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.directives.InversionDirective.endIter.html">SimPEG.directives.InversionDirective.endIter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.directives.InversionDirective.finish.html">SimPEG.directives.InversionDirective.finish</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.directives.InversionDirective.initialize.html">SimPEG.directives.InversionDirective.initialize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SimPEG.directives.InversionDirective.validate.html">SimPEG.directives.InversionDirective.validate</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="SimPEG.directives.DirectiveList.html">SimPEG.directives.DirectiveList</a></li>
+</ul>
+</li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.utils.html">Utility Classes and Functions (<code class="xref py py-mod docutils literal notranslate"><span class="pre">SimPEG.utils</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../SimPEG.meta.html">Meta SimPEG Classes (<code class="xref py py-mod docutils literal notranslate"><span class="pre">SimPEG.meta</span></code>)</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">API Reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../SimPEG.directives.html" class="nav-link">Directives (<code class="xref py py-mod docutils literal notranslate"><span class="pre">SimPEG.directives</span></code>)</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">SimPEG.direc...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="simpeg-directives-inversiondirective">
+<h1>SimPEG.directives.InversionDirective<a class="headerlink" href="#simpeg-directives-inversiondirective" title="Permalink to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="SimPEG.directives.InversionDirective">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SimPEG.directives.</span></span><span class="sig-name descname"><span class="pre">InversionDirective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inversion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dmisfit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/SimPEG/directives/directives.py#L41-L247"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SimPEG.directives.InversionDirective" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Base inversion directive class.</p>
+<p>SimPEG directives initialize and update parameters used by the inversion algorithm;
+e.g. setting the initial beta or updating the regularization. <code class="docutils literal notranslate"><span class="pre">InversionDirective</span></code>
+is a parent class responsible for connecting directives to the data misfit, regularization
+and optimization defining the inverse problem.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>inversion</strong><span class="classifier"><a class="reference internal" href="SimPEG.inversion.BaseInversion.html#SimPEG.inversion.BaseInversion" title="SimPEG.inversion.BaseInversion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SimPEG.inversion.BaseInversion</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></span></dt><dd><p>An SimPEG inversion object; i.e. an instance of <a class="reference internal" href="SimPEG.inversion.BaseInversion.html#SimPEG.inversion.BaseInversion" title="SimPEG.inversion.BaseInversion"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.inversion.BaseInversion</span></code></a>.</p>
+</dd>
+<dt><strong>dmisfit</strong><span class="classifier"><a class="reference internal" href="SimPEG.data_misfit.BaseDataMisfit.html#SimPEG.data_misfit.BaseDataMisfit" title="SimPEG.data_misfit.BaseDataMisfit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SimPEG.data_misfit.BaseDataMisfit</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></span></dt><dd><p>A data data misfit; i.e. an instance of <a class="reference internal" href="SimPEG.data_misfit.BaseDataMisfit.html#SimPEG.data_misfit.BaseDataMisfit" title="SimPEG.data_misfit.BaseDataMisfit"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.data_misfit.BaseDataMisfit</span></code></a>.</p>
+</dd>
+<dt><strong>reg</strong><span class="classifier"><a class="reference internal" href="SimPEG.regularization.BaseRegularization.html#SimPEG.regularization.BaseRegularization" title="SimPEG.regularization.BaseRegularization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SimPEG.regularization.BaseRegularization</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></span></dt><dd><p>The regularization, or model objective function; i.e. an instance of <a class="reference internal" href="SimPEG.regularization.BaseRegularization.html#SimPEG.regularization.BaseRegularization" title="SimPEG.regularization.BaseRegularization"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimPEG.regularization.BaseRegularization</span></code></a>.</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.12)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Whether or not to print debugging information.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.directives.InversionDirective.debug.html#SimPEG.directives.InversionDirective.debug" title="SimPEG.directives.InversionDirective.debug"><code class="xref py py-obj docutils literal notranslate"><span class="pre">debug</span></code></a></p></td>
+<td><p><cite>verbose.debug</cite> has been deprecated.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.directives.InversionDirective.dmisfit.html#SimPEG.directives.InversionDirective.dmisfit" title="SimPEG.directives.InversionDirective.dmisfit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dmisfit</span></code></a></p></td>
+<td><p>Data misfit associated with the directive.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.directives.InversionDirective.invProb.html#SimPEG.directives.InversionDirective.invProb" title="SimPEG.directives.InversionDirective.invProb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">invProb</span></code></a></p></td>
+<td><p>Inverse problem associated with the directive.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.directives.InversionDirective.inversion.html#SimPEG.directives.InversionDirective.inversion" title="SimPEG.directives.InversionDirective.inversion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inversion</span></code></a></p></td>
+<td><p>Inversion object associated with the directive.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.directives.InversionDirective.opt.html#SimPEG.directives.InversionDirective.opt" title="SimPEG.directives.InversionDirective.opt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">opt</span></code></a></p></td>
+<td><p>Optimization algorithm associated with the directive.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.directives.InversionDirective.reg.html#SimPEG.directives.InversionDirective.reg" title="SimPEG.directives.InversionDirective.reg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reg</span></code></a></p></td>
+<td><p>Regularization associated with the directive.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.directives.InversionDirective.simulation.html#SimPEG.directives.InversionDirective.simulation" title="SimPEG.directives.InversionDirective.simulation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simulation</span></code></a></p></td>
+<td><p>Return simulation for all data misfits.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.directives.InversionDirective.survey.html#SimPEG.directives.InversionDirective.survey" title="SimPEG.directives.InversionDirective.survey"><code class="xref py py-obj docutils literal notranslate"><span class="pre">survey</span></code></a></p></td>
+<td><p>Return survey for all data misfits</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.directives.InversionDirective.verbose.html#SimPEG.directives.InversionDirective.verbose" title="SimPEG.directives.InversionDirective.verbose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verbose</span></code></a></p></td>
+<td><p>Whether or not to print debugging information.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.directives.InversionDirective.endIter.html#SimPEG.directives.InversionDirective.endIter" title="SimPEG.directives.InversionDirective.endIter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">endIter</span></code></a>()</p></td>
+<td><p>Update inversion parameter(s) according to directive at end of iteration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.directives.InversionDirective.finish.html#SimPEG.directives.InversionDirective.finish" title="SimPEG.directives.InversionDirective.finish"><code class="xref py py-obj docutils literal notranslate"><span class="pre">finish</span></code></a>()</p></td>
+<td><p>Update inversion parameter(s) according to directive at end of inversion.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="SimPEG.directives.InversionDirective.initialize.html#SimPEG.directives.InversionDirective.initialize" title="SimPEG.directives.InversionDirective.initialize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">initialize</span></code></a>()</p></td>
+<td><p>Initialize inversion parameter(s) according to directive.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SimPEG.directives.InversionDirective.validate.html#SimPEG.directives.InversionDirective.validate" title="SimPEG.directives.InversionDirective.validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></a>([directiveList])</p></td>
+<td><p>Validate directive.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<section id="galleries-and-tutorials-using-simpeg-directives-inversiondirective">
+<h2>Galleries and Tutorials using <code class="docutils literal notranslate"><span class="pre">SimPEG.directives.InversionDirective</span></code><a class="headerlink" href="#galleries-and-tutorials-using-simpeg-directives-inversiondirective" title="Permalink to this heading">#</a></h2>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="Invert synthetic magnetic data with variable background values and a single block anomaly burie..."><img alt="" src="../../../_images/sphx_glr_plot_sumMap_thumb.png" />
+<p><a class="reference internal" href="../../examples/01-maps/plot_sumMap.html#sphx-glr-content-examples-01-maps-plot-summap-py"><span class="std std-ref">Maps: ComboMaps</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Maps: ComboMaps</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Invert data in tiles."><img alt="" src="../../../_images/sphx_glr_plot_inv_grav_tiled_thumb.png" />
+<p><a class="reference internal" href="../../examples/02-gravity/plot_inv_grav_tiled.html#sphx-glr-content-examples-02-gravity-plot-inv-grav-tiled-py"><span class="std std-ref">PF: Gravity: Tiled Inversion Linear</span></a></p>
+  <div class="sphx-glr-thumbnail-title">PF: Gravity: Tiled Inversion Linear</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="In this example, we demonstrate the use of a Magnetic Vector Inverison on 3D TreeMesh for the i..."><img alt="" src="../../../_images/sphx_glr_plot_inv_mag_MVI_Sparse_TreeMesh_thumb.png" />
+<p><a class="reference internal" href="../../examples/03-magnetics/plot_inv_mag_MVI_Sparse_TreeMesh.html#sphx-glr-content-examples-03-magnetics-plot-inv-mag-mvi-sparse-treemesh-py"><span class="std std-ref">Magnetic inversion on a TreeMesh</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Magnetic inversion on a TreeMesh</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="In this example, we demonstrate the use of a Magnetic Vector Inverison on 3D TreeMesh for the i..."><img alt="" src="../../../_images/sphx_glr_plot_inv_mag_MVI_VectorAmplitude_thumb.png" />
+<p><a class="reference internal" href="../../examples/03-magnetics/plot_inv_mag_MVI_VectorAmplitude.html#sphx-glr-content-examples-03-magnetics-plot-inv-mag-mvi-vectoramplitude-py"><span class="std std-ref">Magnetic inversion on a TreeMesh</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Magnetic inversion on a TreeMesh</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="In this example, we demonstrate the use of magnetic amplitude inversion on 3D TreeMesh for the ..."><img alt="" src="../../../_images/sphx_glr_plot_inv_mag_nonLinear_Amplitude_thumb.png" />
+<p><a class="reference internal" href="../../examples/03-magnetics/plot_inv_mag_nonLinear_Amplitude.html#sphx-glr-content-examples-03-magnetics-plot-inv-mag-nonlinear-amplitude-py"><span class="std std-ref">Magnetic Amplitude inversion on a TreeMesh</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Magnetic Amplitude inversion on a TreeMesh</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This is an example for 3D DC inversion. The model consists of 2 spheres, one conductive, the ot..."><img alt="" src="../../../_images/sphx_glr_plot_inv_dcip_dipoledipole_3Dinversion_twospheres_thumb.png" />
+<p><a class="reference internal" href="../../examples/04-dcip/plot_inv_dcip_dipoledipole_3Dinversion_twospheres.html#sphx-glr-content-examples-04-dcip-plot-inv-dcip-dipoledipole-3dinversion-twospheres-py"><span class="std std-ref">3D DC inversion of Dipole Dipole array</span></a></p>
+  <div class="sphx-glr-thumbnail-title">3D DC inversion of Dipole Dipole array</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This is an example for a parametric inversion with a DC survey. Resistivity structure of the su..."><img alt="" src="../../../_images/sphx_glr_plot_inv_dcip_dipoledipole_parametric_inversion_thumb.png" />
+<p><a class="reference internal" href="../../examples/04-dcip/plot_inv_dcip_dipoledipole_parametric_inversion.html#sphx-glr-content-examples-04-dcip-plot-inv-dcip-dipoledipole-parametric-inversion-py"><span class="std std-ref">Parametric DC inversion with Dipole Dipole array</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Parametric DC inversion with Dipole Dipole array</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="In this example, we consider a single line of loop-loop EM data at 30kHz with 3 different coil ..."><img alt="" src="../../../_images/sphx_glr_plot_inv_fdem_loop_loop_2Dinversion_thumb.png" />
+<p><a class="reference internal" href="../../examples/05-fdem/plot_inv_fdem_loop_loop_2Dinversion.html#sphx-glr-content-examples-05-fdem-plot-inv-fdem-loop-loop-2dinversion-py"><span class="std std-ref">2D inversion of Loop-Loop EM Data</span></a></p>
+  <div class="sphx-glr-thumbnail-title">2D inversion of Loop-Loop EM Data</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Here we will create and run a TDEM 1D inversion."><img alt="" src="../../../_images/sphx_glr_plot_inv_tdem_1D_thumb.png" />
+<p><a class="reference internal" href="../../examples/06-tdem/plot_inv_tdem_1D.html#sphx-glr-content-examples-06-tdem-plot-inv-tdem-1d-py"><span class="std std-ref">EM: TDEM: 1D: Inversion</span></a></p>
+  <div class="sphx-glr-thumbnail-title">EM: TDEM: 1D: Inversion</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Here we will create and run a TDEM 1D inversion, with VTEM waveform of which initial condition ..."><img alt="" src="../../../_images/sphx_glr_plot_inv_tdem_1D_raw_waveform_thumb.png" />
+<p><a class="reference internal" href="../../examples/06-tdem/plot_inv_tdem_1D_raw_waveform.html#sphx-glr-content-examples-06-tdem-plot-inv-tdem-1d-raw-waveform-py"><span class="std std-ref">EM: TDEM: 1D: Inversion with VTEM waveform</span></a></p>
+  <div class="sphx-glr-thumbnail-title">EM: TDEM: 1D: Inversion with VTEM waveform</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="The example shows an inversion of Richards equation in 1D with a heterogeneous hydraulic conduc..."><img alt="" src="../../../_images/sphx_glr_plot_inv_flow_richards_1D_thumb.png" />
+<p><a class="reference internal" href="../../examples/09-flow/plot_inv_flow_richards_1D.html#sphx-glr-content-examples-09-flow-plot-inv-flow-richards-1d-py"><span class="std std-ref">FLOW: Richards: 1D: Inversion</span></a></p>
+  <div class="sphx-glr-thumbnail-title">FLOW: Richards: 1D: Inversion</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="We do a comparison between the classic least-squares inversion and our formulation of a petroph..."><img alt="" src="../../../_images/sphx_glr_plot_inv_0_PGI_Linear_1D_thumb.png" />
+<p><a class="reference internal" href="../../examples/10-pgi/plot_inv_0_PGI_Linear_1D.html#sphx-glr-content-examples-10-pgi-plot-inv-0-pgi-linear-1d-py"><span class="std std-ref">Petrophysically guided inversion (PGI): Linear example</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Petrophysically guided inversion (PGI): Linear example</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="We do a comparison between the classic least-squares inversion and our formulation of a petroph..."><img alt="" src="../../../_images/sphx_glr_plot_inv_1_PGI_Linear_1D_joint_WithRelationships_thumb.png" />
+<p><a class="reference internal" href="../../examples/10-pgi/plot_inv_1_PGI_Linear_1D_joint_WithRelationships.html#sphx-glr-content-examples-10-pgi-plot-inv-1-pgi-linear-1d-joint-withrelationships-py"><span class="std std-ref">Petrophysically guided inversion: Joint linear example with nonlinear relationships</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Petrophysically guided inversion: Joint linear example with nonlinear relationships</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="In this example, show 1D inversions of a single sounding from each of the RESOLVE and SkyTEM da..."><img alt="" src="../../../_images/sphx_glr_plot_booky_1D_time_freq_inv_thumb.png" />
+<p><a class="reference internal" href="../../examples/20-published/plot_booky_1D_time_freq_inv.html#sphx-glr-content-examples-20-published-plot-booky-1d-time-freq-inv-py"><span class="std std-ref">Heagy et al., 2017 1D RESOLVE and SkyTEM Bookpurnong Inversions</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Heagy et al., 2017 1D RESOLVE and SkyTEM Bookpurnong Inversions</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="In this example, perform a stitched 1D inversion of the Bookpurnong RESOLVE data. The original ..."><img alt="" src="../../../_images/sphx_glr_plot_booky_1Dstitched_resolve_inv_thumb.png" />
+<p><a class="reference internal" href="../../examples/20-published/plot_booky_1Dstitched_resolve_inv.html#sphx-glr-content-examples-20-published-plot-booky-1dstitched-resolve-inv-py"><span class="std std-ref">Heagy et al., 2017 1D RESOLVE Bookpurnong Inversion</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Heagy et al., 2017 1D RESOLVE Bookpurnong Inversion</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Here, we perform a 1D inversion using both the frequency and time domain codes. The forward sim..."><img alt="" src="../../../_images/sphx_glr_plot_heagyetal2017_cyl_inversions_thumb.png" />
+<p><a class="reference internal" href="../../examples/20-published/plot_heagyetal2017_cyl_inversions.html#sphx-glr-content-examples-20-published-plot-heagyetal2017-cyl-inversions-py"><span class="std std-ref">Heagy et al., 2017 1D FDEM and TDEM inversions</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Heagy et al., 2017 1D FDEM and TDEM inversions</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This notebook illustrates the SimPEG code used to invert Bouguer gravity data collected at Lagu..."><img alt="" src="../../../_images/sphx_glr_plot_laguna_del_maule_inversion_thumb.png" />
+<p><a class="reference internal" href="../../examples/20-published/plot_laguna_del_maule_inversion.html#sphx-glr-content-examples-20-published-plot-laguna-del-maule-inversion-py"><span class="std std-ref">PF: Gravity: Laguna del Maule Bouguer Gravity</span></a></p>
+  <div class="sphx-glr-thumbnail-title">PF: Gravity: Laguna del Maule Bouguer Gravity</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Here we invert a line of DC resistivity and induced polarization data to recover electrical con..."><img alt="" src="../../../_images/sphx_glr_plot_inv_2_dcip2d_thumb.png" />
+<p><a class="reference internal" href="../../tutorials/06-ip/plot_inv_2_dcip2d.html#sphx-glr-content-tutorials-06-ip-plot-inv-2-dcip2d-py"><span class="std std-ref">2.5D DC Resistivity and IP Least-Squares Inversion</span></a></p>
+  <div class="sphx-glr-thumbnail-title">2.5D DC Resistivity and IP Least-Squares Inversion</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Here we invert 5 lines of DC and IP data to recover both an electrical conductivity and a charg..."><img alt="" src="../../../_images/sphx_glr_plot_inv_3_dcip3d_thumb.png" />
+<p><a class="reference internal" href="../../tutorials/06-ip/plot_inv_3_dcip3d.html#sphx-glr-content-tutorials-06-ip-plot-inv-3-dcip3d-py"><span class="std std-ref">3D Least-Squares Inversion of DC and IP Data</span></a></p>
+  <div class="sphx-glr-thumbnail-title">3D Least-Squares Inversion of DC and IP Data</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Here we invert gravity anomaly data to recover a density contrast model. We formulate the inver..."><img alt="" src="../../../_images/sphx_glr_plot_inv_1a_gravity_anomaly_thumb.png" />
+<p><a class="reference internal" href="../../tutorials/03-gravity/plot_inv_1a_gravity_anomaly.html#sphx-glr-content-tutorials-03-gravity-plot-inv-1a-gravity-anomaly-py"><span class="std std-ref">Least-Squares Inversion of Gravity Anomaly Data</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Least-Squares Inversion of Gravity Anomaly Data</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Here we invert gravity anomaly data to recover a density contrast model. We formulate the inver..."><img alt="" src="../../../_images/sphx_glr_plot_inv_1b_gravity_anomaly_irls_thumb.png" />
+<p><a class="reference internal" href="../../tutorials/03-gravity/plot_inv_1b_gravity_anomaly_irls.html#sphx-glr-content-tutorials-03-gravity-plot-inv-1b-gravity-anomaly-irls-py"><span class="std std-ref">Sparse Norm Inversion of Gravity Anomaly Data</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Sparse Norm Inversion of Gravity Anomaly Data</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Here we demonstrate the basics of inverting data with SimPEG by considering a linear inverse pr..."><img alt="" src="../../../_images/sphx_glr_plot_inv_1_inversion_lsq_thumb.png" />
+<p><a class="reference internal" href="../../tutorials/02-linear_inversion/plot_inv_1_inversion_lsq.html#sphx-glr-content-tutorials-02-linear-inversion-plot-inv-1-inversion-lsq-py"><span class="std std-ref">Linear Least-Squares Inversion</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Linear Least-Squares Inversion</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Least-squares inversion produces smooth models which may not be an accurate representation of t..."><img alt="" src="../../../_images/sphx_glr_plot_inv_2_inversion_irls_thumb.png" />
+<p><a class="reference internal" href="../../tutorials/02-linear_inversion/plot_inv_2_inversion_irls.html#sphx-glr-content-tutorials-02-linear-inversion-plot-inv-2-inversion-irls-py"><span class="std std-ref">Sparse Inversion with Iteratively Re-Weighted Least-Squares</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Sparse Inversion with Iteratively Re-Weighted Least-Squares</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Here we use the module SimPEG.electromangetics.time_domain_1d to invert time domain data and re..."><img alt="" src="../../../_images/sphx_glr_plot_inv_1_em1dtm_thumb.png" />
+<p><a class="reference internal" href="../../tutorials/08-tdem/plot_inv_1_em1dtm.html#sphx-glr-content-tutorials-08-tdem-plot-inv-1-em1dtm-py"><span class="std std-ref">1D Inversion of Time-Domain Data for a Single Sounding</span></a></p>
+  <div class="sphx-glr-thumbnail-title">1D Inversion of Time-Domain Data for a Single Sounding</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Here we 2D straight ray tomography data to recover a velocity/slowness model. We formulate the ..."><img alt="" src="../../../_images/sphx_glr_plot_inv_1_tomography_2D_thumb.png" />
+<p><a class="reference internal" href="../../tutorials/12-seismic/plot_inv_1_tomography_2D.html#sphx-glr-content-tutorials-12-seismic-plot-inv-1-tomography-2d-py"><span class="std std-ref">Sparse Norm Inversion of 2D Seismic Tomography Data</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Sparse Norm Inversion of 2D Seismic Tomography Data</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip=" This tutorial shows through a joint inversion of Gravity and Magnetic data on an Octree mesh h..."><img alt="" src="../../../_images/sphx_glr_plot_inv_1_joint_pf_pgi_full_info_tutorial_thumb.png" />
+<p><a class="reference internal" href="../../tutorials/14-pgi/plot_inv_1_joint_pf_pgi_full_info_tutorial.html#sphx-glr-content-tutorials-14-pgi-plot-inv-1-joint-pf-pgi-full-info-tutorial-py"><span class="std std-ref">Joint PGI of Gravity + Magnetic on an Octree mesh using full petrophysical information</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Joint PGI of Gravity + Magnetic on an Octree mesh using full petrophysical information</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip=" This tutorial shows through a joint inversion of Gravity and Magnetic data on an Octree mesh h..."><img alt="" src="../../../_images/sphx_glr_plot_inv_2_joint_pf_pgi_no_info_tutorial_thumb.png" />
+<p><a class="reference internal" href="../../tutorials/14-pgi/plot_inv_2_joint_pf_pgi_no_info_tutorial.html#sphx-glr-content-tutorials-14-pgi-plot-inv-2-joint-pf-pgi-no-info-tutorial-py"><span class="std std-ref">Joint PGI of Gravity + Magnetic on an Octree mesh without petrophysical information</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Joint PGI of Gravity + Magnetic on an Octree mesh without petrophysical information</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Here we simultaneously invert gravity and magentic data using cross-gradient constraint. The re..."><img alt="" src="../../../_images/sphx_glr_plot_inv_3_cross_gradient_pf_thumb.png" />
+<p><a class="reference internal" href="../../tutorials/13-joint_inversion/plot_inv_3_cross_gradient_pf.html#sphx-glr-content-tutorials-13-joint-inversion-plot-inv-3-cross-gradient-pf-py"><span class="std std-ref">Cross-gradient Joint Inversion of Gravity and Magnetic Anomaly Data</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Cross-gradient Joint Inversion of Gravity and Magnetic Anomaly Data</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Here we use the module SimPEG.electromangetics.frequency_domain_1d to invert frequency domain d..."><img alt="" src="../../../_images/sphx_glr_plot_inv_1_em1dfm_thumb.png" />
+<p><a class="reference internal" href="../../tutorials/07-fdem/plot_inv_1_em1dfm.html#sphx-glr-content-tutorials-07-fdem-plot-inv-1-em1dfm-py"><span class="std std-ref">1D Inversion of for a Single Sounding</span></a></p>
+  <div class="sphx-glr-thumbnail-title">1D Inversion of for a Single Sounding</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Here we invert total magnetic intensity (TMI) data to recover a magnetic susceptibility model. ..."><img alt="" src="../../../_images/sphx_glr_plot_inv_2a_magnetics_induced_thumb.png" />
+<p><a class="reference internal" href="../../tutorials/04-magnetics/plot_inv_2a_magnetics_induced.html#sphx-glr-content-tutorials-04-magnetics-plot-inv-2a-magnetics-induced-py"><span class="std std-ref">Sparse Norm Inversion for Total Magnetic Intensity Data on a Tensor Mesh</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Sparse Norm Inversion for Total Magnetic Intensity Data on a Tensor Mesh</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Here we use the module SimPEG.electromangetics.static.resistivity to invert DC resistivity soun..."><img alt="" src="../../../_images/sphx_glr_plot_inv_1_dcr_sounding_thumb.png" />
+<p><a class="reference internal" href="../../tutorials/05-dcr/plot_inv_1_dcr_sounding.html#sphx-glr-content-tutorials-05-dcr-plot-inv-1-dcr-sounding-py"><span class="std std-ref">Least-Squares 1D Inversion of Sounding Data</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Least-Squares 1D Inversion of Sounding Data</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Here we use the module SimPEG.electromangetics.static.resistivity to invert DC resistivity soun..."><img alt="" src="../../../_images/sphx_glr_plot_inv_1_dcr_sounding_irls_thumb.png" />
+<p><a class="reference internal" href="../../tutorials/05-dcr/plot_inv_1_dcr_sounding_irls.html#sphx-glr-content-tutorials-05-dcr-plot-inv-1-dcr-sounding-irls-py"><span class="std std-ref">Sparse 1D Inversion of Sounding Data</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Sparse 1D Inversion of Sounding Data</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Here we use the module SimPEG.electromangetics.static.resistivity to invert DC resistivity soun..."><img alt="" src="../../../_images/sphx_glr_plot_inv_1_dcr_sounding_parametric_thumb.png" />
+<p><a class="reference internal" href="../../tutorials/05-dcr/plot_inv_1_dcr_sounding_parametric.html#sphx-glr-content-tutorials-05-dcr-plot-inv-1-dcr-sounding-parametric-py"><span class="std std-ref">Parametric 1D Inversion of Sounding Data</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Parametric 1D Inversion of Sounding Data</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Here we invert a line of DC resistivity data to recover an electrical conductivity model. We fo..."><img alt="" src="../../../_images/sphx_glr_plot_inv_2_dcr2d_thumb.png" />
+<p><a class="reference internal" href="../../tutorials/05-dcr/plot_inv_2_dcr2d.html#sphx-glr-content-tutorials-05-dcr-plot-inv-2-dcr2d-py"><span class="std std-ref">2.5D DC Resistivity Least-Squares Inversion</span></a></p>
+  <div class="sphx-glr-thumbnail-title">2.5D DC Resistivity Least-Squares Inversion</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Here we invert a line of DC resistivity data to recover an electrical conductivity model. We fo..."><img alt="" src="../../../_images/sphx_glr_plot_inv_2_dcr2d_irls_thumb.png" />
+<p><a class="reference internal" href="../../tutorials/05-dcr/plot_inv_2_dcr2d_irls.html#sphx-glr-content-tutorials-05-dcr-plot-inv-2-dcr2d-irls-py"><span class="std std-ref">2.5D DC Resistivity Inversion with Sparse Norms</span></a></p>
+  <div class="sphx-glr-thumbnail-title">2.5D DC Resistivity Inversion with Sparse Norms</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Here we invert 5 lines of DC data to recover an electrical conductivity model. We formulate the..."><img alt="" src="../../../_images/sphx_glr_plot_inv_3_dcr3d_thumb.png" />
+<p><a class="reference internal" href="../../tutorials/05-dcr/plot_inv_3_dcr3d.html#sphx-glr-content-tutorials-05-dcr-plot-inv-3-dcr3d-py"><span class="std std-ref">3D Least-Squares Inversion of DC Resistivity Data</span></a></p>
+  <div class="sphx-glr-thumbnail-title">3D Least-Squares Inversion of DC Resistivity Data</div>
+</div></div></section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="SimPEG.directives.MovingAndMultiTargetStopping.validate.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">SimPEG.directives.MovingAndMultiTargetStopping.validate</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="SimPEG.directives.InversionDirective.debug.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">SimPEG.directives.InversionDirective.debug</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#SimPEG.directives.InversionDirective"><code class="docutils literal notranslate"><span class="pre">InversionDirective</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#galleries-and-tutorials-using-simpeg-directives-inversiondirective">Galleries and Tutorials using <code class="docutils literal notranslate"><span class="pre">SimPEG.directives.InversionDirective</span></code></a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/content/api/generated/SimPEG.directives.InversionDirective.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

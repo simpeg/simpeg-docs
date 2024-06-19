@@ -1,0 +1,1018 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Computation times &#8212; SimPEG 0.21.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=45118af6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=cfc953b7"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script data-domain="docs.simpeg.xyz" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'sg_execution_times';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.14.4';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.simpeg.xyz/latest/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.21.1';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="icon" href="_static/logo-block.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/simpeg-logo.png" class="logo__image only-light" alt="SimPEG 0.21.1 documentation - Home"/>
+    <script>document.write(`<img src="_static/simpeg-logo.png" class="logo__image only-dark" alt="SimPEG 0.21.1 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="content/getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="content/user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="content/api/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="content/release/index.html">
+                        Release Notes
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+                    User Tutorials
+                  </a>
+                </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+                    SimPEG
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+                    Contact
+                  </a>
+                </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-comment fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-discourse fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-youtube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="content/getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="content/user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="content/api/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="content/release/index.html">
+                        Release Notes
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+                    User Tutorials
+                  </a>
+                </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links-2">
+                    More
+                </button>
+                <ul id="pst-nav-more-links-2" class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+                    SimPEG
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+                    Contact
+                  </a>
+                </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-3"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-3"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-3"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-3">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-comment fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-discourse fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-youtube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Computation times</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="computation-times">
+<span id="sphx-glr-sg-execution-times"></span><h1>Computation times<a class="headerlink" href="#computation-times" title="Permalink to this heading">#</a></h1>
+<p><strong>55:49.657</strong> total execution time for 85 files <strong>from all galleries</strong>:</p>
+<div class="docutils container">
+<style scoped>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+</style>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script type="text/javascript" class="init">
+$(document).ready( function () {
+    $('table.sg-datatable').DataTable({order: [[1, 'desc']]});
+} );
+</script><table class="table table-striped sg-datatable">
+<thead>
+<tr class="row-odd"><th class="head"><p>Example</p></th>
+<th class="head"><p>Time</p></th>
+<th class="head"><p>Mem (MB)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="content/examples/09-flow/plot_inv_flow_richards_1D.html#sphx-glr-content-examples-09-flow-plot-inv-flow-richards-1d-py"><span class="std std-ref">FLOW: Richards: 1D: Inversion</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/09-flow/plot_inv_flow_richards_1D.py</span></code>)</p></td>
+<td><p>05:17.346</p></td>
+<td><p>8.7</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/tutorials/14-pgi/plot_inv_2_joint_pf_pgi_no_info_tutorial.html#sphx-glr-content-tutorials-14-pgi-plot-inv-2-joint-pf-pgi-no-info-tutorial-py"><span class="std std-ref">Joint PGI of Gravity + Magnetic on an Octree mesh without petrophysical information</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/14-pgi/plot_inv_2_joint_pf_pgi_no_info_tutorial.py</span></code>)</p></td>
+<td><p>04:19.308</p></td>
+<td><p>95.2</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/examples/05-fdem/plot_inv_fdem_loop_loop_2Dinversion.html#sphx-glr-content-examples-05-fdem-plot-inv-fdem-loop-loop-2dinversion-py"><span class="std std-ref">2D inversion of Loop-Loop EM Data</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/05-fdem/plot_inv_fdem_loop_loop_2Dinversion.py</span></code>)</p></td>
+<td><p>03:22.270</p></td>
+<td><p>3227.2</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/tutorials/14-pgi/plot_inv_1_joint_pf_pgi_full_info_tutorial.html#sphx-glr-content-tutorials-14-pgi-plot-inv-1-joint-pf-pgi-full-info-tutorial-py"><span class="std std-ref">Joint PGI of Gravity + Magnetic on an Octree mesh using full petrophysical information</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/14-pgi/plot_inv_1_joint_pf_pgi_full_info_tutorial.py</span></code>)</p></td>
+<td><p>03:21.508</p></td>
+<td><p>104.3</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/06-ip/plot_inv_3_dcip3d.html#sphx-glr-content-tutorials-06-ip-plot-inv-3-dcip3d-py"><span class="std std-ref">3D Least-Squares Inversion of DC and IP Data</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/06-ip/plot_inv_3_dcip3d.py</span></code>)</p></td>
+<td><p>03:16.580</p></td>
+<td><p>560.2</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/tutorials/05-dcr/plot_inv_2_dcr2d_irls.html#sphx-glr-content-tutorials-05-dcr-plot-inv-2-dcr2d-irls-py"><span class="std std-ref">2.5D DC Resistivity Inversion with Sparse Norms</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/05-dcr/plot_inv_2_dcr2d_irls.py</span></code>)</p></td>
+<td><p>02:46.683</p></td>
+<td><p>8.6</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/05-dcr/plot_inv_3_dcr3d.html#sphx-glr-content-tutorials-05-dcr-plot-inv-3-dcr3d-py"><span class="std std-ref">3D Least-Squares Inversion of DC Resistivity Data</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/05-dcr/plot_inv_3_dcr3d.py</span></code>)</p></td>
+<td><p>02:22.619</p></td>
+<td><p>8.6</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/03-magnetics/plot_inv_mag_MVI_Sparse_TreeMesh.html#sphx-glr-content-examples-03-magnetics-plot-inv-mag-mvi-sparse-treemesh-py"><span class="std std-ref">Magnetic inversion on a TreeMesh</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/03-magnetics/plot_inv_mag_MVI_Sparse_TreeMesh.py</span></code>)</p></td>
+<td><p>02:19.917</p></td>
+<td><p>671.3</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/13-joint_inversion/plot_inv_3_cross_gradient_pf.html#sphx-glr-content-tutorials-13-joint-inversion-plot-inv-3-cross-gradient-pf-py"><span class="std std-ref">Cross-gradient Joint Inversion of Gravity and Magnetic Anomaly Data</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/13-joint_inversion/plot_inv_3_cross_gradient_pf.py</span></code>)</p></td>
+<td><p>02:07.487</p></td>
+<td><p>13.8</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/06-tdem/plot_fwd_tdem_3d_model.html#sphx-glr-content-examples-06-tdem-plot-fwd-tdem-3d-model-py"><span class="std std-ref">Time-domain CSEM for a resistive cube in a deep marine setting</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/06-tdem/plot_fwd_tdem_3d_model.py</span></code>)</p></td>
+<td><p>01:26.511</p></td>
+<td><p>2161.7</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/examples/04-dcip/plot_inv_dcip_dipoledipole_3Dinversion_twospheres.html#sphx-glr-content-examples-04-dcip-plot-inv-dcip-dipoledipole-3dinversion-twospheres-py"><span class="std std-ref">3D DC inversion of Dipole Dipole array</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/04-dcip/plot_inv_dcip_dipoledipole_3Dinversion_twospheres.py</span></code>)</p></td>
+<td><p>01:17.631</p></td>
+<td><p>266.8</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/20-published/plot_laguna_del_maule_inversion.html#sphx-glr-content-examples-20-published-plot-laguna-del-maule-inversion-py"><span class="std std-ref">PF: Gravity: Laguna del Maule Bouguer Gravity</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/20-published/plot_laguna_del_maule_inversion.py</span></code>)</p></td>
+<td><p>01:17.575</p></td>
+<td><p>280.6</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/08-tdem/plot_fwd_3_tem_3d.html#sphx-glr-content-tutorials-08-tdem-plot-fwd-3-tem-3d-py"><span class="std std-ref">3D Forward Simulation with User-Defined Waveforms</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/08-tdem/plot_fwd_3_tem_3d.py</span></code>)</p></td>
+<td><p>01:13.938</p></td>
+<td><p>770.7</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/tutorials/05-dcr/plot_inv_2_dcr2d.html#sphx-glr-content-tutorials-05-dcr-plot-inv-2-dcr2d-py"><span class="std std-ref">2.5D DC Resistivity Least-Squares Inversion</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/05-dcr/plot_inv_2_dcr2d.py</span></code>)</p></td>
+<td><p>01:08.116</p></td>
+<td><p>8.6</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/06-ip/plot_inv_2_dcip2d.html#sphx-glr-content-tutorials-06-ip-plot-inv-2-dcip2d-py"><span class="std std-ref">2.5D DC Resistivity and IP Least-Squares Inversion</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/06-ip/plot_inv_2_dcip2d.py</span></code>)</p></td>
+<td><p>00:58.988</p></td>
+<td><p>8.6</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/03-magnetics/plot_inv_mag_nonLinear_Amplitude.html#sphx-glr-content-examples-03-magnetics-plot-inv-mag-nonlinear-amplitude-py"><span class="std std-ref">Magnetic Amplitude inversion on a TreeMesh</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/03-magnetics/plot_inv_mag_nonLinear_Amplitude.py</span></code>)</p></td>
+<td><p>00:56.258</p></td>
+<td><p>539.5</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/examples/03-magnetics/plot_inv_mag_MVI_VectorAmplitude.html#sphx-glr-content-examples-03-magnetics-plot-inv-mag-mvi-vectoramplitude-py"><span class="std std-ref">Magnetic inversion on a TreeMesh</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/03-magnetics/plot_inv_mag_MVI_VectorAmplitude.py</span></code>)</p></td>
+<td><p>00:54.396</p></td>
+<td><p>137.4</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/07-nsem/plot_fwd_nsem_MTTipper3D.html#sphx-glr-content-examples-07-nsem-plot-fwd-nsem-mttipper3d-py"><span class="std std-ref">MT: 3D: Forward</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/07-nsem/plot_fwd_nsem_MTTipper3D.py</span></code>)</p></td>
+<td><p>00:51.830</p></td>
+<td><p>1175.1</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/05-dcr/plot_inv_1_dcr_sounding_irls.html#sphx-glr-content-tutorials-05-dcr-plot-inv-1-dcr-sounding-irls-py"><span class="std std-ref">Sparse 1D Inversion of Sounding Data</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/05-dcr/plot_inv_1_dcr_sounding_irls.py</span></code>)</p></td>
+<td><p>00:46.667</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/tutorials/03-gravity/plot_inv_1b_gravity_anomaly_irls.html#sphx-glr-content-tutorials-03-gravity-plot-inv-1b-gravity-anomaly-irls-py"><span class="std std-ref">Sparse Norm Inversion of Gravity Anomaly Data</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/03-gravity/plot_inv_1b_gravity_anomaly_irls.py</span></code>)</p></td>
+<td><p>00:44.487</p></td>
+<td><p>9.1</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/examples/20-published/plot_heagyetal2017_cyl_inversions.html#sphx-glr-content-examples-20-published-plot-heagyetal2017-cyl-inversions-py"><span class="std std-ref">Heagy et al., 2017 1D FDEM and TDEM inversions</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/20-published/plot_heagyetal2017_cyl_inversions.py</span></code>)</p></td>
+<td><p>00:43.466</p></td>
+<td><p>118.6</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/20-published/plot_tomo_joint_with_volume.html#sphx-glr-content-examples-20-published-plot-tomo-joint-with-volume-py"><span class="std std-ref">Straight Ray with Volume Data Misfit Term</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/20-published/plot_tomo_joint_with_volume.py</span></code>)</p></td>
+<td><p>00:40.206</p></td>
+<td><p>8.8</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/08-tdem/plot_fwd_2_tem_cyl.html#sphx-glr-content-tutorials-08-tdem-plot-fwd-2-tem-cyl-py"><span class="std std-ref">3D Forward Simulation for Transient Response on a Cylindrical Mesh</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/08-tdem/plot_fwd_2_tem_cyl.py</span></code>)</p></td>
+<td><p>00:38.777</p></td>
+<td><p>456.3</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/06-tdem/plot_inv_tdem_1D_raw_waveform.html#sphx-glr-content-examples-06-tdem-plot-inv-tdem-1d-raw-waveform-py"><span class="std std-ref">EM: TDEM: 1D: Inversion with VTEM waveform</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/06-tdem/plot_inv_tdem_1D_raw_waveform.py</span></code>)</p></td>
+<td><p>00:37.594</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/examples/10-pgi/plot_inv_1_PGI_Linear_1D_joint_WithRelationships.html#sphx-glr-content-examples-10-pgi-plot-inv-1-pgi-linear-1d-joint-withrelationships-py"><span class="std std-ref">Petrophysically guided inversion: Joint linear example with nonlinear relationships</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/10-pgi/plot_inv_1_PGI_Linear_1D_joint_WithRelationships.py</span></code>)</p></td>
+<td><p>00:36.963</p></td>
+<td><p>9.7</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/04-dcip/plot_inv_dcip_dipoledipole_parametric_inversion.html#sphx-glr-content-examples-04-dcip-plot-inv-dcip-dipoledipole-parametric-inversion-py"><span class="std std-ref">Parametric DC inversion with Dipole Dipole array</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/04-dcip/plot_inv_dcip_dipoledipole_parametric_inversion.py</span></code>)</p></td>
+<td><p>00:34.020</p></td>
+<td><p>9.5</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/04-magnetics/plot_inv_2a_magnetics_induced.html#sphx-glr-content-tutorials-04-magnetics-plot-inv-2a-magnetics-induced-py"><span class="std std-ref">Sparse Norm Inversion for Total Magnetic Intensity Data on a Tensor Mesh</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/04-magnetics/plot_inv_2a_magnetics_induced.py</span></code>)</p></td>
+<td><p>00:33.489</p></td>
+<td><p>9.7</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/tutorials/06-ip/plot_fwd_3_dcip3d.html#sphx-glr-content-tutorials-06-ip-plot-fwd-3-dcip3d-py"><span class="std std-ref">DC/IP Forward Simulation in 3D</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/06-ip/plot_fwd_3_dcip3d.py</span></code>)</p></td>
+<td><p>00:33.025</p></td>
+<td><p>161.8</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/05-dcr/plot_inv_1_dcr_sounding_parametric.html#sphx-glr-content-tutorials-05-dcr-plot-inv-1-dcr-sounding-parametric-py"><span class="std std-ref">Parametric 1D Inversion of Sounding Data</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/05-dcr/plot_inv_1_dcr_sounding_parametric.py</span></code>)</p></td>
+<td><p>00:32.406</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/20-published/plot_heagyetal2017_casing.html#sphx-glr-content-examples-20-published-plot-heagyetal2017-casing-py"><span class="std std-ref">Heagy et al., 2017 Casing Example</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/20-published/plot_heagyetal2017_casing.py</span></code>)</p></td>
+<td><p>00:30.241</p></td>
+<td><p>1538.0</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/examples/20-published/plot_booky_1D_time_freq_inv.html#sphx-glr-content-examples-20-published-plot-booky-1d-time-freq-inv-py"><span class="std std-ref">Heagy et al., 2017 1D RESOLVE and SkyTEM Bookpurnong Inversions</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/20-published/plot_booky_1D_time_freq_inv.py</span></code>)</p></td>
+<td><p>00:29.113</p></td>
+<td><p>15.6</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/tutorials/02-linear_inversion/plot_inv_2_inversion_irls.html#sphx-glr-content-tutorials-02-linear-inversion-plot-inv-2-inversion-irls-py"><span class="std std-ref">Sparse Inversion with Iteratively Re-Weighted Least-Squares</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/02-linear_inversion/plot_inv_2_inversion_irls.py</span></code>)</p></td>
+<td><p>00:28.099</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/10-vrm/plot_fwd_3_vrm_tem.html#sphx-glr-content-tutorials-10-vrm-plot-fwd-3-vrm-tem-py"><span class="std std-ref">Forward Simulation Including Inductive Response</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/10-vrm/plot_fwd_3_vrm_tem.py</span></code>)</p></td>
+<td><p>00:27.607</p></td>
+<td><p>288.7</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/08-vrm/plot_inv_vrm_eq.html#sphx-glr-content-examples-08-vrm-plot-inv-vrm-eq-py"><span class="std std-ref">Method of Equivalent Sources for Removing VRM Responses</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/08-vrm/plot_inv_vrm_eq.py</span></code>)</p></td>
+<td><p>00:27.313</p></td>
+<td><p>110.8</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/02-linear_inversion/plot_inv_1_inversion_lsq.html#sphx-glr-content-tutorials-02-linear-inversion-plot-inv-1-inversion-lsq-py"><span class="std std-ref">Linear Least-Squares Inversion</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/02-linear_inversion/plot_inv_1_inversion_lsq.py</span></code>)</p></td>
+<td><p>00:27.241</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/tutorials/08-tdem/plot_inv_1_em1dtm.html#sphx-glr-content-tutorials-08-tdem-plot-inv-1-em1dtm-py"><span class="std std-ref">1D Inversion of Time-Domain Data for a Single Sounding</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/08-tdem/plot_inv_1_em1dtm.py</span></code>)</p></td>
+<td><p>00:23.877</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/07-fdem/plot_inv_1_em1dfm.html#sphx-glr-content-tutorials-07-fdem-plot-inv-1-em1dfm-py"><span class="std std-ref">1D Inversion of for a Single Sounding</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/07-fdem/plot_inv_1_em1dfm.py</span></code>)</p></td>
+<td><p>00:22.250</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/08-vrm/plot_fwd_vrm.html#sphx-glr-content-examples-08-vrm-plot-fwd-vrm-py"><span class="std std-ref">Predict Response from a Conductive and Magnetically Viscous Earth</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/08-vrm/plot_fwd_vrm.py</span></code>)</p></td>
+<td><p>00:21.370</p></td>
+<td><p>110.9</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/examples/06-tdem/plot_inv_tdem_1D.html#sphx-glr-content-examples-06-tdem-plot-inv-tdem-1d-py"><span class="std std-ref">EM: TDEM: 1D: Inversion</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/06-tdem/plot_inv_tdem_1D.py</span></code>)</p></td>
+<td><p>00:21.299</p></td>
+<td><p>8.4</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/01-maps/plot_sumMap.html#sphx-glr-content-examples-01-maps-plot-summap-py"><span class="std std-ref">Maps: ComboMaps</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/01-maps/plot_sumMap.py</span></code>)</p></td>
+<td><p>00:17.723</p></td>
+<td><p>41.9</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/03-gravity/plot_inv_1a_gravity_anomaly.html#sphx-glr-content-tutorials-03-gravity-plot-inv-1a-gravity-anomaly-py"><span class="std std-ref">Least-Squares Inversion of Gravity Anomaly Data</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/03-gravity/plot_inv_1a_gravity_anomaly.py</span></code>)</p></td>
+<td><p>00:14.168</p></td>
+<td><p>10.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/tutorials/12-seismic/plot_inv_1_tomography_2D.html#sphx-glr-content-tutorials-12-seismic-plot-inv-1-tomography-2d-py"><span class="std std-ref">Sparse Norm Inversion of 2D Seismic Tomography Data</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/12-seismic/plot_inv_1_tomography_2D.py</span></code>)</p></td>
+<td><p>00:14.120</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/10-vrm/plot_fwd_2_vrm_topsoil.html#sphx-glr-content-tutorials-10-vrm-plot-fwd-2-vrm-topsoil-py"><span class="std std-ref">Forward Simulation of VRM Response on a Tree Mesh</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/10-vrm/plot_fwd_2_vrm_topsoil.py</span></code>)</p></td>
+<td><p>00:13.707</p></td>
+<td><p>8.6</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/06-tdem/plot_fwd_tdem_inductive_src_permeable_target.html#sphx-glr-content-examples-06-tdem-plot-fwd-tdem-inductive-src-permeable-target-py"><span class="std std-ref">EM: TDEM: Permeable Target, Inductive Source</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/06-tdem/plot_fwd_tdem_inductive_src_permeable_target.py</span></code>)</p></td>
+<td><p>00:12.921</p></td>
+<td><p>8.6</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/examples/06-tdem/plot_0_tdem_analytic.html#sphx-glr-content-examples-06-tdem-plot-0-tdem-analytic-py"><span class="std std-ref">Simulation with Analytic TDEM Solutions</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/06-tdem/plot_0_tdem_analytic.py</span></code>)</p></td>
+<td><p>00:12.720</p></td>
+<td><p>169.2</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/tutorials/07-fdem/plot_fwd_3_fem_3d.html#sphx-glr-content-tutorials-07-fdem-plot-fwd-3-fem-3d-py"><span class="std std-ref">3D Forward Simulation on a Tree Mesh</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/07-fdem/plot_fwd_3_fem_3d.py</span></code>)</p></td>
+<td><p>00:12.128</p></td>
+<td><p>949.2</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/06-ip/plot_fwd_2_dcip2d.html#sphx-glr-content-tutorials-06-ip-plot-fwd-2-dcip2d-py"><span class="std std-ref">2.5D Forward Simulation of a DCIP Line</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/06-ip/plot_fwd_2_dcip2d.py</span></code>)</p></td>
+<td><p>00:12.064</p></td>
+<td><p>9.1</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/05-fdem/plot_0_fdem_analytic.html#sphx-glr-content-examples-05-fdem-plot-0-fdem-analytic-py"><span class="std std-ref">Simulation with Analytic FDEM Solutions</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/05-fdem/plot_0_fdem_analytic.py</span></code>)</p></td>
+<td><p>00:11.452</p></td>
+<td><p>118.4</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/05-dcr/plot_fwd_3_dcr3d.html#sphx-glr-content-tutorials-05-dcr-plot-fwd-3-dcr3d-py"><span class="std std-ref">DC Resistivity Forward Simulation in 3D</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/05-dcr/plot_fwd_3_dcr3d.py</span></code>)</p></td>
+<td><p>00:10.650</p></td>
+<td><p>8.9</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/tutorials/04-magnetics/plot_2b_magnetics_mvi.html#sphx-glr-content-tutorials-04-magnetics-plot-2b-magnetics-mvi-py"><span class="std std-ref">Forward Simulation of Gradiometry Data for Magnetic Vector Models</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/04-magnetics/plot_2b_magnetics_mvi.py</span></code>)</p></td>
+<td><p>00:10.460</p></td>
+<td><p>8.6</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/04-magnetics/plot_2a_magnetics_induced.html#sphx-glr-content-tutorials-04-magnetics-plot-2a-magnetics-induced-py"><span class="std std-ref">Forward Simulation of Total Magnetic Intensity Data</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/04-magnetics/plot_2a_magnetics_induced.py</span></code>)</p></td>
+<td><p>00:10.078</p></td>
+<td><p>8.6</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/tutorials/07-fdem/plot_fwd_2_fem_cyl.html#sphx-glr-content-tutorials-07-fdem-plot-fwd-2-fem-cyl-py"><span class="std std-ref">3D Forward Simulation on a Cylindrical Mesh</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/07-fdem/plot_fwd_2_fem_cyl.py</span></code>)</p></td>
+<td><p>00:09.866</p></td>
+<td><p>225.2</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/05-dcr/plot_inv_1_dcr_sounding.html#sphx-glr-content-tutorials-05-dcr-plot-inv-1-dcr-sounding-py"><span class="std std-ref">Least-Squares 1D Inversion of Sounding Data</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/05-dcr/plot_inv_1_dcr_sounding.py</span></code>)</p></td>
+<td><p>00:09.844</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/20-published/plot_schenkel_morrison_casing.html#sphx-glr-content-examples-20-published-plot-schenkel-morrison-casing-py"><span class="std std-ref">EM: Schenkel and Morrison Casing Model</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/20-published/plot_schenkel_morrison_casing.py</span></code>)</p></td>
+<td><p>00:09.653</p></td>
+<td><p>2111.1</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/08-tdem/plot_fwd_1_em1dtm_waveforms.html#sphx-glr-content-tutorials-08-tdem-plot-fwd-1-em1dtm-waveforms-py"><span class="std std-ref">1D Forward Simulation with User-Defined Waveforms</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/08-tdem/plot_fwd_1_em1dtm_waveforms.py</span></code>)</p></td>
+<td><p>00:08.982</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/tutorials/12-seismic/plot_fwd_1_tomography_2D.html#sphx-glr-content-tutorials-12-seismic-plot-fwd-1-tomography-2d-py"><span class="std std-ref">Forward Simulation for Straight Ray Tomography in 2D</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/12-seismic/plot_fwd_1_tomography_2D.py</span></code>)</p></td>
+<td><p>00:08.872</p></td>
+<td><p>8.6</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/05-dcr/plot_fwd_2_dcr2d.html#sphx-glr-content-tutorials-05-dcr-plot-fwd-2-dcr2d-py"><span class="std std-ref">DC Resistivity Forward Simulation in 2.5D</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/05-dcr/plot_fwd_2_dcr2d.py</span></code>)</p></td>
+<td><p>00:08.829</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/tutorials/01-models_mapping/plot_1_tensor_models.html#sphx-glr-content-tutorials-01-models-mapping-plot-1-tensor-models-py"><span class="std std-ref">Tensor Meshes</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/01-models_mapping/plot_1_tensor_models.py</span></code>)</p></td>
+<td><p>00:08.738</p></td>
+<td><p>8.6</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/03-gravity/plot_1b_gravity_gradiometry.html#sphx-glr-content-tutorials-03-gravity-plot-1b-gravity-gradiometry-py"><span class="std std-ref">Forward Simulation of Gradiometry Data on a Tree Mesh</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/03-gravity/plot_1b_gravity_gradiometry.py</span></code>)</p></td>
+<td><p>00:06.862</p></td>
+<td><p>9.5</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/09-flow/plot_fwd_flow_richards_1D.html#sphx-glr-content-examples-09-flow-plot-fwd-flow-richards-1d-py"><span class="std std-ref">FLOW: Richards: 1D: Forward Simulation</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/09-flow/plot_fwd_flow_richards_1D.py</span></code>)</p></td>
+<td><p>00:06.774</p></td>
+<td><p>8.6</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/03-gravity/plot_1a_gravity_anomaly.html#sphx-glr-content-tutorials-03-gravity-plot-1a-gravity-anomaly-py"><span class="std std-ref">Forward Simulation of Gravity Anomaly Data on a Tensor Mesh</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/03-gravity/plot_1a_gravity_anomaly.py</span></code>)</p></td>
+<td><p>00:06.532</p></td>
+<td><p>31.9</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/02-gravity/plot_inv_grav_tiled.html#sphx-glr-content-examples-02-gravity-plot-inv-grav-tiled-py"><span class="std std-ref">PF: Gravity: Tiled Inversion Linear</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/02-gravity/plot_inv_grav_tiled.py</span></code>)</p></td>
+<td><p>00:06.316</p></td>
+<td><p>15.1</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/01-models_mapping/plot_3_tree_models.html#sphx-glr-content-tutorials-01-models-mapping-plot-3-tree-models-py"><span class="std std-ref">Tree Meshes</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/01-models_mapping/plot_3_tree_models.py</span></code>)</p></td>
+<td><p>00:05.973</p></td>
+<td><p>8.6</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/20-published/plot_richards_celia1990.html#sphx-glr-content-examples-20-published-plot-richards-celia1990-py"><span class="std std-ref">FLOW: Richards: 1D: Celia1990</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/20-published/plot_richards_celia1990.py</span></code>)</p></td>
+<td><p>00:05.836</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/01-models_mapping/plot_2_cyl_models.html#sphx-glr-content-tutorials-01-models-mapping-plot-2-cyl-models-py"><span class="std std-ref">Cylindrical Meshes</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/01-models_mapping/plot_2_cyl_models.py</span></code>)</p></td>
+<td><p>00:05.761</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/tutorials/10-vrm/plot_fwd_1_vrm_layer.html#sphx-glr-content-tutorials-10-vrm-plot-fwd-1-vrm-layer-py"><span class="std std-ref">Response from a Homogeneous Layer for Different Waveforms</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/10-vrm/plot_fwd_1_vrm_layer.py</span></code>)</p></td>
+<td><p>00:05.198</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/05-dcr/plot_gen_3_3d_to_2d.html#sphx-glr-content-tutorials-05-dcr-plot-gen-3-3d-to-2d-py"><span class="std std-ref">Convert 3D DC/IP Data to 2D Lines</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/05-dcr/plot_gen_3_3d_to_2d.py</span></code>)</p></td>
+<td><p>00:04.856</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/10-pgi/plot_inv_0_PGI_Linear_1D.html#sphx-glr-content-examples-10-pgi-plot-inv-0-pgi-linear-1d-py"><span class="std std-ref">Petrophysically guided inversion (PGI): Linear example</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/10-pgi/plot_inv_0_PGI_Linear_1D.py</span></code>)</p></td>
+<td><p>00:04.616</p></td>
+<td><p>9.2</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/08-tdem/plot_fwd_1_em1dtm_dispersive.html#sphx-glr-content-tutorials-08-tdem-plot-fwd-1-em1dtm-dispersive-py"><span class="std std-ref">1D Forward Simulation with Chargeable and/or Magnetic Viscosity</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/08-tdem/plot_fwd_1_em1dtm_dispersive.py</span></code>)</p></td>
+<td><p>00:04.510</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/tutorials/05-dcr/plot_fwd_1_dcr_sounding.html#sphx-glr-content-tutorials-05-dcr-plot-fwd-1-dcr-sounding-py"><span class="std std-ref">Simulate a 1D Sounding over a Layered Earth</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/05-dcr/plot_fwd_1_dcr_sounding.py</span></code>)</p></td>
+<td><p>00:04.295</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/08-tdem/plot_fwd_1_em1dtm.html#sphx-glr-content-tutorials-08-tdem-plot-fwd-1-em1dtm-py"><span class="std std-ref">1D Forward Simulation for a Single Sounding</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/08-tdem/plot_fwd_1_em1dtm.py</span></code>)</p></td>
+<td><p>00:04.248</p></td>
+<td><p>8.4</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/tutorials/07-fdem/plot_fwd_1_em1dfm_dispersive.html#sphx-glr-content-tutorials-07-fdem-plot-fwd-1-em1dfm-dispersive-py"><span class="std std-ref">1D Forward Simulation for a Susceptible and Chargeable Earth</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/07-fdem/plot_fwd_1_em1dfm_dispersive.py</span></code>)</p></td>
+<td><p>00:04.195</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/tutorials/07-fdem/plot_fwd_1_em1dfm.html#sphx-glr-content-tutorials-07-fdem-plot-fwd-1-em1dfm-py"><span class="std std-ref">1D Forward Simulation for a Single Sounding</span></a> (<code class="docutils literal notranslate"><span class="pre">../tutorials/07-fdem/plot_fwd_1_em1dfm.py</span></code>)</p></td>
+<td><p>00:03.917</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/20-published/plot_effective_medium_theory.html#sphx-glr-content-examples-20-published-plot-effective-medium-theory-py"><span class="std std-ref">Effective Medium Theory Mapping</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/20-published/plot_effective_medium_theory.py</span></code>)</p></td>
+<td><p>00:02.647</p></td>
+<td><p>8.6</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/examples/04-dcip/plot_read_DC_data_with_IO_class.html#sphx-glr-content-examples-04-dcip-plot-read-dc-data-with-io-class-py"><span class="std std-ref">Reading and Plotting data with DC.IO class</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/04-dcip/plot_read_DC_data_with_IO_class.py</span></code>)</p></td>
+<td><p>00:02.275</p></td>
+<td><p>9.6</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/20-published/plot_load_booky.html#sphx-glr-content-examples-20-published-plot-load-booky-py"><span class="std std-ref">Heagy et al., 2017 Load and Plot Bookpurnong Data</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/20-published/plot_load_booky.py</span></code>)</p></td>
+<td><p>00:01.832</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/examples/20-published/plot_booky_1Dstitched_resolve_inv.html#sphx-glr-content-examples-20-published-plot-booky-1dstitched-resolve-inv-py"><span class="std std-ref">Heagy et al., 2017 1D RESOLVE Bookpurnong Inversion</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/20-published/plot_booky_1Dstitched_resolve_inv.py</span></code>)</p></td>
+<td><p>00:01.716</p></td>
+<td><p>8.6</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/06-tdem/plot_fwd_tdem_waveforms.html#sphx-glr-content-examples-06-tdem-plot-fwd-tdem-waveforms-py"><span class="std std-ref">TDEM: Waveforms</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/06-tdem/plot_fwd_tdem_waveforms.py</span></code>)</p></td>
+<td><p>00:01.434</p></td>
+<td><p>8.6</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/examples/04-dcip/plot_dc_analytic.html#sphx-glr-content-examples-04-dcip-plot-dc-analytic-py"><span class="std std-ref">DC Analytic Dipole</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/04-dcip/plot_dc_analytic.py</span></code>)</p></td>
+<td><p>00:01.391</p></td>
+<td><p>28.9</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/20-published/plot_vadose_vangenuchten.html#sphx-glr-content-examples-20-published-plot-vadose-vangenuchten-py"><span class="std std-ref">FLOW: Vadose: van Genuchten</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/20-published/plot_vadose_vangenuchten.py</span></code>)</p></td>
+<td><p>00:00.793</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/examples/03-magnetics/plot_0_analytic.html#sphx-glr-content-examples-03-magnetics-plot-0-analytic-py"><span class="std std-ref">PF: Magnetics: Analytics</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/03-magnetics/plot_0_analytic.py</span></code>)</p></td>
+<td><p>00:00.608</p></td>
+<td><p>8.3</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/01-maps/plot_combo.html#sphx-glr-content-examples-01-maps-plot-combo-py"><span class="std std-ref">Maps: ComboMaps</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/01-maps/plot_combo.py</span></code>)</p></td>
+<td><p>00:00.543</p></td>
+<td><p>10.4</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/examples/01-maps/plot_mesh2mesh.html#sphx-glr-content-examples-01-maps-plot-mesh2mesh-py"><span class="std std-ref">Maps: Mesh2Mesh</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/01-maps/plot_mesh2mesh.py</span></code>)</p></td>
+<td><p>00:00.506</p></td>
+<td><p>8.9</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="content/examples/01-maps/plot_block_in_layer.html#sphx-glr-content-examples-01-maps-plot-block-in-layer-py"><span class="std std-ref">Maps: Parametric Block in a Layer</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/01-maps/plot_block_in_layer.py</span></code>)</p></td>
+<td><p>00:00.329</p></td>
+<td><p>8.8</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="content/examples/01-maps/plot_layer.html#sphx-glr-content-examples-01-maps-plot-layer-py"><span class="std std-ref">Maps: Parametrized Layer</span></a> (<code class="docutils literal notranslate"><span class="pre">../examples/01-maps/plot_layer.py</span></code>)</p></td>
+<td><p>00:00.246</p></td>
+<td><p>8.3</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="_sources/sg_execution_times.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
