@@ -1,0 +1,941 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Reading and Plotting data with DC.IO class &#8212; SimPEG 0.22.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=45118af6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=2ea346ab"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script data-domain="docs.simpeg.xyz" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/examples/04-dcip/plot_read_DC_data_with_IO_class';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.14.4';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.simpeg.xyz/latest/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.22.0';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="icon" href="../../../_static/logo-block.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Frequency Domain Electromagnetics" href="../05-fdem/index.html" />
+    <link rel="prev" title="Parametric DC inversion with Dipole Dipole array" href="plot_inv_dcip_dipoledipole_parametric_inversion.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/simpeg-logo.png" class="logo__image only-light" alt="SimPEG 0.22.0 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/simpeg-logo.png" class="logo__image only-dark" alt="SimPEG 0.22.0 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../api/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../release/index.html">
+                        Release Notes
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+                    User Tutorials
+                  </a>
+                </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+                    SimPEG
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+                    Contact
+                  </a>
+                </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-comment fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-discourse fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-youtube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../api/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../release/index.html">
+                        Release Notes
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+                    User Tutorials
+                  </a>
+                </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links-2">
+                    More
+                </button>
+                <ul id="pst-nav-more-links-2" class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+                    SimPEG
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+                    Contact
+                  </a>
+                </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-3"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-3"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-3"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-3">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-comment fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-discourse fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-youtube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/01-models_mapping/index.html">Models and Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/02-linear_inversion/index.html">Linear Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/03-gravity/index.html">Gravity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/04-magnetics/index.html">Magnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/05-dcr/index.html">Direct Current Resistivity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/06-ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/07-fdem/index.html">Frequency-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/08-tdem/index.html">Time-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/09-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/10-vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/11-flow/index.html">Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/12-seismic/index.html">Seismic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/13-joint_inversion/index.html">Joint Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/14-pgi/index.html">Petrophysically Guided Inversion</a></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Gallery</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../01-maps/index.html">Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02-gravity/index.html">Gravity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03-magnetics/index.html">Magnetics</a></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="index.html">DC Resistivity and Induced Polarization</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="plot_dc_analytic.html">DC Analytic Dipole</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_inv_dcip_dipoledipole_3Dinversion_twospheres.html">3D DC inversion of Dipole Dipole array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_inv_dcip_dipoledipole_parametric_inversion.html">Parametric DC inversion with Dipole Dipole array</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Reading and Plotting data with DC.IO class</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../05-fdem/index.html">Frequency Domain Electromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06-tdem/index.html">Time Domain Electromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08-vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09-flow/index.html">Richards Fluid Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10-pgi/index.html">PGI: Petrophysically and Geologically guided Inversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../20-published/index.html">In Publication</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../user_guide.html" class="nav-link">User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><i class="fa-solid fa-ellipsis"></i></li>
+    
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">DC Resistivity and Induced Polarization</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Reading and...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-content-examples-04-dcip-plot-read-dc-data-with-io-class-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="reading-and-plotting-data-with-dc-io-class">
+<span id="sphx-glr-content-examples-04-dcip-plot-read-dc-data-with-io-class-py"></span><h1>Reading and Plotting data with DC.IO class<a class="headerlink" href="#reading-and-plotting-data-with-dc-io-class" title="Permalink to this heading">#</a></h1>
+<p>The DC.IO class is a convenient way to handle DC data and
+carry inversions within a same class. It also has several plotting utils
+such as pseudosections. We show here an example of plotting DC data based
+on a demonstration dataset.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">simpeg.electromagnetics.static</span> <span class="kn">import</span> <span class="n">resistivity</span> <span class="k">as</span> <span class="n">DC</span>
+<span class="kn">from</span> <span class="nn">simpeg</span> <span class="kn">import</span> <span class="n">Report</span>
+<span class="kn">from</span> <span class="nn">simpeg.utils.io_utils</span> <span class="kn">import</span> <span class="n">download</span>
+</pre></div>
+</div>
+<section id="download-an-example-dc-data-csv-file">
+<h2>Download an example DC data csv file<a class="headerlink" href="#download-an-example-dc-data-csv-file" title="Permalink to this heading">#</a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># file origina and name</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">url</span></a> <span class="o">=</span> <span class="s2">&quot;https://storage.googleapis.com/simpeg/examples/dc_data.csv&quot;</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fname</span></a> <span class="o">=</span> <span class="n">download</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">url</span></a><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="s2">&quot;./test_url&quot;</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># read csv using pandas</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fname</span></a><span class="p">)</span>
+<span class="c1"># header for ABMN locations</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">header_loc</span></a> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Spa.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
+<span class="c1"># Apparent resistivity</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">header_apprho</span></a> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">6</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Downloading https://storage.googleapis.com/simpeg/examples/dc_data.csv
+   saved to: /home/vsts/work/1/s/examples/04-dcip/test_url/dc_data.csv
+Download completed!
+</pre></div>
+</div>
+</section>
+<section id="convert-file-to-dc-io-object">
+<h2>Convert file to DC.IO object<a class="headerlink" href="#convert-file-to-dc-io-object" title="Permalink to this heading">#</a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Number of the data</span>
+<a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ndata</span></a> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">header_loc</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">size</span>
+<span class="c1"># ABMN locations</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">a</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.c_.html#numpy.c_" title="numpy.c_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">c_</span></a><span class="p">[</span><span class="n">df</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">header_loc</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ndata</span></a><span class="p">)]</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">b</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.c_.html#numpy.c_" title="numpy.c_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">c_</span></a><span class="p">[</span><span class="n">df</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">header_loc</span></a><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ndata</span></a><span class="p">)]</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">m</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.c_.html#numpy.c_" title="numpy.c_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">c_</span></a><span class="p">[</span><span class="n">df</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">header_loc</span></a><span class="p">[</span><span class="mi">2</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ndata</span></a><span class="p">)]</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">n</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.c_.html#numpy.c_" title="numpy.c_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">c_</span></a><span class="p">[</span><span class="n">df</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">header_loc</span></a><span class="p">[</span><span class="mi">3</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.zeros.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ndata</span></a><span class="p">)]</span>
+<span class="c1"># Apparent resistivity</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">apprho</span></a> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">header_apprho</span></a><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="c1"># Create DC.IO survey Object object</span>
+<span class="n">IO</span> <span class="o">=</span> <span class="n">DC</span><span class="o">.</span><span class="n">IO</span><span class="p">()</span>
+<span class="c1"># Generate DC survey using IO object</span>
+<span class="n">dc_survey</span> <span class="o">=</span> <span class="n">IO</span><span class="o">.</span><span class="n">from_abmn_locations_to_survey</span><span class="p">(</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">a</span></a><span class="p">,</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">b</span></a><span class="p">,</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">m</span></a><span class="p">,</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">n</span></a><span class="p">,</span>
+    <span class="n">survey_type</span><span class="o">=</span><span class="s2">&quot;dipole-dipole&quot;</span><span class="p">,</span>
+    <span class="n">data_dc</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">apprho</span></a><span class="p">,</span>
+    <span class="n">data_dc_type</span><span class="o">=</span><span class="s2">&quot;apparent_resistivity&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/vsts/work/1/s/examples/04-dcip/plot_read_DC_data_with_IO_class.py:53: UserWarning:
+
+code under construction - API might change in the future
+</pre></div>
+</div>
+</section>
+<section id="plot">
+<h2>Plot<a class="headerlink" href="#plot" title="Permalink to this heading">#</a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a><span class="p">,</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">IO</span><span class="o">.</span><span class="n">plotPseudoSection</span><span class="p">(</span>
+    <span class="n">data_type</span><span class="o">=</span><span class="s2">&quot;apparent_resistivity&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">),</span> <span class="n">ncontour</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a><span class="o">=</span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a>
+<span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
+
+<span class="c1"># clean up</span>
+<a href="https://docs.python.org/3/library/shutil.html#shutil.rmtree" title="shutil.rmtree" class="sphx-glr-backref-module-shutil sphx-glr-backref-type-py-function"><span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/os.path.html#os.path.expanduser" title="os.path.expanduser" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span></a><span class="p">(</span><span class="s2">&quot;./test_url&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<img src="../../../_images/sphx_glr_plot_read_DC_data_with_IO_class_001.png" srcset="../../../_images/sphx_glr_plot_read_DC_data_with_IO_class_001.png" alt="plot read DC data with IO class" class = "sphx-glr-single-img"/></section>
+<section id="print-the-version-of-simpeg-and-dependencies">
+<h2>Print the version of SimPEG and dependencies<a class="headerlink" href="#print-the-version-of-simpeg-and-dependencies" title="Permalink to this heading">#</a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">Report</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<table style='border: 1.5px solid;'>
+  <tr>
+     <td style='text-align: center; font-weight: bold; font-size: 1.2em; border: 1px solid;' colspan='6'>Wed Jun 26 19:42:41 2024 UTC</td>
+  </tr>
+  <tr>
+    <td style='text-align: right; border: 1px solid;'>OS</td>
+    <td style='text-align: left; border: 1px solid;'>Linux</td>
+    <td style='text-align: right; border: 1px solid;'>CPU(s)</td>
+    <td style='text-align: left; border: 1px solid;'>2</td>
+    <td style='text-align: right; border: 1px solid;'>Machine</td>
+    <td style='text-align: left; border: 1px solid;'>x86_64</td>
+  </tr>
+  <tr>
+    <td style='text-align: right; border: 1px solid;'>Architecture</td>
+    <td style='text-align: left; border: 1px solid;'>64bit</td>
+    <td style='text-align: right; border: 1px solid;'>RAM</td>
+    <td style='text-align: left; border: 1px solid;'>6.8 GiB</td>
+    <td style='text-align: right; border: 1px solid;'>Environment</td>
+    <td style='text-align: left; border: 1px solid;'>Python</td>
+  </tr>
+  <tr>
+    <td style='text-align: right; border: 1px solid;'>File system</td>
+    <td style='text-align: left; border: 1px solid;'>ext4</td>
+  </tr>
+  <tr>
+     <td style='text-align: center; border: 1px solid;' colspan='6'>Python 3.8.19 | packaged by conda-forge | (default, Mar 20 2024, 12:47:35)
+[GCC 12.3.0]</td>
+  </tr>
+  <tr>
+    <td style='text-align: right; border: 1px solid;'>simpeg</td>
+    <td style='text-align: left; border: 1px solid;'>0.22.0</td>
+    <td style='text-align: right; border: 1px solid;'>discretize</td>
+    <td style='text-align: left; border: 1px solid;'>0.10.0</td>
+    <td style='text-align: right; border: 1px solid;'>pymatsolver</td>
+    <td style='text-align: left; border: 1px solid;'>0.2.0</td>
+  </tr>
+  <tr>
+    <td style='text-align: right; border: 1px solid;'>numpy</td>
+    <td style='text-align: left; border: 1px solid;'>1.24.4</td>
+    <td style='text-align: right; border: 1px solid;'>scipy</td>
+    <td style='text-align: left; border: 1px solid;'>1.10.1</td>
+    <td style='text-align: right; border: 1px solid;'>sklearn</td>
+    <td style='text-align: left; border: 1px solid;'>1.3.2</td>
+  </tr>
+  <tr>
+    <td style='text-align: right; border: 1px solid;'>matplotlib</td>
+    <td style='text-align: left; border: 1px solid;'>3.7.3</td>
+    <td style='text-align: right; border: 1px solid;'>empymod</td>
+    <td style='text-align: left; border: 1px solid;'>2.2.2</td>
+    <td style='text-align: right; border: 1px solid;'>geoana</td>
+    <td style='text-align: left; border: 1px solid;'>0.6.0</td>
+  </tr>
+  <tr>
+    <td style='text-align: right; border: 1px solid;'>pandas</td>
+    <td style='text-align: left; border: 1px solid;'>2.0.3</td>
+    <td style='text-align: right; border: 1px solid;'>pydiso</td>
+    <td style='text-align: left; border: 1px solid;'>0.0.5</td>
+    <td style='text-align: right; border: 1px solid;'>numba</td>
+    <td style='text-align: left; border: 1px solid;'>0.58.1</td>
+  </tr>
+  <tr>
+    <td style='text-align: right; border: 1px solid;'>dask</td>
+    <td style='text-align: left; border: 1px solid;'>2023.5.0</td>
+    <td style='text-align: right; border: 1px solid;'>sympy</td>
+    <td style='text-align: left; border: 1px solid;'>1.12.1</td>
+    <td style='text-align: right; border: 1px solid;'>plotly</td>
+    <td style='text-align: left; border: 1px solid;'>5.22.0</td>
+  </tr>
+  <tr>
+    <td style='text-align: right; border: 1px solid;'>memory_profiler</td>
+    <td style='text-align: left; border: 1px solid;'>0.61.0</td>
+    <td style='text-align: right; border: 1px solid;'>choclo</td>
+    <td style='text-align: left; border: 1px solid;'>0.2.0</td>
+    <td style= border: 1px solid;'></td>
+    <td style= border: 1px solid;'></td>
+  </tr>
+</table>
+</div>
+<br />
+<br /></section>
+<section id="moving-forward">
+<h2>Moving Forward<a class="headerlink" href="#moving-forward" title="Permalink to this heading">#</a></h2>
+<p>If you have suggestions for improving this example, please create a <a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/examples/06-dc/read_plot_DC_data_with_IO_class.py">pull request on the example in SimPEG</a></p>
+<dl class="simple">
+<dt>You might try:</dt><dd><ul class="simple">
+<li><p>changing the contour levels</p></li>
+<li><p>try with you own dataset</p></li>
+<li><p>create a mask for negative apparent resistivities</p></li>
+<li><p>…</p></li>
+</ul>
+</dd>
+</dl>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.239 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  10 MB</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-content-examples-04-dcip-plot-read-dc-data-with-io-class-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/78c0ff384f86094edb2dc16cc55bbf73/plot_read_DC_data_with_IO_class.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_read_DC_data_with_IO_class.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/1c5a06a96ff07ae8863e265da4f15c9b/plot_read_DC_data_with_IO_class.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_read_DC_data_with_IO_class.py</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="plot_inv_dcip_dipoledipole_parametric_inversion.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Parametric DC inversion with Dipole Dipole array</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../05-fdem/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Frequency Domain Electromagnetics</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#download-an-example-dc-data-csv-file">Download an example DC data csv file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#convert-file-to-dc-io-object">Convert file to DC.IO object</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot">Plot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#print-the-version-of-simpeg-and-dependencies">Print the version of SimPEG and dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#moving-forward">Moving Forward</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/content/examples/04-dcip/plot_read_DC_data_with_IO_class.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

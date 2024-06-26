@@ -1,0 +1,929 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Regularization (simpeg.regularization) &#8212; SimPEG 0.22.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=45118af6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=2ea346ab"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script data-domain="docs.simpeg.xyz" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/api/simpeg.regularization';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.14.4';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.simpeg.xyz/latest/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.22.0';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="icon" href="../../_static/logo-block.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="simpeg.regularization.WeightedLeastSquares" href="generated/simpeg.regularization.WeightedLeastSquares.html" />
+    <link rel="prev" title="simpeg.inversion.BaseInversion.run" href="generated/simpeg.inversion.BaseInversion.run.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/simpeg-logo.png" class="logo__image only-light" alt="SimPEG 0.22.0 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/simpeg-logo.png" class="logo__image only-dark" alt="SimPEG 0.22.0 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../release/index.html">
+                        Release Notes
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+                    User Tutorials
+                  </a>
+                </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+                    SimPEG
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+                    Contact
+                  </a>
+                </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-comment fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-discourse fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-youtube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../release/index.html">
+                        Release Notes
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+                    User Tutorials
+                  </a>
+                </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links-2">
+                    More
+                </button>
+                <ul id="pst-nav-more-links-2" class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+                    SimPEG
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+                    Contact
+                  </a>
+                </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-3"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-3"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-3"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-3">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-comment fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-discourse fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-youtube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="simpeg.potential_fields.html">Potential Fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simpeg.electromagnetics.html">Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simpeg.flow.html">Fluid Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simpeg.seismic.html">Seismic</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="simpeg.html">Base SimPEG Classes (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg</span></code>)</a></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Regularization (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.regularization</span></code>)</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.WeightedLeastSquares.html">simpeg.regularization.WeightedLeastSquares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.Smallness.html">simpeg.regularization.Smallness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.SmoothnessFirstOrder.html">simpeg.regularization.SmoothnessFirstOrder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.SmoothnessSecondOrder.html">simpeg.regularization.SmoothnessSecondOrder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.SmoothnessFullGradient.html">simpeg.regularization.SmoothnessFullGradient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.Sparse.html">simpeg.regularization.Sparse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.SparseSmallness.html">simpeg.regularization.SparseSmallness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.SparseSmoothness.html">simpeg.regularization.SparseSmoothness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.CrossReferenceRegularization.html">simpeg.regularization.CrossReferenceRegularization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.VectorAmplitude.html">simpeg.regularization.VectorAmplitude</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.AmplitudeSmallness.html">simpeg.regularization.AmplitudeSmallness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.AmplitudeSmoothnessFirstOrder.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.CrossGradient.html">simpeg.regularization.CrossGradient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.JointTotalVariation.html">simpeg.regularization.JointTotalVariation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.PGI.html">simpeg.regularization.PGI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.PGIsmallness.html">simpeg.regularization.PGIsmallness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.LinearCorrespondence.html">simpeg.regularization.LinearCorrespondence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.RegularizationMesh.html">simpeg.regularization.RegularizationMesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.BaseRegularization.html">simpeg.regularization.BaseRegularization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.BaseSimilarityMeasure.html">simpeg.regularization.BaseSimilarityMeasure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.BaseSparse.html">simpeg.regularization.BaseSparse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.BaseVectorRegularization.html">simpeg.regularization.BaseVectorRegularization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/simpeg.regularization.BaseAmplitude.html">simpeg.regularization.BaseAmplitude</a></li>
+</ul>
+</li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="simpeg.directives.html">Directives (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.directives</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="simpeg.utils.html">Utility Classes and Functions (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.utils</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="simpeg.meta.html">Meta SimPEG Classes (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.meta</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="simpeg.typing.html">Typing (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.typing</span></code>)</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">API Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Regularizati...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <span class="target" id="module-simpeg.regularization"></span><section id="regularization-simpeg-regularization">
+<h1>Regularization (<a class="reference internal" href="#module-simpeg.regularization" title="simpeg.regularization"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.regularization</span></code></a>)<a class="headerlink" href="#regularization-simpeg-regularization" title="Permalink to this heading">#</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">Regularization</span></code> classes are used to impose constraints on models recovered through geophysical
+inversion. Constraints may be straight forward, such as: requiring the recovered model be
+spatially smooth, or using a reference model to add a-priori information. Constraints may also
+be more sophisticated; e.g. cross-validation and petrophysically-guided regularization.
+In SimPEG, constraints on the recovered model can be defined using a single <code class="docutils literal notranslate"><span class="pre">Regularization</span></code>
+object, or defined as a weighted sum of <code class="docutils literal notranslate"><span class="pre">Regularization</span></code> objects.</p>
+<section id="basic-theory">
+<h2>Basic Theory<a class="headerlink" href="#basic-theory" title="Permalink to this heading">#</a></h2>
+<p>Most geophysical inverse problems suffer from non-uniqueness; i.e. there is an infinite number
+of models (<span class="math notranslate nohighlight">\(m\)</span>) capable of reproducing the observed data to within a specified
+degree of uncertainty. The challenge is recovering a model which 1) reproduces the observed data,
+and 2) reasonably approximates the subsurface structures responsible for the observed geophysical
+response. To accomplish this, regularization is used to ensure the solution to the inverse
+problem is unique and is geologically plausible. The regularization applied to solve the inverse
+problem depends on user assumptions and a priori information.</p>
+<p>SimPEG uses a deterministic inversion approach to recover an appropriate model.
+The algorithm does this by finding the model (<span class="math notranslate nohighlight">\(m\)</span>) which minimizes a global objective
+function (or penalty function) of the form:</p>
+<div class="math notranslate nohighlight">
+\[\phi (m) = \phi_d (m) + \beta \, \phi_m (m)\]</div>
+<p>The global objective function contains two terms: a data misfit term <span class="math notranslate nohighlight">\(\phi_d\)</span> which
+ensures data predicted by the recovered model adequately reproduces the observed data,
+and the model objective function <span class="math notranslate nohighlight">\(\phi_m\)</span> which is comprised of one or more
+regularization functions (objective functions) <span class="math notranslate nohighlight">\(\phi_i (m)\)</span>. I.e.:</p>
+<div class="math notranslate nohighlight">
+\[\phi_m (m) = \sum_i \alpha_i \, \phi_i (m)\]</div>
+<p>The model objective function imposes all the desired constraints on the recovered model.
+Constants <span class="math notranslate nohighlight">\(\alpha_i\)</span> weight the relative contributions of the regularization
+functions comprising the model objective function. The trade-off parameter <span class="math notranslate nohighlight">\(\beta\)</span>
+balances the relative contribution of the data misfit and regularization functions on the
+global objective function.</p>
+<p>Regularization classes within SimPEG correspond to different regularization (objective)
+functions that can be used individually or combined to define the model objective function
+<span class="math notranslate nohighlight">\(\phi_m (\mathbf{m})\)</span>. For example, a combination of regularization functions that ensures
+the values in the recovered model are not too large and are spatially smooth in the x and
+y-directions can be expressed as:</p>
+<div class="math notranslate nohighlight">
+\[\phi_m (m) =
+\alpha_s \! \int_\Omega \Bigg [ w_s(r) \, m(r)^2 \Bigg ] \, dv +
+\alpha_x \! \int_\Omega \Bigg [ w_x(r)
+\bigg ( \frac{\partial m}{\partial x} \bigg )^2 \Bigg ] \, dv +
+\alpha_y \! \int_\Omega \Bigg [ w_y(r)
+\bigg ( \frac{\partial m}{\partial y} \bigg )^2 \Bigg ] \, dv\]</div>
+<p>where <span class="math notranslate nohighlight">\(w_s(r), w_x(r), w_y(r)\)</span> are user-defined weighting functions.
+For practical implementation within SimPEG, the regularization function and all its dependent
+variables are discretized to a numerical grid (or mesh). The model is therefore defined as a
+discrete set of model parameters <span class="math notranslate nohighlight">\(\mathbf{m}\)</span>.
+And the regularization is implemented using a weighted sum of objective functions:</p>
+<div class="math notranslate nohighlight">
+\[\phi_m (\mathbf{m}) \approx \alpha_s \big \| \mathbf{W_s m} \big \|^2 +
+\alpha_x \big \| \mathbf{W_x G_x m} \big \|^2 +
+\alpha_y \big \| \mathbf{W_y G_y m} \big \|^2\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{G_x}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{G_y}\)</span> are partial gradient operators along the x and
+y-directions, respectively. <span class="math notranslate nohighlight">\(\mathbf{W_s}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{W_x}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{W_y}\)</span>
+are weighting matrices that apply user-defined weights and account for cell dimensions
+in the inversion mesh.</p>
+<section id="the-api">
+<h3>The API<a class="headerlink" href="#the-api" title="Permalink to this heading">#</a></h3>
+</section>
+</section>
+<section id="weighted-least-squares-regularization">
+<h2>Weighted Least Squares Regularization<a class="headerlink" href="#weighted-least-squares-regularization" title="Permalink to this heading">#</a></h2>
+<p>Weighted least squares regularization functions are defined as weighted L2-norms on the model,
+its first-order directional derivative(s), or its second-order directional derivative(s).</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/simpeg.regularization.WeightedLeastSquares.html#simpeg.regularization.WeightedLeastSquares" title="simpeg.regularization.WeightedLeastSquares"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WeightedLeastSquares</span></code></a>(mesh[, active_cells, ...])</p></td>
+<td><p>Weighted least-squares regularization using smallness and smoothness.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/simpeg.regularization.Smallness.html#simpeg.regularization.Smallness" title="simpeg.regularization.Smallness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Smallness</span></code></a>(mesh, **kwargs)</p></td>
+<td><p>Smallness regularization for least-squares inversion.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/simpeg.regularization.SmoothnessFirstOrder.html#simpeg.regularization.SmoothnessFirstOrder" title="simpeg.regularization.SmoothnessFirstOrder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SmoothnessFirstOrder</span></code></a>(mesh[, orientation, ...])</p></td>
+<td><p>First-order smoothness least-squares regularization.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/simpeg.regularization.SmoothnessSecondOrder.html#simpeg.regularization.SmoothnessSecondOrder" title="simpeg.regularization.SmoothnessSecondOrder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SmoothnessSecondOrder</span></code></a>(mesh[, orientation, ...])</p></td>
+<td><p>Second-order smoothness (flatness) least-squares regularization.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/simpeg.regularization.SmoothnessFullGradient.html#simpeg.regularization.SmoothnessFullGradient" title="simpeg.regularization.SmoothnessFullGradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SmoothnessFullGradient</span></code></a>(mesh[, alphas, ...])</p></td>
+<td><p>Measures the gradient of a model using optionally anisotropic weighting.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sparse-norm-regularization">
+<h2>Sparse Norm Regularization<a class="headerlink" href="#sparse-norm-regularization" title="Permalink to this heading">#</a></h2>
+<p>Sparse norm regularization allows for the recovery of compact and/or blocky structures.
+An iteratively re-weighted least-squares approach allows smallness and smoothness
+regularization functions to be defined using norms between 0 and 2.</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/simpeg.regularization.Sparse.html#simpeg.regularization.Sparse" title="simpeg.regularization.Sparse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sparse</span></code></a>(mesh[, active_cells, norms, ...])</p></td>
+<td><p>Sparse norm weighted least squares regularization.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/simpeg.regularization.SparseSmallness.html#simpeg.regularization.SparseSmallness" title="simpeg.regularization.SparseSmallness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SparseSmallness</span></code></a>(mesh[, norm, irls_scaled, ...])</p></td>
+<td><p>Sparse smallness (compactness) regularization.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/simpeg.regularization.SparseSmoothness.html#simpeg.regularization.SparseSmoothness" title="simpeg.regularization.SparseSmoothness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SparseSmoothness</span></code></a>(mesh[, orientation, ...])</p></td>
+<td><p>Sparse smoothness (blockiness) regularization.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="vector-regularizations">
+<h2>Vector Regularizations<a class="headerlink" href="#vector-regularizations" title="Permalink to this heading">#</a></h2>
+<p>Vector regularization allows for the recovery of vector models; that is, a model
+where the parameters for each cell define directional components of a vector quantity.</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/simpeg.regularization.CrossReferenceRegularization.html#simpeg.regularization.CrossReferenceRegularization" title="simpeg.regularization.CrossReferenceRegularization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CrossReferenceRegularization</span></code></a>(mesh, ref_dir)</p></td>
+<td><p>Cross reference regularization for models representing vector quantities.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/simpeg.regularization.VectorAmplitude.html#simpeg.regularization.VectorAmplitude" title="simpeg.regularization.VectorAmplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VectorAmplitude</span></code></a>(mesh[, mapping, active_cells])</p></td>
+<td><p>Sparse vector amplitude regularization.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/simpeg.regularization.AmplitudeSmallness.html#simpeg.regularization.AmplitudeSmallness" title="simpeg.regularization.AmplitudeSmallness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AmplitudeSmallness</span></code></a>(mesh[, norm, ...])</p></td>
+<td><p>Sparse smallness regularization on vector amplitudes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/simpeg.regularization.AmplitudeSmoothnessFirstOrder.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AmplitudeSmoothnessFirstOrder</span></code></a>(mesh[, ...])</p></td>
+<td><p>Sparse amplitude smoothness (blockiness) regularization.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="joint-regularizations">
+<h2>Joint Regularizations<a class="headerlink" href="#joint-regularizations" title="Permalink to this heading">#</a></h2>
+<p>Regularization functions for joint inversion involving one or more physical properties.</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/simpeg.regularization.CrossGradient.html#simpeg.regularization.CrossGradient" title="simpeg.regularization.CrossGradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CrossGradient</span></code></a>(mesh, wire_map[, approx_hessian])</p></td>
+<td><p>Cross-gradient regularization for joint inversion.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/simpeg.regularization.JointTotalVariation.html#simpeg.regularization.JointTotalVariation" title="simpeg.regularization.JointTotalVariation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">JointTotalVariation</span></code></a>(mesh, wire_map[, eps])</p></td>
+<td><p>Joint total variation regularization for joint inversion.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/simpeg.regularization.PGI.html#simpeg.regularization.PGI" title="simpeg.regularization.PGI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PGI</span></code></a>(mesh, gmmref[, alpha_x, alpha_y, ...])</p></td>
+<td><p>Regularization function for petrophysically guided inversion (PGI).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/simpeg.regularization.PGIsmallness.html#simpeg.regularization.PGIsmallness" title="simpeg.regularization.PGIsmallness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PGIsmallness</span></code></a>(gmmref[, gmm, wiresmap, ...])</p></td>
+<td><p>Smallness regularization function for petrophysically guided inversion (PGI).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/simpeg.regularization.LinearCorrespondence.html#simpeg.regularization.LinearCorrespondence" title="simpeg.regularization.LinearCorrespondence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LinearCorrespondence</span></code></a>(mesh, wire_map[, ...])</p></td>
+<td><p>Linear correspondence regularization for joint inversion with two physical properties.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="base-regularization-classes">
+<h2>Base Regularization Classes<a class="headerlink" href="#base-regularization-classes" title="Permalink to this heading">#</a></h2>
+<p>Base regularization classes. Inherited by other classes and not used directly
+to constrain inversions.</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/simpeg.regularization.RegularizationMesh.html#simpeg.regularization.RegularizationMesh" title="simpeg.regularization.RegularizationMesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RegularizationMesh</span></code></a>(mesh[, active_cells])</p></td>
+<td><p>Regularization Mesh</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/simpeg.regularization.BaseRegularization.html#simpeg.regularization.BaseRegularization" title="simpeg.regularization.BaseRegularization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseRegularization</span></code></a>(mesh[, active_cells, ...])</p></td>
+<td><p>Base regularization class.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/simpeg.regularization.BaseSimilarityMeasure.html#simpeg.regularization.BaseSimilarityMeasure" title="simpeg.regularization.BaseSimilarityMeasure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseSimilarityMeasure</span></code></a>(mesh, wire_map, **kwargs)</p></td>
+<td><p>Base regularization class for joint inversion.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/simpeg.regularization.BaseSparse.html#simpeg.regularization.BaseSparse" title="simpeg.regularization.BaseSparse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseSparse</span></code></a>(mesh[, norm, irls_scaled, ...])</p></td>
+<td><p>Base class for sparse-norm regularization.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/simpeg.regularization.BaseVectorRegularization.html#simpeg.regularization.BaseVectorRegularization" title="simpeg.regularization.BaseVectorRegularization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseVectorRegularization</span></code></a>(mesh[, ...])</p></td>
+<td><p>Base regularization class for models defined by vector quantities.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/simpeg.regularization.BaseAmplitude.html#simpeg.regularization.BaseAmplitude" title="simpeg.regularization.BaseAmplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseAmplitude</span></code></a>(mesh[, active_cells, mapping, ...])</p></td>
+<td><p>Base amplitude regularization class for models defined by vector quantities.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="generated/simpeg.inversion.BaseInversion.run.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">simpeg.inversion.BaseInversion.run</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="generated/simpeg.regularization.WeightedLeastSquares.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">simpeg.regularization.WeightedLeastSquares</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-theory">Basic Theory</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-api">The API</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#weighted-least-squares-regularization">Weighted Least Squares Regularization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sparse-norm-regularization">Sparse Norm Regularization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-regularizations">Vector Regularizations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#joint-regularizations">Joint Regularizations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#base-regularization-classes">Base Regularization Classes</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/content/api/simpeg.regularization.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
