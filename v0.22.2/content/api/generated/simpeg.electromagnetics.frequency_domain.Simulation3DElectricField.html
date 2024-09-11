@@ -1,0 +1,1357 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>simpeg.electromagnetics.frequency_domain.Simulation3DElectricField &#8212; SimPEG 0.22.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=45118af6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=bd2348d8"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script data-domain="docs.simpeg.xyz" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/api/generated/simpeg.electromagnetics.frequency_domain.Simulation3DElectricField';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.14.4';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.simpeg.xyz/latest/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.22.2';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = true;
+        </script>
+    <link rel="icon" href="../../../_static/logo-block.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Mcc" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Mcc.html" />
+    <link rel="prev" title="simpeg.electromagnetics.frequency_domain.Simulation1DLayered.residual" href="simpeg.electromagnetics.frequency_domain.Simulation1DLayered.residual.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/simpeg-logo.png" class="logo__image only-light" alt="SimPEG 0.22.2 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/simpeg-logo.png" class="logo__image only-dark" alt="SimPEG 0.22.2 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../release/index.html">
+                        Release Notes
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+                    User Tutorials
+                  </a>
+                </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+                    SimPEG
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+                    Contact
+                  </a>
+                </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-comment fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-discourse fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-youtube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../release/index.html">
+                        Release Notes
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+                    User Tutorials
+                  </a>
+                </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links-2">
+                    More
+                </button>
+                <ul id="pst-nav-more-links-2" class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+                    SimPEG
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+                    Contact
+                  </a>
+                </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-3"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-3"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-3"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-3">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-comment fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-discourse fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-youtube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.potential_fields.html">Potential Fields</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../simpeg.electromagnetics.html">Electromagnetics</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../simpeg.electromagnetics.static.induced_polarization.html">Induced Polarization (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.electromagnetics.static.induced_polarization</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simpeg.electromagnetics.static.resistivity.html">DC Resistivity (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.electromagnetics.static.resistivity</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simpeg.electromagnetics.static.spectral_induced_polarization.html">Spectral Induced Polarization (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.electromagnetics.static.induced_polarization</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simpeg.electromagnetics.static.self_potential.html">Self Potential (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.electromagnetics.static.self_potential</span></code>)</a></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../simpeg.electromagnetics.frequency_domain.html">Frequency-Domain EM (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.electromagnetics.frequency_domain</span></code>)</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation1DLayered.html">simpeg.electromagnetics.frequency_domain.Simulation1DLayered</a></li>
+<li class="toctree-l3 current active has-children"><a class="current reference internal" href="#">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Mcc.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Mcc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMu.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuI.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMui.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMui</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuiI.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuiI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccRho.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccRho</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccRhoI.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccRhoI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccSigma.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccSigma</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccSigmaI.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccSigmaI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Me.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Me</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeI.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMu.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuI.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMui.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMui</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuiI.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuiI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeRho.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeRho</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeRhoI.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeRhoI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeSigma.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeSigma</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeSigmaI.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeSigmaI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Mf.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Mf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfI.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMu.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuI.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMui.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMui</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuiI.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuiI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfRho.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfRho</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfRhoI.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfRhoI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfSigma.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfSigma</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfSigmaI.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfSigmaI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Mn.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Mn</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnI.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMu.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuI.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMui.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMui</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuiI.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuiI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnRho.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnRho</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnRhoI.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnRhoI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnSigma.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnSigma</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnSigmaI.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnSigmaI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.clean_on_model_update.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.clean_on_model_update</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.counter.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.counter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.deleteTheseOnModelUpdate.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.deleteTheseOnModelUpdate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.forward_only.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.forward_only</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.mesh.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.mesh</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.model.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.mu.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.mu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.muDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.muDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.muMap.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.muMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.mui.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.mui</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.muiDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.muiDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.muiMap.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.muiMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.needs_model.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.needs_model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.permittivity.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.permittivity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.rho.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.rho</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.rhoDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.rhoDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.rhoMap.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.rhoMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.sensitivity_path.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.sensitivity_path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.sigma.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.sigma</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.sigmaDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.sigmaDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.sigmaMap.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.sigmaMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.solver.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.solver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.solver_opts.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.solver_opts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.storeInnerProduct.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.storeInnerProduct</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.storeJ.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.storeJ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.survey.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.survey</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.verbose.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.verbose</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Jtvec.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Jtvec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Jtvec_approx.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Jtvec_approx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Jvec.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Jvec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Jvec_approx.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Jvec_approx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuIDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuIDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuiDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuiDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuiIDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuiIDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccRhoDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccRhoDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccRhoIDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccRhoIDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccSigmaDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccSigmaDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccSigmaIDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccSigmaIDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuIDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuIDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuiDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuiDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuiIDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuiIDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeRhoDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeRhoDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeRhoIDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeRhoIDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeSigmaDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeSigmaDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeSigmaIDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeSigmaIDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuIDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuIDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuiDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuiDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuiIDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuiIDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfRhoDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfRhoDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfRhoIDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfRhoIDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfSigmaDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfSigmaDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfSigmaIDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfSigmaIDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuIDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuIDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuiDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuiDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuiIDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuiIDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnRhoDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnRhoDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnRhoIDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnRhoIDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnSigmaDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnSigmaDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnSigmaIDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnSigmaIDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.dpred.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.dpred</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.fields.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.fields</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getA.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getADeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getADeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getADeriv_mui.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getADeriv_mui</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getADeriv_sigma.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getADeriv_sigma</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getJ.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getJ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getJtJdiag.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getJtJdiag</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getRHS.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getRHS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getRHSDeriv.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getRHSDeriv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getSourceTerm.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getSourceTerm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.make_synthetic_data.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.make_synthetic_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.residual.html">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.residual</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DMagneticFluxDensity.html">simpeg.electromagnetics.frequency_domain.Simulation3DMagneticFluxDensity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DCurrentDensity.html">simpeg.electromagnetics.frequency_domain.Simulation3DCurrentDensity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DMagneticField.html">simpeg.electromagnetics.frequency_domain.Simulation3DMagneticField</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.receivers.PointElectricField.html">simpeg.electromagnetics.frequency_domain.receivers.PointElectricField</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.receivers.PointMagneticFluxDensity.html">simpeg.electromagnetics.frequency_domain.receivers.PointMagneticFluxDensity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.receivers.PointMagneticFluxDensitySecondary.html">simpeg.electromagnetics.frequency_domain.receivers.PointMagneticFluxDensitySecondary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.receivers.PointMagneticField.html">simpeg.electromagnetics.frequency_domain.receivers.PointMagneticField</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.receivers.PointCurrentDensity.html">simpeg.electromagnetics.frequency_domain.receivers.PointCurrentDensity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.sources.RawVec_e.html">simpeg.electromagnetics.frequency_domain.sources.RawVec_e</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.sources.RawVec_m.html">simpeg.electromagnetics.frequency_domain.sources.RawVec_m</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.sources.RawVec.html">simpeg.electromagnetics.frequency_domain.sources.RawVec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.sources.MagDipole.html">simpeg.electromagnetics.frequency_domain.sources.MagDipole</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.sources.MagDipole_Bfield.html">simpeg.electromagnetics.frequency_domain.sources.MagDipole_Bfield</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.sources.CircularLoop.html">simpeg.electromagnetics.frequency_domain.sources.CircularLoop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.sources.PrimSecSigma.html">simpeg.electromagnetics.frequency_domain.sources.PrimSecSigma</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.sources.PrimSecMappedSigma.html">simpeg.electromagnetics.frequency_domain.sources.PrimSecMappedSigma</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.sources.LineCurrent.html">simpeg.electromagnetics.frequency_domain.sources.LineCurrent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.survey.Survey.html">simpeg.electromagnetics.frequency_domain.survey.Survey</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Fields3DElectricField.html">simpeg.electromagnetics.frequency_domain.Fields3DElectricField</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Fields3DMagneticFluxDensity.html">simpeg.electromagnetics.frequency_domain.Fields3DMagneticFluxDensity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Fields3DCurrentDensity.html">simpeg.electromagnetics.frequency_domain.Fields3DCurrentDensity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Fields3DMagneticField.html">simpeg.electromagnetics.frequency_domain.Fields3DMagneticField</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.survey.Survey.html">simpeg.electromagnetics.frequency_domain.survey.Survey</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.sources.BaseFDEMSrc.html">simpeg.electromagnetics.frequency_domain.sources.BaseFDEMSrc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.receivers.BaseRx.html">simpeg.electromagnetics.frequency_domain.receivers.BaseRx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.simulation.BaseFDEMSimulation.html">simpeg.electromagnetics.frequency_domain.simulation.BaseFDEMSimulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.fields.FieldsFDEM.html">simpeg.electromagnetics.frequency_domain.fields.FieldsFDEM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../simpeg.electromagnetics.natural_source.html">Natural Source EM (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.electromagnetics.natural_source</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simpeg.electromagnetics.time_domain.html">Time-Domain EM (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.electromagnetics.time_domain</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simpeg.electromagnetics.viscous_remanent_magnetization.html">Viscous Remanent Magnetization (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.electromagnetics.viscous_remanent_magnetization</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simpeg.electromagnetics.static.utils.html">Static Utilities (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.electromagnetics.utils</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simpeg.electromagnetics.utils.html">Electromagnetics Utilities (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.electromagnetics.utils</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simpeg.electromagnetics.base.html">Base EM (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.electromagnetics</span></code>)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.flow.html">Fluid Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.seismic.html">Seismic</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.html">Base SimPEG Classes (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.regularization.html">Regularization (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.regularization</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.directives.html">Directives (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.directives</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.utils.html">Utility Classes and Functions (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.utils</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.meta.html">Meta SimPEG Classes (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.meta</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.typing.html">Typing (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.typing</span></code>)</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">API Reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><i class="fa-solid fa-ellipsis"></i></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../simpeg.electromagnetics.frequency_domain.html" class="nav-link">Frequency-Domain EM (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.electromagnetics.frequency_domain</span></code>)</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">simpeg.elect...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="simpeg-electromagnetics-frequency-domain-simulation3delectricfield">
+<h1>simpeg.electromagnetics.frequency_domain.Simulation3DElectricField<a class="headerlink" href="#simpeg-electromagnetics-frequency-domain-simulation3delectricfield" title="Permalink to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">simpeg.electromagnetics.frequency_domain.</span></span><span class="sig-name descname"><span class="pre">Simulation3DElectricField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">survey</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forward_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permittivity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storeJ</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/v0.22.2/simpeg/electromagnetics/frequency_domain/simulation.py#L509-L896"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="simpeg.electromagnetics.frequency_domain.simulation.BaseFDEMSimulation.html#simpeg.electromagnetics.frequency_domain.simulation.BaseFDEMSimulation" title="simpeg.electromagnetics.frequency_domain.simulation.BaseFDEMSimulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseFDEMSimulation</span></code></a></p>
+<p>3D FDEM simulation in terms of the electric field.</p>
+<p>This simulation solves for the electric field at each frequency.
+In this formulation, the electric fields are defined on mesh edges and the
+magnetic flux density is defined on mesh faces; i.e. it is an EB formulation.
+See the <em>Notes</em> section for a comprehensive description of the formulation.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>mesh</strong><span class="classifier"><a class="reference external" href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.base.BaseMesh.html#discretize.base.BaseMesh" title="(in discretize v0.10.1.dev66)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discretize.base.BaseMesh</span></code></a></span></dt><dd><p>The mesh.</p>
+</dd>
+<dt><strong>survey</strong><span class="classifier"><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.survey.Survey.html#simpeg.electromagnetics.frequency_domain.survey.Survey" title="simpeg.electromagnetics.frequency_domain.survey.Survey"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frequency_domain.survey.Survey</span></code></a></span></dt><dd><p>The frequency-domain EM survey.</p>
+</dd>
+<dt><strong>forward_only</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.12)"><span class="xref std std-ref">bool</span></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">optional</span></code></span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the factorization for the inverse of the system matrix at each
+frequency is discarded after the fields are computed at that frequency.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, the factorizations of the system matrices for all frequencies are stored.</p>
+</dd>
+<dt><strong>permittivity</strong><span class="classifier">(n_cells,) <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">optional</span></code></span></dt><dd><p>Dielectric permittivity (F/m) defined on the entire mesh. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, electric displacement
+is ignored. Please note that <cite>permittivity</cite> is not an invertible property, and that future
+development will result in the deprecation of this propery.</p>
+</dd>
+<dt><strong>storeJ</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.12)"><span class="xref std std-ref">bool</span></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">optional</span></code></span></dt><dd><p>Whether to compute and store the sensitivity matrix.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Here, we start with the Maxwell’s equations in the frequency-domain where a
+<span class="math notranslate nohighlight">\(+i\omega t\)</span> Fourier convention is used:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+&amp;\nabla \times \vec{E} + i\omega \vec{B} = - i \omega \vec{S}_m \\
+&amp;\nabla \times \vec{H} - \vec{J} = \vec{S}_e
+\end{align}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\vec{S}_e\)</span> is an electric source term that defines a source current density,
+and <span class="math notranslate nohighlight">\(\vec{S}_m\)</span> magnetic source term that defines a source magnetic flux density.
+We define the constitutive relations for the electrical conductivity <span class="math notranslate nohighlight">\(\sigma\)</span>
+and magnetic permeability <span class="math notranslate nohighlight">\(\mu\)</span> as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\vec{J} &amp;= \sigma \vec{E} \\
+\vec{H} &amp;= \mu^{-1} \vec{B}\end{split}\]</div>
+<p>We then take the inner products of all previous expressions with a vector test function <span class="math notranslate nohighlight">\(\vec{u}\)</span>.
+Through vector calculus identities and the divergence theorem, we obtain:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}&amp; \int_\Omega \vec{u} \cdot (\nabla \times \vec{E}) \, dv
++ i \omega \int_\Omega \vec{u} \cdot \vec{B} \, dv
+= - i \omega \int_\Omega \vec{u} \cdot \vec{S}_m \, dv \\
+&amp; \int_\Omega (\nabla \times \vec{u}) \cdot \vec{H} \, dv
+- \oint_{\partial \Omega} \vec{u} \cdot (\vec{H} \times \hat{n}) \, da
+- \int_\Omega \vec{u} \cdot \vec{J} \, dv
+= \int_\Omega \vec{u} \cdot \vec{S}_j \, dv \\
+&amp; \int_\Omega \vec{u} \cdot \vec{J} \, dv = \int_\Omega \vec{u} \cdot \sigma \vec{E} \, dv \\
+&amp; \int_\Omega \vec{u} \cdot \vec{H} \, dv = \int_\Omega \vec{u} \cdot \mu^{-1} \vec{B} \, dv\end{split}\]</div>
+<p>Assuming natural boundary conditions, the surface integral is zero.</p>
+<p>The above expressions are discretized in space according to the finite volume method.
+The discrete electric fields <span class="math notranslate nohighlight">\(\mathbf{e}\)</span> are defined on mesh edges,
+and the discrete magnetic flux densities <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> are defined on mesh faces.
+This implies <span class="math notranslate nohighlight">\(\mathbf{j}\)</span> must be defined on mesh edges and <span class="math notranslate nohighlight">\(\mathbf{h}\)</span> must
+be defined on mesh faces. Where <span class="math notranslate nohighlight">\(\mathbf{u_e}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{u_f}\)</span> represent
+test functions discretized to edges and faces, respectively, we obtain the following
+set of discrete inner-products:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}&amp;\mathbf{u_f^T M_f C e} + i \omega \mathbf{u_f^T M_f b} = - i \omega \mathbf{u_f^T M_f s_m} \\
+&amp;\mathbf{u_e^T C^T M_f h} - \mathbf{u_e^T M_e j} = \mathbf{u_e^T s_e} \\
+&amp;\mathbf{u_e^T M_e j} = \mathbf{u_e^T M_{e \sigma} e} \\
+&amp;\mathbf{u_f^T M_f h} = \mathbf{u_f^T M_{f \mu} b}\end{split}\]</div>
+<p>where</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\mathbf{C}\)</span> is the discrete curl operator</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{s_m}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{s_e}\)</span> are the integrated magnetic and electric source terms, respectively</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{M_e}\)</span> is the edge inner-product matrix</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{M_f}\)</span> is the face inner-product matrix</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{M_{e\sigma}}\)</span> is the inner-product matrix for conductivities projected to edges</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{M_{f\frac{1}{\mu}}}\)</span> is the inner-product matrix for inverse permeabilities projected to faces</p></li>
+</ul>
+<p>By cancelling like-terms and combining the discrete expressions to solve for the electric field, we obtain:</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{A \, e} = \mathbf{q}\]</div>
+<p>where</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\mathbf{A} = \mathbf{C^T M_{f\frac{1}{\mu}} C} + i\omega \mathbf{M_{e\sigma}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{q} = - i \omega \mathbf{s_e} - i \omega \mathbf{C^T M_{f\frac{1}{\mu}} s_m }\)</span></p></li>
+</ul>
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Mcc.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Mcc" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Mcc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Mcc</span></code></a></p></td>
+<td><p>Cell center inner product matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMu.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMu" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MccMu</span></code></a></p></td>
+<td><p>Cell center property inner product matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuI.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuI" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MccMuI</span></code></a></p></td>
+<td><p>Cell center property inner product inverse matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMui.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMui" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMui"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MccMui</span></code></a></p></td>
+<td><p>Cell center property inner product matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuiI.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuiI" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuiI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MccMuiI</span></code></a></p></td>
+<td><p>Cell center property inner product inverse matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccRho.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccRho" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccRho"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MccRho</span></code></a></p></td>
+<td><p>Cell center property inner product matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccRhoI.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccRhoI" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccRhoI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MccRhoI</span></code></a></p></td>
+<td><p>Cell center property inner product inverse matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccSigma.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccSigma" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccSigma"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MccSigma</span></code></a></p></td>
+<td><p>Cell center property inner product matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccSigmaI.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccSigmaI" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccSigmaI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MccSigmaI</span></code></a></p></td>
+<td><p>Cell center property inner product inverse matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Me.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Me" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Me"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Me</span></code></a></p></td>
+<td><p>Edge inner product matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeI.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeI" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeI</span></code></a></p></td>
+<td><p>Edge inner product inverse matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMu.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMu" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeMu</span></code></a></p></td>
+<td><p>Edge property inner product matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuI.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuI" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeMuI</span></code></a></p></td>
+<td><p>Edge property inner product inverse matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMui.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMui" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMui"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeMui</span></code></a></p></td>
+<td><p>Edge property inner product matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuiI.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuiI" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuiI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeMuiI</span></code></a></p></td>
+<td><p>Edge property inner product inverse matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeRho.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeRho" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeRho"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeRho</span></code></a></p></td>
+<td><p>Edge property inner product matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeRhoI.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeRhoI" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeRhoI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeRhoI</span></code></a></p></td>
+<td><p>Edge property inner product inverse matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeSigma.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeSigma" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeSigma"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeSigma</span></code></a></p></td>
+<td><p>Edge property inner product matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeSigmaI.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeSigmaI" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeSigmaI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeSigmaI</span></code></a></p></td>
+<td><p>Edge property inner product inverse matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Mf.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Mf" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Mf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Mf</span></code></a></p></td>
+<td><p>Face inner product matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfI.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfI" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MfI</span></code></a></p></td>
+<td><p>Face inner product inverse matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMu.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMu" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MfMu</span></code></a></p></td>
+<td><p>Face property inner product matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuI.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuI" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MfMuI</span></code></a></p></td>
+<td><p>Face property inner product inverse matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMui.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMui" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMui"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MfMui</span></code></a></p></td>
+<td><p>Face property inner product matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuiI.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuiI" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuiI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MfMuiI</span></code></a></p></td>
+<td><p>Face property inner product inverse matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfRho.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfRho" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfRho"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MfRho</span></code></a></p></td>
+<td><p>Face property inner product matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfRhoI.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfRhoI" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfRhoI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MfRhoI</span></code></a></p></td>
+<td><p>Face property inner product inverse matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfSigma.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfSigma" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfSigma"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MfSigma</span></code></a></p></td>
+<td><p>Face property inner product matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfSigmaI.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfSigmaI" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfSigmaI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MfSigmaI</span></code></a></p></td>
+<td><p>Face property inner product inverse matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Mn.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Mn" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Mn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Mn</span></code></a></p></td>
+<td><p>Node inner product matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnI.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnI" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MnI</span></code></a></p></td>
+<td><p>Node inner product inverse matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMu.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMu" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MnMu</span></code></a></p></td>
+<td><p>Node property inner product matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuI.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuI" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MnMuI</span></code></a></p></td>
+<td><p>Node property inner product inverse matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMui.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMui" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMui"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MnMui</span></code></a></p></td>
+<td><p>Node property inner product matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuiI.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuiI" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuiI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MnMuiI</span></code></a></p></td>
+<td><p>Node property inner product inverse matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnRho.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnRho" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnRho"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MnRho</span></code></a></p></td>
+<td><p>Node property inner product matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnRhoI.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnRhoI" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnRhoI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MnRhoI</span></code></a></p></td>
+<td><p>Node property inner product inverse matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnSigma.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnSigma" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnSigma"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MnSigma</span></code></a></p></td>
+<td><p>Node property inner product matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnSigmaI.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnSigmaI" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnSigmaI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MnSigmaI</span></code></a></p></td>
+<td><p>Node property inner product inverse matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.clean_on_model_update.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.clean_on_model_update" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.clean_on_model_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clean_on_model_update</span></code></a></p></td>
+<td><p>A list of solver objects to clean when the model is updated</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.counter.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.counter" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.counter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">counter</span></code></a></p></td>
+<td><p>SimPEG <code class="docutils literal notranslate"><span class="pre">Counter</span></code> object to store iterations and run-times.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.deleteTheseOnModelUpdate.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.deleteTheseOnModelUpdate" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.deleteTheseOnModelUpdate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deleteTheseOnModelUpdate</span></code></a></p></td>
+<td><p>List of model-dependent attributes to clean upon model update.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.forward_only.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.forward_only" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.forward_only"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward_only</span></code></a></p></td>
+<td><p>Whether to store the factorizations of the inverses of the system matrices.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.mesh.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.mesh" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh</span></code></a></p></td>
+<td><p>Mesh for the simulation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.model.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.model" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model</span></code></a></p></td>
+<td><p>The inversion model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.mu.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.mu" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.mu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mu</span></code></a></p></td>
+<td><p>Magnetic permeability (h/m) physical property model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.muDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.muDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.muDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">muDeriv</span></code></a></p></td>
+<td><p>Derivative of Magnetic Permeability (H/m) wrt the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.muMap.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.muMap" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.muMap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">muMap</span></code></a></p></td>
+<td><p>Mapping of the inversion model to Magnetic Permeability (H/m).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.mui.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.mui" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.mui"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mui</span></code></a></p></td>
+<td><p>Inverse magnetic permeability (m/h) physical property model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.muiDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.muiDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.muiDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">muiDeriv</span></code></a></p></td>
+<td><p>Derivative of Inverse Magnetic Permeability (m/H) wrt the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.muiMap.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.muiMap" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.muiMap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">muiMap</span></code></a></p></td>
+<td><p>Mapping of the inversion model to Inverse Magnetic Permeability (m/H).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.needs_model.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.needs_model" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.needs_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">needs_model</span></code></a></p></td>
+<td><p>True if a model is necessary</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.permittivity.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.permittivity" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.permittivity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">permittivity</span></code></a></p></td>
+<td><p>Dielectric permittivity (F/m)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.rho.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.rho" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.rho"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rho</span></code></a></p></td>
+<td><p>Electrical resistivity (ohm m) physical property model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.rhoDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.rhoDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.rhoDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rhoDeriv</span></code></a></p></td>
+<td><p>Derivative of Electrical resistivity (Ohm m) wrt the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.rhoMap.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.rhoMap" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.rhoMap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rhoMap</span></code></a></p></td>
+<td><p>Mapping of the inversion model to Electrical resistivity (Ohm m).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.sensitivity_path.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.sensitivity_path" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.sensitivity_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sensitivity_path</span></code></a></p></td>
+<td><p>Path to directory where sensitivity file is stored.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.sigma.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.sigma" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.sigma"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sigma</span></code></a></p></td>
+<td><p>Electrical conductivity (s/m) physical property model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.sigmaDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.sigmaDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.sigmaDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sigmaDeriv</span></code></a></p></td>
+<td><p>Derivative of Electrical conductivity (S/m) wrt the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.sigmaMap.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.sigmaMap" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.sigmaMap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sigmaMap</span></code></a></p></td>
+<td><p>Mapping of the inversion model to Electrical conductivity (S/m).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.solver.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.solver" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.solver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">solver</span></code></a></p></td>
+<td><p>Numerical solver used in the forward simulation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.solver_opts.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.solver_opts" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.solver_opts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">solver_opts</span></code></a></p></td>
+<td><p>Solver-specific parameters.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.storeInnerProduct.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.storeInnerProduct" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.storeInnerProduct"><code class="xref py py-obj docutils literal notranslate"><span class="pre">storeInnerProduct</span></code></a></p></td>
+<td><p>Whether to store inner product matrices</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.storeJ.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.storeJ" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.storeJ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">storeJ</span></code></a></p></td>
+<td><p>Whether to compute and store the sensitivity matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.survey.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.survey" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.survey"><code class="xref py py-obj docutils literal notranslate"><span class="pre">survey</span></code></a></p></td>
+<td><p>The FDEM survey object.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.verbose.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.verbose" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.verbose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verbose</span></code></a></p></td>
+<td><p>Verbose progress printout.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>MccI</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>Vol</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Jtvec.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Jtvec" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Jtvec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Jtvec</span></code></a>(m, v[, f])</p></td>
+<td><p>Compute the adjoint sensitivity matrix times a vector.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Jtvec_approx.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Jtvec_approx" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Jtvec_approx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Jtvec_approx</span></code></a>(m, v[, f])</p></td>
+<td><p>Approximation of the Jacobian transpose times a vector for the model provided.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Jvec.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Jvec" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Jvec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Jvec</span></code></a>(m, v[, f])</p></td>
+<td><p>Compute the sensitivity matrix times a vector.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Jvec_approx.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Jvec_approx" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Jvec_approx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Jvec_approx</span></code></a>(m, v[, f])</p></td>
+<td><p>Approximation of the Jacobian times a vector for the model provided.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MccMuDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MccProperty</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuIDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuIDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuIDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MccMuIDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MccPropertyI</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuiDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuiDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuiDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MccMuiDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MccProperty</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuiIDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuiIDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccMuiIDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MccMuiIDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MccPropertyI</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccRhoDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccRhoDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccRhoDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MccRhoDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MccProperty</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccRhoIDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccRhoIDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccRhoIDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MccRhoIDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MccPropertyI</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccSigmaDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccSigmaDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccSigmaDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MccSigmaDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MccProperty</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccSigmaIDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccSigmaIDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MccSigmaIDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MccSigmaIDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MccPropertyI</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeMuDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MeProperty</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuIDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuIDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuIDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeMuIDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MePropertyI</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuiDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuiDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuiDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeMuiDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MeProperty</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuiIDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuiIDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeMuiIDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeMuiIDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MePropertyI</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeRhoDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeRhoDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeRhoDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeRhoDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MeProperty</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeRhoIDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeRhoIDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeRhoIDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeRhoIDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MePropertyI</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeSigmaDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeSigmaDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeSigmaDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeSigmaDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MeProperty</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeSigmaIDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeSigmaIDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MeSigmaIDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeSigmaIDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MePropertyI</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MfMuDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MfProperty</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuIDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuIDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuIDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MfMuIDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>I Derivative of <cite>MfPropertyI</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuiDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuiDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuiDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MfMuiDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MfProperty</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuiIDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuiIDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfMuiIDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MfMuiIDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>I Derivative of <cite>MfPropertyI</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfRhoDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfRhoDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfRhoDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MfRhoDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MfProperty</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfRhoIDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfRhoIDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfRhoIDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MfRhoIDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>I Derivative of <cite>MfPropertyI</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfSigmaDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfSigmaDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfSigmaDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MfSigmaDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MfProperty</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfSigmaIDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfSigmaIDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MfSigmaIDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MfSigmaIDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>I Derivative of <cite>MfPropertyI</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MnMuDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MnProperty</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuIDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuIDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuIDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MnMuIDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MnPropertyI</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuiDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuiDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuiDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MnMuiDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MnProperty</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuiIDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuiIDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnMuiIDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MnMuiIDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MnPropertyI</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnRhoDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnRhoDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnRhoDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MnRhoDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MnProperty</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnRhoIDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnRhoIDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnRhoIDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MnRhoIDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MnPropertyI</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnSigmaDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnSigmaDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnSigmaDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MnSigmaDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MnProperty</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnSigmaIDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnSigmaIDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.MnSigmaIDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MnSigmaIDeriv</span></code></a>(u[, v, adjoint])</p></td>
+<td><p>Derivative of <cite>MnPropertyI</cite> with respect to the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.dpred.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.dpred" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.dpred"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dpred</span></code></a>([m, f])</p></td>
+<td><p>Predicted data for the model provided.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.fields.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.fields" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.fields"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fields</span></code></a>([m])</p></td>
+<td><p>Compute and return the fields for the model provided.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fieldsPair</span></code></p></td>
+<td><p>alias of <a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Fields3DElectricField.html#simpeg.electromagnetics.frequency_domain.Fields3DElectricField" title="simpeg.electromagnetics.frequency_domain.fields.Fields3DElectricField"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fields3DElectricField</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getA.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getA" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getA</span></code></a>(freq)</p></td>
+<td><p>System matrix for the frequency provided.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getADeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getADeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getADeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getADeriv</span></code></a>(freq, u, v[, adjoint])</p></td>
+<td><p>Derivative operation for the system matrix times a vector.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getADeriv_mui.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getADeriv_mui" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getADeriv_mui"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getADeriv_mui</span></code></a>(freq, u, v[, adjoint])</p></td>
+<td><p>Inverse permeability derivative operation for the system matrix times a vector.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getADeriv_sigma.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getADeriv_sigma" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getADeriv_sigma"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getADeriv_sigma</span></code></a>(freq, u, v[, adjoint])</p></td>
+<td><p>Conductivity derivative operation for the system matrix times a vector.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getJ.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getJ" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getJ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getJ</span></code></a>(m[, f])</p></td>
+<td><p>Generate the full sensitivity matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getJtJdiag.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getJtJdiag" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getJtJdiag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getJtJdiag</span></code></a>(m[, W, f])</p></td>
+<td><p>Return the diagonal of <span class="math notranslate nohighlight">\(\mathbf{J^T J}\)</span>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getRHS.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getRHS" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getRHS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getRHS</span></code></a>(freq)</p></td>
+<td><p>Right-hand sides for the given frequency.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getRHSDeriv.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getRHSDeriv" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getRHSDeriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getRHSDeriv</span></code></a>(freq, src, v[, adjoint])</p></td>
+<td><p>Derivative of the right-hand side times a vector for a given source and frequency.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getSourceTerm.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getSourceTerm" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.getSourceTerm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSourceTerm</span></code></a>(freq)</p></td>
+<td><p>Returns the discrete source terms for the frequency provided.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.make_synthetic_data.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.make_synthetic_data" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.make_synthetic_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_synthetic_data</span></code></a>(m[, relative_error, ...])</p></td>
+<td><p>Make synthetic data for the model and Gaussian noise provided.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.residual.html#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.residual" title="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.residual"><code class="xref py py-obj docutils literal notranslate"><span class="pre">residual</span></code></a>(m, dobs[, f])</p></td>
+<td><p>The data residual.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<section id="galleries-and-tutorials-using-simpeg-electromagnetics-frequency-domain-simulation3delectricfield">
+<h2>Galleries and Tutorials using <code class="docutils literal notranslate"><span class="pre">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField</span></code><a class="headerlink" href="#galleries-and-tutorials-using-simpeg-electromagnetics-frequency-domain-simulation3delectricfield" title="Permalink to this heading">#</a></h2>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="Forward model 3D MT data."><img alt="" src="../../../_images/sphx_glr_plot_fwd_nsem_MTTipper3D_thumb.png" />
+<p><a class="reference internal" href="../../examples/07-nsem/plot_fwd_nsem_MTTipper3D.html#sphx-glr-content-examples-07-nsem-plot-fwd-nsem-mttipper3d-py"><span class="std std-ref">MT: 3D: Forward</span></a></p>
+  <div class="sphx-glr-thumbnail-title">MT: 3D: Forward</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Here, we use a primary-secondary approach to compute the sensitivity of an EM survey with respect to a parametric model of a block in a layered space."><img alt="" src="../../../_images/sphx_glr_plot_heagyetal2017_casing_thumb.png" />
+<p><a class="reference internal" href="../../examples/20-published/plot_heagyetal2017_casing.html#sphx-glr-content-examples-20-published-plot-heagyetal2017-casing-py"><span class="std std-ref">Heagy et al., 2017 Casing Example</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Heagy et al., 2017 Casing Example</div>
+</div></div></section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="simpeg.electromagnetics.frequency_domain.Simulation1DLayered.residual.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">simpeg.electromagnetics.frequency_domain.Simulation1DLayered.residual</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Mcc.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.Mcc</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simpeg.electromagnetics.frequency_domain.Simulation3DElectricField"><code class="docutils literal notranslate"><span class="pre">Simulation3DElectricField</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#galleries-and-tutorials-using-simpeg-electromagnetics-frequency-domain-simulation3delectricfield">Galleries and Tutorials using <code class="docutils literal notranslate"><span class="pre">simpeg.electromagnetics.frequency_domain.Simulation3DElectricField</span></code></a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/content/api/generated/simpeg.electromagnetics.frequency_domain.Simulation3DElectricField.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

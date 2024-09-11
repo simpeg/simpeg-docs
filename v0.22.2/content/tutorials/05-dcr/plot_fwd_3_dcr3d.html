@@ -1,0 +1,1130 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>DC Resistivity Forward Simulation in 3D &#8212; SimPEG 0.22.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=45118af6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=bd2348d8"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script data-domain="docs.simpeg.xyz" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/tutorials/05-dcr/plot_fwd_3_dcr3d';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.14.4';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.simpeg.xyz/latest/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.22.2';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = true;
+        </script>
+    <link rel="icon" href="../../../_static/logo-block.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Convert 3D DC/IP Data to 2D Lines" href="plot_gen_3_3d_to_2d.html" />
+    <link rel="prev" title="DC Resistivity Forward Simulation in 2.5D" href="plot_fwd_2_dcr2d.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/simpeg-logo.png" class="logo__image only-light" alt="SimPEG 0.22.2 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/simpeg-logo.png" class="logo__image only-dark" alt="SimPEG 0.22.2 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../api/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../release/index.html">
+                        Release Notes
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+                    User Tutorials
+                  </a>
+                </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+                    SimPEG
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+                    Contact
+                  </a>
+                </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-comment fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-discourse fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-youtube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../api/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../release/index.html">
+                        Release Notes
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+                    User Tutorials
+                  </a>
+                </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links-2">
+                    More
+                </button>
+                <ul id="pst-nav-more-links-2" class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+                    SimPEG
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+                    Contact
+                  </a>
+                </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-3"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-3"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-3"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-3">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-comment fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-discourse fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-youtube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../01-models_mapping/index.html">Models and Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02-linear_inversion/index.html">Linear Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03-gravity/index.html">Gravity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../04-magnetics/index.html">Magnetics</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Direct Current Resistivity</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="plot_fwd_1_dcr_sounding.html">Simulate a 1D Sounding over a Layered Earth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_fwd_2_dcr2d.html">DC Resistivity Forward Simulation in 2.5D</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">DC Resistivity Forward Simulation in 3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_gen_3_3d_to_2d.html">Convert 3D DC/IP Data to 2D Lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inv_1_dcr_sounding.html">Least-Squares 1D Inversion of Sounding Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inv_1_dcr_sounding_irls.html">Sparse 1D Inversion of Sounding Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inv_1_dcr_sounding_parametric.html">Parametric 1D Inversion of Sounding Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inv_2_dcr2d.html">2.5D DC Resistivity Least-Squares Inversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inv_2_dcr2d_irls.html">2.5D DC Resistivity Inversion with Sparse Norms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inv_3_dcr3d.html">3D Least-Squares Inversion of DC Resistivity Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../06-ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../07-fdem/index.html">Frequency-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../08-tdem/index.html">Time-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../09-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../10-vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../11-flow/index.html">Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../12-seismic/index.html">Seismic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../13-joint_inversion/index.html">Joint Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../14-pgi/index.html">Petrophysically Guided Inversion</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Gallery</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../user_guide.html" class="nav-link">User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Direct Current Resistivity</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">DC...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-content-tutorials-05-dcr-plot-fwd-3-dcr3d-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="dc-resistivity-forward-simulation-in-3d">
+<span id="sphx-glr-content-tutorials-05-dcr-plot-fwd-3-dcr3d-py"></span><h1>DC Resistivity Forward Simulation in 3D<a class="headerlink" href="#dc-resistivity-forward-simulation-in-3d" title="Permalink to this heading">#</a></h1>
+<p>Here we use the module <em>simpeg.electromagnetics.static.resistivity</em> to predict
+DC resistivity data on an OcTree mesh. In this tutorial, we focus on the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>How to define the survey</p></li>
+<li><p>How to definine a tree mesh based on the survey geometry</p></li>
+<li><p>How to define the forward simulations</p></li>
+<li><p>How to predict DC data for a synthetic conductivity model</p></li>
+<li><p>How to include surface topography</p></li>
+<li><p>The units of the model and resulting data</p></li>
+<li><p>Plotting DC data in 3D</p></li>
+</ul>
+</div></blockquote>
+<p>In this case, we simulate dipole-dipole data for three East-West lines and two
+North-South lines.</p>
+<section id="import-modules">
+<h2>Import modules<a class="headerlink" href="#import-modules" title="Permalink to this heading">#</a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">discretize</span> <span class="kn">import</span> <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class"><span class="n">TreeMesh</span></a>
+<span class="kn">from</span> <span class="nn">discretize.utils</span> <span class="kn">import</span> <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.utils.mkvc.html#discretize.utils.mkvc" title="discretize.utils.mkvc" class="sphx-glr-backref-module-discretize-utils sphx-glr-backref-type-py-function"><span class="n">mkvc</span></a><span class="p">,</span> <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.utils.refine_tree_xyz.html#discretize.utils.refine_tree_xyz" title="discretize.utils.refine_tree_xyz" class="sphx-glr-backref-module-discretize-utils sphx-glr-backref-type-py-function"><span class="n">refine_tree_xyz</span></a><span class="p">,</span> <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.utils.active_from_xyz.html#discretize.utils.active_from_xyz" title="discretize.utils.active_from_xyz" class="sphx-glr-backref-module-discretize-utils sphx-glr-backref-type-py-function"><span class="n">active_from_xyz</span></a>
+
+<span class="kn">from</span> <span class="nn">simpeg</span> <span class="kn">import</span> <span class="n">maps</span><span class="p">,</span> <span class="n">data</span>
+<span class="kn">from</span> <span class="nn">simpeg.utils</span> <span class="kn">import</span> <span class="n">model_builder</span>
+<span class="kn">from</span> <span class="nn">simpeg.utils.io_utils.io_utils_electromagnetics</span> <span class="kn">import</span> <span class="n">write_dcip_xyz</span>
+<span class="kn">from</span> <span class="nn">simpeg.electromagnetics.static</span> <span class="kn">import</span> <span class="n">resistivity</span> <span class="k">as</span> <span class="n">dc</span>
+<span class="kn">from</span> <span class="nn">simpeg.electromagnetics.static.utils.static_utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">generate_dcip_sources_line</span><span class="p">,</span>
+    <span class="n">apparent_resistivity_from_voltage</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># To plot DC data in 3D, the user must have the plotly package</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">plotly</span>
+    <span class="kn">from</span> <span class="nn">simpeg.electromagnetics.static.utils.static_utils</span> <span class="kn">import</span> <span class="n">plot_3d_pseudosection</span>
+
+    <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">has_plotly</span></a> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">has_plotly</span></a> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">pass</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pymatsolver</span> <span class="kn">import</span> <span class="n">Pardiso</span> <span class="k">as</span> <a href="https://pymatsolver.readthedocs.io/en/latest/api.html#pymatsolver.solvers.Base" title="pymatsolver.solvers.Base" class="sphx-glr-backref-module-pymatsolver-solvers sphx-glr-backref-type-py-class"><span class="n">Solver</span></a>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">simpeg</span> <span class="kn">import</span> <span class="n">SolverLU</span> <span class="k">as</span> <a href="https://pymatsolver.readthedocs.io/en/latest/api.html#pymatsolver.solvers.Base" title="pymatsolver.solvers.Base" class="sphx-glr-backref-module-pymatsolver-solvers sphx-glr-backref-type-py-class"><span class="n">Solver</span></a>
+
+<a href="https://docs.python.org/3/library/stdtypes.html#dict.update" title="builtins.dict.update" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-method"><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span></a><span class="p">({</span><span class="s2">&quot;font.size&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">})</span>
+<a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">write_output</span></a> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1"># sphinx_gallery_thumbnail_number = 2</span>
+</pre></div>
+</div>
+</section>
+<section id="defining-topography">
+<h2>Defining Topography<a class="headerlink" href="#defining-topography" title="Permalink to this heading">#</a></h2>
+<p>Here we define surface topography as an (N, 3) numpy array. Topography could
+also be loaded from a file. In our case, our survey takes place within a circular
+depression.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x_topo</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y_topo</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.meshgrid.html#numpy.meshgrid" title="numpy.meshgrid" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span></a><span class="p">(</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html#numpy.linspace" title="numpy.linspace" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="o">-</span><span class="mi">2100</span><span class="p">,</span> <span class="mi">2100</span><span class="p">,</span> <span class="mi">141</span><span class="p">),</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html#numpy.linspace" title="numpy.linspace" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="o">-</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">141</span><span class="p">)</span>
+<span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">s</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x_topo</span></a><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y_topo</span></a><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">z_topo</span></a> <span class="o">=</span> <span class="mi">10</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">pi</span></a><span class="p">)</span> <span class="o">*</span> <span class="mi">140</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">pi</span></a> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">arctan</span></a><span class="p">((</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">s</span></a> <span class="o">-</span> <span class="mf">600.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">160.0</span><span class="p">))</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x_topo</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y_topo</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">z_topo</span></a> <span class="o">=</span> <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.utils.mkvc.html#discretize.utils.mkvc" title="discretize.utils.mkvc" class="sphx-glr-backref-module-discretize-utils sphx-glr-backref-type-py-function"><span class="n">mkvc</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x_topo</span></a><span class="p">),</span> <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.utils.mkvc.html#discretize.utils.mkvc" title="discretize.utils.mkvc" class="sphx-glr-backref-module-discretize-utils sphx-glr-backref-type-py-function"><span class="n">mkvc</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y_topo</span></a><span class="p">),</span> <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.utils.mkvc.html#discretize.utils.mkvc" title="discretize.utils.mkvc" class="sphx-glr-backref-module-discretize-utils sphx-glr-backref-type-py-function"><span class="n">mkvc</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">z_topo</span></a><span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">topo_xyz</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.c_.html#numpy.c_" title="numpy.c_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">c_</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x_topo</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y_topo</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">z_topo</span></a><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="construct-the-dc-survey">
+<h2>Construct the DC Survey<a class="headerlink" href="#construct-the-dc-survey" title="Permalink to this heading">#</a></h2>
+<p>Here we define 5 DC lines that use a dipole-dipole electrode configuration;
+three lines along the East-West direction and 2 lines along the North-South direction.
+For each source, we must define the AB electrode locations. For each receiver
+we must define the MN electrode locations. Instead of creating the survey
+from scratch (see 1D example), we will use the <em>generat_dcip_sources_line</em> utility.
+This utility will give us the source list for a given DC/IP line. We can append
+the sources for multiple lines to create the survey.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the parameters for each survey line</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">survey_type</span></a> <span class="o">=</span> <span class="s2">&quot;dipole-dipole&quot;</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_type</span></a> <span class="o">=</span> <span class="s2">&quot;volt&quot;</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dimension_type</span></a> <span class="o">=</span> <span class="s2">&quot;3D&quot;</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">end_locations_list</span></a> <span class="o">=</span> <span class="p">[</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="o">-</span><span class="mf">1000.0</span><span class="p">,</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="o">-</span><span class="mf">350.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">350.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1000.0</span><span class="p">,</span> <span class="mf">1000.0</span><span class="p">],</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="mf">350.0</span><span class="p">,</span> <span class="mf">350.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1000.0</span><span class="p">,</span> <span class="mf">1000.0</span><span class="p">],</span>
+<span class="p">]</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">station_separation</span></a> <span class="o">=</span> <span class="mf">100.0</span>
+<a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">num_rx_per_src</span></a> <span class="o">=</span> <span class="mi">8</span>
+
+<span class="c1"># The source lists for each line can be appended to create the source</span>
+<span class="c1"># list for the whole survey.</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">source_list</span></a> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">end_locations_list</span></a><span class="p">)):</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">source_list</span></a> <span class="o">+=</span> <span class="n">generate_dcip_sources_line</span><span class="p">(</span>
+        <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">survey_type</span></a><span class="p">,</span>
+        <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_type</span></a><span class="p">,</span>
+        <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dimension_type</span></a><span class="p">,</span>
+        <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">end_locations_list</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">],</span>
+        <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">topo_xyz</span></a><span class="p">,</span>
+        <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">num_rx_per_src</span></a><span class="p">,</span>
+        <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">station_separation</span></a><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="c1"># Define the survey</span>
+<span class="n">survey</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">survey</span><span class="o">.</span><span class="n">Survey</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">source_list</span></a><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="create-octree-mesh">
+<h2>Create OcTree Mesh<a class="headerlink" href="#create-octree-mesh" title="Permalink to this heading">#</a></h2>
+<p>Here, we create the OcTree mesh that will be used to predict DC data.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Defining domain side and minimum cell size</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dh</span></a> <span class="o">=</span> <span class="mf">25.0</span>  <span class="c1"># base cell width</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dom_width_x</span></a> <span class="o">=</span> <span class="mf">6000.0</span>  <span class="c1"># domain width x</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dom_width_y</span></a> <span class="o">=</span> <span class="mf">6000.0</span>  <span class="c1"># domain width y</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dom_width_z</span></a> <span class="o">=</span> <span class="mf">4000.0</span>  <span class="c1"># domain width z</span>
+<a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nbcx</span></a> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="nb">int</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.round.html#numpy.round" title="numpy.round" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">round</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">log</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dom_width_x</span></a> <span class="o">/</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dh</span></a><span class="p">)</span> <span class="o">/</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">log</span></a><span class="p">(</span><span class="mf">2.0</span><span class="p">)))</span>  <span class="c1"># num. base cells x</span>
+<a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nbcy</span></a> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="nb">int</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.round.html#numpy.round" title="numpy.round" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">round</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">log</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dom_width_y</span></a> <span class="o">/</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dh</span></a><span class="p">)</span> <span class="o">/</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">log</span></a><span class="p">(</span><span class="mf">2.0</span><span class="p">)))</span>  <span class="c1"># num. base cells y</span>
+<a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nbcz</span></a> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="nb">int</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.round.html#numpy.round" title="numpy.round" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">round</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">log</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dom_width_z</span></a> <span class="o">/</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dh</span></a><span class="p">)</span> <span class="o">/</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">log</span></a><span class="p">(</span><span class="mf">2.0</span><span class="p">)))</span>  <span class="c1"># num. base cells z</span>
+
+<span class="c1"># Define the base mesh</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hx</span></a> <span class="o">=</span> <span class="p">[(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dh</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nbcx</span></a><span class="p">)]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hy</span></a> <span class="o">=</span> <span class="p">[(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dh</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nbcy</span></a><span class="p">)]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hz</span></a> <span class="o">=</span> <span class="p">[(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dh</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nbcz</span></a><span class="p">)]</span>
+<a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a> <span class="o">=</span> <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class"><span class="n">TreeMesh</span></a><span class="p">([</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hx</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hy</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hz</span></a><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="s2">&quot;CCN&quot;</span><span class="p">)</span>
+
+<span class="c1"># Mesh refinement based on topography</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">k</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.sum.html#numpy.sum" title="numpy.sum" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">sum</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">topo_xyz</span></a><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">1200</span>
+<a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a> <span class="o">=</span> <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.utils.refine_tree_xyz.html#discretize.utils.refine_tree_xyz" title="discretize.utils.refine_tree_xyz" class="sphx-glr-backref-module-discretize-utils sphx-glr-backref-type-py-function"><span class="n">refine_tree_xyz</span></a><span class="p">(</span>
+    <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">topo_xyz</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">k</span></a><span class="p">,</span> <span class="p">:],</span> <span class="n">octree_levels</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;surface&quot;</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+
+<span class="c1"># Mesh refinement near sources and receivers.</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">electrode_locations</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span>
+    <span class="n">survey</span><span class="o">.</span><span class="n">locations_a</span><span class="p">,</span> <span class="n">survey</span><span class="o">.</span><span class="n">locations_b</span><span class="p">,</span> <span class="n">survey</span><span class="o">.</span><span class="n">locations_m</span><span class="p">,</span> <span class="n">survey</span><span class="o">.</span><span class="n">locations_n</span>
+<span class="p">]</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">unique_locations</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.unique.html#numpy.unique" title="numpy.unique" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">unique</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">electrode_locations</span></a><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a> <span class="o">=</span> <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.utils.refine_tree_xyz.html#discretize.utils.refine_tree_xyz" title="discretize.utils.refine_tree_xyz" class="sphx-glr-backref-module-discretize-utils sphx-glr-backref-type-py-function"><span class="n">refine_tree_xyz</span></a><span class="p">(</span>
+    <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">unique_locations</span></a><span class="p">,</span> <span class="n">octree_levels</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;radial&quot;</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+
+<span class="c1"># Finalize the mesh</span>
+<a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.finalize.html#discretize.TreeMesh.finalize" title="discretize.TreeMesh.finalize" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-method"><span class="n">mesh</span><span class="o">.</span><span class="n">finalize</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/vsts/work/1/s/tutorials/05-dcr/plot_fwd_3_dcr3d.py:151: DeprecationWarning:
+
+The surface option is deprecated as of `0.9.0` please update your code to use the `TreeMesh.refine_surface` functionality. It will be removed in a future version of discretize.
+
+/home/vsts/work/1/s/tutorials/05-dcr/plot_fwd_3_dcr3d.py:160: DeprecationWarning:
+
+The radial option is deprecated as of `0.9.0` please update your code to use the `TreeMesh.refine_points` functionality. It will be removed in a future version of discretize.
+</pre></div>
+</div>
+</section>
+<section id="create-conductivity-model-and-mapping-for-octree-mesh">
+<h2>Create Conductivity Model and Mapping for OcTree Mesh<a class="headerlink" href="#create-conductivity-model-and-mapping-for-octree-mesh" title="Permalink to this heading">#</a></h2>
+<p>Here we define the conductivity model that will be used to predict DC
+resistivity data. The model consists of a conductive sphere and a
+resistive sphere within a moderately conductive background. Note that
+you can carry through this work flow with a resistivity model if desired.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define conductivity model in S/m (or resistivity model in Ohm m)</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">air_value</span></a> <span class="o">=</span> <span class="mf">1e-8</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">background_value</span></a> <span class="o">=</span> <span class="mf">1e-2</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">conductor_value</span></a> <span class="o">=</span> <span class="mf">1e-1</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">resistor_value</span></a> <span class="o">=</span> <span class="mf">1e-3</span>
+
+<span class="c1"># Find active cells in forward modeling (cell below surface)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_active</span></a> <span class="o">=</span> <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.utils.active_from_xyz.html#discretize.utils.active_from_xyz" title="discretize.utils.active_from_xyz" class="sphx-glr-backref-module-discretize-utils sphx-glr-backref-type-py-function"><span class="n">active_from_xyz</span></a><span class="p">(</span><a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">topo_xyz</span></a><span class="p">)</span>
+
+<span class="c1"># Define mapping from model to active cells</span>
+<a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nC</span></a> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_active</span></a><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="n">conductivity_map</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="n">InjectActiveCells</span><span class="p">(</span><a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_active</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">air_value</span></a><span class="p">)</span>
+
+<span class="c1"># Define model</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">conductivity_model</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">background_value</span></a> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ones.html#numpy.ones" title="numpy.ones" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nC</span></a><span class="p">)</span>
+
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_conductor</span></a> <span class="o">=</span> <span class="n">model_builder</span><span class="o">.</span><span class="n">get_indices_sphere</span><span class="p">(</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="o">-</span><span class="mf">350.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">300.0</span><span class="p">],</span> <span class="mf">160.0</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span><span class="o">.</span><span class="n">cell_centers</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_active</span></a><span class="p">,</span> <span class="p">:]</span>
+<span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">conductivity_model</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_conductor</span></a><span class="p">]</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">conductor_value</span></a>
+
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_resistor</span></a> <span class="o">=</span> <span class="n">model_builder</span><span class="o">.</span><span class="n">get_indices_sphere</span><span class="p">(</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><span class="mf">350.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">300.0</span><span class="p">],</span> <span class="mf">160.0</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span><span class="o">.</span><span class="n">cell_centers</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_active</span></a><span class="p">,</span> <span class="p">:]</span>
+<span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">conductivity_model</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_resistor</span></a><span class="p">]</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">resistor_value</span></a>
+
+<span class="c1"># Plot Conductivity Model</span>
+<span class="n">fig</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+<span class="n">plotting_map</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="n">InjectActiveCells</span><span class="p">(</span><a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_active</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">nan</span></a><span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">log_mod</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">log10</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">conductivity_model</span></a><span class="p">)</span>
+
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.68</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">])</span>
+<a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.plot_slice.html#discretize.TreeMesh.plot_slice" title="discretize.TreeMesh.plot_slice" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-method"><span class="n">mesh</span><span class="o">.</span><span class="n">plot_slice</span></a><span class="p">(</span>
+    <span class="n">plotting_map</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">log_mod</span></a><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a><span class="p">,</span>
+    <span class="n">normal</span><span class="o">=</span><span class="s2">&quot;Y&quot;</span><span class="p">,</span>
+    <span class="n">ind</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.h.html#discretize.TreeMesh.h" title="discretize.TreeMesh.h" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-property"><span class="n">mesh</span><span class="o">.</span><span class="n">h</span></a><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">clim</span><span class="o">=</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">log10</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">resistor_value</span></a><span class="p">),</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">log10</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">conductor_value</span></a><span class="p">)),</span>
+    <span class="n">pcolor_opts</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cmap&quot;</span><span class="p">:</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.ListedColormap.html#matplotlib.colors.ListedColormap" title="matplotlib.colors.ListedColormap" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">viridis</span></a><span class="p">},</span>
+<span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_title.html#matplotlib.axes.Axes.set_title" title="matplotlib.axes.Axes.set_title" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span></a><span class="p">(</span><span class="s2">&quot;Conductivity Model&quot;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_xlabel.html#matplotlib.axes.Axes.set_xlabel" title="matplotlib.axes.Axes.set_xlabel" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span></a><span class="p">(</span><span class="s2">&quot;x (m)&quot;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_ylabel.html#matplotlib.axes.Axes.set_ylabel" title="matplotlib.axes.Axes.set_ylabel" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span></a><span class="p">(</span><span class="s2">&quot;z (m)&quot;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_xlim.html#matplotlib.axes.Axes.set_xlim" title="matplotlib.axes.Axes.set_xlim" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span></a><span class="p">([</span><span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">])</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_ylim.html#matplotlib.axes.Axes.set_ylim" title="matplotlib.axes.Axes.set_ylim" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span></a><span class="p">([</span><span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax2</span></a> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.84</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">])</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.Normalize.html#matplotlib.colors.Normalize" title="matplotlib.colors.Normalize" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">norm</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.Normalize.html#matplotlib.colors.Normalize" title="matplotlib.colors.Normalize" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class"><span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span></a><span class="p">(</span>
+    <span class="n">vmin</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">log10</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">resistor_value</span></a><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">log10</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">conductor_value</span></a><span class="p">)</span>
+<span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/colorbar_api.html#matplotlib.colorbar.Colorbar" title="matplotlib.colorbar.Colorbar" class="sphx-glr-backref-module-matplotlib-colorbar sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cbar</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/colorbar_api.html#matplotlib.colorbar.Colorbar" title="matplotlib.colorbar.Colorbar" class="sphx-glr-backref-module-matplotlib-colorbar sphx-glr-backref-type-py-class"><span class="n">mpl</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">ColorbarBase</span></a><span class="p">(</span>
+    <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax2</span></a><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.ListedColormap.html#matplotlib.colors.ListedColormap" title="matplotlib.colors.ListedColormap" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">viridis</span></a><span class="p">,</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.Normalize.html#matplotlib.colors.Normalize" title="matplotlib.colors.Normalize" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">norm</span></a><span class="o">=</span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.Normalize.html#matplotlib.colors.Normalize" title="matplotlib.colors.Normalize" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">norm</span></a><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;$10^{</span><span class="si">%.1f</span><span class="s2">}$&quot;</span>
+<span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/colorbar_api.html#matplotlib.colorbar.Colorbar.set_label" title="matplotlib.colorbar.Colorbar.set_label" class="sphx-glr-backref-module-matplotlib-colorbar sphx-glr-backref-type-py-method"><span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span></a><span class="p">(</span><span class="s2">&quot;Conductivity [S/m]&quot;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">270</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</pre></div>
+</div>
+<img src="../../../_images/sphx_glr_plot_fwd_3_dcr3d_001.png" srcset="../../../_images/sphx_glr_plot_fwd_3_dcr3d_001.png" alt="Conductivity Model" class = "sphx-glr-single-img"/></section>
+<section id="project-survey-to-discretized-topography">
+<h2>Project Survey to Discretized Topography<a class="headerlink" href="#project-survey-to-discretized-topography" title="Permalink to this heading">#</a></h2>
+<p>It is important that electrodes are not modeled as being in the air. Even if the
+electrodes are properly located along surface topography, they may lie above
+the <em>discretized</em> topography. This step is carried out to ensure all electrodes
+lie on the discretized surface.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">survey</span><span class="o">.</span><span class="n">drape_electrodes_on_topography</span><span class="p">(</span><a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind_active</span></a><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="predict-dc-resistivity-data">
+<h2>Predict DC Resistivity Data<a class="headerlink" href="#predict-dc-resistivity-data" title="Permalink to this heading">#</a></h2>
+<p>Here we predict DC resistivity data. If the keyword argument <em>sigmaMap</em> is
+defined, the simulation will expect a conductivity model. If the keyword
+argument <em>rhoMap</em> is defined, the simulation will expect a resistivity model.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the DC simulation</span>
+<span class="n">simulation</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">Simulation3DNodal</span><span class="p">(</span>
+    <a href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TreeMesh.html#discretize.TreeMesh" title="discretize.TreeMesh" class="sphx-glr-backref-module-discretize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mesh</span></a><span class="p">,</span> <span class="n">survey</span><span class="o">=</span><span class="n">survey</span><span class="p">,</span> <span class="n">sigmaMap</span><span class="o">=</span><span class="n">conductivity_map</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><a href="https://pymatsolver.readthedocs.io/en/latest/api.html#pymatsolver.solvers.Base" title="pymatsolver.solvers.Base" class="sphx-glr-backref-module-pymatsolver-solvers sphx-glr-backref-type-py-class"><span class="n">Solver</span></a>
+<span class="p">)</span>
+
+<span class="c1"># Predict the data by running the simulation. The data are the measured voltage</span>
+<span class="c1"># normalized by the source current in units of V/A.</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dpred</span></a> <span class="o">=</span> <span class="n">simulation</span><span class="o">.</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dpred</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">conductivity_model</span></a><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="plot-dc-data-in-3d-pseudosection">
+<h2>Plot DC Data in 3D Pseudosection<a class="headerlink" href="#plot-dc-data-in-3d-pseudosection" title="Permalink to this heading">#</a></h2>
+<p>Here we demonstrate how 3D DC resistivity data can be represented on a 3D
+pseudosection plot. To use this utility, you must have Python’s <em>plotly</em>
+package. Here, we represent the data as apparent conductivities.</p>
+<p>The <em>plot_3d_pseudosection</em> utility allows the user to plot all pseudosection
+points, or plot the pseudosection plots that lie within some distance of
+one or more planes.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Since the data are normalized voltage, we must convert predicted</span>
+<span class="c1"># to apparent conductivities.</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">apparent_conductivity</span></a> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">apparent_resistivity_from_voltage</span><span class="p">(</span>
+    <span class="n">survey</span><span class="p">,</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dpred</span></a><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># For large datasets or for surveys with unconventional electrode geometry,</span>
+<span class="c1"># interpretation can be challenging if we plot every datum. Here, we plot</span>
+<span class="c1"># 3 out of the 5 survey lines to better image anomalous structures.</span>
+<span class="c1"># To plot ALL of the data, simply remove the keyword argument *plane_points*</span>
+<span class="c1"># when calling *plot_3d_pseudosection*.</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">plane_points</span></a> <span class="o">=</span> <span class="p">[]</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">p1</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">p2</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">p3</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">])</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">plane_points</span></a><span class="o">.</span><span class="n">append</span><span class="p">([</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">p1</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">p2</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">p3</span></a><span class="p">])</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">p1</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">p2</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">p3</span></a> <span class="o">=</span> <span class="p">(</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="o">-</span><span class="mi">350</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="o">-</span><span class="mi">350</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="o">-</span><span class="mi">350</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">]),</span>
+<span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">plane_points</span></a><span class="o">.</span><span class="n">append</span><span class="p">([</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">p1</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">p2</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">p3</span></a><span class="p">])</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">p1</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">p2</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">p3</span></a> <span class="o">=</span> <span class="p">(</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="mi">350</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="mi">350</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([</span><span class="mi">350</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">]),</span>
+<span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">plane_points</span></a><span class="o">.</span><span class="n">append</span><span class="p">([</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">p1</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">p2</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">p3</span></a><span class="p">])</span>
+
+<span class="k">if</span> <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">has_plotly</span></a><span class="p">:</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plot_3d_pseudosection</span><span class="p">(</span>
+        <span class="n">survey</span><span class="p">,</span>
+        <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">apparent_conductivity</span></a><span class="p">,</span>
+        <span class="n">scale</span><span class="o">=</span><span class="s2">&quot;log&quot;</span><span class="p">,</span>
+        <span class="n">units</span><span class="o">=</span><span class="s2">&quot;S/m&quot;</span><span class="p">,</span>
+        <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">plane_points</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">plane_points</span></a><span class="p">,</span>
+        <span class="n">plane_distance</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+        <span class="n">title_text</span><span class="o">=</span><span class="s2">&quot;Apparent Conductivity&quot;</span><span class="p">,</span>
+        <span class="n">title_x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">title_font_size</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span>
+        <span class="n">width</span><span class="o">=</span><span class="mi">650</span><span class="p">,</span>
+        <span class="n">height</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+        <span class="n">scene_camera</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=-</span><span class="mf">0.4</span><span class="p">)),</span>
+    <span class="p">)</span>
+
+    <span class="n">plotly</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;INSTALL &#39;PLOTLY&#39; TO VISUALIZE 3D PSEUDOSECTIONS&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<html>
+<head><meta charset="utf-8" /></head>
+<body>
+    <div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-2.35.0.min.js"></script>                <div id="ecd9b039-7280-478d-9c76-863ac87ad949" class="plotly-graph-div" style="height:500px; width:650px;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("ecd9b039-7280-478d-9c76-863ac87ad949")) {                    Plotly.newPlot(                        "ecd9b039-7280-478d-9c76-863ac87ad949",                        [{"customdata":[0.015596117481617454,0.012680142475108212,0.010915604423932693,0.012690548580952735,0.03256662220709072,0.0363475220891576,0.014099744023799175,0.012700139845614867,0.008101478366694743,0.007598947052807633,0.008554928090944984,0.02226628688478057,0.025744201105650587,0.010362246180484872,0.00911732524757867,0.009168038942674981,0.009826969767740699,0.010998126036223091,0.02688639805101154,0.03434074239793933,0.013975072533585568,0.011869266142197457,0.01161481093248057,0.01127986789828285,0.009358858534472709,0.022487188329957497,0.033277788755625544,0.01448633186823063,0.011707961714310293,0.011003364035729385,0.010395608370891658,0.009798896926097481,0.017926621744972632,0.03328738873394233,0.01652896316583124,0.013032804130795937,0.011849105564627468,0.010930881415046445,0.00990944585989669,0.007678071108446008,0.014153957177365102,0.022403058530119487,0.021585735053314754,0.019334486592665175,0.01736622255997702,0.0157872611868067,0.011483041048484967,0.010726978271781751,0.013878584642532178,0.025668495590132213,0.029777768677346945,0.030761762612842154,0.030403261181877153,0.023035097145565796,0.02115934134230512,0.03720315286468474,0.013351323197668338,0.01617958693732095,0.0174384297448239,0.01858605868358519,0.01347735124902962,0.012692638026444271,0.021736722444242563,0.02305033935021172,0.008984947935593292,0.009463232526422246,0.009695457122956773,0.006948875278664457,0.006163655364827869,0.010646145770982758,0.010920214660885814,0.012614770213944809,0.009432913645577424,0.010749773168273587,0.007688777454998685,0.006570265716243248,0.011253149441135687,0.01158349201150941,0.013395685150119201,0.010931143209588289,0.010416087657023019,0.00798722484568388,0.006486058805649937,0.01104582615099271,0.01152313613805071,0.01350350103685299,0.011070713738685237,0.013097011700909853,0.007187296198553302,0.005378435615534516,0.008893017380675725,0.0093319120116877,0.011090065647732761,0.009158604695942344,0.011097221231985125,0.005699088412319617,0.008710217867113616,0.008222124905716196,0.009720794620526161,0.008186055160619397,0.009673528152783908,0.010257087347852271,0.008288139007100896,0.009015037930861667,0.007021202201445625,0.008337682663887735,0.008170131465186185,0.009810004288349614,0.007726731378268927,0.00889023623868516,0.010865930592071487,0.008924832500764675,0.011227540705115597,0.008324327563617206,0.010565603043109797,0.011438383597440004,0.008449826673726535,0.01246126140809107,0.009617354560376242,0.009859742475852942,0.009575178063229833,0.00906443092456575,0.009974686491134274,0.017792453797696554,0.01294992810741833,0.009578390226623667,0.010507802882653253,0.010106621476503213,0.009756665470094118,0.010616092759227857,0.018839752104682105,0.032940587140091196,0.007011242405432963,0.008833921083835388,0.008599138994358076,0.008209035754145281,0.008967585613530135,0.015650152257210188,0.027636629652188698,0.013577102697788288,0.010958301236782491,0.011765605441768778,0.010864030381250212,0.011879228494773254,0.01982813674502657,0.03728156826632466,0.0181478582732834,0.01226752107405473,0.00968537485504362,0.009273063428155533,0.009856877235433593,0.016025388494239356,0.02946609936990329,0.015137328827239964,0.009980649364988948,0.009677533705514543,0.009312497514907264,0.010474213928843687,0.015453945609254652,0.03047567916867743,0.01611468788835011,0.010274797024221679,0.00984865565088782,0.008466978003096549,0.009581963707499915,0.013635783951189594,0.02833427127775088,0.01764252276529063,0.01086491914049157,0.010024724194985825,0.008750306056928652,0.009933049849990681,0.010408824108556671,0.02444635043742406,0.019433887070490707,0.011810481589515474,0.01046840044009246,0.008843416496911193,0.010232542889370951,0.012206683030801887,0.016957360060805202,0.025655762450081936,0.01745233428941835,0.015006650892051523,0.01227724039239529,0.013868869263258912,0.016093984606216503,0.012153191345195482,0.018050082642942104,0.026228980209760965,0.028481722706053984,0.024447002536889407,0.02922956947511691,0.033605243888427935,0.02520007093018796,0.026091290704538937,0.011770172071178637,0.01716492796617089,0.017569900627647395,0.021766107018787315,0.025017171789956685,0.020363778021243326,0.022090597377043886,0.022373571358448897,0.01012044258871687,0.009606111179515103,0.011481382227667106,0.01241380758946162,0.009870315861295552,0.01059307682008196,0.010584076165214595,0.008702865999363141,0.010518318299181257,0.010856130708095334,0.008527491229047073,0.00911647644044105,0.008975260939878245,0.0113486839565272,0.012123277607438527,0.009118202106136673,0.009555138076286409,0.009730286452930916,0.010216334826413645,0.007517747355500343,0.007819987478005472,0.008402911070007391,0.007045099873445599,0.008564337443455767,0.009591243093690539,0.010286479295740935,0.012095830127888507,0.009509525891813529,0.008369562341855834,0.012194423926118117,0.009120339016255717,0.008035213923846955,0.009746323791583729,0.00992893360271624,0.01072459847487716,0.00868284632558202,0.011910839002870094,0.009769214680658818,0.00886224023914472,0.010876769867775386,0.011573683106606409,0.012570240550766217,0.010241222636013595,0.00904974734334049,0.00706972271387085,0.007436769493837974,0.009172198193709196,0.009364805896708118,0.010358713760017423,0.008533388427221554,0.007508742261769713,0.009489730096666048,0.010137283184976876,0.012821995351086619,0.0123752599093525,0.013479125059079548,0.011078466907778393,0.009928179648803204,0.011931297500929128,0.01449531365758936,0.011849633876550912,0.01140392356887606,0.012451515447281345,0.01019161669793831,0.008423089278368273,0.010325777981348016,0.012318933399259564,0.013809243483527535,0.008855016075680835,0.010532916015378629,0.008782526497889073,0.00675834181302981,0.008232035527634268,0.0098638355164206,0.011356430793291765,0.010874604820349944,0.011035103282618908,0.009849024887264515,0.007183045854901843,0.008564830351669642,0.01035350991204825,0.01223194087653512,0.01184450937300807,0.013606645054482306,0.009043166392278628,0.006668597319025828,0.007493584926201367,0.009117276686709162,0.010779173340568519,0.010685390818308561,0.012439400841421533,0.01342525396662836,0.006712603443406974,0.006470394624943398,0.007587610413034229,0.009096588411406927,0.009131847135054676,0.010861576876866402,0.011778513217603917,0.01038990656965273,0.00630623976916024,0.006338775198508617,0.007235607433776896,0.007105159449541206,0.008579097506206827,0.009121107420176036,0.00795245898498984,0.00859600891988082,0.0084152915809016,0.009036544944989155,0.00821498209598359,0.009316004171214705,0.009599316107179425,0.008151258183269823,0.008686331824336568,0.008550438513708436,0.010742537628805598,0.010728706822257872,0.012133595737131657,0.012493180841839088,0.010505715931526624,0.011267832383324912,0.011017229182899883,0.0094121473290693,0.010973407972862781,0.011543465368362437,0.009665911656817535,0.010578207448859367,0.010514023101970393,0.012166679086482467,0.011137746677374391,0.009396532357909606,0.010038094817354399,0.010075027242849659,0.008672447530838338,0.008115003200852676,0.00862526058504612,0.008892919283473777,0.008375739725980621,0.009740520435007054,0.009963236234347993,0.010068705252290039,0.011152006125784207,0.009345530324489886],"marker":{"cmax":-1.428505827136576,"cmin":-2.2693440258833903,"color":[-1.8069835020409883,-1.8968758666588854,-1.9619522113326722,-1.8965196040257688,-1.487227283894288,-1.4395251908485882,-1.8507887717460831,-1.8961914968515652,-2.0914357233542495,-2.1192465815134227,-2.0677836366006184,-1.6523521996655568,-1.5893205806590762,-1.984546094199437,-2.0401325520876235,-2.0377235506392357,-2.0075803800346335,-1.9586813077017329,-1.5704673759600212,-1.4641903202454787,-1.8546459293553699,-1.9255761319507685,-1.934987855312622,-1.9476959864681687,-2.0287771173313254,-1.648064842880084,-1.4778455394466783,-1.8390415697434528,-1.9315187064031725,-1.9584745185872379,-1.9831500898447827,-2.0088228106209858,-1.7465015451143588,-1.4777202722185112,-1.7817543881394333,-1.8849621316773433,-1.9263144313422693,-1.9613448171667494,-2.0039506307536596,-2.1147478700953117,-1.849122122681741,-1.6496926864837997,-1.6658331578410182,-1.7136673556795026,-1.7602946374979216,-1.8016932059401125,-1.9399430826976973,-1.9695225990694762,-1.8576548215814659,-1.5905995842327283,-1.5261078481359371,-1.5119887835942822,-1.517079829636932,-1.6376099518639082,-1.6744978553445302,-1.4294202532978841,-1.8744756909309526,-1.791032570061947,-1.7584926239826204,-1.7308126959433392,-1.870395452827623,-1.896448105150289,-1.6628059400882336,-1.6373226764852,-2.0464844351215126,-2.023960488483175,-2.013431709917144,-2.1580854831505816,-2.210161652454895,-1.9728075916011734,-1.9617688245322062,-1.8991206560243055,-2.025354141329419,-1.9686006997303709,-2.114142709191653,-2.1824170662446845,-1.948725913687186,-1.93616049650568,-1.8730350685950534,-1.9613344159411654,-1.9822953739370575,-2.097604089717356,-2.1880191181278166,-1.9568017963702362,-1.9384293071896261,-1.8695536178855496,-1.9558243788701304,-1.8828277844855568,-2.143434456889941,-2.2693440258833903,-2.050950858890433,-2.03002936471526,-1.9550658830335539,-2.0381706856127333,-1.954785755870626,-2.244194605583687,-2.0599709819266785,-2.085015929957607,-2.0122982324806835,-2.086925333246587,-2.0144151000817265,-1.9889759460798506,-2.081542973632794,-2.0450324416393872,-2.153588519671837,-2.07895463834682,-2.087770955200073,-2.008330802772328,-2.112004185847811,-2.05108669844551,-1.9639330734212588,-2.049399925879774,-1.949715361740639,-2.0796508385670385,-1.9761057100815467,-1.9416353430526807,-2.073152199383581,-1.9044379934035425,-2.0169443726430494,-2.0061344281395788,-2.0188531409980763,-2.0426594562213998,-2.001100745496863,-1.7497641532476431,-1.8877326425972603,-2.018707473639506,-1.9784880828005973,-1.9953939996345642,-2.0106985855484143,-1.9740352954332963,-1.7249248159952086,-1.4822686641392704,-2.1542050174092897,-2.053846484747982,-2.0655450311655934,-2.0857078527767134,-2.0473244684232554,-1.805481432932577,-1.5585149212365172,-1.8671928969634513,-1.9602567652560992,-1.9293857197200965,-1.9640090285577865,-1.9252117640133164,-1.7027180946384983,-1.428505827136576,-1.7411746210398815,-1.9112431872832345,-2.013883566031445,-2.0327767696138044,-2.006260652424515,-1.7951914333311865,-1.5306773508907154,-1.819950754818698,-2.0008412015526154,-2.014235307418619,-2.0309338301375788,-1.9798785601683946,-1.8109606206041349,-1.5160466070903125,-1.792778101549719,-1.9882267487347332,-2.006623046989383,-2.072271568508279,-2.0185454784019363,-1.8653198884602702,-1.5476879523932752,-1.753439313495148,-1.963973501462094,-1.9989275670612416,-2.0579767565193205,-2.0029173849730944,-1.9825983302406809,-1.6117859669367753,-1.7114403252660142,-1.9277323930380665,-1.9801196729641168,-2.053379920608445,-1.990016426347672,-1.9134023325435372,-1.7706417582270193,-1.5908150742480056,-1.758146476944711,-1.8237162205743913,-1.9108992404455714,-1.857958945757668,-1.7933364184084941,-1.9153096643193817,-1.7435208053211178,-1.5812185945748478,-1.5454337461058767,-1.6117743824091353,-1.5341775813568306,-1.473592948380622,-1.5985982368158418,-1.583504436346539,-1.9292171880472087,-1.7653580147817869,-1.755230694793062,-1.662219239835574,-1.60176178918463,-1.691141645708288,-1.6557925397172537,-1.6502646865573456,-1.9948004944493356,-2.017452391216681,-1.9400058246808296,-1.906094990341203,-2.005668949192291,-1.9749778782395926,-1.9753470435358433,-2.06033770338853,-1.978053690958729,-1.9643249364000133,-2.0691787186140176,-2.040172986031421,-2.0469529162201887,-1.945054498255586,-1.9163799499397018,-2.040090785833645,-2.0197630328019565,-2.011874374213045,-1.9907048821032007,-2.1239122734553733,-2.1067939423669397,-2.0755702326735297,-2.1521128458223515,-2.067306229403796,-2.018125101510947,-1.9877332437086934,-1.9173643209697444,-2.0218411347662535,-2.0772972513838592,-1.9138387112680415,-2.039989018014493,-2.095002556397894,-2.0111591646187685,-2.0030973935313825,-1.9696189586686013,-2.061337885323323,-1.9240576456135141,-2.0101403465744156,-2.05245648121473,-1.963500060233711,-1.9365284130158704,-1.9006564113458018,-1.9896481925420852,-2.0433635455378627,-2.1505976196114993,-2.128615679465271,-2.037526569565268,-2.0285012197689567,-1.9846941675257734,-2.068878485474875,-2.124432802612086,-2.022746139437354,-1.9940784213208702,-1.8920443849158493,-1.9074456711004757,-1.870338297292238,-1.955520335235678,-2.0031303729498964,-1.9233123252438953,-1.8387723827038471,-1.926295068037847,-1.9429457020716803,-1.9047777883000327,-1.991756918319224,-2.074528596091412,-1.98607721712649,-1.9094268927291134,-1.859830112871684,-2.052810646041028,-1.9774513786653651,-2.0563805312177306,-2.170159846926519,-2.0844927639231963,-2.0059541783939236,-1.9447581413662522,-1.9635865162087025,-1.9572235977210342,-2.0066067651413118,-2.1436913611224195,-2.0672812349242053,-1.9849123963882085,-1.9125046267664854,-1.926482924051243,-1.8662489441529275,-2.0436794781620544,-2.175965506513727,-2.1253103663866972,-2.0401348652412357,-1.9674145441024906,-1.9712095888830794,-1.9052005374531589,-1.87207748996643,-2.1731090086212994,-2.1890692312000857,-2.11989497612458,-2.0411214551406784,-2.039441367107108,-1.9641071195714999,-1.9289095263690876,-1.9833883577812923,-2.2002295209900127,-2.197994649991459,-2.140525003720643,-2.1484261714622157,-2.066558396147734,-2.039952429514362,-2.099498562099696,-2.065703142522962,-2.074930831585634,-2.0439975870184357,-2.085393378744319,-2.0307703256831786,-2.0177597066956445,-2.088775350784221,-2.0611635842846634,-2.068011611681159,-1.9688931164009584,-1.9694526222841342,-1.916010478821483,-1.9033269734605918,-1.9785743464453769,-1.948159622064193,-1.9579276161815766,-2.026311283397733,-1.9596584741613081,-1.937663795648693,-2.0147571784845364,-1.9755879202995,-1.9782310730616264,-1.9148279469326632,-1.953202664150477,-2.0270323863651507,-1.9983487063966077,-1.996753770854021,-2.061858319002341,-2.0907113045361623,-2.0642277752183946,-2.0509556495375945,-2.0769768267120527,-2.0114178381918695,-2.001599572175432,-1.997026372339917,-1.9526470006885381,-2.029396048970582],"colorbar":{"thickness":20,"tickformat":".2f","tickprefix":"10^","title":{"text":"S\u002fm"}},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"opacity":0.8,"size":4},"mode":"markers","x":[-813.1422929899629,-732.4637077693175,-676.2845859799259,-613.8098341238759,-551.3606076167856,-495.2266094240032,-432.79555894194215,-382.4716868617703,-701.1906469908024,-644.9637077693175,-582.4597567425069,-519.9980627678393,-463.8606076167856,-401.4253332313714,-351.09613488072114,-300.8687388697124,-613.1422929899629,-550.6803038083929,-488.24924789055615,-432.12212267620373,-369.70460943534096,-319.4501827241833,-269.28517321605835,-219.1721874860189,-518.9693024829342,-456.5649845805167,-400.43860496586825,-338.034106528591,-287.86597105815895,-237.76620787150313,-187.70225281175968,-150.08143327880117,-425.1930530821583,-369.0649845805167,-306.66110666829877,-256.5109280694474,-206.4300996397011,-156.3817091520603,-118.79244483533358,-81.25991276803443,-331.46930248293415,-269.0649845805167,-218.92437449167625,-168.86045679369067,-118.826159392614,-81.26651255133919,-43.75157440645501,-6.25,-231.46930248293413,-181.34398529510793,-131.30186727578854,-81.28280841308529,-43.752828374286686,-6.25,31.251574406455013,68.75991276803443,-150.0243427689639,-100.0108365863456,-50.006099048911516,-12.5,25.0027117908986,62.51592864131126,100.04113096113107,137.5769823397294,-62.5,-12.5,25.006099048911516,62.53119152805388,100.07302830689167,137.62706500846326,175.1898661656723,200.41062334541334,37.5,75.0108365863456,112.54868553792778,150.1050258791829,187.67271208775603,225.24764341784615,250.51872697149213,288.1116265326381,125.02434276896389,162.58635604387803,200.1637165227767,237.74814048950054,275.3363494443264,300.6756857875541,338.27221232863326,382.0953665866851,212.69305308215831,250.28957962323747,287.88610616431663,325.48263270539576,350.91586415696287,388.50505063388334,432.3131399887842,312.6930530821583,350.28957962323744,387.88610616431663,413.3297735348777,450.91586415696287,494.7206022848156,412.6930530821583,450.28957962323744,475.74924789055615,513.3297735348776,557.129419304648,512.6930530821583,538.1803038083929,575.7492478905561,619.5404201899423,600.6422929899629,638.1803038083929,681.9552809859521,700.6422929899629,744.3779684041647,818.9212348919281,-357.89845118348944,-350.0,-350.0,-350.0,-350.0,-358.0489569074029,-357.8494370971953,-350.0,-350.0,-350.0,-350.0,-350.0,-358.0534529799269,-357.827921860668,-350.0,-350.0,-355.42034586050005,-354.70088927855244,-354.37827266176413,-362.5,-362.5,-354.8946274984725,-355.0650342687134,-362.5,-350.0,-350.0,-358.5525208494207,-358.150104719768,-350.0,-350.0,-357.4349657312866,-357.30248257687987,-350.0,-358.6995681302176,-358.17879187452615,-350.0,-350.0,-357.3614734281712,-357.22347773649165,-356.93384161655183,-358.5492725230686,-357.8652393459523,-350.0,-350.0,-357.0460724907603,-356.9306939960876,-356.6403867994778,-350.0,-357.1383363181484,-350.0,-350.0,-356.5787198018989,-356.5216108002598,-356.25,-350.0,-350.0,-356.25,-356.25,-362.5,-362.5,-362.5,-356.91857773342565,-357.2388299807923,-357.30248257687987,-356.25,-362.5,-362.5,-362.5,-357.01371735984185,-357.3614734281712,-357.4166176985564,-352.07534199842183,-356.25,-356.25,-355.8715594737646,-350.0,-350.0,-350.0,-344.9166176985564,-344.95945912049865,-356.25,-355.7507980851057,-350.0,-350.0,-350.0,-345.08145418583433,-345.108918478341,-345.1302625785239,-362.5,-357.7381421064985,-358.17879187452615,-358.10368921723983,-353.0982214428951,-353.09892302679424,-353.0993786368687,-358.4186809948734,-358.7973098310601,-358.5525208494207,-353.70398598743594,-353.6046097860657,-353.5333262666879,-359.4641217326661,-358.90297724986254,-353.9727607885233,-353.79655597664413,-353.6795249183978,-350.0,-345.3652393459523,-345.3488236984777,-345.3390401130654,-344.52821600795585,-344.7871747670563,-344.91619452544586,-344.52821600795585,-344.7871747670563,-337.5,342.20253884852457,350.0,350.0,342.20004265423927,341.9090163242981,350.0,357.8244615278335,350.0,350.0,350.0,342.24653805168936,341.89631078276017,350.0,357.8001908434038,350.0,350.0,344.4827629772007,337.5,337.5,345.650104719768,353.1629806228669,345.1053725015275,344.9349657312866,352.10434363950367,341.3037697260496,340.9824534826872,350.0,358.1988738762553,350.0,350.0,357.4538973043421,357.31740614769643,340.3240564508623,350.0,358.3038774371899,350.0,350.0,357.40228174900756,357.2546725461884,350.0,346.1962302739504,353.2215258469067,344.95343226963564,344.70839308686385,351.5910698131493,351.3607156464306,344.1403867994778,343.75,351.54746115147543,344.2699314567548,344.140244088159,350.62402572037416,350.5202691111621,343.75,343.36561199665465,343.2296682880229,350.0,350.0,356.25,356.25,350.0,350.0,350.0,344.61588687296637,356.25,362.5,362.5,356.5546968433863,357.01371735984185,357.14044688495824,351.9462473604038,352.07534199842183,356.25,356.25,350.0,350.0,350.0,344.8614734281712,344.9166176985564,344.9430462524462,356.25,350.0,350.0,350.0,345.0447981101016,345.08145418583433,345.08825844757826,350.0,356.9827629772007,357.7381421064985,357.79968931843433,353.09705894269655,353.0982214428951,353.045436259537,357.7767620413812,358.4186809948734,358.30325390588297,353.85208469600855,353.70398598743594,353.5326512850654,357.987095710878,350.0,345.88980246255454,345.7393969189976,345.60368921723983,350.0,345.39845118348944,345.3652393459523,345.29968931843433,350.0,345.29746115147543,345.2381421064985,350.0,337.5,342.2618578935015,342.2919703912005],"y":[-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-12.5,-819.023232247658,-768.8439852951079,-712.6861053671254,-631.7573959571343,-550.9158641569629,-494.80737009284127,-450.8348999738945,-400.6467327343596,-737.524342768964,-681.3439852951079,-600.3861061643166,-519.5404201899423,-463.4342569635098,-419.46429766325963,-369.28517321605835,-319.1721874860189,-643.8051879075006,-562.8213426852587,-481.98299783821614,-425.8297735348777,-381.8537665297113,-331.7045124159898,-281.5971589289461,-231.5163781106969,-513.1422929899629,-432.46370776931747,-376.319332818538,-332.145915929047,-281.8537665297113,-231.6923367544004,-181.5971589289461,-131.5237370415295,-401.19064699080235,-345.0107967445609,-300.7786600151632,-250.48263270539576,-200.33634944432637,-150.25748802241185,-100.19742486453363,-56.32956199171506,-313.211639630902,-269.09949504309697,-218.92437449167625,-168.86045679369067,-118.83459293426641,-68.81183021518142,-25.015244833419573,0.0,-237.5632915459227,-187.51289324737127,-137.50693866276058,-87.50864752784234,-37.50590318805058,6.25,31.262588117615817,50.08143327880117,-156.25,-106.25,-56.25,-6.25,37.5027117908986,62.559646928164874,81.45371121008696,119.0237370415295,-62.5,-12.5,37.5,81.25371636696188,106.32784936775063,125.25748802241186,162.83646729238995,212.78768805681446,37.5,87.5,131.26146263423112,156.3499853653163,175.33634944432637,212.92681345601432,262.83646729238995,300.41894332409527,137.5,181.26995212764263,206.4040047574611,225.48263270539576,263.07915924647494,312.93856559327804,350.5292173861752,388.12109434627877,231.27157033531256,256.54644733753696,275.7786600151632,313.35243131040716,363.1426853705175,400.7301552497611,438.31988362020104,306.8824230871522,326.36456405455834,363.819332818538,413.4202802512808,450.9893651344233,488.5668645327397,395.5381740100081,432.73152325316124,482.17220777788884,519.717158455439,557.2811644176511,506.9782246615905,556.599495043097,594.1864653471914,631.7774355904502,625.0485438727062,662.6078055906494,700.1817751857326,725.0485438727062,762.6078055906494,812.6930530821583,-825.2406215763931,-768.8296180365969,-706.404004757461,-638.0017061695696,-569.7237672420094,-507.2913560715489,-457.0589237464922,-406.8788134667476,-737.5192455849324,-675.0736378624605,-606.6357557057482,-538.3524313104072,-475.91586415696287,-425.6893127693868,-375.51872697149213,-325.41062334541334,-631.2930293875884,-562.7895796232375,-494.54742995545956,-432.145915929047,-381.91995536262823,-331.7045124159898,-281.5971589289461,-231.54580079762044,-507.0565458907439,-439.11397661911843,-376.456449323181,-325.94279270229913,-275.6299691610334,-225.45871989947858,-175.35836713078874,-125.28156966124881,-402.0367903120728,-339.05419651303373,-288.38367688430236,-238.034106528591,-187.86597105815895,-137.77678555359336,-87.71030213632177,-43.82916094416323,-319.5565458907439,-269.2024527605731,-218.94359964129484,-168.87266961231023,-118.85985939099083,-68.83031972315815,-25.015244833419573,0.0,-250.12031078819655,-200.02164503788447,-150.01218917891075,-100.01948559251706,-50.01354133210848,-6.25,18.76477978255103,50.036116737648385,-162.5,-112.5,-62.5,-12.5,31.252602269206925,56.301831400030885,87.59737107585556,125.1561451464233,-62.5,-12.5,37.5,81.25742942116152,106.32784936775063,137.63497444233926,175.22008446707815,212.78768805681446,37.5,87.5,131.25573526068274,156.3499853653163,187.67271208775603,225.25748802241185,262.83646729238995,306.6576235714273,137.5,181.25998801597763,206.4040047574611,237.74814048950054,275.3496907151219,312.93856559327804,356.763200907412,394.345132679784,231.29302938758832,256.54644733753696,287.9099418101005,325.5588211460695,363.1426853705175,406.95506660319654,444.51046731022535,306.8824230871522,338.2219062588091,375.8666448638634,413.4202802512808,457.20004351589677,494.73554447995383,406.9782246615905,444.534543361245,482.07869551107456,525.8524313104072,563.4158641569629,519.023232247658,556.599495043097,600.4099418101005,637.9826327053958,612.7406215763931,656.546447337537,694.1133108983146,718.9212348919281,756.546447337537,818.9634966504083],"z":[-118.75,-187.5,-237.5,-293.75,-350.0,-400.0,-456.25,-506.25,-150.0,-200.0,-256.25,-312.5,-362.5,-418.75,-468.75,-518.75,-156.25,-212.5,-268.75,-318.75,-375.0,-425.0,-475.0,-525.0,-168.75,-225.0,-275.0,-331.25,-381.25,-431.25,-481.25,-525.0,-187.5,-237.5,-293.75,-343.75,-393.75,-443.75,-487.5,-531.25,-193.75,-250.0,-300.0,-350.0,-400.0,-443.75,-487.5,-531.25,-206.25,-256.25,-306.25,-356.25,-400.0,-443.75,-487.5,-531.25,-218.75,-268.75,-318.75,-362.5,-406.25,-450.0,-493.75,-537.5,-225.0,-275.0,-318.75,-362.5,-406.25,-450.0,-493.75,-531.25,-225.0,-268.75,-312.5,-356.25,-400.0,-443.75,-481.25,-525.0,-218.75,-262.5,-306.25,-350.0,-393.75,-431.25,-475.0,-525.0,-212.5,-256.25,-300.0,-343.75,-381.25,-425.0,-475.0,-200.0,-243.75,-287.5,-325.0,-368.75,-418.75,-187.5,-231.25,-268.75,-312.5,-362.5,-175.0,-212.5,-256.25,-306.25,-156.25,-200.0,-250.0,-143.75,-193.75,-131.25,-106.45810236483068,-156.25,-206.25,-275.0,-343.75,-393.80681348687665,-437.55039994818736,-487.5,-118.75,-168.75,-237.5,-306.25,-356.3150971039451,-400.05681348687665,-450.0,-500.0,-125.20810236483068,-193.88015186830393,-262.5946752402397,-312.5,-356.25,-406.30681348687665,-456.2996000505841,-506.25,-143.75,-212.5,-262.5976324197765,-306.3301150391395,-356.25,-406.25,-456.2996000505841,-506.2940119019183,-175.0,-225.12495003996005,-268.8476324197765,-318.75,-368.75,-418.8057991235112,-468.7988251451315,-518.7928062110996,-181.44512213675873,-225.13580541526673,-275.0,-325.0,-375.06648183857897,-425.05681348687665,-475.0488251451315,-512.5,-181.47293029761374,-231.25,-281.25,-331.3322226093527,-381.31792675818355,-431.30681348687665,-468.75,-500.0,-193.95810236483067,-243.88580541526673,-293.75,-343.75,-393.75,-431.3057991235112,-462.5496000505841,-506.2940119019183,-200.19512213675873,-250.0,-300.0,-350.0,-387.56376887107115,-418.8057991235112,-462.5488251451315,-512.6735776342277,-200.19512213675873,-250.13015186830393,-300.0946752402397,-337.5,-368.75,-412.5,-462.5488251451315,-506.29340068486727,-200.19512213675873,-250.12495003996005,-287.5,-318.75,-362.5,-412.5557991235112,-456.2988251451315,-500.04340068486727,-200.0,-237.62495003996005,-268.8476324197765,-312.57811279678197,-362.76030373660785,-406.4731431530475,-450.19526483955303,-187.68366478704002,-218.88015186830393,-262.5976324197765,-312.81230493125986,-356.51030373660785,-400.2231431530475,-156.45810236483067,-200.13580541526673,-250.40280708761333,-294.07030237208295,-337.76583715847687,-137.5,-187.63580541526673,-231.35078024088529,-275.0801150391395,-131.44512213675873,-175.13015186830393,-218.84763241977652,-118.94512213675873,-162.63015186830393,-112.5,-112.69512213675873,-168.75,-225.0,-281.32811279678197,-337.56648183857897,-393.75,-443.7996000505841,-493.75,-131.25,-187.5,-243.84467524023972,-300.07811279678197,-356.25,-406.3057991235112,-456.25,-506.25,-137.68366478704002,-193.75,-250.0,-306.3301150391395,-356.51583715847687,-406.30681348687665,-456.2996000505841,-506.42602142699405,-137.70810236483067,-193.89197215965774,-250.0,-300.0822226093527,-350.0,-400.0,-450.05039994818736,-500.04464057967846,-150.22293029761374,-206.25,-256.35413774754545,-306.25,-356.25,-406.3078654097694,-456.30039994818736,-506.25,-175.20810236483067,-225.54245475768994,-275.1007802408853,-325.0801150391395,-375.26583715847687,-425.22719764542535,-475.0488251451315,-512.5434006848673,-194.52822185373185,-243.88015186830393,-293.8476324197765,-344.06230493125986,-394.01030373660785,-443.8048203434806,-481.2980740786252,-518.7934006848673,-200.0,-250.0,-300.0976324197765,-350.07811279678197,-400.0,-437.5,-475.0,-518.7934006848673,-200.19512213675873,-250.0,-300.0,-350.0762081801235,-387.56376887107115,-425.0557991235112,-468.94526483955303,-512.6735776342277,-200.19512213675873,-250.13015186830393,-300.0,-337.5,-375.0,-418.8057991235112,-462.5488251451315,-512.5428062110996,-200.19512213675873,-250.0,-287.5,-325.0,-368.8150971039451,-412.5557991235112,-462.5480740786252,-506.25,-200.18366478704002,-237.62495003996005,-275.0976324197765,-319.06230493125986,-362.76030373660785,-412.71923078998,-456.2980740786252,-187.68366478704002,-225.13015186830393,-269.14024427351745,-312.81230493125986,-362.7549958809807,-406.3048203434806,-162.5,-206.38580541526673,-250.10078024088529,-300.07811279678197,-343.75,-143.95810236483067,-187.63580541526673,-237.59763241977652,-281.25,-137.69512213675873,-187.62495003996005,-231.25,-131.25,-175.12495003996005,-118.93366478704],"type":"scatter3d"}],                        {"height":500,"scene":{"camera":{"center":{"x":0.05,"y":0,"z":-0.4},"eye":{"x":1.5,"y":-1.5,"z":1.5}},"xaxis":{"title":{"text":"X[m]"}},"yaxis":{"title":{"text":"Y[m]"}},"zaxis":{"title":{"text":"Z[m]"}}},"template":{"data":{"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"#E5ECF6","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2}}},"title":{"font":{"size":24},"text":"Apparent Conductivity","x":0.5},"width":650},                        {"responsive": true}                    )                };                            </script>        </div>
+</body>
+</html>
+</section>
+<section id="optional-write-predicted-dc-data">
+<h2>Optional: Write Predicted DC Data<a class="headerlink" href="#optional-write-predicted-dc-data" title="Permalink to this heading">#</a></h2>
+<p>Write DC resistivity data, topography and true model</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">write_output</span></a><span class="p">:</span>
+    <span class="n">dir_path</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.dirname" title="os.path.dirname" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span></a><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span></a><span class="p">)</span>
+    <span class="n">dir_path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;outputs&quot;</span><span class="p">])</span>
+    <span class="n">dir_path</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span></a><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span> <span class="o">+</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span></a>
+
+    <span class="k">if</span> <span class="ow">not</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.exists" title="os.path.exists" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span></a><span class="p">(</span><span class="n">dir_path</span><span class="p">):</span>
+        <a href="https://docs.python.org/3/library/os.html#os.mkdir" title="os.mkdir" class="sphx-glr-backref-module-os sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">mkdir</span></a><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span>
+
+    <span class="c1"># Add 5% Gaussian noise to each datum</span>
+    <a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="numpy.random.seed" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span></a><span class="p">(</span><span class="mi">433</span><span class="p">)</span>
+    <span class="n">std</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">abs</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dpred</span></a><span class="p">)</span>
+    <span class="n">noise</span> <span class="o">=</span> <span class="n">std</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.randn.html#numpy.random.randn" title="numpy.random.randn" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span></a><span class="p">(</span><span class="nb">len</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dpred</span></a><span class="p">))</span>
+    <span class="n">dobs</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dpred</span></a> <span class="o">+</span> <span class="n">noise</span>
+
+    <span class="c1"># Create dictionary that stores line IDs</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">survey</span><span class="o">.</span><span class="n">nD</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">end_locations_list</span></a><span class="p">))</span>
+    <span class="n">lineID</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.r_.html#numpy.r_" title="numpy.r_" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-data"><span class="n">np</span><span class="o">.</span><span class="n">r_</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ones.html#numpy.ones" title="numpy.ones" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="mi">2</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ones.html#numpy.ones" title="numpy.ones" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="mi">3</span> <span class="o">*</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ones.html#numpy.ones" title="numpy.ones" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+    <span class="n">out_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;LINEID&quot;</span><span class="p">:</span> <span class="n">lineID</span><span class="p">}</span>
+
+    <span class="c1"># Create a survey with the original electrode locations</span>
+    <span class="c1"># and not the shifted ones</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">source_list</span></a> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">end_locations_list</span></a><span class="p">)):</span>
+        <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">source_list</span></a> <span class="o">+=</span> <span class="n">generate_dcip_sources_line</span><span class="p">(</span>
+            <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">survey_type</span></a><span class="p">,</span>
+            <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_type</span></a><span class="p">,</span>
+            <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dimension_type</span></a><span class="p">,</span>
+            <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">end_locations_list</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">],</span>
+            <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">topo_xyz</span></a><span class="p">,</span>
+            <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">num_rx_per_src</span></a><span class="p">,</span>
+            <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">station_separation</span></a><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="n">survey_original</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">survey</span><span class="o">.</span><span class="n">Survey</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">source_list</span></a><span class="p">)</span>
+
+    <span class="c1"># Write out data at their original electrode locations (not shifted)</span>
+    <span class="n">data_obj</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Data</span><span class="p">(</span><span class="n">survey_original</span><span class="p">,</span> <span class="n">dobs</span><span class="o">=</span><span class="n">dobs</span><span class="p">,</span> <span class="n">standard_deviation</span><span class="o">=</span><span class="n">std</span><span class="p">)</span>
+
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">dir_path</span> <span class="o">+</span> <span class="s2">&quot;dc_data.xyz&quot;</span>
+    <span class="n">write_dcip_xyz</span><span class="p">(</span>
+        <span class="n">fname</span><span class="p">,</span>
+        <span class="n">data_obj</span><span class="p">,</span>
+        <span class="n">data_header</span><span class="o">=</span><span class="s2">&quot;V/A&quot;</span><span class="p">,</span>
+        <span class="n">uncertainties_header</span><span class="o">=</span><span class="s2">&quot;UNCERT&quot;</span><span class="p">,</span>
+        <span class="n">out_dict</span><span class="o">=</span><span class="n">out_dict</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">dir_path</span> <span class="o">+</span> <span class="s2">&quot;topo_xyz.txt&quot;</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.savetxt.html#numpy.savetxt" title="numpy.savetxt" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">savetxt</span></a><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">topo_xyz</span></a><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.4e</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 13.527 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  163 MB</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-content-tutorials-05-dcr-plot-fwd-3-dcr3d-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/ad7dc89d8aa2e36f8ca46a69dd7e9f8f/plot_fwd_3_dcr3d.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_fwd_3_dcr3d.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/7d09fd8a42913aa4b97ba1cc41d32130/plot_fwd_3_dcr3d.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_fwd_3_dcr3d.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/790094816eaeaa65c96e6c1f9c806f61/plot_fwd_3_dcr3d.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_fwd_3_dcr3d.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="plot_fwd_2_dcr2d.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">DC Resistivity Forward Simulation in 2.5D</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="plot_gen_3_3d_to_2d.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Convert 3D DC/IP Data to 2D Lines</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-modules">Import modules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-topography">Defining Topography</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#construct-the-dc-survey">Construct the DC Survey</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-octree-mesh">Create OcTree Mesh</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-conductivity-model-and-mapping-for-octree-mesh">Create Conductivity Model and Mapping for OcTree Mesh</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#project-survey-to-discretized-topography">Project Survey to Discretized Topography</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#predict-dc-resistivity-data">Predict DC Resistivity Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-dc-data-in-3d-pseudosection">Plot DC Data in 3D Pseudosection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-write-predicted-dc-data">Optional: Write Predicted DC Data</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/content/tutorials/05-dcr/plot_fwd_3_dcr3d.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
