@@ -1,0 +1,850 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Why SimPEG? &#8212; SimPEG 0.22.2.dev28+g702389ee2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=45118af6" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="../../_static/documentation_options.js?v=be8c3773"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script data-domain="docs.simpeg.xyz" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/getting_started/big_picture';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.simpeg.xyz/latest/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = true;
+        </script>
+    <link rel="icon" href="../../_static/logo-block.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Getting Started with SimPEG" href="installing.html" />
+    <link rel="prev" title="Getting Started" href="index.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.22" />
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/simpeg-logo.png" class="logo__image only-light" alt="SimPEG 0.22.2.dev28+g702389ee2 documentation - Home"/>
+    <img src="../../_static/simpeg-logo.png" class="logo__image only-dark pst-js-only" alt="SimPEG 0.22.2.dev28+g702389ee2 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../release/index.html">
+    Release Notes
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+    User Tutorials
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+    SimPEG
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+    Contact
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-comment fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-discourse fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-youtube fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../release/index.html">
+    Release Notes
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+    User Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://simpeg.xyz">
+    SimPEG
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+    Contact
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-comment fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-discourse fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-youtube fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Why SimPEG?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Getting Started with SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing/index.html">Contributing to SimPEG</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Getting Started</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Why SimPEG?</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="why-simpeg">
+<h1>Why SimPEG?<a class="headerlink" href="#why-simpeg" title="Link to this heading">#</a></h1>
+<p>Our essential functions as researchers are the pursuit and dissemination of knowledge through research and education. As scientists we
+seek to find models that reproduce the observations that we make in the world. In geophysics, we use inverse theory, hence iterative forward modeling, to mathematically
+create models of the earth from measured data. It is a difficult problem with many moving pieces: physics, discretization, simulation,
+regularization, optimization, computer science, linear algebra, geology. Exploring each of these disciplines can take a career, if you
+are so inclined, but as geophysicists we care about the combination: how to pull these disciplines together to answer our questions.
+This is the first problem we hope to help solve: to create a toolbox for the geophysicist that allows you to work at a high level and
+keep your geophysical question in focus. However, a toolbox is not enough. The research questions that we are interested in surround
+the integration of information to make better decisions.</p>
+<p>We believe that the feedback loops in the geosciences could use some serious work. For example, collect multiple data-sets from the
+same field area (geology, seismic, electromagnetics, hydrogeology), process the data separately, and then reconvene with your
+multidisciplinary team. You may be rather surprised (or not) that the everyone has a (completely!?) different model. Dissonant at best,
+but often conflicting in the details. Therein lies the second problem: how do we integrate these geoscience fields? Not by force or
+even by default, but at least to have the option of quantitative communication and built in feedback loops. What we require is an
+implementation that is inherently and unequivocally modular, with all pieces available to manipulation. Black-box software, where the
+implementations are hidden, obfuscated, or difficult to manipulate, do not promote experimentation and investigation. We are working on
+a framework that exposes the details of the implementation to the geophysicist in a manner that promotes productivity and question
+based interrogation. This framework can be easily extended to encompass many geophysical problems and is built with the inverse problem
+as the fundamental goal.</p>
+<p>There are some geophysical methods where you can make interpretations about
+the subsurface from (processed) data. For example, geologic contacts can be
+interpreted from seismic data. Similarly in potential fields data, filtering
+techniques are often applied to magnetic data and used to interpret geologic
+maps where rock exposure is limited. In many cases though, the geologic settings
+and governing physics are sufficiently complex and the data cannot be directly
+interpreted to construct a geologic model. This is where inversion techniques,
+which make use of the ability to simulate the governing equations, are a powerful
+tool for interpretation. The way this
+data is interpreted is by creating a geologically feasible starting model,
+calculating the response of that starting model, and comparing the calculated
+responses to the measured data. Depending on the differences between the two
+we update our model according to some defined rules, and repeat the whole
+process until a termination criterion is reached. This iterative modeling to
+generate a model whose response matches the measured data as good as possible
+is what geophysicists call inversion of data. It is important to note that in
+this process we only adjust our model of the subsurface and never touch the
+data, which is very distinct to data-processing methods.</p>
+<p>The future we see is a mix of tools that span our disciplines, and a framework that allows us to integrate many different types of
+geophysical data so that we can communicate effectively and experiment efficiently. A toolbox combined with a framework that allows you
+to solve your own problems, and creates opportunities for us to work together to better image and understand the subsurface. What we
+are building is called SimPEG, simulation and parameter estimation in geophysics. We are building it in the open. We are testing it.
+Breaking it. Building it. Fixing it. Using it. If you believe, like we do, that geophysics can be more innovative and informative in
+the open and that these tools are necessary and invaluable in education as well as research, then you should get in touch. There is a
+lot of work to do!</p>
+<section id="the-big-picture">
+<h2>The Big Picture<a class="headerlink" href="#the-big-picture" title="Link to this heading">#</a></h2>
+<p>Defining a well-posed inverse problem and solving it is a complex task that
+requires many components that must interact. It is helpful to view this task
+as a workflow in which various elements are explicitly identified and
+integrated. The figure below outlines the inversion components that consists
+of inputs, implementation, and evaluation. The inputs are composed of the
+geophysical data, the equations which are a mathematical description of the
+governing physics, and prior knowledge or assumptions about the setting. The
+implementation consists of two broad categories: the forward simulation and
+the inversion. The <strong>forward simulation</strong> is the means by which we solve the
+governing equations given a model and the <strong>inversion components</strong> evaluate
+and update this model. We are considering a gradient based approach, which
+updates the model through an optimization routine. The output of this
+implementation is a model, which, prior to interpretation, must be evaluated.
+This requires considering, and often re-assessing, the choices and assumptions
+made in both the input and implementation stages.</p>
+<a class="reference internal image-reference" href="../../_images/InversionWorkflow-PreSimPEG.png"><img alt="Components" class="align-center" src="../../_images/InversionWorkflow-PreSimPEG.png" style="width: 400px;" />
+</a>
+</section>
+<section id="a-comprehensive-framework">
+<h2>A Comprehensive Framework<a class="headerlink" href="#a-comprehensive-framework" title="Link to this heading">#</a></h2>
+<p>There are an overwhelming amount of choices to be made as one works through
+the forward modeling and inversion process (see figure above). As a result,
+software implementations of this workflow often become complex and highly
+interdependent, making it difficult to interact with and to ask other
+scientists to pick up and change. Our approach to handling this complexity is
+to propose a framework, (see below), that compartmentalizes the implementation
+of inversions into various units. We present it in this specific modular
+style, as each unit contains a targeted subset of choices crucial to the
+inversion process.</p>
+<a class="reference internal image-reference" href="../../_images/InversionWorkflow.png"><img alt="Framework" class="align-center" src="../../_images/InversionWorkflow.png" style="width: 400px;" />
+</a>
+<p>The process of obtaining an acceptable model from an inversion generally
+requires the geophysicist to perform several iterations of the inversion
+workflow, rethinking and redesigning each piece of the framework to ensure it
+is appropriate in the current context. Inversions are experimental and
+empirical by nature and our software package is designed to facilitate this
+iterative process. To accomplish this, we have divided the inversion
+methodology into eight major components (See figure above). The
+<a class="reference external" href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.base.BaseMesh.html#discretize.base.BaseMesh" title="(in discretize v0.10.1.dev118)"><code class="xref py py-class docutils literal notranslate"><span class="pre">discretize.base.BaseMesh</span></code></a> class handles the discretization of the
+earth and also provides numerical operators. The <a class="reference internal" href="../api/generated/simpeg.survey.BaseSurvey.html#simpeg.survey.BaseSurvey" title="simpeg.survey.BaseSurvey"><code class="xref py py-class docutils literal notranslate"><span class="pre">simpeg.survey.BaseSurvey</span></code></a>
+class handles the geometry of a geophysical problem as well as sources and
+receivers. The <a class="reference internal" href="../api/generated/simpeg.simulation.BaseSimulation.html#simpeg.simulation.BaseSimulation" title="simpeg.simulation.BaseSimulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">simpeg.simulation.BaseSimulation</span></code></a> class handles the
+simulation of the physics for the geophysical problem of interest. The
+<a class="reference internal" href="../api/generated/simpeg.simulation.BaseSimulation.html#simpeg.simulation.BaseSimulation" title="simpeg.simulation.BaseSimulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">simpeg.simulation.BaseSimulation</span></code></a> creates geophysical fields given a
+source from the <a class="reference internal" href="../api/generated/simpeg.survey.BaseSurvey.html#simpeg.survey.BaseSurvey" title="simpeg.survey.BaseSurvey"><code class="xref py py-class docutils literal notranslate"><span class="pre">simpeg.survey.BaseSurvey</span></code></a>, interpolates these fields to
+the receiver locations, and converts them to the appropriate data type, for
+example, by selecting only the measured components of the field. Each of these
+operations may have associated derivatives with respect to the model and the
+computed field; these are included in the calculation of the sensitivity. For
+the inversion, a <a class="reference internal" href="../api/generated/simpeg.data_misfit.BaseDataMisfit.html#simpeg.data_misfit.BaseDataMisfit" title="simpeg.data_misfit.BaseDataMisfit"><code class="xref py py-class docutils literal notranslate"><span class="pre">simpeg.data_misfit.BaseDataMisfit</span></code></a> is chosen to capture
+the goodness of fit of the predicted data and a
+<a class="reference internal" href="../api/generated/simpeg.regularization.BaseRegularization.html#simpeg.regularization.BaseRegularization" title="simpeg.regularization.BaseRegularization"><code class="xref py py-class docutils literal notranslate"><span class="pre">simpeg.regularization.BaseRegularization</span></code></a> is chosen to handle the non-
+uniqueness. These inversion elements and an Optimization routine are combined
+into an inverse problem class <a class="reference internal" href="../api/generated/simpeg.inverse_problem.BaseInvProblem.html#simpeg.inverse_problem.BaseInvProblem" title="simpeg.inverse_problem.BaseInvProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">simpeg.inverse_problem.BaseInvProblem</span></code></a>.
+<a class="reference internal" href="../api/generated/simpeg.inverse_problem.BaseInvProblem.html#simpeg.inverse_problem.BaseInvProblem" title="simpeg.inverse_problem.BaseInvProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">simpeg.inverse_problem.BaseInvProblem</span></code></a> is the mathematical statement that
+will be numerically solved by running an Inversion. The
+<a class="reference internal" href="../api/generated/simpeg.inversion.BaseInversion.html#simpeg.inversion.BaseInversion" title="simpeg.inversion.BaseInversion"><code class="xref py py-class docutils literal notranslate"><span class="pre">simpeg.inversion.BaseInversion</span></code></a> class handles organization and
+dispatch of directives between all of the various pieces of the framework.</p>
+<p>The arrows in the figure above indicate what each class takes as a primary
+argument. For example, both the <a class="reference internal" href="../api/generated/simpeg.simulation.BaseSimulation.html#simpeg.simulation.BaseSimulation" title="simpeg.simulation.BaseSimulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">simpeg.simulation.BaseSimulation</span></code></a> and
+<a class="reference internal" href="../api/generated/simpeg.regularization.BaseRegularization.html#simpeg.regularization.BaseRegularization" title="simpeg.regularization.BaseRegularization"><code class="xref py py-class docutils literal notranslate"><span class="pre">simpeg.regularization.BaseRegularization</span></code></a> classes take a
+<a class="reference external" href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.base.BaseMesh.html#discretize.base.BaseMesh" title="(in discretize v0.10.1.dev118)"><code class="xref py py-class docutils literal notranslate"><span class="pre">discretize.base.BaseMesh</span></code></a> class as an argument. The diagram does
+not show class inheritance, as each of the base classes outlined have many
+subtypes that can be interchanged. The <a class="reference external" href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.base.BaseMesh.html#discretize.base.BaseMesh" title="(in discretize v0.10.1.dev118)"><code class="xref py py-class docutils literal notranslate"><span class="pre">discretize.base.BaseMesh</span></code></a>
+class, for example, could be a regular Cartesian mesh
+<a class="reference external" href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.TensorMesh.html#discretize.TensorMesh" title="(in discretize v0.10.1.dev118)"><code class="xref py py-class docutils literal notranslate"><span class="pre">discretize.TensorMesh</span></code></a> or a cylindrical coordinate mesh
+<a class="reference external" href="https://discretize.simpeg.xyz/en/main/api/generated/discretize.CylindricalMesh.html#discretize.CylindricalMesh" title="(in discretize v0.10.1.dev118)"><code class="xref py py-class docutils literal notranslate"><span class="pre">discretize.CylindricalMesh</span></code></a>, which have many properties in common. These
+common features, such as both meshes being created from tensor products, can
+be exploited through inheritance of base classes, and differences can be
+expressed through subtype polymorphism. Please look at the documentation here
+for more in-depth information.</p>
+</section>
+<section id="citing-simpeg">
+<h2>Citing SimPEG<a class="headerlink" href="#citing-simpeg" title="Link to this heading">#</a></h2>
+<p>There is a <a class="reference external" href="http://dx.doi.org/10.1016/j.cageo.2015.09.015">paper about SimPEG</a>, if you use this code, please help our scientific visibility by citing our work!</p>
+<blockquote>
+<div><p>Cockett, R., Kang, S., Heagy, L. J., Pidlisecky, A., &amp; Oldenburg, D. W. (2015). SimPEG: An open source framework for simulation and gradient based parameter estimation in geophysical applications. Computers &amp; Geosciences.</p>
+</div></blockquote>
+<p>BibTex:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@article</span><span class="p">{</span><span class="n">cockett2015simpeg</span><span class="p">,</span>
+  <span class="n">title</span><span class="o">=</span><span class="p">{</span><span class="n">SimPEG</span><span class="p">:</span> <span class="n">An</span> <span class="nb">open</span> <span class="n">source</span> <span class="n">framework</span> <span class="k">for</span> <span class="n">simulation</span> <span class="ow">and</span> <span class="n">gradient</span> <span class="n">based</span> <span class="n">parameter</span> <span class="n">estimation</span> <span class="ow">in</span> <span class="n">geophysical</span> <span class="n">applications</span><span class="p">},</span>
+  <span class="n">author</span><span class="o">=</span><span class="p">{</span><span class="n">Cockett</span><span class="p">,</span> <span class="n">Rowan</span> <span class="ow">and</span> <span class="n">Kang</span><span class="p">,</span> <span class="n">Seogi</span> <span class="ow">and</span> <span class="n">Heagy</span><span class="p">,</span> <span class="n">Lindsey</span> <span class="n">J</span> <span class="ow">and</span> <span class="n">Pidlisecky</span><span class="p">,</span> <span class="n">Adam</span> <span class="ow">and</span> <span class="n">Oldenburg</span><span class="p">,</span> <span class="n">Douglas</span> <span class="n">W</span><span class="p">},</span>
+  <span class="n">journal</span><span class="o">=</span><span class="p">{</span><span class="n">Computers</span> \<span class="o">&amp;</span> <span class="n">Geosciences</span><span class="p">},</span>
+  <span class="n">year</span><span class="o">=</span><span class="p">{</span><span class="mi">2015</span><span class="p">},</span>
+  <span class="n">publisher</span><span class="o">=</span><span class="p">{</span><span class="n">Elsevier</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="authors">
+<h2>Authors<a class="headerlink" href="#authors" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Rowan Cockett, (<a class="reference external" href="https://github.com/rowanc1/">&#64;rowanc1</a>)</p></li>
+<li><p>Lindsey Heagy, (<a class="reference external" href="https://github.com/lheagy/">&#64;lheagy</a>)</p></li>
+<li><p>Seogi Kang, (<a class="reference external" href="https://github.com/sgkang/">&#64;sgkang</a>)</p></li>
+<li><p>Brendan Smithyman, (<a class="reference external" href="https://github.com/bsmithyman/">&#64;bsmithyman</a>)</p></li>
+<li><p>Gudni Rosenkjaer, (<a class="reference external" href="https://github.com/grosenkj/">&#64;grosenkj</a>)</p></li>
+<li><p>Dom Fournier, (<a class="reference external" href="https://github.com/fourndo/">&#64;fourndo</a>)</p></li>
+<li><p>Joseph Capriotti, (<a class="reference external" href="https://github.com/jcapriot">&#64;jcapriot</a>)</p></li>
+<li><p>Dave Marchant, (<a class="reference external" href="https://github.com/dwfmarchant/">&#64;dwfmarchant</a>)</p></li>
+<li><p>Lars Ruthotto, (<a class="reference external" href="https://github.com/lruthotto/">&#64;lruthotto</a>)</p></li>
+<li><p>Mike Wathen, (<a class="reference external" href="https://github.com/wathenmp/">&#64;wathenmp</a>)</p></li>
+<li><p>Luz Angelica Caudillo-Mata, (<a class="reference external" href="https://github.com/lacmajedrez/">&#64;lacmajedrez</a>)</p></li>
+<li><p>Eldad Haber, (<a class="reference external" href="https://github.com/eldadhaber/">&#64;eldadhaber</a>)</p></li>
+<li><p>Doug Oldenburg, (<a class="reference external" href="https://github.com/dougoldenburg/">&#64;dougoldenburg</a>)</p></li>
+<li><p>Devin Cowan, (<a class="reference external" href="https://github.com/dccowan/">&#64;dccowan</a>)</p></li>
+<li><p>Adam Pidlisecky, (<a class="reference external" href="https://github.com/aPid1/">&#64;aPid1</a>)</p></li>
+<li><p>Dieter Werthmüller, (<a class="reference external" href="https://github.com/prisae/">&#64;prisae</a>)</p></li>
+<li><p>John Kuttai, (<a class="reference external" href="https://github.com/JKutt/">&#64;JKutt</a>)</p></li>
+<li><p>Thibaut Astic, (<a class="reference external" href="https://github.com/thast/">&#64;thast</a>)</p></li>
+<li><p>Michael Mitchell, (<a class="reference external" href="https://github.com/micmitch/">&#64;micmitch</a>)</p></li>
+<li><p>I-Kang Ding, (<a class="reference external" href="https://github.com/ikding/">&#64;ikding</a>)</p></li>
+<li><p>Richard Scott, (<a class="reference external" href="https://github.com/bluetyson/">&#64;bluetyson</a>)</p></li>
+<li><p>Xiaolong Wei, (<a class="reference external" href="https://github.com/xiaolongw1223">&#64;xiaolongw1223</a>)</p></li>
+<li><p>Santiago Soler, (<a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a>)</p></li>
+<li><p>Nick Williams, (<a class="reference external" href="https://github.com/nwilliams-kobold">&#64;nwilliams-kobold</a>)</p></li>
+<li><p>John Weis, (<a class="reference external" href="https://github.com/johnweis0480">&#64;johnweis0480</a>)</p></li>
+<li><p>Kalen Martens, (<a class="reference external" href="https://github.com/kalen-sj">&#64;kalen-sj</a>)</p></li>
+<li><p>Williams A. Lima (<a class="reference external" href="https://github.com/ghwilliams">&#64;ghwilliams</a>)</p></li>
+<li><p>Ying Hu, (<a class="reference external" href="https://github.com/YingHuuu">&#64;YingHuuu</a>)</p></li>
+</ul>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Link to this heading">#</a></h2>
+<p>The MIT License (MIT)</p>
+<p>Copyright (c) 2013-2024 SimPEG Developers</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the “Software”), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Getting Started</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="installing.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Getting Started with SimPEG</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-big-picture">The Big Picture</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-comprehensive-framework">A Comprehensive Framework</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#citing-simpeg">Citing SimPEG</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#authors">Authors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#license">License</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/content/getting_started/big_picture.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

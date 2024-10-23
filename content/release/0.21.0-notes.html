@@ -1,0 +1,962 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>SimPEG 0.21.0 Release Notes &#8212; SimPEG 0.22.2.dev28+g702389ee2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=45118af6" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="../../_static/documentation_options.js?v=be8c3773"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script data-domain="docs.simpeg.xyz" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/release/0.21.0-notes';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.simpeg.xyz/latest/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = true;
+        </script>
+    <link rel="icon" href="../../_static/logo-block.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="SimPEG 0.20.0 Release Notes" href="0.20.0-notes.html" />
+    <link rel="prev" title="SimPEG 0.21.1 Release Notes" href="0.21.1-notes.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.22" />
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/simpeg-logo.png" class="logo__image only-light" alt="SimPEG 0.22.2.dev28+g702389ee2 documentation - Home"/>
+    <img src="../../_static/simpeg-logo.png" class="logo__image only-dark pst-js-only" alt="SimPEG 0.22.2.dev28+g702389ee2 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started/index.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Release Notes
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+    User Tutorials
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+    SimPEG
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+    Contact
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-comment fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-discourse fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-youtube fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started/index.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Release Notes
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+    User Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://simpeg.xyz">
+    SimPEG
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+    Contact
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-comment fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-discourse fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-youtube fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="0.22.2-notes.html">0.22.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="0.22.1-notes.html">0.22.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="0.22.0-notes.html">0.22.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="0.21.1-notes.html">0.21.1</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">0.21.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="0.20.0-notes.html">0.20.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="0.19.0-notes.html">0.19.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="0.18.1-notes.html">0.18.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="0.18.0-notes.html">0.18.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="0.17.0-notes.html">0.17.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="0.16.0-notes.html">0.16.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="0.15.2-notes.html">0.15.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="0.15.1-notes.html">0.15.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="0.15.0-notes.html">0.15.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="0.14.3-notes.html">0.14.3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="0.14.2-notes.html">0.14.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="0.14.1-notes.html">0.14.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="0.14.0-notes.html">0.14.0</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Release Notes</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">SimPEG 0.21.0 Release Notes</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="simpeg-0-21-0-release-notes">
+<span id="notes"></span><h1><a class="toc-backref" href="#id1" role="doc-backlink">SimPEG 0.21.0 Release Notes</a><a class="headerlink" href="#simpeg-0-21-0-release-notes" title="Link to this heading">#</a></h1>
+<p>April 8th, 2024</p>
+<nav class="contents" id="highlights">
+<p class="topic-title">Highlights</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#simpeg-0-21-0-release-notes" id="id1">SimPEG 0.21.0 Release Notes</a></p>
+<ul>
+<li><p><a class="reference internal" href="#updates" id="id2">Updates</a></p>
+<ul>
+<li><p><a class="reference internal" href="#new-features" id="id3">New features</a></p></li>
+<li><p><a class="reference internal" href="#documentation" id="id4">Documentation</a></p></li>
+<li><p><a class="reference internal" href="#breaking-changes" id="id5">Breaking changes</a></p></li>
+<li><p><a class="reference internal" href="#bugfixes" id="id6">Bugfixes</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#contributors" id="id7">Contributors</a></p></li>
+<li><p><a class="reference internal" href="#pull-requests" id="id8">Pull Requests</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="updates">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Updates</a><a class="headerlink" href="#updates" title="Link to this heading">#</a></h2>
+<section id="new-features">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink">New features</a><a class="headerlink" href="#new-features" title="Link to this heading">#</a></h3>
+<section id="gravity-simulation-using-choclo">
+<h4>Gravity simulation using Choclo<a class="headerlink" href="#gravity-simulation-using-choclo" title="Link to this heading">#</a></h4>
+<p>Now we can use a faster and more memory efficient implementation of the gravity
+simulation <code class="docutils literal notranslate"><span class="pre">simpeg.potential_fields.gravity.Simulation3DIntegral</span></code>, making use
+of Choclo and Numba.  To make use of this functionality you will need to
+<a class="reference external" href="https://www.fatiando.org/choclo/latest/install.html">install Choclo</a> in
+addition to <code class="docutils literal notranslate"><span class="pre">SimPEG</span></code>.</p>
+<p>See <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1285">simpeg/simpeg#1285</a>.</p>
+</section>
+<section id="use-dask-with-metasimulation">
+<h4>Use Dask with MetaSimulation<a class="headerlink" href="#use-dask-with-metasimulation" title="Link to this heading">#</a></h4>
+<p>A new <code class="docutils literal notranslate"><span class="pre">simpeg.meta.DaskMetaSimulation</span></code> class has been added that allows to
+use Dask with <code class="docutils literal notranslate"><span class="pre">simpeg.meta.MetaSimulations</span></code>.</p>
+<p>See <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1199">simpeg/simpeg#1199</a>.</p>
+</section>
+<section id="rotated-gradients">
+<h4>Rotated Gradients<a class="headerlink" href="#rotated-gradients" title="Link to this heading">#</a></h4>
+<p>Added a new <code class="docutils literal notranslate"><span class="pre">simpeg.regularization.SmoothnessFullGradient</span></code> regularization
+class that allows to regularize first order smoothness along any arbitrary
+direction, enabling anisotropic weighting. This regularization also works for
+a <code class="docutils literal notranslate"><span class="pre">SimplexMesh</span></code>.</p>
+<p>See <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1167">simpeg/simpeg#1167</a>.</p>
+</section>
+<section id="logistic-sigmoid-map">
+<h4>Logistic Sigmoid Map<a class="headerlink" href="#logistic-sigmoid-map" title="Link to this heading">#</a></h4>
+<p>New <code class="docutils literal notranslate"><span class="pre">simpeg.map.LogisticSigmoidMap</span></code> mapping class that computes the logistic
+sigmoid of the model parameters. This is an alternative method to incorporate
+upper and lower bounds on model parameters.</p>
+<p>See <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1352">simpeg/simpeg#1352</a>.</p>
+</section>
+<section id="create-jacobian-matrix-in-nsem-and-fdem-simulations">
+<h4>Create Jacobian matrix in NSEM and FDEM simulations<a class="headerlink" href="#create-jacobian-matrix-in-nsem-and-fdem-simulations" title="Link to this heading">#</a></h4>
+<p>The frequency domain electromagnetic simulations (including natural source) now
+support creating and storing the Jacobian matrix. You can access it by using
+the <code class="docutils literal notranslate"><span class="pre">getJ</span></code> method.</p>
+<p>See <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1276">simpeg/simpeg#1276</a>.</p>
+</section>
+</section>
+<section id="documentation">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">Documentation</a><a class="headerlink" href="#documentation" title="Link to this heading">#</a></h3>
+<p>This new release includes major improvements in documentation pages: more
+detailed docstrings of classes and methods, the addition of directive classes
+to the API reference, improvements to the contributing guide, among corrections
+and fixes.</p>
+</section>
+<section id="breaking-changes">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Breaking changes</a><a class="headerlink" href="#breaking-changes" title="Link to this heading">#</a></h3>
+<section id="removal-of-deprecated-bits">
+<h4>Removal of deprecated bits<a class="headerlink" href="#removal-of-deprecated-bits" title="Link to this heading">#</a></h4>
+<p>Several deprecated bits of code has been removed in this release. From old
+classes, methods and properties that were marked for deprecation a few releases
+back. These removals simplify the SimPEG API and cleans up the codebase.</p>
+</section>
+<section id="remove-factor-of-half-in-data-misfits-and-regularizations">
+<h4>Remove factor of half in data misfits and regularizations<a class="headerlink" href="#remove-factor-of-half-in-data-misfits-and-regularizations" title="Link to this heading">#</a></h4>
+<p>Simplify the definition of data misfit and regularization terms by removing the
+leading factor of one half from these functions. This change makes it easier to
+interpret the resulting values of these objective functions, while
+avoiding confusions with their definition.</p>
+<p>See <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1326">simpeg/simpeg#1326</a>.</p>
+</section>
+</section>
+<section id="bugfixes">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Bugfixes</a><a class="headerlink" href="#bugfixes" title="Link to this heading">#</a></h3>
+<p>A few bugs have been fixed:</p>
+<ul class="simple">
+<li><p>Fix issue with lengthscales in coterminal angle calculations by
+<a class="reference external" href="https://github.com/domfournier">&#64;domfournier</a> in <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1299">simpeg/simpeg#1299</a></p></li>
+<li><p>ISSUE-1341: Set parent of objective functions by <a class="reference external" href="https://github.com/domfournier">&#64;domfournier</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1342">simpeg/simpeg#1342</a></p></li>
+<li><p>Ravel instead of flatten by <a class="reference external" href="https://github.com/thibaut-kobold">&#64;thibaut-kobold</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1343">simpeg/simpeg#1343</a></p></li>
+<li><p>Fix implementation of coterminal function by <a class="reference external" href="https://github.com/domfournier">&#64;domfournier</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1334">simpeg/simpeg#1334</a></p></li>
+<li><p>Simpeg vector update by <a class="reference external" href="https://github.com/johnweis0480">&#64;johnweis0480</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1329">simpeg/simpeg#1329</a></p></li>
+</ul>
+</section>
+</section>
+<section id="contributors">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Contributors</a><a class="headerlink" href="#contributors" title="Link to this heading">#</a></h2>
+<p>This is a combination of contributors and reviewers who’ve made contributions
+towards this release (in no particular order).</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/ckohnke">&#64;ckohnke</a></p></li>
+<li><p><a class="reference external" href="https://github.com/dccowan">&#64;dccowan</a></p></li>
+<li><p><a class="reference external" href="https://github.com/domfournier">&#64;domfournier</a></p></li>
+<li><p><a class="reference external" href="https://github.com/ghwilliams">&#64;ghwilliams</a></p></li>
+<li><p><a class="reference external" href="https://github.com/jcapriot">&#64;jcapriot</a></p></li>
+<li><p><a class="reference external" href="https://github.com/JKutt">&#64;JKutt</a></p></li>
+<li><p><a class="reference external" href="https://github.com/johnweis0480">&#64;johnweis0480</a></p></li>
+<li><p><a class="reference external" href="https://github.com/lheagy">&#64;lheagy</a></p></li>
+<li><p><a class="reference external" href="https://github.com/mplough-kobold">&#64;mplough-kobold</a></p></li>
+<li><p><a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a></p></li>
+<li><p><a class="reference external" href="https://github.com/thibaut-kobold">&#64;thibaut-kobold</a></p></li>
+<li><p><a class="reference external" href="https://github.com/YingHuuu">&#64;YingHuuu</a></p></li>
+</ul>
+<p>We would like to highlight the contributions made by new contributors:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/mplough-kobold">&#64;mplough-kobold</a> made their first
+contribution in <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1282">simpeg/simpeg#1282</a></p></li>
+<li><p><a class="reference external" href="https://github.com/ghwilliams">&#64;ghwilliams</a> made their first contribution
+in <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1292">simpeg/simpeg#1292</a></p></li>
+<li><p><a class="reference external" href="https://github.com/johnweis0480">&#64;johnweis0480</a> made their first
+contribution in <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1329">simpeg/simpeg#1329</a></p></li>
+<li><p><a class="reference external" href="https://github.com/ckohnke">&#64;ckohnke</a> made their first contribution in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1352">simpeg/simpeg#1352</a></p></li>
+<li><p><a class="reference external" href="https://github.com/YingHuuu">&#64;YingHuuu</a> made their first contribution in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1344">simpeg/simpeg#1344</a></p></li>
+</ul>
+</section>
+<section id="pull-requests">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Pull Requests</a><a class="headerlink" href="#pull-requests" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Add 0.20.0 release notes to toc by <a class="reference external" href="https://github.com/jcapriot">&#64;jcapriot</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1277">simpeg/simpeg#1277</a></p></li>
+<li><p>add plausible analytics to simpeg docs by <a class="reference external" href="https://github.com/lheagy">&#64;lheagy</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1279">simpeg/simpeg#1279</a></p></li>
+<li><p>Refresh links in documentation by <a class="reference external" href="https://github.com/mplough-kobold">&#64;mplough-kobold</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1282">simpeg/simpeg#1282</a></p></li>
+<li><p>Run pytest on Azure with increased verbosity by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1287">simpeg/simpeg#1287</a> -  Allow to use random seed in make_synthetic_data by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1286">simpeg/simpeg#1286</a></p></li>
+<li><p>pgi doc by <a class="reference external" href="https://github.com/thibaut-kobold">&#64;thibaut-kobold</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1291">simpeg/simpeg#1291</a></p></li>
+<li><p>Fix deprecation warning for gradientType in SparseSmoothness by
+<a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1284">simpeg/simpeg#1284</a></p></li>
+<li><p>Gravity simulation with Choclo as engine by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1285">simpeg/simpeg#1285</a></p></li>
+<li><p>Fix minor flake8 warning by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1307">simpeg/simpeg#1307</a></p></li>
+<li><p>ISSUE-1298: Use normal distributed noise in example. by <a class="reference external" href="https://github.com/domfournier">&#64;domfournier</a>
+in <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1312">simpeg/simpeg#1312</a></p></li>
+<li><p>Ditch deprecated functions in utils.model_builder by <a class="reference external" href="https://github.com/domfournier">&#64;domfournier</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1311">simpeg/simpeg#1311</a> -  Triaxial magnetic gradient forward modelling by <a class="reference external" href="https://github.com/thibaut-kobold">&#64;thibaut-kobold</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1288">simpeg/simpeg#1288</a></p></li>
+<li><p>Documentation improvements for classes in Objective Function Pieces
+by <a class="reference external" href="https://github.com/ghwilliams">&#64;ghwilliams</a> in <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1292">simpeg/simpeg#1292</a></p></li>
+<li><p>Fix description of source_field in gravity survey by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1322">simpeg/simpeg#1322</a></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">weights_keys</span></code> method to <code class="docutils literal notranslate"><span class="pre">BaseRegularization</span></code> by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a>
+in <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1320">simpeg/simpeg#1320</a></p></li>
+<li><p>Bump versions of flake8 and black and pin flake plugins by
+<a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1330">simpeg/simpeg#1330</a></p></li>
+<li><p>Move <code class="docutils literal notranslate"><span class="pre">__init__</span></code> in <code class="docutils literal notranslate"><span class="pre">BaseSimulation</span></code> to the top of the class by
+<a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1323">simpeg/simpeg#1323</a></p></li>
+<li><p>Simpeg vector update by <a class="reference external" href="https://github.com/johnweis0480">&#64;johnweis0480</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1329">simpeg/simpeg#1329</a></p></li>
+<li><p>Fix typo in error messages by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1324">simpeg/simpeg#1324</a></p></li>
+<li><p>Fix issue with lengthscales in coterminal angle calculations by
+<a class="reference external" href="https://github.com/domfournier">&#64;domfournier</a> in <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1299">simpeg/simpeg#1299</a></p></li>
+<li><p>Simplify check for invalid multipliers by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1336">simpeg/simpeg#1336</a></p></li>
+<li><p>Ravel instead of flatten by <a class="reference external" href="https://github.com/thibaut-kobold">&#64;thibaut-kobold</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1343">simpeg/simpeg#1343</a></p></li>
+<li><p>Fix implementation of coterminal function by <a class="reference external" href="https://github.com/domfournier">&#64;domfournier</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1334">simpeg/simpeg#1334</a></p></li>
+<li><p>Update cross gradient hessian approximation by <a class="reference external" href="https://github.com/jcapriot">&#64;jcapriot</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1355">simpeg/simpeg#1355</a></p></li>
+<li><p>ISSUE-1341: Set parent of objective functions by <a class="reference external" href="https://github.com/domfournier">&#64;domfournier</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1342">simpeg/simpeg#1342</a></p></li>
+<li><p>Fix partial derivatives in regularization docs by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1362">simpeg/simpeg#1362</a></p></li>
+<li><p>Remove factor of half in data misfits and regularizations by <a class="reference external" href="https://github.com/lheagy">&#64;lheagy</a>
+in <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1326">simpeg/simpeg#1326</a></p></li>
+<li><p>Improvements to template for a bug report issue by <a class="reference external" href="https://github.com/lheagy">&#64;lheagy</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1359">simpeg/simpeg#1359</a></p></li>
+<li><p>Simplify a few gravity simulation tests by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1363">simpeg/simpeg#1363</a></p></li>
+<li><p>Exponential Sinusoids Simulation by <a class="reference external" href="https://github.com/lheagy">&#64;lheagy</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1337">simpeg/simpeg#1337</a></p></li>
+<li><p>Replace magnetic SourceField for UniformBackgroundField by
+<a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1364">simpeg/simpeg#1364</a></p></li>
+<li><p>Remove deprecated regularization classes by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1365">simpeg/simpeg#1365</a></p></li>
+<li><p>Removed deprecated properties of UpdateSensitivityWeights by
+<a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1368">simpeg/simpeg#1368</a></p></li>
+<li><p>Replace indActive for active_cells in regularizations by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a>
+in <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1366">simpeg/simpeg#1366</a></p></li>
+<li><p>Remove the debug argument from InversionDirective by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1370">simpeg/simpeg#1370</a></p></li>
+<li><p>Remove cellDiff properties of RegularizationMesh by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1371">simpeg/simpeg#1371</a></p></li>
+<li><p>Remove deprecated bits of code by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1372">simpeg/simpeg#1372</a></p></li>
+<li><p>Use choclo in gravity tutorials by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1378">simpeg/simpeg#1378</a></p></li>
+<li><p>Remove surface2ind_topo by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1374">simpeg/simpeg#1374</a></p></li>
+<li><p>Speed up sphinx documentation building by <a class="reference external" href="https://github.com/jcapriot">&#64;jcapriot</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1382">simpeg/simpeg#1382</a></p></li>
+<li><p>Add docs/sg_execution_times.rst to .gitignore by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1380">simpeg/simpeg#1380</a></p></li>
+<li><p>Describe merge process of Pull Requests in docs by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1375">simpeg/simpeg#1375</a></p></li>
+<li><p>Simplify private methods in gravity simulation by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1384">simpeg/simpeg#1384</a></p></li>
+<li><p>Update Slack links: point to Mattermost by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1385">simpeg/simpeg#1385</a></p></li>
+<li><p>added getJ for fdem and nsem simulations by <a class="reference external" href="https://github.com/JKutt">&#64;JKutt</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1276">simpeg/simpeg#1276</a></p></li>
+<li><p>Add LogisticSigmoidMap by <a class="reference external" href="https://github.com/ckohnke">&#64;ckohnke</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1352">simpeg/simpeg#1352</a></p></li>
+<li><p>Remove the cell_weights attribute in regularizations by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a>
+in <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1376">simpeg/simpeg#1376</a></p></li>
+<li><p>Remove regmesh, mref and gradientType from regularizations by
+<a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1377">simpeg/simpeg#1377</a></p></li>
+<li><p>Test if gravity sensitivities are stored on disk by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1388">simpeg/simpeg#1388</a></p></li>
+<li><p>Check if mesh is 3D when using Choclo in gravity simulation by
+<a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in <a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1386">simpeg/simpeg#1386</a></p></li>
+<li><p>Rotated Gradients by <a class="reference external" href="https://github.com/jcapriot">&#64;jcapriot</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1167">simpeg/simpeg#1167</a></p></li>
+<li><p>Add directives to the API Reference by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1397">simpeg/simpeg#1397</a></p></li>
+<li><p>Remove deprecated modelType in mag simulation by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1399">simpeg/simpeg#1399</a></p></li>
+<li><p>Remove mref property of PGI regularization by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1400">simpeg/simpeg#1400</a></p></li>
+<li><p>Add link to User Tutorials to navbar in docs by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1401">simpeg/simpeg#1401</a></p></li>
+<li><p>Improve documentation for base simulation classes by <a class="reference external" href="https://github.com/ghwilliams">&#64;ghwilliams</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1295">simpeg/simpeg#1295</a></p></li>
+<li><p>Enforce regularization <code class="docutils literal notranslate"><span class="pre">weights</span></code> as dictionaries by <a class="reference external" href="https://github.com/YingHuuu">&#64;YingHuuu</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1344">simpeg/simpeg#1344</a></p></li>
+<li><p>Minor adjustments to Sphinx configuration by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1398">simpeg/simpeg#1398</a></p></li>
+<li><p>Update AUTHORS.rst by <a class="reference external" href="https://github.com/lheagy">&#64;lheagy</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1259">simpeg/simpeg#1259</a></p></li>
+<li><p>Update year in LICENSE by <a class="reference external" href="https://github.com/lheagy">&#64;lheagy</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1404">simpeg/simpeg#1404</a></p></li>
+<li><p>Dask MetaSim by <a class="reference external" href="https://github.com/jcapriot">&#64;jcapriot</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1199">simpeg/simpeg#1199</a></p></li>
+<li><p>Add Ying and Williams to AUTHORS.rst by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1405">simpeg/simpeg#1405</a></p></li>
+<li><p>Remove link to “twitter” by <a class="reference external" href="https://github.com/jcapriot">&#64;jcapriot</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1406">simpeg/simpeg#1406</a></p></li>
+<li><p>Bump Black version to 24.3.0 by <a class="reference external" href="https://github.com/santisoler">&#64;santisoler</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1403">simpeg/simpeg#1403</a></p></li>
+<li><p>Publish documentation on azure <a class="reference external" href="https://github.com/jcapriot">&#64;jcapriot</a> in
+<a class="github reference external" href="https://github.com/simpeg/simpeg/pull/1412">simpeg/simpeg#1412</a></p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="0.21.1-notes.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">SimPEG 0.21.1 Release Notes</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="0.20.0-notes.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">SimPEG 0.20.0 Release Notes</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#updates">Updates</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#new-features">New features</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gravity-simulation-using-choclo">Gravity simulation using Choclo</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#use-dask-with-metasimulation">Use Dask with MetaSimulation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rotated-gradients">Rotated Gradients</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#logistic-sigmoid-map">Logistic Sigmoid Map</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#create-jacobian-matrix-in-nsem-and-fdem-simulations">Create Jacobian matrix in NSEM and FDEM simulations</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#breaking-changes">Breaking changes</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#removal-of-deprecated-bits">Removal of deprecated bits</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#remove-factor-of-half-in-data-misfits-and-regularizations">Remove factor of half in data misfits and regularizations</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bugfixes">Bugfixes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contributors">Contributors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pull-requests">Pull Requests</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/content/release/0.21.0-notes.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

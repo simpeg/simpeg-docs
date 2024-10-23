@@ -1,0 +1,898 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>simpeg.utils.GaussianMixtureWithPrior &#8212; SimPEG 0.22.2.dev28+g702389ee2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=45118af6" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="../../../_static/documentation_options.js?v=be8c3773"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script data-domain="docs.simpeg.xyz" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/api/generated/simpeg.utils.GaussianMixtureWithPrior';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.simpeg.xyz/latest/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = true;
+        </script>
+    <link rel="icon" href="../../../_static/logo-block.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="simpeg.utils.GaussianMixtureWithPrior.aic" href="simpeg.utils.GaussianMixtureWithPrior.aic.html" />
+    <link rel="prev" title="simpeg.utils.WeightedGaussianMixture.set_params" href="simpeg.utils.WeightedGaussianMixture.set_params.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.22" />
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/simpeg-logo.png" class="logo__image only-light" alt="SimPEG 0.22.2.dev28+g702389ee2 documentation - Home"/>
+    <img src="../../../_static/simpeg-logo.png" class="logo__image only-dark pst-js-only" alt="SimPEG 0.22.2.dev28+g702389ee2 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../release/index.html">
+    Release Notes
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+    User Tutorials
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+    SimPEG
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+    Contact
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-comment fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-discourse fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-youtube fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../release/index.html">
+    Release Notes
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+    User Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://simpeg.xyz">
+    SimPEG
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+    Contact
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-comment fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-discourse fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-youtube fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.potential_fields.html">Potential Fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.electromagnetics.html">Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.flow.html">Fluid Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.seismic.html">Seismic</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.html">Base SimPEG Classes (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.regularization.html">Regularization (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.regularization</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.directives.html">Directives (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.directives</span></code>)</a></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../simpeg.utils.html">Utility Classes and Functions (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.utils</span></code>)</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.Counter.html">simpeg.utils.Counter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.count.html">simpeg.utils.count</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.timeIt.html">simpeg.utils.timeIt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.download.html">simpeg.utils.download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.io_utils.read_dcip2d_ubc.html">simpeg.utils.io_utils.read_dcip2d_ubc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.io_utils.read_dcip3d_ubc.html">simpeg.utils.io_utils.read_dcip3d_ubc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.io_utils.read_dcipoctree_ubc.html">simpeg.utils.io_utils.read_dcipoctree_ubc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.io_utils.read_dcip_xyz.html">simpeg.utils.io_utils.read_dcip_xyz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.io_utils.read_gg3d_ubc.html">simpeg.utils.io_utils.read_gg3d_ubc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.io_utils.read_grav3d_ubc.html">simpeg.utils.io_utils.read_grav3d_ubc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.io_utils.read_mag3d_ubc.html">simpeg.utils.io_utils.read_mag3d_ubc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.io_utils.write_dcip2d_ubc.html">simpeg.utils.io_utils.write_dcip2d_ubc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.io_utils.write_dcip3d_ubc.html">simpeg.utils.io_utils.write_dcip3d_ubc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.io_utils.write_dcipoctree_ubc.html">simpeg.utils.io_utils.write_dcipoctree_ubc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.io_utils.write_dcip_xyz.html">simpeg.utils.io_utils.write_dcip_xyz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.io_utils.write_grav3d_ubc.html">simpeg.utils.io_utils.write_grav3d_ubc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.io_utils.write_gg3d_ubc.html">simpeg.utils.io_utils.write_gg3d_ubc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.io_utils.write_mag3d_ubc.html">simpeg.utils.io_utils.write_mag3d_ubc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.cartesian2spherical.html">simpeg.utils.cartesian2spherical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.coterminal.html">simpeg.utils.coterminal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.define_plane_from_points.html">simpeg.utils.define_plane_from_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.eigenvalue_by_power_iteration.html">simpeg.utils.eigenvalue_by_power_iteration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.estimate_diagonal.html">simpeg.utils.estimate_diagonal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.spherical2cartesian.html">simpeg.utils.spherical2cartesian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.unique_rows.html">simpeg.utils.unique_rows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.surface2inds.html">simpeg.utils.surface2inds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.depth_weighting.html">simpeg.utils.depth_weighting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.model_builder.add_block.html">simpeg.utils.model_builder.add_block</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.model_builder.create_2_layer_model.html">simpeg.utils.model_builder.create_2_layer_model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.model_builder.create_block_in_wholespace.html">simpeg.utils.model_builder.create_block_in_wholespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.model_builder.create_ellipse_in_wholespace.html">simpeg.utils.model_builder.create_ellipse_in_wholespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.model_builder.create_from_function.html">simpeg.utils.model_builder.create_from_function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.model_builder.create_layers_model.html">simpeg.utils.model_builder.create_layers_model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.model_builder.create_random_model.html">simpeg.utils.model_builder.create_random_model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.model_builder.get_indices_block.html">simpeg.utils.model_builder.get_indices_block</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.model_builder.get_indices_polygon.html">simpeg.utils.model_builder.get_indices_polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.model_builder.get_indices_sphere.html">simpeg.utils.model_builder.get_indices_sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.plot2Ddata.html">simpeg.utils.plot2Ddata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.plot_1d_layer_model.html">simpeg.utils.plot_1d_layer_model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.WeightedGaussianMixture.html">simpeg.utils.WeightedGaussianMixture</a></li>
+<li class="toctree-l2 current active has-children"><a class="current reference internal" href="#">simpeg.utils.GaussianMixtureWithPrior</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.aic.html">simpeg.utils.GaussianMixtureWithPrior.aic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.bic.html">simpeg.utils.GaussianMixtureWithPrior.bic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.compute_clusters_covariances.html">simpeg.utils.GaussianMixtureWithPrior.compute_clusters_covariances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.compute_clusters_precisions.html">simpeg.utils.GaussianMixtureWithPrior.compute_clusters_precisions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.fit.html">simpeg.utils.GaussianMixtureWithPrior.fit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.fit_predict.html">simpeg.utils.GaussianMixtureWithPrior.fit_predict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.get_metadata_routing.html">simpeg.utils.GaussianMixtureWithPrior.get_metadata_routing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.get_params.html">simpeg.utils.GaussianMixtureWithPrior.get_params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.order_cluster.html">simpeg.utils.GaussianMixtureWithPrior.order_cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.order_clusters_GM_weight.html">simpeg.utils.GaussianMixtureWithPrior.order_clusters_GM_weight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.plot_pdf.html">simpeg.utils.GaussianMixtureWithPrior.plot_pdf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.predict.html">simpeg.utils.GaussianMixtureWithPrior.predict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.predict_proba.html">simpeg.utils.GaussianMixtureWithPrior.predict_proba</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.sample.html">simpeg.utils.GaussianMixtureWithPrior.sample</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.score.html">simpeg.utils.GaussianMixtureWithPrior.score</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.score_samples.html">simpeg.utils.GaussianMixtureWithPrior.score_samples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.score_samples_with_sensW.html">simpeg.utils.GaussianMixtureWithPrior.score_samples_with_sensW</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.set_fit_request.html">simpeg.utils.GaussianMixtureWithPrior.set_fit_request</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.set_params.html">simpeg.utils.GaussianMixtureWithPrior.set_params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.update_gmm_with_priors.html">simpeg.utils.GaussianMixtureWithPrior.update_gmm_with_priors</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithNonlinearRelationships.html">simpeg.utils.GaussianMixtureWithNonlinearRelationships</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.GaussianMixtureWithNonlinearRelationshipsWithPrior.html">simpeg.utils.GaussianMixtureWithNonlinearRelationshipsWithPrior</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.call_hooks.html">simpeg.utils.call_hooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.check_stoppers.html">simpeg.utils.check_stoppers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.mem_profile_class.html">simpeg.utils.mem_profile_class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.dependent_property.html">simpeg.utils.dependent_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.deprecate_class.html">simpeg.utils.deprecate_class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.deprecate_function.html">simpeg.utils.deprecate_function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.deprecate_method.html">simpeg.utils.deprecate_method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.deprecate_module.html">simpeg.utils.deprecate_module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.deprecate_property.html">simpeg.utils.deprecate_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.hook.html">simpeg.utils.hook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.print_done.html">simpeg.utils.print_done</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.print_line.html">simpeg.utils.print_line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.print_stoppers.html">simpeg.utils.print_stoppers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.print_titles.html">simpeg.utils.print_titles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.requires.html">simpeg.utils.requires</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.set_kwargs.html">simpeg.utils.set_kwargs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.validate_float.html">simpeg.utils.validate_float</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.validate_integer.html">simpeg.utils.validate_integer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.validate_list_of_types.html">simpeg.utils.validate_list_of_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.validate_location_property.html">simpeg.utils.validate_location_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.validate_ndarray_with_shape.html">simpeg.utils.validate_ndarray_with_shape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.validate_string.html">simpeg.utils.validate_string</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.validate_callable.html">simpeg.utils.validate_callable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.validate_direction.html">simpeg.utils.validate_direction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.utils.validate_active_indices.html">simpeg.utils.validate_active_indices</a></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.meta.html">Meta SimPEG Classes (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.meta</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.typing.html">Typing (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.typing</span></code>)</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">API Reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../simpeg.utils.html" class="nav-link">Utility Classes and Functions (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.utils</span></code>)</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">simpeg.utils.GaussianMixtureWithPrior</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="simpeg-utils-gaussianmixturewithprior">
+<h1>simpeg.utils.GaussianMixtureWithPrior<a class="headerlink" href="#simpeg-utils-gaussianmixturewithprior" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="simpeg.utils.GaussianMixtureWithPrior">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">simpeg.utils.</span></span><span class="sig-name descname"><span class="pre">GaussianMixtureWithPrior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gmmref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zeta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'semi'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_covariances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_membership</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kmeans'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">means_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precisions_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg_covar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warm_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/simpeg/utils/pgi_utils.py#L810-L1224"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simpeg.utils.GaussianMixtureWithPrior" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="simpeg.utils.WeightedGaussianMixture.html#simpeg.utils.WeightedGaussianMixture" title="simpeg.utils.pgi_utils.WeightedGaussianMixture"><code class="xref py py-class docutils literal notranslate"><span class="pre">WeightedGaussianMixture</span></code></a></p>
+<p>This class built upon the WeightedGaussianMixture, which itself built upon from
+the mixture.gaussian_mixture.GaussianMixture class from Scikit-Learn.</p>
+<p>In addition to weights samples/observations by the cells volume of the mesh,
+this class uses a posterior approach to fit the GMM parameters. This means
+it takes prior parameters, passed through <cite>WeightedGaussianMixture</cite> gmmref.
+The prior distribution for each parameters (proportions, means, covariances) is
+defined through a conjugate or semi-conjugate approach (prior_type), to the choice of the user.
+See Astic &amp; Oldenburg 2019: A framework for petrophysically and geologically
+guided geophysical inversion (<a class="reference external" href="https://doi.org/10.1093/gji/ggz389">https://doi.org/10.1093/gji/ggz389</a>) for more information.</p>
+<p>Disclaimer: this class built upon the GaussianMixture class from Scikit-Learn.
+New functionalitie are added, as well as modifications to
+existing functions, to serve the purposes pursued within SimPEG.
+This use is allowed by the Scikit-Learn licensing (BSD-3-Clause License)
+and we are grateful for their contributions to the open-source community.</p>
+<p>Addtional parameters to provide, compared to <cite>WeightedGaussianMixture</cite>:</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>kappa</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></span></dt><dd><p>strength of the confidence in the prior means</p>
+</dd>
+<dt><strong>nu</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarry</span></code></span></dt><dd><p>strength of the confidence in the prior covariances</p>
+</dd>
+<dt><strong>zeta</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarry</span></code></span></dt><dd><p>strength of the confidence in the prior proportions</p>
+</dd>
+<dt><strong>prior_type</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Choose from one of the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>“semi”: semi-conjugate prior, the means and covariances priors are indepedent</p></li>
+<li><p>“full”: conjugate prior, the means and covariances priors are inter-depedent</p></li>
+</ul>
+</div></blockquote>
+</dd>
+<dt><strong>update_covariances</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.13)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Choose from two options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">True</span></code>: semi or conjugate prior by averaging the covariances</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">False</span></code>: alternative (not conjugate) prior: average the precisions instead</p></li>
+</ul>
+</dd>
+<dt><strong>fixed_membership</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> <code class="xref py py-obj docutils literal notranslate"><span class="pre">of</span></code> <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">optional</span></code></span></dt><dd><p>A 2d numpy.ndarray to fix the membership to a chosen lithology of particular cells.
+The first column contains the numeric index of the cells, the second column the respective lithology index.
+Shape is (index of the fixed cell, lithology index) fixed_membership:</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.aic.html#simpeg.utils.GaussianMixtureWithPrior.aic" title="simpeg.utils.GaussianMixtureWithPrior.aic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aic</span></code></a>(X)</p></td>
+<td><p>Akaike information criterion for the current model on the input X.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.bic.html#simpeg.utils.GaussianMixtureWithPrior.bic" title="simpeg.utils.GaussianMixtureWithPrior.bic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bic</span></code></a>(X)</p></td>
+<td><p>Bayesian information criterion for the current model on the input X.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.compute_clusters_covariances.html#simpeg.utils.GaussianMixtureWithPrior.compute_clusters_covariances" title="simpeg.utils.GaussianMixtureWithPrior.compute_clusters_covariances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_clusters_covariances</span></code></a>()</p></td>
+<td><p>Compute the precisions matrices and their Cholesky decomposition.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.compute_clusters_precisions.html#simpeg.utils.GaussianMixtureWithPrior.compute_clusters_precisions" title="simpeg.utils.GaussianMixtureWithPrior.compute_clusters_precisions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_clusters_precisions</span></code></a>()</p></td>
+<td><p>Compute and set the precisions matrices and their Cholesky decomposition.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.fit.html#simpeg.utils.GaussianMixtureWithPrior.fit" title="simpeg.utils.GaussianMixtureWithPrior.fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code></a>(X[, y, debug])</p></td>
+<td><p>Estimate model parameters with the EM algorithm.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.fit_predict.html#simpeg.utils.GaussianMixtureWithPrior.fit_predict" title="simpeg.utils.GaussianMixtureWithPrior.fit_predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit_predict</span></code></a>(X[, y, debug])</p></td>
+<td><p>Estimate model parameters using X and predict the labels for X.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.get_metadata_routing.html#simpeg.utils.GaussianMixtureWithPrior.get_metadata_routing" title="simpeg.utils.GaussianMixtureWithPrior.get_metadata_routing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_metadata_routing</span></code></a>()</p></td>
+<td><p>Get metadata routing of this object.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.get_params.html#simpeg.utils.GaussianMixtureWithPrior.get_params" title="simpeg.utils.GaussianMixtureWithPrior.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>([deep])</p></td>
+<td><p>Get parameters for this estimator.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.order_cluster.html#simpeg.utils.GaussianMixtureWithPrior.order_cluster" title="simpeg.utils.GaussianMixtureWithPrior.order_cluster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">order_cluster</span></code></a>([outputindex])</p></td>
+<td><p>Order cluster</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.order_clusters_GM_weight.html#simpeg.utils.GaussianMixtureWithPrior.order_clusters_GM_weight" title="simpeg.utils.GaussianMixtureWithPrior.order_clusters_GM_weight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">order_clusters_GM_weight</span></code></a>([outputindex])</p></td>
+<td><p>Order clusters by decreasing weights</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.plot_pdf.html#simpeg.utils.GaussianMixtureWithPrior.plot_pdf" title="simpeg.utils.GaussianMixtureWithPrior.plot_pdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_pdf</span></code></a>([ax, flag2d, x_component, ...])</p></td>
+<td><p>Utils to plot the marginal PDFs of a GMM, either in 1D or 2D (1 or 2 physical properties at the time).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.predict.html#simpeg.utils.GaussianMixtureWithPrior.predict" title="simpeg.utils.GaussianMixtureWithPrior.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>(X)</p></td>
+<td><p>Predict the labels for the data samples in X using trained model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.predict_proba.html#simpeg.utils.GaussianMixtureWithPrior.predict_proba" title="simpeg.utils.GaussianMixtureWithPrior.predict_proba"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict_proba</span></code></a>(X)</p></td>
+<td><p>Evaluate the components' density for each sample.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.sample.html#simpeg.utils.GaussianMixtureWithPrior.sample" title="simpeg.utils.GaussianMixtureWithPrior.sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code></a>([n_samples])</p></td>
+<td><p>Generate random samples from the fitted Gaussian distribution.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.score.html#simpeg.utils.GaussianMixtureWithPrior.score" title="simpeg.utils.GaussianMixtureWithPrior.score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">score</span></code></a>(X[, y])</p></td>
+<td><p>Compute the per-sample average log-likelihood</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.score_samples.html#simpeg.utils.GaussianMixtureWithPrior.score_samples" title="simpeg.utils.GaussianMixtureWithPrior.score_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">score_samples</span></code></a>(X)</p></td>
+<td><p>Compute the log-likelihood of each sample.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.score_samples_with_sensW.html#simpeg.utils.GaussianMixtureWithPrior.score_samples_with_sensW" title="simpeg.utils.GaussianMixtureWithPrior.score_samples_with_sensW"><code class="xref py py-obj docutils literal notranslate"><span class="pre">score_samples_with_sensW</span></code></a>(X, sensW)</p></td>
+<td><p>Compute the weighted log probabilities for each sample.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.set_fit_request.html#simpeg.utils.GaussianMixtureWithPrior.set_fit_request" title="simpeg.utils.GaussianMixtureWithPrior.set_fit_request"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_fit_request</span></code></a>(*[, debug])</p></td>
+<td><p>Request metadata passed to the <code class="docutils literal notranslate"><span class="pre">fit</span></code> method.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.set_params.html#simpeg.utils.GaussianMixtureWithPrior.set_params" title="simpeg.utils.GaussianMixtureWithPrior.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</p></td>
+<td><p>Set the parameters of this estimator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.utils.GaussianMixtureWithPrior.update_gmm_with_priors.html#simpeg.utils.GaussianMixtureWithPrior.update_gmm_with_priors" title="simpeg.utils.GaussianMixtureWithPrior.update_gmm_with_priors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_gmm_with_priors</span></code></a>([debug])</p></td>
+<td><p>Update GMM with priors</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</dd></dl>
+
+<section id="galleries-and-tutorials-using-simpeg-utils-gaussianmixturewithprior">
+<h2>Galleries and Tutorials using <code class="docutils literal notranslate"><span class="pre">simpeg.utils.GaussianMixtureWithPrior</span></code><a class="headerlink" href="#galleries-and-tutorials-using-simpeg-utils-gaussianmixturewithprior" title="Link to this heading">#</a></h2>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip=" This tutorial shows through a joint inversion of Gravity and Magnetic data on an Octree mesh how to use the PGI framework introduced in Astic &amp; Oldenburg (2019) and Astic et al. (2021) to make geologic assumptions and learn a suitable petrophysical distribution when no quantitative petrophysical information is available."><img alt="" src="../../../_images/sphx_glr_plot_inv_2_joint_pf_pgi_no_info_tutorial_thumb.png" />
+<p><a class="reference internal" href="../../tutorials/14-pgi/plot_inv_2_joint_pf_pgi_no_info_tutorial.html#sphx-glr-content-tutorials-14-pgi-plot-inv-2-joint-pf-pgi-no-info-tutorial-py"><span class="std std-ref">Joint PGI of Gravity + Magnetic on an Octree mesh without petrophysical information</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Joint PGI of Gravity + Magnetic on an Octree mesh without petrophysical information</div>
+</div></div></section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="simpeg.utils.WeightedGaussianMixture.set_params.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">simpeg.utils.WeightedGaussianMixture.set_params</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="simpeg.utils.GaussianMixtureWithPrior.aic.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">simpeg.utils.GaussianMixtureWithPrior.aic</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simpeg.utils.GaussianMixtureWithPrior"><code class="docutils literal notranslate"><span class="pre">GaussianMixtureWithPrior</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#galleries-and-tutorials-using-simpeg-utils-gaussianmixturewithprior">Galleries and Tutorials using <code class="docutils literal notranslate"><span class="pre">simpeg.utils.GaussianMixtureWithPrior</span></code></a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/content/api/generated/simpeg.utils.GaussianMixtureWithPrior.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

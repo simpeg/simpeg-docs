@@ -1,0 +1,1027 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>simpeg.regularization.AmplitudeSmoothnessFirstOrder &#8212; SimPEG 0.22.2.dev28+g702389ee2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=45118af6" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="../../../_static/documentation_options.js?v=be8c3773"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script data-domain="docs.simpeg.xyz" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/api/generated/simpeg.regularization.AmplitudeSmoothnessFirstOrder';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.simpeg.xyz/latest/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = true;
+        </script>
+    <link rel="icon" href="../../../_static/logo-block.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.W" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.W.html" />
+    <link rel="prev" title="simpeg.regularization.AmplitudeSmallness.update_weights" href="simpeg.regularization.AmplitudeSmallness.update_weights.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.22" />
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/simpeg-logo.png" class="logo__image only-light" alt="SimPEG 0.22.2.dev28+g702389ee2 documentation - Home"/>
+    <img src="../../../_static/simpeg-logo.png" class="logo__image only-dark pst-js-only" alt="SimPEG 0.22.2.dev28+g702389ee2 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../release/index.html">
+    Release Notes
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+    User Tutorials
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://simpeg.xyz">
+    SimPEG
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+    Contact
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-comment fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-discourse fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-youtube fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../release/index.html">
+    Release Notes
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+    User Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://simpeg.xyz">
+    SimPEG
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+    Contact
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-comment fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-discourse fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-youtube fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.potential_fields.html">Potential Fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.electromagnetics.html">Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.flow.html">Fluid Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.seismic.html">Seismic</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.html">Base SimPEG Classes (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg</span></code>)</a></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../simpeg.regularization.html">Regularization (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.regularization</span></code>)</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.WeightedLeastSquares.html">simpeg.regularization.WeightedLeastSquares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.Smallness.html">simpeg.regularization.Smallness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.SmoothnessFirstOrder.html">simpeg.regularization.SmoothnessFirstOrder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.SmoothnessSecondOrder.html">simpeg.regularization.SmoothnessSecondOrder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.SmoothnessFullGradient.html">simpeg.regularization.SmoothnessFullGradient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.Sparse.html">simpeg.regularization.Sparse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.SparseSmallness.html">simpeg.regularization.SparseSmallness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.SparseSmoothness.html">simpeg.regularization.SparseSmoothness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.CrossReferenceRegularization.html">simpeg.regularization.CrossReferenceRegularization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.VectorAmplitude.html">simpeg.regularization.VectorAmplitude</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.AmplitudeSmallness.html">simpeg.regularization.AmplitudeSmallness</a></li>
+<li class="toctree-l2 current active has-children"><a class="current reference internal" href="#">simpeg.regularization.AmplitudeSmoothnessFirstOrder</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.W.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.W</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.active_cells.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.active_cells</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.cell_gradient.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.cell_gradient</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.cell_weights.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.cell_weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.gradientType.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.gradientType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.gradient_type.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.gradient_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.indActive.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.indActive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.irls_scaled.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.irls_scaled</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.irls_threshold.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.irls_threshold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.mapping.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.mapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.model.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.mref.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.mref</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.nP.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.nP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.n_comp.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.n_comp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.norm.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.norm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.orientation.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.orientation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.parent.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.parent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.reference_model.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.reference_model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.regmesh.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.regmesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.regularization_mesh.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.regularization_mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.units.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.weights_keys.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.weights_keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.__call__.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.__call__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.amplitude.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.amplitude</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.deriv.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.deriv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.deriv2.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.deriv2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.f_m.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.f_m</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.f_m_deriv.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.f_m_deriv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.get_lp_weights.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.get_lp_weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.get_weights.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.get_weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.remove_weights.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.remove_weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.set_weights.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.set_weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.test.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.update_weights.html">simpeg.regularization.AmplitudeSmoothnessFirstOrder.update_weights</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.CrossGradient.html">simpeg.regularization.CrossGradient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.JointTotalVariation.html">simpeg.regularization.JointTotalVariation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.PGI.html">simpeg.regularization.PGI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.PGIsmallness.html">simpeg.regularization.PGIsmallness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.LinearCorrespondence.html">simpeg.regularization.LinearCorrespondence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.RegularizationMesh.html">simpeg.regularization.RegularizationMesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.BaseRegularization.html">simpeg.regularization.BaseRegularization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.BaseSimilarityMeasure.html">simpeg.regularization.BaseSimilarityMeasure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.BaseSparse.html">simpeg.regularization.BaseSparse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.BaseVectorRegularization.html">simpeg.regularization.BaseVectorRegularization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simpeg.regularization.BaseAmplitude.html">simpeg.regularization.BaseAmplitude</a></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.directives.html">Directives (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.directives</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.utils.html">Utility Classes and Functions (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.utils</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.meta.html">Meta SimPEG Classes (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.meta</span></code>)</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../simpeg.typing.html">Typing (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.typing</span></code>)</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">API Reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../simpeg.regularization.html" class="nav-link">Regularization (<code class="xref py py-mod docutils literal notranslate"><span class="pre">simpeg.regularization</span></code>)</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">simpeg.regularization.AmplitudeSmoothnessFirstOrder</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="simpeg-regularization-amplitudesmoothnessfirstorder">
+<h1>simpeg.regularization.AmplitudeSmoothnessFirstOrder<a class="headerlink" href="#simpeg-regularization-amplitudesmoothnessfirstorder" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="simpeg.regularization.AmplitudeSmoothnessFirstOrder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">simpeg.regularization.</span></span><span class="sig-name descname"><span class="pre">AmplitudeSmoothnessFirstOrder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'total'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/simpeg/simpeg/blob/main/simpeg/regularization/vector.py#L683-L984"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simpeg.regularization.AmplitudeSmoothnessFirstOrder" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="simpeg.regularization.SparseSmoothness.html#simpeg.regularization.SparseSmoothness" title="simpeg.regularization.sparse.SparseSmoothness"><code class="xref py py-class docutils literal notranslate"><span class="pre">SparseSmoothness</span></code></a>, <a class="reference internal" href="simpeg.regularization.BaseAmplitude.html#simpeg.regularization.BaseAmplitude" title="simpeg.regularization.vector.BaseAmplitude"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseAmplitude</span></code></a></p>
+<p>Sparse amplitude smoothness (blockiness) regularization.</p>
+<p><code class="docutils literal notranslate"><span class="pre">AmplitudeSmallness</span></code> is a sparse norm smoothness regularization that acts on the
+amplitudes of the vectors defining the model. Sparse norm functionality allows the
+use to recover more blocky regions of higher amplitude vectors.
+The level of blockiness is controlled by the norm within the regularization
+function; with more blocky structures being recovered when a smaller norm is used.
+Optionally, custom cell weights can be included to control the degree of blockiness
+being enforced throughout different regions the model.</p>
+<p>See the <em>Notes</em> section below for a comprehensive description.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>mesh</strong><span class="classifier"><a class="reference internal" href="simpeg.regularization.RegularizationMesh.html#simpeg.regularization.RegularizationMesh" title="simpeg.regularization.RegularizationMesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regularization.RegularizationMesh</span></code></a></span></dt><dd><p>Mesh on which the regularization is discretized. Not the mesh used to
+define the simulation.</p>
+</dd>
+<dt><strong>orientation</strong><span class="classifier">{‘x’,’y’,’z’}</span></dt><dd><p>The direction along which sparse smoothness is applied.</p>
+</dd>
+<dt><strong>norm</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/glossary.html#term-array_like" title="(in NumPy v2.1)"><span>array_like</span></a></span></dt><dd><p>The norm defining sparseness thoughout the regularization function. Must be within the
+interval [0,2]. There are several options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">float</span></code>: constant sparse norm throughout the domain.</p></li>
+<li><p>(n_faces, ) <code class="docutils literal notranslate"><span class="pre">array_like</span></code>: define the sparse norm independently at each face set by <cite>orientation</cite> (e.g. x-faces).</p></li>
+<li><p>(n_cells, ) <code class="docutils literal notranslate"><span class="pre">array_like</span></code>: define the sparse norm independently for each cell. Will be averaged to faces specified by <cite>orientation</cite> (e.g. x-faces).</p></li>
+</ul>
+</dd>
+<dt><strong>active_cells</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><code class="docutils literal notranslate"><span class="pre">None</span></code></a>, (<code class="xref py py-obj docutils literal notranslate"><span class="pre">n_cells</span></code>, ) <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> <code class="xref py py-obj docutils literal notranslate"><span class="pre">of</span></code> <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.13)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Boolean array defining the set of <a class="reference internal" href="simpeg.regularization.RegularizationMesh.html#simpeg.regularization.RegularizationMesh" title="simpeg.regularization.RegularizationMesh"><code class="xref py py-class docutils literal notranslate"><span class="pre">RegularizationMesh</span></code></a>
+cells that are active in the inversion. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, all cells are active.</p>
+</dd>
+<dt><strong>mapping</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><code class="docutils literal notranslate"><span class="pre">None</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">simpeg.maps.BaseMap</span></code></span></dt><dd><p>The mapping from the model parameters to the active cells in the inversion.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the mapping is the identity map.</p>
+</dd>
+<dt><strong>reference_model</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><code class="docutils literal notranslate"><span class="pre">None</span></code></a>, (<code class="xref py py-obj docutils literal notranslate"><span class="pre">n_param</span></code>, ) <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></span></dt><dd><p>Reference model. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the reference model in the inversion is set to
+the starting model. To include the reference model in the regularization, the
+<cite>reference_model_in_smooth</cite> property must be set to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt><strong>reference_model_in_smooth</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.13)"><span class="xref std std-ref">bool</span></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">optional</span></code></span></dt><dd><p>Whether to include the reference model in the smoothness terms.</p>
+</dd>
+<dt><strong>units</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><code class="docutils literal notranslate"><span class="pre">None</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Units for the model parameters. Some regularization classes behave
+differently depending on the units; e.g. ‘radian’.</p>
+</dd>
+<dt><strong>weights</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><code class="docutils literal notranslate"><span class="pre">None</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Custom weights for the least-squares function. Each <code class="docutils literal notranslate"><span class="pre">key</span></code> points to
+a <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> that is defined on the <code class="xref py py-class docutils literal notranslate"><span class="pre">regularization.RegularizationMesh</span></code>.
+A (n_cells, ) <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> is used to define weights at cell centers, which are
+averaged to the appropriate faces internally when weighting is applied.
+A (n_faces, ) <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> is used to define weights directly on the faces specified
+by the <cite>orientation</cite> input argument.</p>
+</dd>
+<dt><strong>irls_scaled</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.13)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, scale the IRLS weights to preserve magnitude of the regularization function.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, do not scale.</p>
+</dd>
+<dt><strong>irls_threshold</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>Constant added to IRLS weights to ensures stability in the algorithm.</p>
+</dd>
+<dt><strong>gradient_type</strong><span class="classifier">{“total”, “component”}</span></dt><dd><p>Gradient measure used in the IRLS re-weighting. Whether to re-weight using the total
+gradient or components of the gradient.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Attributes</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.W.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.W" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.W"><code class="xref py py-obj docutils literal notranslate"><span class="pre">W</span></code></a></p></td>
+<td><p>Weighting matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.active_cells.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.active_cells" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.active_cells"><code class="xref py py-obj docutils literal notranslate"><span class="pre">active_cells</span></code></a></p></td>
+<td><p>Active cells defined on the regularization mesh.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.cell_gradient.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.cell_gradient" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.cell_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell_gradient</span></code></a></p></td>
+<td><p>Partial cell gradient operator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.cell_weights.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.cell_weights" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.cell_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell_weights</span></code></a></p></td>
+<td><p>Deprecated property for 'volume' and user defined weights.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.gradientType.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.gradientType" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.gradientType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gradientType</span></code></a></p></td>
+<td><p><cite>gradient_type.gradientType</cite> has been deprecated.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.gradient_type.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.gradient_type" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.gradient_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gradient_type</span></code></a></p></td>
+<td><p>Gradient measure used to update IRLS weights for sparse smoothness.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.indActive.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.indActive" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.indActive"><code class="xref py py-obj docutils literal notranslate"><span class="pre">indActive</span></code></a></p></td>
+<td><p><cite>active_cells.indActive</cite> has been deprecated.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.irls_scaled.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.irls_scaled" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.irls_scaled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">irls_scaled</span></code></a></p></td>
+<td><p>Scale IRLS weights.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.irls_threshold.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.irls_threshold" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.irls_threshold"><code class="xref py py-obj docutils literal notranslate"><span class="pre">irls_threshold</span></code></a></p></td>
+<td><p>Stability constant for computing IRLS weights.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.mapping.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.mapping" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.mapping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mapping</span></code></a></p></td>
+<td><p>Mapping from the inversion model parameters to the regularization mesh.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.model.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.model" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model</span></code></a></p></td>
+<td><p>The model parameters.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.mref.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.mref" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.mref"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mref</span></code></a></p></td>
+<td><p><cite>reference_model.mref</cite> has been deprecated.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.nP.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.nP" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.nP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nP</span></code></a></p></td>
+<td><p>Number of model parameters.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.n_comp.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.n_comp" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.n_comp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_comp</span></code></a></p></td>
+<td><p>Number of components in the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.norm.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.norm" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.norm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norm</span></code></a></p></td>
+<td><p>Norm for the sparse regularization.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.orientation.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.orientation" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.orientation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">orientation</span></code></a></p></td>
+<td><p>Direction along which smoothness is enforced.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.parent.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.parent" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parent</span></code></a></p></td>
+<td><p>The parent objective function</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.reference_model.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.reference_model" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.reference_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reference_model</span></code></a></p></td>
+<td><p>Reference model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.regmesh.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.regmesh" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.regmesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regmesh</span></code></a></p></td>
+<td><p><cite>regularization_mesh.regmesh</cite> has been deprecated.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.regularization_mesh.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.regularization_mesh" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.regularization_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regularization_mesh</span></code></a></p></td>
+<td><p>Regularization mesh.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.units.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.units" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.units"><code class="xref py py-obj docutils literal notranslate"><span class="pre">units</span></code></a></p></td>
+<td><p>Units for the model parameters.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.weights_keys.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.weights_keys" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.weights_keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">weights_keys</span></code></a></p></td>
+<td><p>Return the keys for the existing cell weights</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>reference_model_in_smooth</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.__call__.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.__call__" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.__call__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code></a>(m)</p></td>
+<td><p>Evaluate the regularization function for the model provided.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.amplitude.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.amplitude" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.amplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">amplitude</span></code></a>(m)</p></td>
+<td><p>Return vector amplitudes for the model provided.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.deriv.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.deriv" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.deriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deriv</span></code></a>(m)</p></td>
+<td><p>Gradient of the regularization function evaluated for the model provided.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.deriv2.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.deriv2" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.deriv2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deriv2</span></code></a>(m[, v])</p></td>
+<td><p>Hessian of the regularization function evaluated for the model provided.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.f_m.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.f_m" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.f_m"><code class="xref py py-obj docutils literal notranslate"><span class="pre">f_m</span></code></a>(m)</p></td>
+<td><p>Evaluate the regularization kernel function.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.f_m_deriv.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.f_m_deriv" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.f_m_deriv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">f_m_deriv</span></code></a>(m)</p></td>
+<td><p>Derivative of the regularization kernel function.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.get_lp_weights.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.get_lp_weights" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.get_lp_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_lp_weights</span></code></a>(f_m)</p></td>
+<td><p>Compute and return iteratively re-weighted least-squares (IRLS) weights.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.get_weights.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.get_weights" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.get_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_weights</span></code></a>(key)</p></td>
+<td><p>Cell weights for a given key.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">map_class</span></code></p></td>
+<td><p>alias of <a class="reference internal" href="simpeg.maps.IdentityMap.html#simpeg.maps.IdentityMap" title="simpeg.maps._base.IdentityMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">IdentityMap</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.remove_weights.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.remove_weights" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.remove_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_weights</span></code></a>(key)</p></td>
+<td><p>Removes the weights for the key provided.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.set_weights.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.set_weights" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.set_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_weights</span></code></a>(**weights)</p></td>
+<td><p>Adds (or updates) the specified weights to the regularization.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.test.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.test" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code></a>([x, num, random_seed])</p></td>
+<td><p>Run a convergence test on both the first and second derivatives.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.update_weights.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.update_weights" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.update_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_weights</span></code></a>(m)</p></td>
+<td><p>Update the IRLS weights for sparse smoothness regularization.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Notes</p>
+<p>The regularization function (objective function) for sparse amplitude smoothness (blockiness)
+along the x-direction as:</p>
+<div class="math notranslate nohighlight">
+\[\phi (m) = \int_\Omega \, w(r) \,
+\Bigg | \, \frac{\partial |\vec{m}|}{\partial x} \, \Bigg |^{p(r)} \, dv\]</div>
+<p>where <span class="math notranslate nohighlight">\(\vec{m}(r)\)</span> is the model, <span class="math notranslate nohighlight">\(w(r)\)</span>
+is a user-defined weighting function and <span class="math notranslate nohighlight">\(p(r) \in [0,2]\)</span> is a parameter which imposes
+sparseness throughout the recovered model. Sharper boundaries are recovered in regions
+where <span class="math notranslate nohighlight">\(p(r)\)</span> is small. If the same level of sparseness is being imposed everywhere,
+the exponent becomes a constant.</p>
+<p>For implementation within SimPEG, the regularization function and its variables
+must be discretized onto a <cite>mesh</cite>. The discrete approximation for the regularization
+function (objective function) is expressed in linear form as:</p>
+<div class="math notranslate nohighlight">
+\[\phi (\mathbf{m}) = \sum_i
+\tilde{w}_i \, \Bigg | \, \frac{\partial |\vec{m}_i|}{\partial x} \, \Bigg |^{p_i}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\vec{m}_i\)</span> is the vector defined for mesh cell <span class="math notranslate nohighlight">\(i\)</span>.
+<span class="math notranslate nohighlight">\(\tilde{w}_i\)</span> are amalgamated weighting constants that 1) account
+for cell dimensions in the discretization and 2) apply user-defined weighting.
+<span class="math notranslate nohighlight">\(p_i \in \mathbf{p}\)</span> define the norm for each cell (set using <cite>norm</cite>).</p>
+<p>It is impractical to work with the general form directly, as its derivatives with respect
+to the model are non-linear and discontinuous. Instead, the iteratively re-weighted
+least-squares (IRLS) approach is used to approximate the sparse norm by iteratively solving
+a set of convex least-squares problems. For IRLS iteration <span class="math notranslate nohighlight">\(k\)</span>, we define:</p>
+<div class="math notranslate nohighlight">
+\[\phi \big (\mathbf{m}^{(k)} \big )
+= \sum_i
+\tilde{w}_i \, \left | \, \frac{\partial \big | \vec{m}_i^{(k)} \big | }{\partial x} \right |^{p_i}
+\approx \sum_i \tilde{w}_i \, r_i^{(k)}
+\left | \, \frac{\partial \big | \vec{m}_i^{(k)} \big | }{\partial x} \right |^2\]</div>
+<p>where the IRLS weight <span class="math notranslate nohighlight">\(r_i\)</span> for iteration <span class="math notranslate nohighlight">\(k\)</span> is given by:</p>
+<div class="math notranslate nohighlight">
+\[r_i^{(k)} = \Bigg [ \Bigg ( \frac{\partial \big | \vec{m}_i^{(k-1)} \big | }{\partial x} \Bigg )^2 +
+\epsilon^2 \; \Bigg ]^{{p_i}/2 - 1}\]</div>
+<p>and <span class="math notranslate nohighlight">\(\epsilon\)</span> is a small constant added for stability (set using <cite>irls_threshold</cite>).</p>
+<p>The global set of model parameters <span class="math notranslate nohighlight">\(\mathbf{m}\)</span> defined at cell centers is ordered according
+to its primary (<span class="math notranslate nohighlight">\(p\)</span>), secondary (<span class="math notranslate nohighlight">\(s\)</span>) and tertiary (<span class="math notranslate nohighlight">\(t\)</span>) directions as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{m} = \begin{bmatrix} \mathbf{m}_p \\ \mathbf{m}_s \\ \mathbf{m}_t \end{bmatrix}\end{split}\]</div>
+<p>We define the amplitudes of the vectors for all cells as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{\bar{m}} = \Big [ \, \mathbf{m}_p^2 + \mathbf{m}_s^2 + \mathbf{m}_t^2 \Big ]^{1/2}\]</div>
+<p>The objective function for IRLS iteration <span class="math notranslate nohighlight">\(k\)</span> is given by:</p>
+<div class="math notranslate nohighlight">
+\[\phi \big ( \mathbf{m}^{(k)} \big ) \approx \Big \| \,
+\mathbf{W}^{(k)} \, \mathbf{G_x} \, \mathbf{\bar{m}}^{(k)} \Big \|^2\]</div>
+<p>where</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\bar{\mathbf{m}}^{(k)}\)</span> are the discrete vector model amplitudes at iteration <span class="math notranslate nohighlight">\(k\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{G_x}\)</span> is the partial cell-gradient operator along x (x-derivative),</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{W}^{(k)}\)</span> is the weighting matrix for iteration <span class="math notranslate nohighlight">\(k\)</span>. It applies the IRLS weights, user-defined weighting, and accounts for cell dimensions when the regularization function is discretized.</p></li>
+</ul>
+</div></blockquote>
+<p>Note that since <span class="math notranslate nohighlight">\(\mathbf{G_x}\)</span> maps from cell centers to x-faces, the weighting matrix
+acts on variables living on x-faces.</p>
+<p><strong>Reference model in smoothness:</strong></p>
+<p>Gradients/interfaces within a discrete reference model <span class="math notranslate nohighlight">\(\mathbf{m}^{(ref)}\)</span> can be
+preserved by including the reference model the smoothness regularization.
+In this case, the least-squares problem for IRLS iteration <span class="math notranslate nohighlight">\(k\)</span> becomes:</p>
+<div class="math notranslate nohighlight">
+\[\phi \big ( \mathbf{m}^{(k)} \big ) \approx \Big \| \,
+\mathbf{W}^{(k)} \, \mathbf{G_x} \, \mathbf{\bar{m}}^{(k)} \Big \|^2\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{\bar{m}} = \bigg (
+\Big [ \mathbf{m}_p - \mathbf{m}_p^{(ref)} \Big ]^2 +
+\Big [ \mathbf{m}_s - \mathbf{m}_s^{(ref)} \Big ]^2 +
+\Big [ \mathbf{m}_t - \mathbf{m}_t^{(ref)} \Big ]^2 \bigg )^{1/2}\]</div>
+<p>This functionality is used by setting <span class="math notranslate nohighlight">\(\mathbf{m}^{(ref)}\)</span> with the
+<cite>reference_model</cite> property, and by setting the <cite>reference_model_in_smooth</cite> parameter
+to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<p><strong>IRLS weights, user-defined weighting and the weighting matrix:</strong></p>
+<p>Let <span class="math notranslate nohighlight">\(\mathbf{w_1, \; w_2, \; w_3, \; ...}\)</span> each represent an optional set of
+custom weights defined on the faces specified by the <cite>orientation</cite> property;
+i.e. x-faces for smoothness along the x-direction. Each set of weights were either defined
+directly on the faces or have been averaged from cell centers. And let
+<span class="math notranslate nohighlight">\(\mathbf{r_x}^{\!\! (k)}\)</span> represent the IRLS weights for iteration <span class="math notranslate nohighlight">\(k\)</span>.
+The net weighting applied within the objective function is given by:</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{w}^{(k)} = \mathbf{r_x}^{\!\! (k)} \odot \mathbf{v_x} \odot \prod_j \mathbf{w_j}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{v_x}\)</span> are cell volumes projected to x-faces; i.e. where the
+x-derivative lives. For a description of how IRLS weights are updated at every iteration,
+see the documentation for <a class="reference internal" href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.update_weights.html#simpeg.regularization.AmplitudeSmoothnessFirstOrder.update_weights" title="simpeg.regularization.AmplitudeSmoothnessFirstOrder.update_weights"><code class="xref py py-meth docutils literal notranslate"><span class="pre">update_weights()</span></code></a>.</p>
+<p>The weighting matrix used to apply the weights is given by:</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{W}^{(k)} = \textrm{diag} \Big ( \sqrt{\mathbf{w}^{(k)} \, } \Big )\]</div>
+<p>Each set of custom weights is stored within a <code class="docutils literal notranslate"><span class="pre">dict</span></code> as an <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>.
+A (n_cells, ) <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> is used to define weights at cell centers, which are
+averaged to the appropriate faces internally when weighting is applied.
+A (n_faces, ) <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> is used to define weights directly on the faces specified
+by the <cite>orientation</cite> input argument. The weights can be set all at once during instantiation
+with the <cite>weights</cite> keyword argument as follows:</p>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="simpeg.regularization.AmplitudeSmallness.update_weights.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">simpeg.regularization.AmplitudeSmallness.update_weights</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="simpeg.regularization.AmplitudeSmoothnessFirstOrder.W.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">simpeg.regularization.AmplitudeSmoothnessFirstOrder.W</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simpeg.regularization.AmplitudeSmoothnessFirstOrder"><code class="docutils literal notranslate"><span class="pre">AmplitudeSmoothnessFirstOrder</span></code></a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/content/api/generated/simpeg.regularization.AmplitudeSmoothnessFirstOrder.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
