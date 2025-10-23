@@ -1,0 +1,940 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Convert 3D DC/IP Data to 2D Lines &#8212; SimPEG 0.25.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css?v=45118af6" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../../_static/documentation_options.js?v=c0aa8791"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script data-domain="docs.simpeg.xyz" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/user-guide/tutorials/05-dcr/plot_gen_3_3d_to_2d';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://docs.simpeg.xyz/latest/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.25.0';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <link rel="icon" href="../../../../_static/logo-block.ico"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Least-Squares 1D Inversion of Sounding Data" href="plot_inv_1_dcr_sounding.html" />
+    <link rel="prev" title="DC Resistivity Forward Simulation in 3D" href="plot_fwd_3_dcr3d.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.25" />
+
+<meta name="description" content="Simulation and Parameter Estimation in Geophysics">
+<meta name="author" content="SimPEG Developers">
+<meta name="keywords" content="python, geophysics, inversion, electromagnetics, magnetotellurics, magnetics, gravity, DC, flow inverse problems, open source, finite volume">
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../../_static/simpeg-logo.png" class="logo__image only-light" alt="SimPEG 0.25.0 documentation - Home"/>
+    <img src="../../../../_static/simpeg-logo.png" class="logo__image only-dark pst-js-only" alt="SimPEG 0.25.0 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../release/index.html">
+    Release Notes
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+    User Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://simpeg.xyz">
+    SimPEG
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+    Contact
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-comment fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-discourse fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-youtube fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../release/index.html">
+    Release Notes
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://simpeg.xyz/user-tutorials">
+    User Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://simpeg.xyz">
+    SimPEG
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://mattermost.softwareunderground.org/simpeg">
+    Contact
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/simpeg/simpeg" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mattermost.softwareunderground.org/simpeg" title="Mattermost" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-comment fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Mattermost</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://simpeg.discourse.group/" title="Discourse" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-discourse fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Discourse</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.youtube.com/c/geoscixyz" title="Youtube" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-youtube fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Youtube</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/about-simpeg.html">What’s SimPEG?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/big_picture.html">Why SimPEG?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/installing.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/contributing/index.html">Contributing to SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/citing.html">Citing SimPEG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/version-compatibility.html">Version compatibility</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">How to Guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../how-to-guide/choosing-solvers.html">Choosing solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../how-to-guide/move-mesh-to-survey.html">Locating mesh on survey area</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../01-models_mapping/index.html">Models and Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02-linear_inversion/index.html">Linear Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03-gravity/index.html">Gravity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../04-magnetics/index.html">Magnetics</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Direct Current Resistivity</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="plot_fwd_1_dcr_sounding.html">Simulate a 1D Sounding over a Layered Earth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_fwd_2_dcr2d.html">DC Resistivity Forward Simulation in 2.5D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_fwd_3_dcr3d.html">DC Resistivity Forward Simulation in 3D</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Convert 3D DC/IP Data to 2D Lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inv_1_dcr_sounding.html">Least-Squares 1D Inversion of Sounding Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inv_1_dcr_sounding_irls.html">Sparse 1D Inversion of Sounding Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inv_1_dcr_sounding_parametric.html">Parametric 1D Inversion of Sounding Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inv_2_dcr2d.html">2.5D DC Resistivity Least-Squares Inversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inv_2_dcr2d_irls.html">2.5D DC Resistivity Inversion with Sparse Norms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inv_3_dcr3d.html">3D Least-Squares Inversion of DC Resistivity Data</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../06-ip/index.html">Induced Polarization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../07-fdem/index.html">Frequency-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../08-tdem/index.html">Time-Domain Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../09-nsem/index.html">Natural Source Electromagnetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../10-vrm/index.html">Viscous Remanent Magnetization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../11-flow/index.html">Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../12-seismic/index.html">Seismic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../13-joint_inversion/index.html">Joint Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../14-pgi/index.html">Petrophysically Guided Inversion</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Gallery</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">SimPEG User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Direct Current Resistivity</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Convert 3D DC/IP Data to 2D Lines</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-content-user-guide-tutorials-05-dcr-plot-gen-3-3d-to-2d-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="convert-3d-dc-ip-data-to-2d-lines">
+<span id="sphx-glr-content-user-guide-tutorials-05-dcr-plot-gen-3-3d-to-2d-py"></span><h1>Convert 3D DC/IP Data to 2D Lines<a class="headerlink" href="#convert-3d-dc-ip-data-to-2d-lines" title="Link to this heading">#</a></h1>
+<p>3D DC/IP surveys are frequently comprised of a set of 2D survey lines.
+In this case, the 3D survey can be parsed into a list of
+2D surveys; which can be imaged or inverted independently.
+In this tutorial, we focus on the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Loading and plotting the distribution of 3D DC/IP data using a 3D pseudo-section</p></li>
+<li><p>Parsing the 3D survey geometry and associated data to a set a 2D surveys</p></li>
+<li><p>Plotting data for each 2D survey on a 2D pseudo-section</p></li>
+<li><p>Including survey topography when plotting pseudo-sections</p></li>
+</ul>
+</div></blockquote>
+<p>In this case, the survey consists of dipole-dipole data for three East-West lines
+and two North-South lines.</p>
+<section id="import-modules">
+<h2>Import modules<a class="headerlink" href="#import-modules" title="Link to this heading">#</a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">simpeg</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">simpeg.utils.io_utils.io_utils_electromagnetics</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_dcip_xyz</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">simpeg.electromagnetics.static.utils.static_utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">apparent_resistivity_from_voltage</span><span class="p">,</span>
+    <span class="n">convert_survey_3d_to_2d_lines</span><span class="p">,</span>
+    <span class="n">plot_pseudosection</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpl</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tarfile</span>
+
+<a href="https://docs.python.org/3/library/stdtypes.html#dict.update" title="builtins.dict.update" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-method"><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span></a><span class="p">({</span><span class="s2">&quot;font.size&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">})</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">plotly</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">simpeg.electromagnetics.static.utils.static_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_3d_pseudosection</span>
+
+    <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">has_plotly</span></a> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">has_plotly</span></a> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">pass</span>
+
+<span class="c1"># sphinx_gallery_thumbnail_number = 3</span>
+</pre></div>
+</div>
+</section>
+<section id="download-assets">
+<h2>Download Assets<a class="headerlink" href="#download-assets" title="Link to this heading">#</a></h2>
+<p>Here we provide the file paths to assets we need to run the inversion. The
+path to the true model conductivity and chargeability models are also
+provided for comparison with the inversion results. These files are stored as a
+tar-file on our google cloud bucket:
+“<a class="reference external" href="https://storage.googleapis.com/simpeg/doc-assets/dcr3d.tar.gz">https://storage.googleapis.com/simpeg/doc-assets/dcr3d.tar.gz</a>”</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># storage bucket where we have the data</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_source</span></a> <span class="o">=</span> <span class="s2">&quot;https://storage.googleapis.com/simpeg/doc-assets/dcr3d.tar.gz&quot;</span>
+
+<span class="c1"># download the data</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">downloaded_data</span></a> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_source</span></a><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># unzip the tarfile</span>
+<a href="https://docs.python.org/3/library/tarfile.html#tarfile.TarFile" title="tarfile.TarFile" class="sphx-glr-backref-module-tarfile sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tar</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/tarfile.html#tarfile.open" title="tarfile.open" class="sphx-glr-backref-module-tarfile sphx-glr-backref-type-py-function"><span class="n">tarfile</span><span class="o">.</span><span class="n">open</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">downloaded_data</span></a><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/tarfile.html#tarfile.TarFile.extractall" title="tarfile.TarFile.extractall" class="sphx-glr-backref-module-tarfile sphx-glr-backref-type-py-method"><span class="n">tar</span><span class="o">.</span><span class="n">extractall</span></a><span class="p">()</span>
+<a href="https://docs.python.org/3/library/tarfile.html#tarfile.TarFile.close" title="tarfile.TarFile.close" class="sphx-glr-backref-module-tarfile sphx-glr-backref-type-py-method"><span class="n">tar</span><span class="o">.</span><span class="n">close</span></a><span class="p">()</span>
+
+<span class="c1"># path to the directory containing our data</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dir_path</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">downloaded_data</span></a><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span></a>
+
+<span class="c1"># files to work with</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">topo_filename</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dir_path</span></a> <span class="o">+</span> <span class="s2">&quot;topo_xyz.txt&quot;</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_filename</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dir_path</span></a> <span class="o">+</span> <span class="s2">&quot;dc_data.xyz&quot;</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Downloading https://storage.googleapis.com/simpeg/doc-assets/dcr3d.tar.gz
+   saved to: /home/vsts/work/1/s/tutorials/05-dcr/dcr3d.tar.gz
+Download completed!
+</pre></div>
+</div>
+</section>
+<section id="load-the-data">
+<h2>Load the Data<a class="headerlink" href="#load-the-data" title="Link to this heading">#</a></h2>
+<p>Here we load the file needed to run the tutorial.
+In this case, we load the surface topography and an XYZ formatted data file
+containing 3D DC resistivity data.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load 3D topography</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">topo_xyz</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.loadtxt.html#numpy.loadtxt" title="numpy.loadtxt" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span></a><span class="p">(</span><span class="nb">str</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">topo_filename</span></a><span class="p">))</span>
+
+<span class="c1"># Load 3D data. Here, the data are loaded from an XYZ formatted data file.</span>
+<span class="c1"># The user must supply the proper headers for the function to identify the</span>
+<span class="c1"># correct column. Using the &#39;dict_headers&#39; keyword argument, we can load and</span>
+<span class="c1"># organize additional columns in the data file as a dictionary.</span>
+<span class="n">data_3d</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">out_dict</span></a> <span class="o">=</span> <span class="n">read_dcip_xyz</span><span class="p">(</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_filename</span></a><span class="p">,</span>
+    <span class="s2">&quot;volt&quot;</span><span class="p">,</span>
+    <span class="n">a_headers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;XA&quot;</span><span class="p">,</span> <span class="s2">&quot;YA&quot;</span><span class="p">,</span> <span class="s2">&quot;ZA&quot;</span><span class="p">],</span>
+    <span class="n">b_headers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;XB&quot;</span><span class="p">,</span> <span class="s2">&quot;YB&quot;</span><span class="p">,</span> <span class="s2">&quot;ZB&quot;</span><span class="p">],</span>
+    <span class="n">m_headers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;XM&quot;</span><span class="p">,</span> <span class="s2">&quot;YM&quot;</span><span class="p">,</span> <span class="s2">&quot;ZM&quot;</span><span class="p">],</span>
+    <span class="n">n_headers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;XN&quot;</span><span class="p">,</span> <span class="s2">&quot;YN&quot;</span><span class="p">,</span> <span class="s2">&quot;ZN&quot;</span><span class="p">],</span>
+    <span class="n">data_header</span><span class="o">=</span><span class="s2">&quot;V/A&quot;</span><span class="p">,</span>
+    <span class="n">uncertainties_header</span><span class="o">=</span><span class="s2">&quot;UNCERT&quot;</span><span class="p">,</span>
+    <span class="n">dict_headers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;LINEID&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="plot-3d-pseudosection">
+<h2>Plot 3D Pseudosection<a class="headerlink" href="#plot-3d-pseudosection" title="Link to this heading">#</a></h2>
+<p>Here we demonstrate how 3D DC resistivity data can be represented on a 3D
+pseudosection plot. To use this utility, you must have Python’s <em>plotly</em>
+package. Here, we represent the data as apparent conductivities.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract 3D survey and observed data</span>
+<span class="n">survey_3d</span> <span class="o">=</span> <span class="n">data_3d</span><span class="o">.</span><span class="n">survey</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs_3d</span></a> <span class="o">=</span> <span class="n">data_3d</span><span class="o">.</span><span class="n">dobs</span>
+
+<span class="c1"># Convert predicted data to apparent conductivities</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">apparent_conductivity_3d</span></a> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">apparent_resistivity_from_voltage</span><span class="p">(</span>
+    <span class="n">survey_3d</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs_3d</span></a><span class="p">,</span> <span class="n">space_type</span><span class="o">=</span><span class="s2">&quot;half space&quot;</span>
+<span class="p">)</span>
+
+<span class="k">if</span> <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">has_plotly</span></a><span class="p">:</span>
+    <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="o">=</span> <span class="n">plot_3d_pseudosection</span><span class="p">(</span>
+        <span class="n">survey_3d</span><span class="p">,</span>
+        <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">apparent_conductivity_3d</span></a><span class="p">,</span>
+        <span class="n">scale</span><span class="o">=</span><span class="s2">&quot;log&quot;</span><span class="p">,</span>
+        <span class="n">units</span><span class="o">=</span><span class="s2">&quot;S/m&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span></a><span class="p">(</span>
+        <span class="n">title_text</span><span class="o">=</span><span class="s2">&quot;Apparent Conductivity&quot;</span><span class="p">,</span>
+        <span class="n">title_x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">title_font_size</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span>
+        <span class="n">width</span><span class="o">=</span><span class="mi">650</span><span class="p">,</span>
+        <span class="n">height</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+        <span class="n">scene_camera</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">center</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=-</span><span class="mf">0.4</span><span class="p">),</span> <span class="n">eye</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">1.6</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">1.8</span><span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="n">plotly</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;INSTALL &#39;PLOTLY&#39; TO VISUALIZE 3D PSEUDOSECTIONS&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<html>
+<head><meta charset="utf-8" /></head>
+<body>
+    <div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.1.1.min.js" integrity="sha256-HUEFyfiTnZJxCxur99FjbKYTvKSzwDaD3/x5TqHpFu4=" crossorigin="anonymous"></script>                <div id="353eb5da-00d1-4c47-91e8-abf6c83c5c29" class="plotly-graph-div" style="height:500px; width:650px;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("353eb5da-00d1-4c47-91e8-abf6c83c5c29")) {                    Plotly.newPlot(                        "353eb5da-00d1-4c47-91e8-abf6c83c5c29",                        [{"customdata":{"dtype":"f8","bdata":"5nGJqRCXij\u002ffZIMofy+HP9DQ6hd284Y\u002fKhG+TjXZgT9Fu+o04hWbP0ucpqmm5J4\u002fwDoTScxBiz\u002fHF1Jqs3+HP2xAxo9ERoE\u002fI8iZredvgj+O9AW3Bj9\u002fPxo7bspwgZY\u002fb31bX8Icmz9ibEO4BkCHPxY5i1QLk4U\u002f+BNEPxbAhD9R0yPUU1+GP4NJXeSi7YE\u002fod4T4XPzmD\u002f9tS+aOWSiPyMZP7qDPo4\u002feQZ1o\u002fzMiD9ET7I2p\u002fmJPzaa3h\u002f1RIk\u002fcXfJ7t+kgT9woRH1J5OXP72WMCnYG6I\u002fN1B5er18kD9QoXKqGi6KP5XIYemVl4k\u002f8UshKu+Shz\u002f+o4RqbQSGPy1QKH9ARJc\u002fW4TkYPv1pD\u002fzKP4FriCUPwGVuEGSKpE\u002fVsyigj3wjT\u002fshEKw0jGLP\u002f5GGY0VyIc\u002fS+GMjW5Zgz8B0pcFuHOSP5\u002fgWEN6\u002fpY\u002fHvEJW41Skz\u002fbes3WppaPPwjg3i8A0o4\u002fbOw4HKoVij88KDBWBGyEPybyvq8VLYM\u002fMyZuDrsNkD89rCE5ykmeP2+PCrBj+Z8\u002fYfN9XuOHoD89Bws5LwufP8+oLKBRV5k\u002fnysTPA9HmD9CLqkya6egP75VLg1pY4w\u002fQqQ7tCrDkD837sdgtMGSP3v98rFIIpM\u002fDJHMsX5cjT+wd0jGh5CLPzUB55mci5I\u002fNwT9Wdv+mz\u002fSF4m2ZMuCP1QWBFxDVYU\u002fQgjhTUi1hD9iOQOzqgGAP4g7HR+TT3s\u002fe4jo+F\u002fzgz\u002fT1G86iqKJP4gZe66KAI0\u002fanw0zq\u002fegz8kg3VWlVyFP7g22hvxBIE\u002fcAZ3GvbofT+KRR2FtuCEPxhmg+F8cos\u002f9yaTnnogkD+pWXCqk32GP1NLa1ootIQ\u002fc37HLsrCgT8tjEKysix+P3Zq4n7aa4M\u002fNEdq7omyij843WgJT0SRP5XepghrZYY\u002fI1TJlyFFjz9pjY0qMOmBP2zQVm5UTXo\u002f9Yn5DN\u002f8fz9oc9HWBJiIP4BZ0s6emYo\u002fRh4w4rBRhD8Jy3U8VzGNP\u002fIAbqAJ1ng\u002fCm2A3BGyej84DIp8l7qDP\u002fBZ7sd+fYY\u002fmwsXfNyBfj\u002fV84S1SuSFP5GtoNa4vIA\u002f0+0TQfx9hT9uOU08QaGGP7PtPXi79Hs\u002f3h6roTQhhj+k1d2XC\u002f2JP67xuO11B4k\u002fX3xs6Piyfz80G3t2n1KGP6+T9smqAIc\u002ftHefSMxjgD90sRKwcTGJP\u002fAZFFBdwn0\u002fsB5vt+yLij\u002fdzHcolSmRP1GLv8K2NIQ\u002fI0T5n8BhhD9BDOsKGjGSPx3G6wo7ZYM\u002fmsurUB1AhT\u002fHQy06JlSDP0XNOEkiRIU\u002fc7ycefAakj+6cM+4l5GHP3dUmRwqwpM\u002fzZDU2JlYhD9KmfT0YkSFP3mXRRdPHoM\u002fenZZHb7EhT\u002fvLWbiyf+SPxKNlc9Xq6A\u002fxELJvxKOkj+GObwW0EeCP5SZWLtwqoI\u002fG7dQivt0gj9RxnysH3KDPwt9nkagSZA\u002fCSZs9IRnnT\u002fep0uiW5qOP4NEc4uNbng\u002fm2lx+Nu+fj91Eu2DxnR9Pw8oZO4zJYA\u002fxEuU9FtIjT9V0ktlInaYP0OcSGo+vok\u002fESFbimVDfT+ExQxvYc+KP9YabcQxlIk\u002fPmqz+y1jiz9\u002f2x1wNiCXP3E8loD9TqU\u002fIgaKmDPQlj9s6lNMy1OKP1SaHUDgi5U\u002fWMM5zDZ+gj9T5cSsf52FP26z9RG9i48\u002febvotbEeoD+lAP4QXHyRPw1Y35E8foI\u002fDmGAERr0jD\u002fCSqgQ6rKCPw3ozXJM94c\u002fwKJHI3BwkD\u002fBPQd3xBagPxSOcWimUpQ\u002fJiNgAScuhD85abN1ta6NPyQVyK+ijIU\u002fwwbKehHfhz9I6D3ukSyHP4l9djc19Jk\u002fVsof060TlD\u002f2flQb\u002fZyFP\u002fBJoUj7JY8\u002fi4GYm83jhD\u002fyE3aYoO2FP1THyOPCOog\u002fMbn3ipRIkT+PV6ulbEqcP7BSPs6v75A\u002fJDl4Bfunlj9kt0W8biCLP2P0uL\u002fSro4\u002fmvMjcHcGkT\u002fitVSmEVaKPzN\u002fTTref5M\u002fLgdKcFsvmT8CWZyrut6lP5MR2Pxqz5w\u002fYzWNo8hRnj\u002fhm4nkrLehPxX\u002fFhev1po\u002fLZS8KMNHnD+Cq5lQKzeIP+VwB\u002fxMr58\u002f16H2rJrAkz\u002fYf8vGkemXP9PwTVmVMJo\u002fQOWqgoYPlj+2F\u002fmrt2CYP6Kv0uF1Fpc\u002fEtd3ngZNlT+xuamCmYGFP\u002fOvaLu2jIg\u002fE5jyh02Sij8DRXDIWFOFP+mBnm2QQYY\u002fIoA+FbSVhj9F1iq5\u002fQJ5P2uYVb+URYA\u002fLzCa\u002fYbMgT+w2MxW1UZ+P3+U9Ndmk30\u002fza+8AKESfz\u002fY+rEq5USMP9zmCb7714s\u002fjzPNbSfzhz\u002fg4NXPoWCJP9uOx6gazIc\u002fjp\u002fo0PGxhD\u002ff+iSr8JCAP\u002fcI2FaOYYI\u002fXlSkSy1wgz+aXQoRFcl9Pxm1dlJmI4Q\u002fLJIq4HHNhT9bct59gUeIP8Vyhdpfooo\u002fJ1WVP5dviD+hgcozbWeDP7D7Dvg+J4g\u002fSOMjuT9Qhj+a1kwDa4mCPzu38VtBi4Y\u002fCAAtdj37hj8wfuDRmwWIP96Ht80aBoQ\u002fEwIiaX\u002fMhz8vO+2HBq+GP0q\u002fqMVUt4M\u002fItD7WO+GhT92MDGYfzWIP73S0RvduYg\u002fs2mCxoFWhD\u002flg8JA0smCP1W3ijBmXoM\u002fMelbjxYDgT\u002fjYa6ceimDPyFTHgZrhIM\u002f7LdhYCwQiD\u002feSlTsoR6DP02H3Q+fTIA\u002fWwzz+GHMhT9XgICRnV2EP+9u6exTjoY\u002fGSilRgHRhz9JFT0PU7SLPy7GfFPcA4Y\u002fiT1pVtqRgj+i5YjsG02HPxExPjFK4Iw\u002f5yR76+X+ij8o0cLE0eqKP6snWxQgrY0\u002ftIVSxXP1hj9f2XTce\u002fyBP0LR+jj2s4Y\u002f9PZ\u002fVpMviz9uMhL\u002fCLCPP+PJkQnpEoQ\u002fbZZsMIXIiD+d+OpW9KeDP9MVXWuKxX0\u002fnAtLc+eSgj\u002fcMPYAiwqGP312ZsON2ok\u002fd3GpujHniT+YJTA1xcKFP4I3hWlpx4M\u002fNr2WIOMsfj83cT5Rvi2CPyWoggKCfIY\u002f0VC1skeVij9b0pWZEUeLP5UG8aFNbJA\u002fRl6aDLeogz+xmt+Adft6PxdAKq\u002fWMoA\u002fm5eeHGQOgj\u002f868tzheSGP4rJV28t0Yc\u002fIWQLej+Sjj+DpgD97HKLPyyLdAdRz30\u002freFREydsez9W9si\u002feFqAP0nLFzYLBIQ\u002f+eRVjLhUgz\u002fEqjBtUc6JP0G\u002fZH+RLYg\u002fXeENGLgjhz8pc1kI2q17P+hYISXpKHs\u002fk0IN19uRfT\u002fS+E+hvPl9P6J\u002fl1Hon4I\u002f3r0kjxqpgj\u002f0pmYXVeWBP4HxenYT8oA\u002fCS5wBK25gT981Q2HQhCDP21nGbnOvoE\u002fR9jQd76WhT8mTF87SvGDP01ZBRmATYI\u002fK3pIkjM\u002fgT8MIYQu9C6CPx4+Gz9KGIk\u002fP34dGBPfiD+nCngYEGeMP8g\u002fseIBJ4o\u002fiUGUPI0Shz8hhq+udAOIP2IJjm1HW4g\u002fagHwG97fhz+Qt2CEVziJP4i+ihLC3og\u002f8LMk43C9hj9KUptg63SFP2+bu42AWog\u002f1WG00qPNjj8cWo9dqCGFP9E\u002fKYaYxYM\u002f\u002fPkuOvOTgz+b\u002fHr1gH2GP57xdJhFvoI\u002fUmGn\u002fEO+gT+9q9XuhNWDP1laoQTTc4M\u002f+XpUDHpphj8\u002fXrI84RSHPw8W589VYIc\u002fLoIMtKzjgz\u002frr2iVG3+HPxdZYCfmP4Y\u002f"},"hovertemplate":"x: %{x:.2f}\u003cbr\u003ey: %{y:.2f}\u003cbr\u003ez: %{z:.2f}\u003cbr\u003evalue: %{customdata:.3e} S\u002fm","marker":{"cmax":-1.3694204657601192,"cmin":-2.224403642584136,"color":{"dtype":"f8","bdata":"EB+D+40v\u002fr\u002fZIgQ6RyP\u002fv\u002fwHAMtcNf+\u002f844+LlN6AMDbyqIXsz35v+eULUi2U\u002fi\u002f4BuW43wD\u002fr\u002fk8j3oZgv\u002fv0aLC+1llwDA8GruwHZdAMBiVOPCxPAAwMFdbkU0h\u002fq\u002fbuwAwO87+b8c7\u002ffJVB7\u002fv2+VlShlo\u002f+\u002ffAj\u002fF6zo\u002f78FYmB0yWL\u002fv\u002fVtcHdbdgDAc+ILoLfP+b82wbEqTB33v6Acs2F\u002fSv2\u002fcXOPJXur\u002fr\u002foUaB3LFn+v0\u002fpJFwuiv6\u002faQGhJJKEAMBQ2ZSvozT6v\u002flkaV3bOPe\u002f4++WbL+w\u002fL\u002ffeOaJMkv+v8kirHuac\u002f6\u002fS\u002fIvQbkF\u002f79qN8kPP3\u002f\u002fv+hgM8QMTPq\u002fBGD7cK009r+7WJQK2k37vxu5fhb0aPy\u002f7EW1qZJc\u002fb8K\u002fjKokAf+v3vGMSog9v6\u002f5l815YIyAMAQIiPbeOj7v8U58+sCYfq\u002fne1q4XmW+7\u002fSSZs7I\u002f38v\u002fEXvknuKP2\u002fky3JL7JR\u002fr+vBkNphgIAwOniw5aCOgDAEPKv9Cjg\u002fL99b0va43b4v0GH4cWHFvi\u002fvnPfYQnb978M1tLcEEv4v6H2vsoetPm\u002flFwuOmMA+r9Oam751M33v9j4064lu\u002f2\u002fl\u002f6LiU+T\u002fL8jX2wDWMv7v1rsHGLrp\u002fu\u002f9O5pDjN\u002f\u002fb9gIDddh+\u002f9vyDUvUN\u002f3\u002fu\u002fMDVEvekC+b8CNo5xY0wAwGaBHOVnt\u002f+\u002fBm07Rkvs\u002f78j1UlDNNsAwNTUsr9\u002faAHA0R86TEoXAMDHLqiyoXD+v8T103EYlf2\u002f7sPFe+YaAMBQqurmBbX\u002fvzsxoouipADAqznSGKQXAcBsjTm0x93\u002fv+Xz8kke9\u002f2\u002fC09sOBDY\u002fL+eS16Zaln\u002fv6rVbOir7P+\u002fJad9GbN+AMDJ6l6qzg8BwLoaoqw1LwDA6O69smMo\u002fr9IMsfOkF78v+CB3W7lYP+\u002fjF6zQykP\u002fb+wduU\u002fOHcAwLaCz0v5iQHAvJ0P4efbAMArt6FKYrr+v2K2jxHjLv6\u002fRAie4QMHAMCLpDEbcYn9v1XxRaH7vAHAu+LD48N8AcC3C7z2OyEAwCXmPg1xWf+\u002fT7hTGw4GAcDNSzLcaon\u002fvywq3WiAswDAIw\u002fM1zCq\u002f7+xZ1BibU7\u002fv0Mbqpa7UwHAK8S73S92\u002f7+QIDc5RFj+vydfkjgsm\u002f6\u002fAwi+APjjAMBk7XS9vGb\u002fv8cWqmReMf+\u002fhW7yqifGAMAZc+8bjo\u002f+v+UUXMEiHAHAkD4w4ncy\u002fr+h3\u002fuMWmn8vz2ectn7CwDAX81E5kUEAMB\u002fwJTNvAH8v5aP2i5lMADA27nlzk6+\u002f7+3VADZdTMAwPcVx3f+vP+\u002fVf\u002fgGjkK\u002fL+tFPJ\u002fHgb\u002fvwi+e87Ibvu\u002fmtaQm9UFAMC0plFW6bz\u002fv4r3Y\u002fUwPQDADnJVtnWT\u002f79+AD++fbT7v\u002fwWiQAyzPe\u002fc1GhN5Pe+7\u002f5CPEeDWUAwJtVG0mAUgDA1s1P74FcAMDE0cuyFi4AwIugQ\u002fhrxvy\u002fHBBry5Kr+L8ChN85hTX9v2AEECOUywHAMu3HoCL\u002fAMCTMWGaPSUBwE3rAiSG0wDA6PgIoPiD\u002fb+Uewjz9vL5v04cRE4jaf6\u002f+gufghUrAcB2STr95SD+v44YsUKGdP6\u002fz2wRgf\u002f6\u002fb8qlcON2Fb6vx+qJJtpF\u002fa\u002fWVVwFQ1v+r9GmaPGOEH+v7PrRcKv1Pq\u002fC+XNgcVaAMAQyer4B6D\u002fv6tw1zWK\u002f\u002fy\u002fU41fTtAH+L\u002fXcHCdJkj8v5yXMWzEWgDAkOOwGBSY\u002fb\u002fpBbPa7FAAwB5J5yFi6P6\u002fgaVirvC1\u002fL+roOzhOwv4v4AMNvquPPu\u002fsxjJ3BwNAMDkkUMg2Wv9v6hD4eJ1pf+\u002fidAJL2zv\u002fr+nh2TTJyT\u002fv2o6N7Scifm\u002fuvKAflhS+78hf8nyMaD\u002fvxvL+70YFv2\u002fLxLhe8Dc\u002f79IL4zpdIb\u002fv47K3xDu1P6\u002fZ3KQ9dhc\u002fL\u002fB4AU5QfD4v4FR6UvzgPy\u002fUCIhLFh7+r92Sz6iAwz+vxs13y7hMP2\u002fulq\u002f7KB3\u002fL8N3UIZn0D+v7cDSf1Ahvu\u002ffJ7YqBy\u002f+b\u002fUmi5vJen1v1CY8K3iz\u002fi\u002f3khkmw51+L\u002fd+PcVt1\u002f3v0v51dX8Tfm\u002fj7ano+jw+L8nfEHd9dX+vzK4H2+0Jvi\u002fiiWYTVVv+78+\u002fJN9WRv6vyrlokiFefm\u002fqVxPdbqq+r9FJGcVD\u002fn5v5e4j1LHWfq\u002fbmhPdBLp+r90guzKBan\u002fv+49brmUvf6\u002fi3WYr8ww\u002fr8yT0+3B7j\u002fvw0EJCkObP+\u002f1gt2T\u002fpR\u002f7+0tgFpt7YBwJDA52WVzADAKkd1+8t8AMC1E\u002feXzQwBwKqnYrWiIQHAoxF6Ebj1AMDXQQ\u002faocL9vwNj4Fub3f2\u002frKZi3pXp\u002fr9nyAlUloL+v\u002fl39ZHz9P6\u002fbOmXF2rt\u002f79WMLIAo7wAwMwySgYsYADAJ6itwm8uAMDDgYYQWhsBwLS7QEb3DgDAlBAyJa+Q\u002f7+55MdaR9H+v2JUuwSaLP6\u002fxz3U4dfF\u002fr9Fxg2BADAAwKcSvBaJ2v6\u002fXPB89Xln\u002f78mWvBHq1gAwFBtTv4xVf+\u002fycqiRwIz\u002f79mctU1PeT+v6O\u002fj9EIFADAnPzvJtb0\u002fr9MHAMyNEr\u002fv0H3PQLPIQDANi6fs0yn\u002f7+VQdCdcNb+v\u002fa4ydrYsP6\u002fky3KKjEGAMC1jsXarUwAwJny66yeMQDAVYsBcQOlAMC7MfTkKTsAwGBxxHbTKgDAWcjciy\u002fh\u002fr9gvPTnIT0AwDkdgeQUywDAzeXrzwWR\u002f79Gs1aA+gQAwAvYdp0\u002fVP+\u002fITjVX4Xz\u002fr\u002fO9YE+h+b9v3Jlztpsf\u002f+\u002fKyPc6hZXAMBGON7qbBr\u002fv1ZC9PPWnP2\u002fI2wNB6AU\u002fr82qS4IzRn+v3AGPgk4bP2\u002fIuoBgsI0\u002f78ad8sOfHMAwPoblECxSP+\u002fdvtwsSMI\u002fr\u002fymkAIkPf8v5KK87fQEQDA6JYSorus\u002fr\u002fuC8i9hSQAwO0TitjDGwHAzzCVkuRWAMBCWOs5UX3\u002fv3tNrEGDYf6\u002fOJbPWh5e\u002fr8abWHpFpT\u002fvx14brv6HgDA173SFskPAcAguskRBWoAwNNj+Ce\u002fWf+\u002fLElMagUw\u002fr9WksIIJQL+vyvkdFKwt\u002fy\u002fx7jaU2MkAMAgjinEQ3MBwOIoRjGY0ADAxJ2iPwhwAMCwFeQ55Dn\u002fv7Ilm3148\u002f6\u002fvIf64Vw3\u002fb9MSW7oAff9v0NcX\u002fqfGgHApTrW8d5kAcBALKRYIsgAwLdESWFkFADAIQ4\u002fjFszAMBWuB\u002fqzWT+vzwAY7C32P6\u002fg+pxvc8m\u002f78rw5vvlVwBwLt9zGpubQHAbMqRHdEhAcBjyPzJsRUBwNgKiLx2VADAkc0b\u002fL9SAMAOVpDN93cAwCXwvp5+qADAMnml93uAAMDWeAp\u002fvz8AwFCMpJx6fwDAncKDNDSi\u002f7+AkiFEpxcAwPCNH5D4YwDALceBDdKYAMDWIerayWkAwD+RZ7GBlv6\u002ftXpDn2um\u002fr94YMbdQLr9v11W3AAVTf6\u002fhmk6avkr\u002f7+Ads6p3OT+v6u6Iu+gy\u002f6\u002fW5g\u002fnzDv\u002fr\u002f3ypRSp43+v6r9TkKCpv6\u002fYstyIMtF\u002f7+6qJnVH63\u002fv7EsvKzZy\u002f6\u002fsc09Deop\u002fb8HibKBS8j\u002fv4GDoGhMHwDALFBjvRAoAMDrZvtgcFn\u002fv+BWS0LRTgDAsSvQxpV\u002fAMCEwZ43gRwAwL6o5e3ILQDAhB7NLaNf\u002f79zQxb0RSv\u002fv9SaVIKzFP+\u002feWr+UQcaAMCp8oXOkwv\u002fvzvgEUWTbP+\u002f"},"colorbar":{"thickness":20,"tickformat":".2f","tickprefix":"10^","title":{"text":"S\u002fm"}},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"opacity":0.8,"size":4},"mode":"markers","name":"","x":{"dtype":"f8","bdata":"7CNg4Gn+icDMscB5zdCHwNiU8XE8foXA0jhtTJZRg8CbbbB0WWSBwFt8ZeqRPX\u002fA5SUPoxjbe8CnAz3PHo54wInJOAkddobAAhMnM4ckhMAkulxrIfiBwH8c2gNvCoDAnn2C6bKIfMBOSdMkeCV5wEk+\u002f2UA2HXACqsF+VS1csBqrbe86fKCwHAxQzJyxoDAkw751kKwfcCoYTyZLCN6wK6NZUl8v3bAsgaulddxc8BG4jy5JU9wwD2OW78cr2rA1FpvedOlf8CQ2Y1mDsl7wBV9ReR4PHjACL\u002fQEYTZdMDYZ9rtlYxxwICvBFZA1WzABAhrzITnZsDc8egXVCVhwDc+shI6LHrAWvbk85qhdsDtfznRQEBzwBXUSWgM6W\u002fAli5c8EunacDokKSYfrtjwJ4o7TKd9VvAFsyazFEZUcCdBSXB07x0wJU8pZdoXHHAUV887acibMDnK+U0GeJlwHZIzqqy7l\u002fA5Ft\u002f99puVMCRd\u002fM3jidDwAAAAAAAAAAA3sRUr3vtbcCoRnyvq1dnwA96+zp9F2HAz1RLWitaVsC0P+yokbVFwAAAAAAAAAAAkXfzN44nQ0AWzJrMURlRQKRbuOX+6WHAscJvv9tTV8BA5ki\u002fiv5GwAAAAAAAAAAAtD\u002fsqJG1RUDkW3\u002f32m5UQJ4o7TKd9VtA3PHoF1QlYUCLQSC4BKlHwAAAAAAAAAAAQOZIv4r+RkDPVEtaK1pWQHZIzqqy7l9A6JCkmH67Y0AECGvMhOdmQD2OW78cr2pAi0EguASpR0Cxwm+\u002f21NXQA96+zp9F2FA5yvlNBniZUCWLlzwS6dpQICvBFZA1WxARuI8uSVPcEAKqwX5VLVyQKRbuOX+6WFAqEZ8r6tXZ0BRXzztpyJsQBXUSWgM6W9A2Gfa7ZWMcUCyBq6V13FzQEk+\u002f2UA2HVApwM9zx6OeEDexFSve+1tQJU8pZdoXHFA7X850UBAc0AIv9ARhNl0QK6NZUl8v3ZATknTJHgleUDlJQ+jGNt7QJ0FJcHTvHRAWvbk85qhdkAVfUXkeDx4QKhhPJksI3pAnn2C6bKIfEBbfGXqkT1\u002fQDc+shI6LHpAkNmNZg7Je0CTDvnWQrB9QH8c2gNvCoBAm22wdFlkgUDUWm9506V\u002fQHAxQzJyxoBAJLpcayH4gUDSOG1MllGDQGqtt7zp8oJAAhMnM4ckhEDYlPFxPH6FQInJOAkddoZAzLHAec3Qh0DsI2Dgaf6JQAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1wAAAAAAA4HXAAAAAAADgdcAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVAAAAAAADgdUAAAAAAAOB1QAAAAAAA4HVA"},"y":{"dtype":"f8","bdata":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVMwrdfNorAVCrVylhMiMBmSe+C4DGGwHqo+7jd\u002fIPAtbJMOKLjgcCYkJK3gft\u002fwBz6\u002fzMSfnzA7hIUpSU0ecB+E4xiJd+GwENb2TD9xITAnRTz4HOQgsAr870hcHeAwJwDgN3VIn3AbPvM6uGkecCjg6YAfFp2wBJf6wRqOHPAaMaIDGZsg8CrnWXEYziBwNtzHRcGP37AuPZ71HRyesCOgvsp2vN2wGidtY31qHPAvBMS95CGcMDKh5TGmBlrwL\u002ffw+PvAoDAVuYEAA3Ue8A+bKXO1wZ4wL2wL3S+h3TA+LwOs6E8ccDieWb0bTRswFiF+ooWQWbAtTsGNLC2YMBLcJRJEsd5wFggGGbS+XXAMXal7hJ7csD\u002f82CJB2FuwE+mxDlnHWjAMkAsYEIrYsBcZTz+FERZwO4Fk+Tn5U7Azxj4Ie4hdMDss39OYKRwwOoSG5HctWrA6IjHJSJ0ZMBvvHiKMwddwL5BC4eV91HAZhHRx9xRQMAAAAAAAAAAAAhk61NYL23A8qwHVPGdZsDTug0vZ11gwNaY+6Kl21TAztFqHySbQ8AAAAAAAAAAAGYR0cfcUUBA7gWT5OflTkCN5roKNbZhwMsFqNYo7FbAuCBo2kkbRsAAAAAAAAAAAM7Rah8km0NAvkELh5X3UUBcZTz+FERZQLU7BjSwtmBAEBPvvbm8R8AAAAAAAAAAALggaNpJG0ZA1pj7oqXbVEBvvHiKMwddQDJALGBCK2JAWIX6ihZBZkDKh5TGmBlrQBAT7725vEdAywWo1ijsVkDTug0vZ11gQOiIxyUidGRAT6bEOWcdaEDieWb0bTRsQLwTEveQhnBA49CB7zg4c0CN5roKNbZhQPKsB1TxnWZA6hIbkdy1akD\u002f82CJB2FuQPi8DrOhPHFAaJ21jfWoc0Bgf+ofS1p2QN8TpqL0M3lACGTrU1gvbUDss39OYKRwQDF2pe4Se3JAvbAvdL6HdECOgvsp2vN2QER05ESxpHlAzl4bXeF9fEDPGPgh7iF0QFggGGbS+XVAPmylztcGeEC49nvUdHJ6QICoaHKlIn1AWWXoB1H7f0BLcJRJEsd5QFbmBAAN1HtA23MdFwY\u002ffkA2JKP9V3eAQJFHDuiJ44FAv9\u002fD4+8CgECrnWXEYziBQF8v06tbkIJA9AmmVMX8g0BoxogMZmyDQAVVCcbkxIRA2PHR8ccxhkAr+GDBDN+GQK7l5RBATIhArIZF5kY2ikDA7DT1sDaKwIwqIrupTIjA2PHR8ccxhsD0CaZUxfyDwJf3MMzh44HAUrn3BgH8f8DOXhtd4X18wN8TpqL0M3nAR4saAnbfhsAFVQnG5MSEwF8v06tbkILA6UlLQq93gMC5QrF5VCN9wER05ESxpHnAYH\u002fqH0tadsDj0IHvODhzwLT+3bb+a4PAIuG8cP03gcAi6mWW5j5+wJlBRiZVcnrA0bKhGgvzdsA8\u002fD8vJahzwEyS1X+\u002fhXDAtQSL\u002f\u002fMXa8B7MZDyigKAwHB7KMrt03vANKftSLgGeMDVtynZ74Z0wIJdM3XRO3HAaszW68oybMDZbRV6cT9mwPdM1G8JtWDATGYVIL3HecCWsBCyf\u002fp1wDF2pe4Se3LA\u002f\u002fNgiQdhbsBPpsQ5Zx1owDJALGBCK2LAXGU8\u002fhREWcDuBZPk5+VOwKHv4DCdInTA7LN\u002fTmCkcMDqEhuR3LVqwOiIxyUidGTAb7x4ijMHXcC+QQuHlfdRwGYR0cfcUUDAAAAAAAAAAADymHx28y1twL053vSKnGbASTip2\u002f9bYMACgsC11dhUwDs4LJeClUPA9e1q\u002fe+Ipj+iabT\u002ffVdAQDfSPjyG605AK7uwa820YcDOQTaOWOlWwIN2MhOoFUbACTuz\u002fO+Ipj\u002feKh+pxaBDQIDzseZk+lFAo6b9EeJGWUA9FmHVFbhgQBAT7725vEfAAAAAAAAAAAC4IGjaSRtGQNaY+6Kl21RAb7x4ijMHXUAyQCxgQitiQFiF+ooWQWZAyoeUxpgZa0AQE++9ubxHQMsFqNYo7FZA07oNL2ddYEDoiMclInRkQE+mxDlnHWhA4nlm9G00bEC8ExL3kIZwQBJf6wRqOHNAjea6CjW2YUDyrAdU8Z1mQOoSG5HctWpA\u002f\u002fNgiQdhbkD4vA6zoTxxQGidtY31qHNAo4OmAHxadkDuEhSlJTR5QAhk61NYL21A7LN\u002fTmCkcEAxdqXuEntyQL2wL3S+h3RAjoL7KdrzdkBs+8zq4aR5QBz6\u002fzMSfnxAzxj4Ie4hdEBYIBhm0vl1QD5spc7XBnhAuPZ71HRyekCcA4Dd1SJ9QJiQkreB+39AS3CUSRLHeUBW5gQADdR7QNtzHRcGP35AK\u002fO9IXB3gEC1skw4ouOBQL\u002ffw+PvAoBAq51lxGM4gUCdFPPgc5CCQHqo+7jd\u002fINAaMaIDGZsg0BDW9kw\u002fcSEQGZJ74LgMYZAfhOMYiXfhkBUKtXKWEyIQAVMwrdfNopA"},"z":{"dtype":"f8","bdata":"3tZI2JiiXcBQcG+GNFBmwDLh+iS1HG7ACvOin87NcsDma79KWEt2wE3\u002fzP\u002f\u002fn3nAVQKcvRfgfMCLAhr4wwqAwKV8rfCDeWDAiO04jwRGaMBo8oOp7MRvwBFy3v\u002f\u002fX3PAdwXstKe0dsB\u002fCLtyv\u002fR5wEALU6UvKn3AoIWp0hclgMAf+7TlF8FiwAAAAAAAQGrA3Hgcq4mdcMBDDCpgMfJzwEsP+R1JMnfADBKRULlnesAMEpFQuYd9wKaH\u002fI4kSYDA4QRLGug+ZcCa9oNw+zlswLSOT22lcXHAvJEeK72xdMB8lLZdLed3wHyUtl0tB3vAvJEeK70RfsBax6e20oiAwHxnDw98hmfASY4qecsvbsAsSmR6\u002fVdywO1M\u002fKxtjXXA7Uz8rG2teMAsSmR6\u002fbd7wCRHlbzlt37A39nDA5\u002fRgMAqk3WTsy5pwDqZEw\u002fjrm\u002fAXs8huuEMc8BezyG64Sx2wJ3MiYdxN3nAlcm6yVk3fMAuNq0UsiJ\u002fwKleyDSU8oDA84pMZfYpasA6SD5la0pwwDpIPmVranPAekWmMvt0dsByQtd043R5wAuvyb87YHzALjatFLIif8Df2cMDn9GAwEG3lzQmvmrAoNtLGhN\u002fcMDg2LPnoolzwNjV5CmLiXbAckLXdON0ecCVybrJWTd8wCRHlbzlt37AWsenttKIgMBRvTWwVf5qwOjbgqW6iXDA4Niz56KJc8B6RaYy+3R2wJ3MiYdxN3nALEpkev23e8C8kR4rvRF+wKaH\u002fI4kSYDAUb01sFX+asCg20saE39wwDpIPmVranPAXs8huuEsdsDtTPysba14wHyUtl0tB3vADBKRULmHfcCghanSFyWAwEG3lzQmvmrAOkg+ZWtKcMBezyG64QxzwO1M\u002fKxtjXXAfJS2XS3nd8AMEpFQuWd6wEALU6UvKn3AiwIa+MMKgMDzikxl9ilqwDqZEw\u002fjrm\u002fALEpkev1XcsC8kR4rvbF0wEsP+R1JMnfAfwi7cr\u002f0ecBVApy9F+B8wCqTdZOzLmnASY4qecsvbsC0jk9tpXFxwEMMKmAx8nPAdwXstKe0dsBN\u002f8z\u002f\u002f595wHxnDw98hmfAmvaDcPs5bMDceByriZ1wwBFy3v\u002f\u002fX3PA5mu\u002fSlhLdsDhBEsa6D5lwAAAAAAAQGrAaPKDqezEb8AK86Kfzs1ywB\u002f7tOUXwWLAiO04jwRGaMAy4foktRxuwKV8rfCDeWDAUHBvhjRQZsDe1kjYmKJdwJk2NTP3EVzAK5QaFMT9ZMCrKm673FRswGvoTeJr8XHAYdWsdVacdcB2xSnGpxJ5wKzSDmb0YHzAA4HGMymVf8DqaTR3XAZewHXL7eJGWmbAoHEb7EHobcDGpWyJC59ywNuV6dlcFXbAEaPOealjecBoUYZH3pd8wGhRhkfet3\u002fASNYrdmWIYMBzfFl\u002fYBZowF5WF6Y1bG\u002fARJuII2wsc8B6qG3DuHp2wNJWJZHtrnnA0lYlke3OfMB6qG3DuNp\u002fwFJ12fkoi2LAPE+XIP7gacC0l8hg0GZwwOmkrQAdtXPAQVNlzlHpdsBBU2XOUQl6wOmkrQAdFX3A2ktkMGgDgMC85erHFrhkwOjF5Gi5pGvAKXBXVKkgccCBHg8i3lR0wIEeDyLedHfAKXBXVKmAesD0YnK0XHJ9wG+5+rEFHoDAE2wScrSyZsB+htyxTU9twJbxpabb23HAlvGlptv7dMA\u002fQ+7Ypgd4wAo2CTla+XrA9EWM6AjDfcB\u002frJYqDyyAwGlgmtgiJWjAGL0JdIyNbsCM3gQ6xmZywDQwTWyRcnXA\u002fyJozERkeMDqMut78y17wPRFjOgIw33Ab7n6sQUegMBDnQMVL\u002fpowEOdAxUvOm\u002fASiDKvOKocsAUE+Uclpp1wP8iaMxEZHjACjYJOVr5esD0YnK0XHJ9wNpLZDBoA4DArrfNVMhWacD\u002fWl65Xm5vwEogyrziqHLANDBNbJFydcA\u002fQ+7Ypgd4wClwV1SpgHrA6aStAB0VfcB6qG3DuNp\u002fwK63zVTIVmnAQ50DFS86b8CM3gQ6xmZywJbxpabb+3TAgR4PIt50d8BBU2XOUQl6wNJWJZHtznzAi5T7V8W3f8BDnQMVL\u002fpowBi9CXSMjW7AlvGlptvbccCBHg8i3lR0wEFTZc5R6XbA0lYlke2uecCLlPtXxZd8wCbEO0QQlX\u002fAaWCa2CIlaMB+htyxTU9twClwV1SpIHHA6aStAB21c8B6qG3DuHp2wDTmQ4qQY3nAzxWEdttgfMATbBJytLJmwOjF5Gi5pGvAtJfIYNBmcMBEm4gjbCxzwP7YXupDFXbAmQif1o4SecC85erHFrhkwDxPlyD+4GnAXlYXpjVsb8Dp6OGZ8p5ywIQYIoY9nHXAUnXZ+SiLYsBzfFl\u002fYBZowOb3BQ0Q6G3AjivD8lLxccBI1it2ZYhgwLtR2AMVWmbA8bBY3KpUbMB2dgm5+AVewHEaBTWS\u002fWTAJUMKdZMRXMBq9mE56Q9cwBT0MBe9\u002fGTA8bBY3KpUbMCOK8PyUvFxwNsfYmLjm3XA8A\u002ffsjQSecDPFYR222B8wCbEO0QQlX\u002fAvClhfU4EXsC7UdgDFVpmwOb3BQ0Q6G3AQPAhdpiecsBV4J7G6RR2wDTmQ4qQY3nAi5T7V8WXfMCLlPtXxbd\u002fwOqvV1iQh2DAFlaFYYsVaMCuPsNArGpvwG2P3nCnK3PAS5WDNE56dsCjQzsCg655wKNDOwKDznzAS5WDNE7af8D0TgXcU4piwI03Q7t032nA3IsergtmcMC6kcNxsrRzwBJAez\u002fn6HbAEkB7P+cIesC6kcNxshR9wENC7+gyA4DAavRqgGK3ZMCW1GQhBaRrwClwV1SpIHHAgR4PIt5UdMCBHg8i3nR3wClwV1SpgHrA9GJytFxyfcBvufqxBR6AwMF6kioAsmbAfobcsU1PbcCW8aWm29txwJbxpabb+3TAP0Pu2KYHeMAKNgk5Wvl6wPRFjOgIw33Af6yWKg8sgMAXbxqRbiRowMbLiSzYjG7A4+VEFmxmcsCMN41IN3J1wFYqqKjqY3jAQDorWJkte8BLTczErsJ9wBu9GqDYHYDA8quDzXr5aMDyq4PNejlvwKEnCpmIqHLAbBol+TuadcBWKqio6mN4wGA9SRUA+XrAS2qykAJyfcCGT4QeOwOAwK63zVTIVmnA\u002f1peuV5ub8BKIMq84qhywDQwTWyRcnXAP0Pu2KYHeMApcFdUqYB6wOmkrQAdFX3Aeqhtw7jaf8Cut81UyFZpwEOdAxUvOm\u002fAjN4EOsZmcsCW8aWm2\u002ft0wIEeDyLedHfAQVNlzlEJesDSViWR7c58wGhRhkfet3\u002fAQ50DFS\u002f6aMAYvQl0jI1uwJbxpabb23HAgR4PIt5UdMBBU2XOUel2wNJWJZHtrnnAaFGGR96XfMADgcYzKZV\u002fwGlgmtgiJWjAfobcsU1PbcApcFdUqSBxwOmkrQAdtXPAeqhtw7h6dsARo855qWN5wKzSDmb0YHzAE2wScrSyZsDoxeRouaRrwLSXyGDQZnDARJuII2wsc8DblenZXBV2wHbFKcanEnnAvOXqxxa4ZMA8T5cg\u002fuBpwF5WF6Y1bG\u002fAxqVsiQufcsBh1ax1Vpx1wFJ12fkoi2LAc3xZf2AWaMCgcRvsQehtwGvoTeJr8XHASNYrdmWIYMB1y+3iRlpmwKsqbrvcVGzA6mk0d1wGXsArlBoUxP1kwJk2NTP3EVzA"},"type":"scatter3d"}],                        {"height":500,"scene":{"camera":{"center":{"x":0,"y":0,"z":-0.4},"eye":{"x":1.6,"y":-1.6,"z":1.8}},"xaxis":{"title":{"text":"X[m]"}},"yaxis":{"title":{"text":"Y[m]"}},"zaxis":{"title":{"text":"Z[m]"}}},"template":{"data":{"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"#E5ECF6","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2}}},"title":{"font":{"size":24},"text":"Apparent Conductivity","x":0.5},"width":650},                        {"responsive": true}                    )                };            </script>        </div>
+</body>
+</html></section>
+<section id="convert-from-3d-to-2d">
+<h2>Convert From 3D to 2D<a class="headerlink" href="#convert-from-3d-to-2d" title="Link to this heading">#</a></h2>
+<p>Here, we convert the 3D survey into a list of 2D surveys. A vector containing
+a line ID for each datum is required. By setting ‘output_indexing’ to True,
+we output a list containing the indices to extract the data for each 2D survey
+from vectors associated with the 3D survey.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract line ID from dictionary</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">lineID</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">out_dict</span></a><span class="p">[</span><span class="s2">&quot;LINEID&quot;</span><span class="p">]</span>
+
+<span class="c1"># Convert 3D survey to a list of 3D surveys</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">survey_2d_list</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">index_list</span></a> <span class="o">=</span> <span class="n">convert_survey_3d_to_2d_lines</span><span class="p">(</span>
+    <span class="n">survey_3d</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">lineID</span></a><span class="p">,</span> <span class="n">data_type</span><span class="o">=</span><span class="s2">&quot;volt&quot;</span><span class="p">,</span> <span class="n">output_indexing</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="c1"># Create list of 2D apparent conductivities. Note that if you converted observed</span>
+<span class="c1"># data then computed apparent conductivities, you would be doing so assuming 2D</span>
+<span class="c1"># survey geometry and the values would not match those on the 3D pseudosection plot.</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs_2d_list</span></a> <span class="o">=</span> <span class="p">[]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">apparent_conductivities_2d</span></a> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind</span></a> <span class="ow">in</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">index_list</span></a><span class="p">:</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs_2d_list</span></a><span class="o">.</span><span class="n">append</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dobs_3d</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind</span></a><span class="p">])</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">apparent_conductivities_2d</span></a><span class="o">.</span><span class="n">append</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">apparent_conductivity_3d</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ind</span></a><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="plot-2d-pseudosections">
+<h2>Plot 2D Pseudosections<a class="headerlink" href="#plot-2d-pseudosections" title="Link to this heading">#</a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">title_str</span></a> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;East-West Line at Northing = 0 m&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;North-South Line at Easting = -350 m&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;North-South Line at Easting = -350 m&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="c1"># Plot apparent conductivity pseudo-section</span>
+<span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">survey_2d_list</span></a><span class="p">)):</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">vlim</span></a> <span class="o">=</span> <span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">apparent_conductivity_3d</span></a><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">apparent_conductivity_3d</span></a><span class="o">.</span><span class="n">max</span><span class="p">()]</span>
+
+    <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+    <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.add_axes.html#matplotlib.figure.Figure.add_axes" title="matplotlib.figure.Figure.add_axes" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span></a><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.78</span><span class="p">])</span>
+    <span class="n">plot_pseudosection</span><span class="p">(</span>
+        <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">survey_2d_list</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">],</span>
+        <span class="n">dobs</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">apparent_conductivities_2d</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">],</span>
+        <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;contourf&quot;</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a><span class="p">,</span>
+        <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">vlim</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">vlim</span></a><span class="p">,</span>
+        <span class="n">scale</span><span class="o">=</span><span class="s2">&quot;log&quot;</span><span class="p">,</span>
+        <span class="n">cbar_label</span><span class="o">=</span><span class="s2">&quot;Apparent Conducitivty [S/m]&quot;</span><span class="p">,</span>
+        <span class="n">mask_topography</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">contourf_opts</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span> <span class="s2">&quot;cmap&quot;</span><span class="p">:</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.ListedColormap.html#matplotlib.colors.ListedColormap" title="matplotlib.colors.ListedColormap" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">viridis</span></a><span class="p">},</span>
+    <span class="p">)</span>
+    <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_title.html#matplotlib.axes.Axes.set_title" title="matplotlib.axes.Axes.set_title" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">title_str</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ii</span></a><span class="p">])</span>
+    <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../../../../_images/sphx_glr_plot_gen_3_3d_to_2d_002.png" srcset="../../../../_images/sphx_glr_plot_gen_3_3d_to_2d_002.png" alt="East-West Line at Northing = 0 m" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../../../_images/sphx_glr_plot_gen_3_3d_to_2d_003.png" srcset="../../../../_images/sphx_glr_plot_gen_3_3d_to_2d_003.png" alt="North-South Line at Easting = -350 m" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../../../_images/sphx_glr_plot_gen_3_3d_to_2d_004.png" srcset="../../../../_images/sphx_glr_plot_gen_3_3d_to_2d_004.png" alt="North-South Line at Easting = -350 m" class = "sphx-glr-multi-img"/></li>
+</ul>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/vsts/work/1/s/tutorials/05-dcr/plot_gen_3_3d_to_2d.py:200: UserWarning:
+
+plot_pseudosection unused kwargs: [&#39;vlim&#39;]
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 19.212 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  320 MB</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-content-user-guide-tutorials-05-dcr-plot-gen-3-3d-to-2d-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../../../_downloads/d920624b9d6a72dd020c60aa255251e7/plot_gen_3_3d_to_2d.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_gen_3_3d_to_2d.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../../../_downloads/cbee7021b781e3264282e276eb881f51/plot_gen_3_3d_to_2d.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_gen_3_3d_to_2d.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../../../_downloads/ab21f26407a15ee6c72a6b6a7d982de4/plot_gen_3_3d_to_2d.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_gen_3_3d_to_2d.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="plot_fwd_3_dcr3d.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">DC Resistivity Forward Simulation in 3D</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="plot_inv_1_dcr_sounding.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Least-Squares 1D Inversion of Sounding Data</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-modules">Import modules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#download-assets">Download Assets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-data">Load the Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-3d-pseudosection">Plot 3D Pseudosection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#convert-from-3d-to-2d">Convert From 3D to 2D</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-2d-pseudosections">Plot 2D Pseudosections</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/content/user-guide/tutorials/05-dcr/plot_gen_3_3d_to_2d.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
